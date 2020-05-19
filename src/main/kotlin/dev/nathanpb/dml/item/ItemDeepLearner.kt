@@ -1,6 +1,13 @@
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.NotDeepLearnerException
+import dev.nathanpb.dml.utils.toTag
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.util.DefaultedList
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -10,4 +17,34 @@ import net.minecraft.item.Item
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-class ItemDeepLearner : Item(settings())
+class ItemDeepLearner : Item(settings()) {
+    companion object {
+        const val INVENTORY_SIZE = 4
+        const val INVENTORY_TAG = "deepmoblearning.deep_learner.inventory";
+    }
+}
+
+var ItemStack.deepLearnerInventory: DefaultedList<ItemStack>
+    get() {
+        if (this.item is ItemDeepLearner) {
+            return orCreateTag.let { tag ->
+                DefaultedList.ofSize(ItemDeepLearner.INVENTORY_SIZE, ItemStack.EMPTY).apply {
+                    tag.getList(ItemDeepLearner.INVENTORY_TAG, 10)
+                        ?.filterIsInstance<CompoundTag>()
+                        ?.map { stackTag -> ItemStack.fromTag(stackTag) }
+                        ?.forEachIndexed { index, itemStack -> set(index, itemStack) }
+                }
+            }
+        } else throw NotDeepLearnerException()
+    }
+    set(inventory) {
+        if (this.item is ItemDeepLearner) {
+            orCreateTag.let { tag ->
+                ListTag().apply {
+                    addAll(inventory.map { stack -> stack.toTag() })
+                }.let { stacks ->
+                    tag.put(ItemDeepLearner.INVENTORY_TAG, stacks)
+                }
+            }
+        } else throw NotDeepLearnerException()
+    }
