@@ -1,10 +1,6 @@
 package dev.nathanpb.dml.item
 
-import dev.nathanpb.dml.identifier
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.util.registry.Registry
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -14,24 +10,4 @@ import net.minecraft.util.registry.Registry
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-
-val ITEM_GROUP = FabricItemGroupBuilder.build(identifier("tab_deepmoblearning")) {
-    ItemStack(ITEM_DML)
-}
-
-fun settings(baseSettings: Item.Settings = Item.Settings()) = baseSettings.apply {
-    group(ITEM_GROUP)
-}
-
-val ITEM_DML = Item(Item.Settings())
-val ITEM_DEEP_LEARNER = ItemDeepLearner()
-
-
-fun registerItems() {
-    mapOf(
-        ITEM_DML to "deepmoblearning",
-        ITEM_DEEP_LEARNER to "deep_learner"
-    ).forEach { (item, id) ->
-        Registry.register(Registry.ITEM, identifier(id), item)
-    }
-}
+class ItemDeepLearner : Item(settings())
