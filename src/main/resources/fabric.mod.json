@@ -1,30 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
-  "version": "${version}",
-
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "id": "deepmoblearning",
+  "version": "1.0.0",
+  "name": "Deep Mob Learning",
+  "description": "Server friendly mob loot acquisition",
   "authors": [
-    "Me!"
+    "NathanPB",
+    "IterationFunk"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/NathanPB/DeepMobLearning-fabric.git",
+    "issues": "https://github.com/NathanPB/DeepMobLearning-fabric/issues/"
   },
-
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
+  "license": "GPL-v3",
+  "icon": "assets/deepmoblearning/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleModKt::init"
+      "dev.nathanpb.dml.DeepMobLearningKt::init"
     ]
   },
-  "mixins": [
-    "modid.mixins.json"
-  ],
+  "mixins": [],
   "depends": {
     "fabricloader": ">=0.7.1",
     "fabric": "*",
