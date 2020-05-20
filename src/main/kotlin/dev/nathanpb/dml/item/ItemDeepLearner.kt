@@ -21,7 +21,7 @@ import net.minecraft.world.World
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-class ItemDeepLearner : Item(settings()) {
+class ItemDeepLearner : Item(settings().maxCount(1)) {
     companion object {
         const val INVENTORY_SIZE = 4
         const val INVENTORY_TAG = "deepmoblearning.deep_learner.inventory"
