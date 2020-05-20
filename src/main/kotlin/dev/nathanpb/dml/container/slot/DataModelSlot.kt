@@ -1,5 +1,7 @@
 package dev.nathanpb.dml.container.slot
 
+import dev.nathanpb.dml.data.DataModelData
+import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.utils.InputRestrictedSlot
 import net.minecraft.inventory.Inventory
@@ -12,11 +14,24 @@ import net.minecraft.inventory.Inventory
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
+enum class DataModelSlotPolicy {
+    ALL,
+    BOUND,
+    UNBOUND;
+
+    fun assert(data: DataModelData) = when(this) {
+        BOUND -> data.isBound()
+        UNBOUND -> !data.isBound()
+        else -> true
+    }
+}
+
 class DataModelSlot (
     inventory: Inventory,
     slot: Int,
     x: Int,
-    y: Int
+    y: Int,
+    policy: DataModelSlotPolicy = DataModelSlotPolicy.ALL
 ) : InputRestrictedSlot(inventory, slot, x, y, {
-    it?.item is ItemDataModel
+    it?.item is ItemDataModel && policy.assert(it.dataModel)
 })
