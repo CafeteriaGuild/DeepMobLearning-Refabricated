@@ -47,9 +47,8 @@ class ContainerDeepLearner (
 
         (0..2).forEach { i ->
             (0..8).forEach { m ->
-                addSlot(Slot(
-                    playerInventory,
-                    slots.size - 1,
+                addSlot(Slot(playerInventory,
+                    m + i * 9 + 9,
                     8 + m * 18,
                     84 + i * 18
                 ))
@@ -57,7 +56,7 @@ class ContainerDeepLearner (
         }
 
         (0..8).forEach { i ->
-            addSlot(Slot(playerInventory, slots.size - 1, 8 + i * 18, 142))
+            addSlot(Slot(playerInventory, i, 8 + i * 18, 142))
         }
 
 
