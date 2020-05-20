@@ -30,10 +30,6 @@ class ItemDeepLearner : Item(settings()) {
 
     override fun use(world: World?, player: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         if (world != null && player != null && hand != null) {
-            if (player.isSneaking) {
-                println((if(world.isClient)  "Client"  else "Server") + " " + player.getStackInHand(hand).tag)
-                return super.use(world, player, hand);
-            }
             if (!world.isClient) {
                 (player as? ServerPlayerEntity)?.let {
                     ContainerProviderRegistry.INSTANCE.openContainer(
