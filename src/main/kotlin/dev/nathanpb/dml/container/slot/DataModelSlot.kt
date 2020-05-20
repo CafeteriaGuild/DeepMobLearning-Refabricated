@@ -1,8 +1,8 @@
-package dev.nathanpb.dml.utils;
+package dev.nathanpb.dml.container.slot
 
-import net.minecraft.container.Slot
+import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.utils.InputRestrictedSlot
 import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -12,12 +12,11 @@ import net.minecraft.item.ItemStack
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-open class InputRestrictedSlot(
+class DataModelSlot (
     inventory: Inventory,
     slot: Int,
     x: Int,
-    y: Int,
-    private val accept: (ItemStack?)->Boolean
-) : Slot(inventory, slot, x, y) {
-    override fun canInsert(stack: ItemStack?) = accept(stack)
-}
+    y: Int
+) : InputRestrictedSlot(inventory, slot, x, y, {
+    it?.item is ItemDataModel
+})

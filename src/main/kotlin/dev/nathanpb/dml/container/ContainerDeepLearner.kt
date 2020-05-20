@@ -1,6 +1,7 @@
 package dev.nathanpb.dml.container
 
 import dev.nathanpb.dml.NotDeepLearnerException
+import dev.nathanpb.dml.container.slot.DataModelSlot
 import dev.nathanpb.dml.inventory.InventoryDeepLearner
 import dev.nathanpb.dml.item.ItemDeepLearner
 import dev.nathanpb.dml.item.deepLearnerInventory
@@ -39,10 +40,10 @@ class ContainerDeepLearner (
             throw NotDeepLearnerException()
         }
 
-        addSlot(Slot(inventory, 0, 134, 45))
-        addSlot(Slot(inventory, 1, 152, 45))
-        addSlot(Slot(inventory, 2, 134, 63))
-        addSlot(Slot(inventory, 3, 152, 63))
+        addSlot(DataModelSlot(inventory, 0, 134, 45))
+        addSlot(DataModelSlot(inventory, 1, 152, 45))
+        addSlot(DataModelSlot(inventory, 2, 134, 63))
+        addSlot(DataModelSlot(inventory, 3, 152, 63))
 
         (0..2).forEach { i ->
             (0..8).forEach { m ->
