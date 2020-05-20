@@ -23,7 +23,9 @@
       "dev.nathanpb.dml.DeepMobLearningKt::initClient"
     ]
   },
-  "mixins": [],
+  "mixins": [
+    "mixins.deepmoblearning.json"
+  ],
   "depends": {
     "fabricloader": ">=0.7.1",
     "fabric": "*",

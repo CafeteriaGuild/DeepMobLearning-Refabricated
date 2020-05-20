@@ -1,11 +1,4 @@
-package dev.nathanpb.dml
-
-import dev.nathanpb.dml.container.registerContainerTypes
-import dev.nathanpb.dml.event.LivingEntityDieCallback
-import dev.nathanpb.dml.gui.registerGuis
-import dev.nathanpb.dml.item.registerItems
-import dev.nathanpb.dml.listener.DataCollectListener
-import net.minecraft.util.Identifier
+package dev.nathanpb.dml.event;
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -15,17 +8,19 @@ import net.minecraft.util.Identifier
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-@Suppress("unused")
-fun init() {
-    registerItems()
-    registerContainerTypes()
-    LivingEntityDieCallback.EVENT.register(DataCollectListener())
-    println("Deep Mob Learning good to go")
-}
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 
-@Suppress("unused")
-fun initClient() {
-    registerGuis()
-}
+public interface LivingEntityDieCallback {
+    Event<LivingEntityDieCallback> EVENT = EventFactory.createArrayBacked(LivingEntityDieCallback.class, listeners ->
+        (entity, source) -> {
+            for(LivingEntityDieCallback listener : listeners) {
+                listener.onDeath(entity, source);
+            }
+        }
+    );
 
-fun identifier(path: String) = Identifier("deepmoblearning", path)
+    void onDeath(LivingEntity entity, DamageSource damageSource);
+}

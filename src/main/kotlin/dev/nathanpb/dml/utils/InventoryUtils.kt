@@ -1,12 +1,3 @@
-package dev.nathanpb.dml
-
-import dev.nathanpb.dml.container.registerContainerTypes
-import dev.nathanpb.dml.event.LivingEntityDieCallback
-import dev.nathanpb.dml.gui.registerGuis
-import dev.nathanpb.dml.item.registerItems
-import dev.nathanpb.dml.listener.DataCollectListener
-import net.minecraft.util.Identifier
-
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -15,17 +6,8 @@ import net.minecraft.util.Identifier
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-@Suppress("unused")
-fun init() {
-    registerItems()
-    registerContainerTypes()
-    LivingEntityDieCallback.EVENT.register(DataCollectListener())
-    println("Deep Mob Learning good to go")
-}
+package dev.nathanpb.dml.utils
 
-@Suppress("unused")
-fun initClient() {
-    registerGuis()
-}
+import net.minecraft.entity.player.PlayerInventory
 
-fun identifier(path: String) = Identifier("deepmoblearning", path)
+fun PlayerInventory.hotbar() = (0..8).map { this.getInvStack(it) }

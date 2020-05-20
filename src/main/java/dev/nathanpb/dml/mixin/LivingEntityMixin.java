@@ -1,11 +1,4 @@
-package dev.nathanpb.dml
-
-import dev.nathanpb.dml.container.registerContainerTypes
-import dev.nathanpb.dml.event.LivingEntityDieCallback
-import dev.nathanpb.dml.gui.registerGuis
-import dev.nathanpb.dml.item.registerItems
-import dev.nathanpb.dml.listener.DataCollectListener
-import net.minecraft.util.Identifier
+package dev.nathanpb.dml.mixin;
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -15,17 +8,18 @@ import net.minecraft.util.Identifier
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-@Suppress("unused")
-fun init() {
-    registerItems()
-    registerContainerTypes()
-    LivingEntityDieCallback.EVENT.register(DataCollectListener())
-    println("Deep Mob Learning good to go")
-}
+import dev.nathanpb.dml.event.LivingEntityDieCallback;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Suppress("unused")
-fun initClient() {
-    registerGuis()
+@Mixin(LivingEntity.class)
+public class LivingEntityMixin {
+    @Inject(at = @At("HEAD"), method = "onDeath")
+    public void onDeath(DamageSource source, CallbackInfo ci) {
+        LivingEntityDieCallback.EVENT.invoker().onDeath((LivingEntity) (Object) this, source);
+    }
 }
-
-fun identifier(path: String) = Identifier("deepmoblearning", path)
