@@ -10,3 +10,4 @@ package dev.nathanpb.dml
 
 
 class NotDeepLearnerException : Exception("The current item stack is not a valid Deep Learner")
+class NotDataModelException : Exception("The current item stack is not a valid Data Model")

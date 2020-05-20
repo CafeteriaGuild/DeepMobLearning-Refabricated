@@ -2,5 +2,9 @@
   "itemGroup.deepmoblearning.tab_deepmoblearning": "Deep Mob Learning",
   "item.deepmoblearning.deepmoblearning": "Deep Mob Learning",
   "item.deepmoblearning.deep_learner": "Deep Learner",
-  "item.deepmoblearning.data_model": "Data Model"
+  "item.deepmoblearning.data_model": "Data Model",
+  "tooltip.deepmoblearning.data_model.bound_to": "Bound To: %s",
+  "tooltip.deepmoblearning.data_model.data_amount": "Data Amount: %d",
+  "tooltip.deepmoblearning.data_model.unbound": "Unbound",
+  "tooltip.deepmoblearning.data_model.unbound.tip": "Right click a monster to bind"
 }
