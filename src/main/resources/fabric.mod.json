@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "dev.nathanpb.dml.DeepMobLearningKt::init"
+    ],
+    "client": [
+      "dev.nathanpb.dml.DeepMobLearningKt::initClient"
     ]
   },
   "mixins": [],

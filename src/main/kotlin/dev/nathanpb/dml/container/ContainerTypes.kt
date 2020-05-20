@@ -1,8 +1,10 @@
-package dev.nathanpb.dml
+package dev.nathanpb.dml.container
 
-import dev.nathanpb.dml.container.registerContainerTypes
-import dev.nathanpb.dml.gui.registerGuis
-import dev.nathanpb.dml.item.registerItems
+import dev.nathanpb.dml.identifier
+import net.fabricmc.fabric.api.container.ContainerFactory
+import net.fabricmc.fabric.api.container.ContainerProviderRegistry
+import net.minecraft.container.Container
+import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
 /*
@@ -13,16 +15,16 @@ import net.minecraft.util.Identifier
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-@Suppress("unused")
-fun init() {
-    registerItems()
-    registerContainerTypes()
-    println("Deep Mob Learning good to go")
+val CONTAINER_DEEP_LEARNER = identifier("deep_learner")
+
+private fun register(id: Identifier, factory: ContainerFactory<Container>) {
+    ContainerProviderRegistry.INSTANCE.registerFactory(id, factory)
 }
 
-@Suppress("unused")
-fun initClient() {
-    registerGuis()
+fun registerContainerTypes() {
+    register(CONTAINER_DEEP_LEARNER, ContainerFactory { syncId, _, player, buff ->
+        ContainerDeepLearner(syncId, player.inventory, Hand.valueOf(buff.readString()))
+    })
 }
 
-fun identifier(path: String) = Identifier("deepmoblearning", path)
+

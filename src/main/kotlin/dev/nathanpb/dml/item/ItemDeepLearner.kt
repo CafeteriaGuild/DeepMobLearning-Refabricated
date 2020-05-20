@@ -1,13 +1,17 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.NotDeepLearnerException
-import dev.nathanpb.dml.utils.toTag
+import dev.nathanpb.dml.container.CONTAINER_DEEP_LEARNER
+import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.Inventories
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.DefaultedList
+import net.minecraft.util.Hand
+import net.minecraft.util.TypedActionResult
+import net.minecraft.world.World
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -20,31 +24,44 @@ import net.minecraft.util.DefaultedList
 class ItemDeepLearner : Item(settings()) {
     companion object {
         const val INVENTORY_SIZE = 4
-        const val INVENTORY_TAG = "deepmoblearning.deep_learner.inventory";
+        const val INVENTORY_TAG = "deepmoblearning.deep_learner.inventory"
+
+    }
+
+    override fun use(world: World?, player: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
+        if (world != null && player != null && hand != null) {
+            if (player.isSneaking) {
+                println((if(world.isClient)  "Client"  else "Server") + " " + player.getStackInHand(hand).tag)
+                return super.use(world, player, hand);
+            }
+            if (!world.isClient) {
+                (player as? ServerPlayerEntity)?.let {
+                    ContainerProviderRegistry.INSTANCE.openContainer(
+                        CONTAINER_DEEP_LEARNER, player
+                    ) {
+                        it.writeString(hand.toString())
+                    }
+                }
+            }
+        }
+        return super.use(world, player, hand)
     }
 }
 
 var ItemStack.deepLearnerInventory: DefaultedList<ItemStack>
     get() {
         if (this.item is ItemDeepLearner) {
-            return orCreateTag.let { tag ->
-                DefaultedList.ofSize(ItemDeepLearner.INVENTORY_SIZE, ItemStack.EMPTY).apply {
-                    tag.getList(ItemDeepLearner.INVENTORY_TAG, 10)
-                        ?.filterIsInstance<CompoundTag>()
-                        ?.map { stackTag -> ItemStack.fromTag(stackTag) }
-                        ?.forEachIndexed { index, itemStack -> set(index, itemStack) }
-                }
+            return getOrCreateSubTag(ItemDeepLearner.INVENTORY_TAG).let { invTag ->
+               DefaultedList.ofSize(ItemDeepLearner.INVENTORY_SIZE, ItemStack.EMPTY).also {
+                   Inventories.fromTag(invTag, it)
+               }
             }
         } else throw NotDeepLearnerException()
     }
     set(inventory) {
         if (this.item is ItemDeepLearner) {
-            orCreateTag.let { tag ->
-                ListTag().apply {
-                    addAll(inventory.map { stack -> stack.toTag() })
-                }.let { stacks ->
-                    tag.put(ItemDeepLearner.INVENTORY_TAG, stacks)
-                }
+            getOrCreateSubTag(ItemDeepLearner.INVENTORY_TAG).let { invTag ->
+                Inventories.toTag(invTag, inventory)
             }
         } else throw NotDeepLearnerException()
     }

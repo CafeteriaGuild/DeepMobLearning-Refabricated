@@ -1,4 +1,8 @@
-package dev.nathanpb.dml
+package dev.nathanpb.dml.gui
+
+import dev.nathanpb.dml.container.ContainerDeepLearner
+import net.minecraft.client.gui.screen.ingame.ContainerScreen
+import net.minecraft.text.TranslatableText
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -8,5 +12,14 @@ package dev.nathanpb.dml
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
+class GuiDeeplearner (
+    container: ContainerDeepLearner
+) : ContainerScreen<ContainerDeepLearner>(
+    container,
+    container.playerInventory,
+    TranslatableText("deep_learner")
+) {
+    override fun drawBackground(delta: Float, mouseX: Int, mouseY: Int) {
 
-class NotDeepLearnerException : Exception("The current item stack is not a valid Deep Learner")
+    }
+}

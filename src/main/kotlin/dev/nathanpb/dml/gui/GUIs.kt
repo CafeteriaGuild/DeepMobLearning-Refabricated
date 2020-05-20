@@ -1,4 +1,9 @@
-package dev.nathanpb.dml
+package dev.nathanpb.dml.gui
+
+import dev.nathanpb.dml.container.CONTAINER_DEEP_LEARNER
+import dev.nathanpb.dml.container.ContainerDeepLearner
+import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
+import net.minecraft.util.Hand
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -8,5 +13,9 @@ package dev.nathanpb.dml
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-
-class NotDeepLearnerException : Exception("The current item stack is not a valid Deep Learner")
+fun registerGuis() {
+    ScreenProviderRegistry.INSTANCE.registerFactory(CONTAINER_DEEP_LEARNER) {
+        syncId, _, player, buff ->
+        GuiDeeplearner(ContainerDeepLearner(syncId, player.inventory, Hand.valueOf(buff.readString())))
+    }
+}

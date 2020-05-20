@@ -1,4 +1,8 @@
-package dev.nathanpb.dml
+package dev.nathanpb.dml.utils;
+
+import net.minecraft.container.Slot
+import net.minecraft.inventory.Inventory
+import net.minecraft.item.ItemStack
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -8,5 +12,12 @@ package dev.nathanpb.dml
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-
-class NotDeepLearnerException : Exception("The current item stack is not a valid Deep Learner")
+class InputRestrictedSlot(
+    inventory: Inventory,
+    slot: Int,
+    x: Int,
+    y: Int,
+    private val accept: (ItemStack?)->Boolean
+) : Slot(inventory, slot, x, y) {
+    override fun canInsert(stack: ItemStack?) = accept(stack)
+}
