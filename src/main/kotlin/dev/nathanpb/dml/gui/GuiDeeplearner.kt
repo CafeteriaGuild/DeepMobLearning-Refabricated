@@ -35,11 +35,47 @@ class GuiDeeplearner (
         val BACKGROUND = identifier("textures/gui/deeplearner_base.png")
     }
 
-    var currentSlot = container.inventory.items.indexOfFirst {
-        it.item is ItemDataModel
-    }.let {
-        if (it == -1) 0 else it
+    private fun firstDataModelIndex() : Int {
+        return container.inventory.items.indexOfFirst {
+            it.item is ItemDataModel
+        }.let {
+            if (it == -1) 0 else it
+        }
     }
+
+    private fun lastDataModelIndex() : Int {
+        return container.inventory.items.indexOfLast {
+            it.item is ItemDataModel
+        }.let {
+            if (it == -1) 0 else it
+        }
+    }
+
+    private fun nextForwardDataModelIndex() : Int {
+        return if (currentSlot != lastDataModelIndex()) {
+            container.inventory.items.mapIndexed { index, stack ->
+                Pair(stack, index)
+            }.indexOfFirst { (stack, index) ->
+                stack.item is ItemDataModel && index > currentSlot
+            }.let {
+                if (it == -1) 0 else it
+            }
+        } else currentSlot
+    }
+
+    private fun nextReverseDataModelIndex() : Int {
+        return if (currentSlot != firstDataModelIndex()) {
+            container.inventory.items.mapIndexed { index, stack ->
+                Pair(stack, index)
+            }.indexOfLast { (stack, index) ->
+                stack.item is ItemDataModel && index < currentSlot
+            }.let {
+                if (it == -1) 0 else it
+            }
+        } else currentSlot
+    }
+
+    var currentSlot = firstDataModelIndex()
     var tickCount = 0
 
     override fun init() {
@@ -141,11 +177,11 @@ class GuiDeeplearner (
 
     private class PaginatorPrevButtonWidget (x: Int, y: Int, val gui: GuiDeeplearner) : BaseButtonWidget (x, y) {
 
-        override fun isActive() = gui.currentSlot > 0
+        override fun isActive() = gui.currentSlot > gui.firstDataModelIndex()
 
         override fun onPress() {
             if (isActive())
-                gui.currentSlot--
+                gui.currentSlot = gui.nextReverseDataModelIndex()
         }
 
         override fun renderToolTip(mouseX: Int, mouseY: Int) {
@@ -154,11 +190,11 @@ class GuiDeeplearner (
     }
 
     private class PaginatorNextButtonWidget (x: Int, y: Int, val gui: GuiDeeplearner) : BaseButtonWidget (x, y, 32) {
-        override fun isActive() = gui.currentSlot < gui.container.inventory.invSize - 1
+        override fun isActive() = gui.currentSlot < gui.lastDataModelIndex()
 
         override fun onPress() {
             if (isActive())
-                gui.currentSlot++
+                gui.currentSlot = gui.nextForwardDataModelIndex()
         }
 
         override fun renderToolTip(mouseX: Int, mouseY: Int) {
