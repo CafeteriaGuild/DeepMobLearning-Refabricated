@@ -48,9 +48,10 @@ class ItemDataModel : Item(settings().maxCount(1)) {
         addPropertyGetter(Identifier("entity")) { stack, world, entity ->
             stack.dataModel.let { data ->
                 if(data.isBound()) {
-                    MODEL_OVERRIDE_MAP.indexOf(data.entity).let { index ->
-                        if (index == -1) -1F else index.inc().toFloat()
-                    }
+                    MODEL_OVERRIDE_MAP
+                        .indexOf(data.entity)
+                        .inc()
+                        .toFloat()
                 } else 0F
             }
         }
