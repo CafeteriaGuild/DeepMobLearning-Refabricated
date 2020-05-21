@@ -31,7 +31,7 @@ class DataCollectListener : LivingEntityDieCallback {
                         dlStack.dataModel
                     }
                 }.flatten().firstOrNull {
-                    entity.type == it.entity
+                    entity.type == it.entity && !it.tier().isMaxTier()
                 }?.let {
                     it.dataAmount++
                 }
