@@ -42,6 +42,7 @@ class DataModelData(val stack: ItemStack) {
         set(value) = stack.orCreateTag.putInt(DATA_AMOUNT_TAG_KEY, value)
 
     fun isBound() = entity != null
+    fun tier() = DataModelTier.fromDataAmount(dataAmount)
 
 }
 

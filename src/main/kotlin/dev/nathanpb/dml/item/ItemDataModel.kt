@@ -15,6 +15,7 @@ import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
@@ -33,6 +34,7 @@ class ItemDataModel : Item(settings().maxCount(1)) {
                 if (data.isBound()) {
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.entity?.name))
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.data_amount", data.dataAmount))
+                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text.asFormattedString()))
                 } else {
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.unbound"))
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.unbound.tip"))
