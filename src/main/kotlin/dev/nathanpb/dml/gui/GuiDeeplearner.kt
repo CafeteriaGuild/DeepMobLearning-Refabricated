@@ -35,7 +35,11 @@ class GuiDeeplearner (
         val BACKGROUND = identifier("textures/gui/deeplearner_base.png")
     }
 
-    var currentSlot: Int = 0
+    var currentSlot = container.inventory.items.indexOfFirst {
+        it.item is ItemDataModel
+    }.let {
+        if (it == -1) 0 else it
+    }
     var tickCount = 0
 
     override fun init() {
