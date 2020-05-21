@@ -13,6 +13,7 @@ import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.HostileEntity
+import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -87,7 +88,7 @@ class ItemDataModel : Item(settings().maxCount(1)) {
             val stack = user.getStackInHand(hand)
             if (!entity.world.isClient) {
                 stack.dataModel.let { data ->
-                    if (entity is HostileEntity && !data.isBound()) {
+                    if (entity is Monster && !data.isBound()) {
                         data.entity = entity.type
                     }
                 }
