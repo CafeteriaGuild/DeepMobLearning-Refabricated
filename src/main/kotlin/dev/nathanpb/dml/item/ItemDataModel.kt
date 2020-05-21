@@ -33,7 +33,11 @@ class ItemDataModel : Item(settings().maxCount(1)) {
                 if (data.isBound()) {
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.entity?.name))
                     if (!data.tier().isMaxTier()) {
-                        tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.data_amount", data.dataAmount))
+                        tooltip.add(TranslatableText(
+                            "tooltip.deepmoblearning.data_model.data_amount",
+                            data.dataAmount,
+                            data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
+                        ))
                     }
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text.asFormattedString()))
                 } else {

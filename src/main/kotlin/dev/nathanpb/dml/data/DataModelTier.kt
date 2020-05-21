@@ -27,4 +27,5 @@ enum class DataModelTier(textEntry: String, val dataAmount: Int) {
 
     val text = TranslatableText(textEntry)
     fun isMaxTier() = this == values().last()
+    fun nextTierOrCurrent() = if (isMaxTier()) SELF_AWARE else values()[ordinal+1]
 }

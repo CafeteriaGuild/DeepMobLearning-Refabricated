@@ -4,7 +4,7 @@
   "item.deepmoblearning.deep_learner": "Deep Learner",
   "item.deepmoblearning.data_model": "Data Model",
   "tooltip.deepmoblearning.data_model.bound_to": "Bound To: %s",
-  "tooltip.deepmoblearning.data_model.data_amount": "Data Amount: %d",
+  "tooltip.deepmoblearning.data_model.data_amount": "Data Amount: %d (%d to next tier)",
   "tooltip.deepmoblearning.data_model.unbound": "Unbound",
   "tooltip.deepmoblearning.data_model.unbound.tip": "Right click a monster to bind",
   "tooltip.deepmoblearning.data_model.tier": "Tier: %s",
