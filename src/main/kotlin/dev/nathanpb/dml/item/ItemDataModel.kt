@@ -45,7 +45,7 @@ class ItemDataModel : Item(settings().maxCount(1)) {
     }
 
     init {
-        addPropertyGetter(Identifier("entity")) { stack, world, entity ->
+        addPropertyGetter(Identifier("entity")) { stack, _, _ ->
             stack.dataModel.let { data ->
                 if(data.isBound()) {
                     MODEL_OVERRIDE_MAP
