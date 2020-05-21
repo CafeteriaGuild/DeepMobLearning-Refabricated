@@ -1,7 +1,16 @@
 # Deep Mob Learner - FabricMC Version
 
 ## License
-All the textures, models and other resources are All Rights Reserved owned by [IterationFunk](https://github.com/xt9/)
+
+By "source file" of textures, models or other resources its meant the file that when put into a specific software can be processed in order to generate the proper resource, but the file itself is not the resource.
+
+By "extension that caracterizes it as a source file" is meant the file extension ".xcf". E.g "data_model_vindicator.xcf"
+
+By "having a source file attached" of texture, models or other resource's file its meant having a file in the same directory with the same name, but an extension that characterizes it as a source file.
+
+All the textures, models and other resources **without a source file** are All Rights Reserved owned by [IterationFunk](https://github.com/xt9/).
+
+Files that does have a source file attached are licensed over GPL-v3.
 
 All the source code is licensed over GPL-3
 
