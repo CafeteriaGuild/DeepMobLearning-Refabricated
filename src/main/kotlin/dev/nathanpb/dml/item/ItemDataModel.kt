@@ -10,6 +10,7 @@ package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.data.dataModel
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -18,9 +19,42 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
+import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
 class ItemDataModel : Item(settings().maxCount(1)) {
+
+    companion object {
+        val MODEL_OVERRIDE_MAP = arrayOf(
+            EntityType.BLAZE,
+            EntityType.CREEPER,
+            EntityType.ENDER_DRAGON,
+            EntityType.ENDERMAN,
+            EntityType.GHAST,
+            EntityType.GUARDIAN,
+            EntityType.SHULKER,
+            EntityType.SKELETON,
+            EntityType.SLIME,
+            EntityType.SPIDER,
+            EntityType.WITCH,
+            EntityType.WITHER,
+            EntityType.WITHER_SKELETON,
+            EntityType.ZOMBIE
+        )
+    }
+
+    init {
+        addPropertyGetter(Identifier("entity")) { stack, world, entity ->
+            stack.dataModel.let { data ->
+                if(data.isBound()) {
+                    MODEL_OVERRIDE_MAP.indexOf(data.entity).let { index ->
+                        if (index == -1) -1F else index.inc().toFloat()
+                    }
+                } else 0F
+            }
+        }
+    }
+
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
@@ -52,6 +86,10 @@ class ItemDataModel : Item(settings().maxCount(1)) {
         if (entity != null && user != null) {
             val stack = user.getStackInHand(hand)
             if (!entity.world.isClient) {
+                if (user.isSneaking) {
+                    user.inventory.insertStack(stack.copy())
+                    return super.useOnEntity(_stack, user, entity, hand)
+                }
                 stack.dataModel.let { data ->
                     if (entity is HostileEntity && !data.isBound()) {
                         data.entity = entity.type
