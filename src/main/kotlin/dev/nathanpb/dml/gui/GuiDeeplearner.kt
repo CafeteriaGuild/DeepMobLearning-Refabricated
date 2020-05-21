@@ -110,6 +110,32 @@ class GuiDeeplearner (
 
     override fun drawForeground(mouseX: Int, mouseY: Int) {
         super.font.draw(title.asFormattedString(), 8F, 6F, 0x40A0D3)
+        container.inventory.getInvStack(currentSlot)?.let { stack ->
+            if (stack.item is ItemDataModel) {
+                stack.dataModel.let{data ->
+                    data.entity?.let {
+                        super.font.draw(it.name.asFormattedString(), 8F, 20F, 0x373737)
+                    }
+                    super.font.draw(
+                        TranslatableText(
+                            "tooltip.deepmoblearning.data_model.tier",
+                            data.tier().text.asFormattedString()
+                        ).asFormattedString(),
+                        46F, 72F, 0x373737
+                    )
+                    if (!data.tier().isMaxTier()) {
+                        super.font.draw(
+                            TranslatableText(
+                                "tooltip.deepmoblearning.data_model.data_amount_simple",
+                                data.dataAmount,
+                                data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
+                            ).asFormattedString(),
+                            46F, 62F, 0x373737
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun drawBackgroundEntity(entityType: EntityType<*>) {

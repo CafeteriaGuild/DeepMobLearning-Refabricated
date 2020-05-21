@@ -5,6 +5,7 @@
   "item.deepmoblearning.data_model": "Data Model",
   "tooltip.deepmoblearning.data_model.bound_to": "§9Bound To:§4 %s",
   "tooltip.deepmoblearning.data_model.data_amount": "§9Data Amount:§r %d (%d to next tier)",
+  "tooltip.deepmoblearning.data_model.data_amount_simple": "§9Data:§r %d/%d",
   "tooltip.deepmoblearning.data_model.unbound": "§4Unbound",
   "tooltip.deepmoblearning.data_model.unbound.tip": "§9Right click a monster to bind",
   "tooltip.deepmoblearning.data_model.tier": "§9Tier:§r %s",
