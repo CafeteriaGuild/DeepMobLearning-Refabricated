@@ -12,5 +12,7 @@
   "tier.deepmoblearning.basic": "§aBasic§r",
   "tier.deepmoblearning.advanced": "§9Advanced§r",
   "tier.deepmoblearning.superior": "§dSuperior§r",
-  "tier.deepmoblearning.self_aware": "§6Self Aware§r"
+  "tier.deepmoblearning.self_aware": "§6Self Aware§r",
+  "gui.deepmoblearning.next": "Next",
+  "gui.deepmoblearning.previous": "Previous"
 }

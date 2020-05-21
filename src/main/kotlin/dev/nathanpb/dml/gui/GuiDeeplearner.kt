@@ -8,14 +8,12 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.ContainerScreen
-import net.minecraft.client.gui.screen.ingame.InventoryScreen
-import net.minecraft.client.render.LightmapTextureManager
+import net.minecraft.client.gui.widget.AbstractPressableButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.client.util.math.Vector3f
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.text.TranslatableText
-import kotlin.random.Random
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -32,8 +30,19 @@ class GuiDeeplearner (
     container.playerInventory,
     TranslatableText("item.deepmoblearning.deep_learner")
 ) {
+
+    companion object {
+        val BACKGROUND = identifier("textures/gui/deeplearner_base.png")
+    }
+
     var currentSlot: Int = 0
-    var tickCount = 0;
+    var tickCount = 0
+
+    override fun init() {
+        super.init()
+        addButton(PaginatorPrevButtonWidget(x + 133, y + 24, this))
+        addButton(PaginatorNextButtonWidget(x + 133 + 18, y + 24, this))
+    }
 
     override fun tick() {
         tickCount++
@@ -48,7 +57,7 @@ class GuiDeeplearner (
 
     override fun drawBackground(delta: Float, mouseX: Int, mouseY: Int) {
         GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f)
-        minecraft?.textureManager?.bindTexture(identifier("textures/gui/deeplearner_base.png"))
+        minecraft?.textureManager?.bindTexture(BACKGROUND)
         blit((this.width - this.containerWidth) / 2, (this.height - this.containerHeight) / 2, 0, 0, containerWidth, containerHeight)
         container.inventory.getInvStack(currentSlot)?.let { stack ->
             if (stack.item is ItemDataModel) {
@@ -101,6 +110,55 @@ class GuiDeeplearner (
             entityRenderDispatcher.setRenderShadows(true)
             RenderSystem.popMatrix()
         }
+    }
 
+    private abstract class BaseButtonWidget (
+        x: Int, y: Int, val startX: Int = 0
+    ) : AbstractPressableButtonWidget(x, y, 16, 16, "") {
+        override fun renderButton(mouseX: Int, mouseY: Int, delta: Float) {
+            MinecraftClient.getInstance().textureManager.bindTexture(BACKGROUND)
+            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
+            var j = startX
+            if (!isActive()) {
+                j += width
+            }
+            this.blit(x, y, j, 166, width, height)
+        }
+
+        override fun render(mouseX: Int, mouseY: Int, delta: Float) {
+            if (isHovered) {
+                renderToolTip(mouseX, mouseY)
+            }
+            super.render(mouseX, mouseY, delta)
+        }
+
+        abstract fun isActive() : Boolean
+    }
+
+    private class PaginatorPrevButtonWidget (x: Int, y: Int, val gui: GuiDeeplearner) : BaseButtonWidget (x, y) {
+
+        override fun isActive() = gui.currentSlot > 0
+
+        override fun onPress() {
+            if (isActive())
+                gui.currentSlot--
+        }
+
+        override fun renderToolTip(mouseX: Int, mouseY: Int) {
+            gui.renderTooltip(TranslatableText("gui.deepmoblearning.previous").asFormattedString(), mouseX, mouseY)
+        }
+    }
+
+    private class PaginatorNextButtonWidget (x: Int, y: Int, val gui: GuiDeeplearner) : BaseButtonWidget (x, y, 32) {
+        override fun isActive() = gui.currentSlot < gui.container.inventory.invSize - 1
+
+        override fun onPress() {
+            if (isActive())
+                gui.currentSlot++
+        }
+
+        override fun renderToolTip(mouseX: Int, mouseY: Int) {
+            gui.renderTooltip(TranslatableText("gui.deepmoblearning.next").asFormattedString(), mouseX, mouseY)
+        }
     }
 }
