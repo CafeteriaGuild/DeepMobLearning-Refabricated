@@ -10,7 +10,6 @@ package dev.nathanpb.dml.data
 
 import net.minecraft.text.TranslatableText
 import kotlin.math.max
-import kotlin.math.min
 
 // TODO remove the hardcoded dataAmount
 enum class DataModelTier(textEntry: String, val dataAmount: Int) {
@@ -27,4 +26,5 @@ enum class DataModelTier(textEntry: String, val dataAmount: Int) {
     }
 
     val text = TranslatableText(textEntry)
+    fun isMaxTier() = this == values().last()
 }
