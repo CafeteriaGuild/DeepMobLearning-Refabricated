@@ -86,10 +86,6 @@ class ItemDataModel : Item(settings().maxCount(1)) {
         if (entity != null && user != null) {
             val stack = user.getStackInHand(hand)
             if (!entity.world.isClient) {
-                if (user.isSneaking) {
-                    user.inventory.insertStack(stack.copy())
-                    return super.useOnEntity(_stack, user, entity, hand)
-                }
                 stack.dataModel.let { data ->
                     if (entity is HostileEntity && !data.isBound()) {
                         data.entity = entity.type
