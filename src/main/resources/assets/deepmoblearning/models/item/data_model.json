@@ -87,6 +87,78 @@
         "entity": 14
       },
       "model": "deepmoblearning:item/data_model_zombie"
+    },
+    {
+      "predicate": {
+        "entity": 15
+      },
+      "model": "deepmoblearning:item/data_model_drowned"
+    },
+    {
+      "predicate": {
+        "entity": 16
+      },
+      "model": "deepmoblearning:item/data_model_evoker"
+    },
+    {
+      "predicate": {
+        "entity": 17
+      },
+      "model": "deepmoblearning:item/data_model_husk"
+    },
+    {
+      "predicate": {
+        "entity": 18
+      },
+      "model": "deepmoblearning:item/data_model_magma_cube"
+    },
+    {
+      "predicate": {
+        "entity": 19
+      },
+      "model": "deepmoblearning:item/data_model_phantom"
+    },
+    {
+      "predicate": {
+        "entity": 20
+      },
+      "model": "deepmoblearning:item/data_model_pillager"
+    },
+    {
+      "predicate": {
+        "entity": 21
+      },
+      "model": "deepmoblearning:item/data_model_ravanger"
+    },
+    {
+      "predicate": {
+        "entity": 22
+      },
+      "model": "deepmoblearning:item/data_model_stray"
+    },
+    {
+      "predicate": {
+        "entity": 23
+      },
+      "model": "deepmoblearning:item/data_model_vex"
+    },
+    {
+      "predicate": {
+        "entity": 24
+      },
+      "model": "deepmoblearning:item/data_model_vindicator"
+    },
+    {
+      "predicate": {
+        "entity": 25
+      },
+      "model": "deepmoblearning:item/data_model_zombie_pigman"
+    },
+    {
+      "predicate": {
+        "entity": 26
+      },
+      "model": "deepmoblearning:item/data_model_zombie_villager"
     }
   ]
 }

@@ -12,7 +12,6 @@ import dev.nathanpb.dml.data.dataModel
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -40,7 +39,19 @@ class ItemDataModel : Item(settings().maxCount(1)) {
             EntityType.WITCH,
             EntityType.WITHER,
             EntityType.WITHER_SKELETON,
-            EntityType.ZOMBIE
+            EntityType.ZOMBIE,
+            EntityType.DROWNED,
+            EntityType.EVOKER,
+            EntityType.HUSK,
+            EntityType.MAGMA_CUBE,
+            EntityType.PHANTOM,
+            EntityType.PILLAGER,
+            EntityType.RAVAGER,
+            EntityType.STRAY,
+            EntityType.VEX,
+            EntityType.VINDICATOR,
+            EntityType.ZOMBIE_PIGMAN,
+            EntityType.ZOMBIE_VILLAGER
         )
     }
 
