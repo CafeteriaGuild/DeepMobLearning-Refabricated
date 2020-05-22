@@ -26,13 +26,15 @@ fun settings(baseSettings: Item.Settings = Item.Settings()) = baseSettings.apply
 val ITEM_DML = Item(Item.Settings())
 val ITEM_DEEP_LEARNER = ItemDeepLearner()
 val ITEM_DATA_MODEL = ItemDataModel()
+val ITEM_TRIAL_KEY = ItemTrialKey()
 
 
 fun registerItems() {
     mapOf(
         ITEM_DML to "deepmoblearning",
         ITEM_DEEP_LEARNER to "deep_learner",
-        ITEM_DATA_MODEL to "data_model"
+        ITEM_DATA_MODEL to "data_model",
+        ITEM_TRIAL_KEY to "trial_key"
     ).forEach { (item, id) ->
         Registry.register(Registry.ITEM, identifier(id), item)
     }
