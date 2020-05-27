@@ -1,3 +1,11 @@
+package dev.nathanpb.dml.recipe
+
+import dev.nathanpb.dml.identifier
+import net.minecraft.recipe.Recipe
+import net.minecraft.recipe.RecipeType
+import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
+
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -6,16 +14,15 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.utils
+lateinit var RECIPE_TRIAL_KEY_ATTUNE: RecipeType<TrialKeyAttuneRecipe>
 
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
+private fun <T : Recipe<*>?> register(id: Identifier) = Registry.register(
+    Registry.RECIPE_TYPE,
+    id,
+    object : RecipeType<T> {
+        override fun toString() = id.toString()
+    })
 
-fun PlayerInventory.hotbar() = (0..8).map { this.getInvStack(it) }
-
-fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
-    ItemStack.EMPTY,
-    *(0..invSize).map { getInvStack(it) }.toTypedArray()
-)
+fun registerRecipeTypes() {
+    RECIPE_TRIAL_KEY_ATTUNE = register(identifier("trial_key_attune"))
+}

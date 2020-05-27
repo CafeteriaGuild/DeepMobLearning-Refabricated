@@ -5,6 +5,8 @@ import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.DataCollectListener
+import dev.nathanpb.dml.recipe.registerRecipeSerializers
+import dev.nathanpb.dml.recipe.registerRecipeTypes
 import net.minecraft.util.Identifier
 
 /*
@@ -19,6 +21,8 @@ import net.minecraft.util.Identifier
 fun init() {
     registerItems()
     registerContainerTypes()
+    registerRecipeSerializers()
+    registerRecipeTypes()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
     println("Deep Mob Learning good to go")
 }

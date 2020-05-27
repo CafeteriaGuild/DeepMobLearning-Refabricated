@@ -1,0 +1,12 @@
+{
+  "type": "deepmoblearning:trial_key_attune",
+  "ingredients": [
+    {
+      "item": "deepmoblearning:trial_key"
+    },
+    {
+      "item": "deepmoblearning:data_model"
+    }
+  ],
+  "result": "deepmoblearning:trial_key"
+}

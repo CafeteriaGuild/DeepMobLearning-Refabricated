@@ -1,3 +1,10 @@
+package dev.nathanpb.dml.recipe
+
+import dev.nathanpb.dml.identifier
+import net.minecraft.recipe.Recipe
+import net.minecraft.recipe.RecipeSerializer
+import net.minecraft.util.registry.Registry
+
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -6,16 +13,14 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.utils
+lateinit var TRIAL_KEY_ATTUNEMENT_SERIALIZER: TrialKeyAttunementRecipeSerializer
 
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
-
-fun PlayerInventory.hotbar() = (0..8).map { this.getInvStack(it) }
-
-fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
-    ItemStack.EMPTY,
-    *(0..invSize).map { getInvStack(it) }.toTypedArray()
+private fun <S: RecipeSerializer<T>, T: Recipe<*>>register(id: String, serializer: S) = Registry.register(
+    Registry.RECIPE_SERIALIZER,
+    identifier(id).toString(),
+    serializer
 )
+
+fun registerRecipeSerializers() {
+    TRIAL_KEY_ATTUNEMENT_SERIALIZER = register("trial_key_attune", TrialKeyAttunementRecipeSerializer())
+}
