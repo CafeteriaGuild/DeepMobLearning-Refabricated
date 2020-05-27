@@ -128,7 +128,7 @@ class GuiDeeplearner (
                             TranslatableText(
                                 "tooltip.deepmoblearning.data_model.data_amount_simple",
                                 data.dataAmount,
-                                data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
+                                data.tier().nextTierOrCurrent().dataAmount
                             ).asFormattedString(),
                             46F, 62F, 0x373737
                         )
