@@ -66,4 +66,16 @@ class TrialKeyAttuneRecipe (
     private fun hasBoundedTrialKey(inv: Inventory) = inv.items().any {
         it.item is ItemTrialKey && it.trialKeyData != null
     }
+
+    override fun getRemainingStacks(inventory: CraftingInventory): DefaultedList<ItemStack> {
+        return DefaultedList.ofSize(inventory.invSize, ItemStack.EMPTY).also { defaultedList ->
+            inventory.items().forEachIndexed { index, itemStack ->
+                if (itemStack.item.hasRecipeRemainder()) {
+                    defaultedList[index] = ItemStack(itemStack.item.recipeRemainder)
+                } else if (itemStack.item is ItemDataModel) {
+                    defaultedList[index] = itemStack.copy()
+                }
+            }
+        }
+    }
 }
