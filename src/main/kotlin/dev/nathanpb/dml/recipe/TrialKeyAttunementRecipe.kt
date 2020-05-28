@@ -5,6 +5,7 @@ import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.utils.items
 import net.minecraft.inventory.CraftingInventory
 import net.minecraft.inventory.Inventory
@@ -53,10 +54,16 @@ class TrialKeyAttuneRecipe (
     override fun getOutput(): ItemStack = output.copy()
 
     override fun matches(craftingInventory: CraftingInventory, world: World): Boolean {
-        return super.matches(craftingInventory, world) && findDataModel(craftingInventory) != null
+        return super.matches(craftingInventory, world)
+                && findDataModel(craftingInventory) != null
+                && !hasBoundedTrialKey(craftingInventory)
     }
 
     private fun findDataModel(inv: Inventory) = inv.items().firstOrNull {
         it.item is ItemDataModel && it.dataModel.isBound()
     }?.dataModel
+
+    private fun hasBoundedTrialKey(inv: Inventory) = inv.items().any {
+        it.item is ItemTrialKey && it.trialKeyData != null
+    }
 }
