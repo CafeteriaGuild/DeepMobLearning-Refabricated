@@ -25,6 +25,7 @@ class TrialKeystoneRecipe (
     private val id: Identifier,
     val entity: EntityType<*>,
     val tier: DataModelTier,
+    val waves: List<Int>,
     private val rewards: List<ItemStack>
 ) : Recipe<TrialKeystoneInventory> {
 
@@ -58,6 +59,7 @@ class TrialKeystoneRecipe (
         override fun write(buf: PacketByteBuf, recipe: TrialKeystoneRecipe) {
             buf.writeString(Registry.ENTITY_TYPE.getId(recipe.entity).toString())
             buf.writeInt(recipe.tier.ordinal)
+            buf.writeIntArray(recipe.waves.toIntArray())
             buf.writeInt(recipe.rewards.size)
             recipe.rewards.forEach { buf.writeItemStack(it) }
         }
@@ -67,6 +69,7 @@ class TrialKeystoneRecipe (
                 id,
                 Registry.ENTITY_TYPE[Identifier(json.getAsJsonPrimitive("entity").asString)],
                 DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY,
+                json.getAsJsonArray("waves").map { it.asInt },
                 json.getAsJsonArray("rewards").map {
                     ShapedRecipe.getItemStack(it.asJsonObject)
                 }
@@ -76,11 +79,12 @@ class TrialKeystoneRecipe (
         override fun read(id: Identifier, buf: PacketByteBuf): TrialKeystoneRecipe {
             val entity = Registry.ENTITY_TYPE[Identifier(buf.readString())]
             val tier = DataModelTier.fromIndex(buf.readInt()) ?: DataModelTier.FAULTY
+            val waves = buf.readIntArray()
             val stacks = (1 .. buf.readInt()).map {
                 buf.readItemStack()
             }
 
-            return TrialKeystoneRecipe(id, entity, tier, stacks)
+            return TrialKeystoneRecipe(id, entity, tier, waves.toList(), stacks)
         }
     }
 }
