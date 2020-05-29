@@ -1,5 +1,6 @@
 package dev.nathanpb.dml
 
+import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.container.registerContainerTypes
 import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.gui.registerGuis
@@ -20,6 +21,7 @@ import net.minecraft.util.Identifier
 @Suppress("unused")
 fun init() {
     registerItems()
+    registerBlocks()
     registerContainerTypes()
     registerRecipeSerializers()
     registerRecipeTypes()
