@@ -23,8 +23,8 @@ import net.minecraft.world.World
 
 class TrialKeystoneRecipe (
     private val id: Identifier,
-    private val entity: EntityType<*>,
-    private val tier: DataModelTier,
+    val entity: EntityType<*>,
+    val tier: DataModelTier,
     private val rewards: List<ItemStack>
 ) : Recipe<TrialKeystoneInventory> {
 

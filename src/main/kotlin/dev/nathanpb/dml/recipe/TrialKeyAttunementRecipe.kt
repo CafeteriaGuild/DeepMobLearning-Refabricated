@@ -1,5 +1,6 @@
 package dev.nathanpb.dml.recipe
 
+import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.data.trialKeyData
@@ -54,9 +55,11 @@ class TrialKeyAttuneRecipe (
     override fun getOutput(): ItemStack = output.copy()
 
     override fun matches(craftingInventory: CraftingInventory, world: World): Boolean {
+        val dataModel = findDataModel(craftingInventory)
         return super.matches(craftingInventory, world)
-                && findDataModel(craftingInventory) != null
+                && dataModel != null
                 && !hasBoundedTrialKey(craftingInventory)
+                && hasTrialKeyRecipe(dataModel, world)
     }
 
     private fun findDataModel(inv: Inventory) = inv.items().firstOrNull {
@@ -65,6 +68,14 @@ class TrialKeyAttuneRecipe (
 
     private fun hasBoundedTrialKey(inv: Inventory) = inv.items().any {
         it.item is ItemTrialKey && it.trialKeyData != null
+    }
+
+    private fun hasTrialKeyRecipe(model: DataModelData, world: World) : Boolean {
+        return world.recipeManager.values()
+            .filterIsInstance(TrialKeystoneRecipe::class.java)
+            .any {
+                it.entity == model.entity && it.tier == model.tier()
+            }
     }
 
     override fun getRemainingStacks(inventory: CraftingInventory): DefaultedList<ItemStack> {
