@@ -23,6 +23,12 @@ enum class DataModelTier(textEntry: String, val dataAmount: Int) {
         fun fromDataAmount(amount: Int) = values().last {
             it.dataAmount <= max(amount, 0)
         }
+
+        fun fromIndex(index: Int): DataModelTier? {
+            return if (index in (0.until(values().size))) {
+                values()[index]
+            } else null
+        }
     }
 
     val text = TranslatableText(textEntry)
