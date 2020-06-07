@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnType
 import net.minecraft.util.math.BlockPos
+import kotlin.random.Random
 
 data class RunningTrialData (
     val recipe: TrialKeystoneRecipe,
@@ -43,9 +44,9 @@ data class RunningTrialWaveData (
                 blockEntity.world,
                 null, null, null,
                 BlockPos(
-                    blockEntity.pos.x,
+                    blockEntity.pos.x + Random.nextInt(-2, 2),
                     blockEntity.pos.y + 1,
-                    blockEntity.pos.z
+                    blockEntity.pos.z + Random.nextInt(-2, 2)
                 ),
                 SpawnType.SPAWNER,
                 false, false
