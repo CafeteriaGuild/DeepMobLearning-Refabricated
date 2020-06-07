@@ -37,6 +37,8 @@ data class RunningTrialWaveData (
     var isSpawned = false
     fun isFinished() = isSpawned && !spawnedEntities.any(LivingEntity::isAlive)
 
+    fun despawnWave() = spawnedEntities.forEach(LivingEntity::remove)
+
     fun spawnWave(blockEntity: BlockEntityTrialKeystone) {
         isSpawned = true
         (1..entityCount).forEach { _ ->

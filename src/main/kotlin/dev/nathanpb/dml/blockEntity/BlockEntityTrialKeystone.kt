@@ -10,10 +10,13 @@ package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
 import dev.nathanpb.dml.data.RunningTrialData
+import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Tickable
+import net.minecraft.util.math.Box
 
 class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
@@ -26,6 +29,10 @@ class BlockEntityTrialKeystone :
     override fun tick() {
         if (world?.isClient == true) return
         currentTrial?.let { currentTrial ->
+            if (!hasPlayerAround()) {
+                endTrial(TrialEndReason.NO_ONE_IS_AROUND)
+                return
+            }
             if (currentWave < currentTrial.waves.size) {
                 val wave = currentTrial.waves[currentWave]
                 if (!wave.isSpawned) {
@@ -38,7 +45,7 @@ class BlockEntityTrialKeystone :
                     // spawn the wave if so, or finish the trial if not
                     currentWave++
                 }
-            } else endTrial()
+            } else endTrial(TrialEndReason.SUCCESS)
             tickCount++
         }
     }
@@ -54,9 +61,12 @@ class BlockEntityTrialKeystone :
     }
 
     @Suppress("private")
-    fun endTrial() {
+    fun endTrial(reason: TrialEndReason) {
         if (isRunning()) {
-            dropRewards()
+            when (reason) {
+                TrialEndReason.SUCCESS -> dropRewards()
+                TrialEndReason.NO_ONE_IS_AROUND -> currentTrial?.waves?.get(currentWave)?.despawnWave()
+            }
             currentTrial = null
             currentWave = 0
             tickCount = 0
@@ -73,5 +83,19 @@ class BlockEntityTrialKeystone :
 
     private fun startCurrentWave() {
         currentTrial?.waves?.get(currentWave)?.spawnWave(this)
+    }
+
+    // TODO remove hardcoded bounds
+    private fun hasPlayerAround(): Boolean {
+        return world?.getEntities(null, Box(
+            pos.x - 16.0,
+            pos.y - 1.0,
+            pos.z - 16.0,
+            pos.x + 16.0,
+            pos.y + 32.0,
+            pos.z + 16.0
+        )) {
+            it is PlayerEntity
+        }?.isNotEmpty() ?: false
     }
 }
