@@ -1,5 +1,7 @@
 package dev.nathanpb.dml
 
+import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -12,3 +14,15 @@ package dev.nathanpb.dml
 class NotDeepLearnerException : Exception("The current item stack is not a valid Deep Learner")
 class NotDataModelException : Exception("The current item stack is not a valid Data Model")
 class InvalidTrialKeyBase : IllegalArgumentException("The given argument cannot be converted into TrialKeyData")
+
+open class TrialKeystoneException(blockEntity: BlockEntityTrialKeystone): Exception()
+class TrialKeystoneAlreadyRunningException(
+    blockEntity: BlockEntityTrialKeystone
+) : TrialKeystoneException(blockEntity) {
+    override val message = "The Trial Keystone at ${blockEntity.pos} is already running"
+}
+class TrialKeystoneNotRunningException(
+    blockEntity: BlockEntityTrialKeystone
+) : TrialKeystoneException(blockEntity) {
+    override val message = "The Trial Keystone at ${blockEntity.pos} is not running"
+}

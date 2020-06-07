@@ -10,6 +10,7 @@ package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
 import dev.nathanpb.dml.data.DataModelTier
+import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemStack
@@ -29,16 +30,18 @@ class TrialKeystoneRecipe (
     private val rewards: List<ItemStack>
 ) : Recipe<TrialKeystoneInventory> {
 
-    fun craftMultiple(inv: TrialKeystoneInventory) = rewards.map {
-        it.copy()
+    companion object {
+        fun findOrNull(world: World, data: TrialKeyData) = world.recipeManager.values()
+            .filterIsInstance(TrialKeystoneRecipe::class.java)
+            .firstOrNull { it.entity == data.entity && it.tier == data.tier() }
     }
 
-    fun getOutputMultiple() = rewards
+    fun copyRewards() = rewards.map(ItemStack::copy)
 
-    @Deprecated("", ReplaceWith("craftMultiple", "dev.nathanpb.dml.recipe"))
+    @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
     override fun craft(inv: TrialKeystoneInventory?) = ItemStack.EMPTY
 
-    @Deprecated("", ReplaceWith("getOutputMultiple", "dev.nathanpb.dml.recipe"))
+    @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
     override fun getOutput() = ItemStack.EMPTY
 
     override fun getId() = id
