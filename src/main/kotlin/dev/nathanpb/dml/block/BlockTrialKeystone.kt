@@ -38,15 +38,15 @@ class BlockTrialKeystone : Block(
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
         if (!world.isClient) {
             (world.getBlockEntity(pos) as? BlockEntityTrialKeystone)?.let { blockEntity ->
-                if (!blockEntity.isRunning()) {
-                    val stackInHand = player.getStackInHand(hand)
-                    if (stackInHand.item is ItemTrialKey) {
-                        stackInHand.trialKeyData?.let { data ->
-                            TrialKeystoneRecipe.findOrNull(world, data)
-                        }?.let {
+                val stackInHand = player.getStackInHand(hand)
+                if (stackInHand.item is ItemTrialKey) {
+                    stackInHand.trialKeyData?.let { data ->
+                        TrialKeystoneRecipe.findOrNull(world, data)
+                    }?.let {
+                        try {
                             blockEntity.startTrial(it)
                             return ActionResult.CONSUME
-                        }
+                        } catch (e: Exception) {/* Ignore */}
                     }
                 }
             }

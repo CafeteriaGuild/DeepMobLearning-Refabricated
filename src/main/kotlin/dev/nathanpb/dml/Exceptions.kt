@@ -1,6 +1,7 @@
 package dev.nathanpb.dml
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+import net.minecraft.util.math.BlockPos
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -26,3 +27,7 @@ class TrialKeystoneNotRunningException(
 ) : TrialKeystoneException(blockEntity) {
     override val message = "The Trial Keystone at ${blockEntity.pos} is not running"
 }
+class TrialKeystoneWrongTerrainException(
+    blockEntity: BlockEntityTrialKeystone,
+    pos: List<BlockPos>
+) : Exception("The trial keystone cannot be started due wrong terrain")

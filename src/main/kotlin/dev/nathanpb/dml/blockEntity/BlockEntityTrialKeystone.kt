@@ -9,6 +9,7 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
+import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -99,7 +100,11 @@ class BlockEntityTrialKeystone :
     @Suppress("private")
     fun startTrial(recipe: TrialKeystoneRecipe) {
         if (!isRunning()) {
-            currentTrial = RunningTrialData(recipe, this)
+            checkTerrain().let { wrongTerrain ->
+                if (wrongTerrain.isEmpty()) {
+                    currentTrial = RunningTrialData(recipe, this)
+                } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
+            }
         } else throw TrialKeystoneAlreadyRunningException(this)
     }
 
