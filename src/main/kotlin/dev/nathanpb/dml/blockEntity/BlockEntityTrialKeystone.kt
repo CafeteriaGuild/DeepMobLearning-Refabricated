@@ -13,15 +13,23 @@ import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.particle.ParticleEffect
+import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
+import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sin
+import kotlin.random.Random
 
 class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
@@ -39,7 +47,30 @@ class BlockEntityTrialKeystone :
     private var tickCount = 0
 
     override fun tick() {
-        if (world?.isClient == true) return
+        if (world?.isClient == true) {
+            val vec3d = Vec3d(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+            MinecraftClient.getInstance().player?.let { clientPlayer ->
+                if (clientPlayer.squaredDistanceTo(vec3d) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
+                    checkTerrain().let { wrongTerrain ->
+                        if (wrongTerrain.isNotEmpty()) {
+                            (0 .. min(wrongTerrain.size / 4, 1)).let { _ ->
+                                wrongTerrain.random().let {
+                                    world?.addParticle(
+                                        ParticleTypes.FLAME,
+                                        true,
+                                        it.x + Random.nextDouble() - .1,
+                                        it.y + 1.0,
+                                        it.z + Random.nextDouble() - .1,
+                                        0.0, 0.0, 0.0
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return
+        }
         currentTrial?.let { currentTrial ->
             if (getPlayersAround().isEmpty()) {
                 endTrial(TrialEndReason.NO_ONE_IS_AROUND)
@@ -114,6 +145,41 @@ class BlockEntityTrialKeystone :
             it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= EFFECTIVE_AREA_RADIUS_SQUARED
         } ?: emptyList()
     }
+
+    /**
+     * Checks the effective terrain and returns a list of wrong blocks
+     *
+     * @return the list of erroneous blocks
+     */
+    private fun checkTerrain() = mutableListOf<BlockPos>().also { list ->
+        val radInt = EFFECTIVE_AREA_RADIUS.toInt()
+        (pos.x - radInt .. pos.x + radInt).forEach { x ->
+            (pos.z - radInt .. pos.z + radInt).forEach { z ->
+
+                // Searching for non-solid blocks bellow the circle
+                val floorPos = BlockPos(x, pos.y - 1, z)
+                if (floorPos.getSquaredDistance(pos) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
+                    world?.getBlockState(floorPos)?.let { floorBlock ->
+                        if (!floorBlock.isSideSolidFullSquare(world, floorPos, Direction.UP)) {
+                            list += floorPos
+                        }
+                    }
+                }
+
+                // Searching for non-air blocks inside the dome
+                (pos.y .. pos.y + radInt).forEach { y ->
+                    val innerBlockPos = BlockPos(x, y, z)
+                    if (
+                        innerBlockPos != pos
+                        && innerBlockPos.getSquaredDistance(pos) <= EFFECTIVE_AREA_RADIUS_SQUARED
+                        && world?.getBlockState(innerBlockPos)?.isAir != true
+                    ) {
+                        list += innerBlockPos
+                    }
+                }
+            }
+        }
+    }.toList()
 
     private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
         (1..360).forEach { angle ->
