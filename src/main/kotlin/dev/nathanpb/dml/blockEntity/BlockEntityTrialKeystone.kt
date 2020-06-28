@@ -13,15 +13,27 @@ import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Tickable
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
+import net.minecraft.world.World
+import kotlin.math.cos
+import kotlin.math.sin
 
 class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
     Tickable
 {
+
+    companion object {
+        const val EFFECTIVE_AREA_RADIUS = 12.0
+        const val EFFECTIVE_AREA_RADIUS_SQUARED = EFFECTIVE_AREA_RADIUS * EFFECTIVE_AREA_RADIUS
+    }
+
+    private var circleBounds: List<BlockPos>? = null
     private var currentTrial: RunningTrialData? = null
     private var currentWave = 0
     private var tickCount = 0
@@ -29,7 +41,7 @@ class BlockEntityTrialKeystone :
     override fun tick() {
         if (world?.isClient == true) return
         currentTrial?.let { currentTrial ->
-            if (!hasPlayerAround()) {
+            if (getPlayersAround().isEmpty()) {
                 endTrial(TrialEndReason.NO_ONE_IS_AROUND)
                 return
             }
@@ -85,17 +97,35 @@ class BlockEntityTrialKeystone :
         currentTrial?.waves?.get(currentWave)?.spawnWave(this)
     }
 
-    // TODO remove hardcoded bounds
-    private fun hasPlayerAround(): Boolean {
-        return world?.getEntities(null, Box(
-            pos.x - 16.0,
-            pos.y - 1.0,
-            pos.z - 16.0,
-            pos.x + 16.0,
-            pos.y + 32.0,
-            pos.z + 16.0
-        )) {
-            it is PlayerEntity
-        }?.isNotEmpty() ?: false
+    override fun setLocation(world: World, pos: BlockPos) {
+        super.setLocation(world, pos)
+        circleBounds = getCircleBoundBlocks()
     }
+
+    private fun getPlayersAround() : List<PlayerEntity> {
+        return world?.getEntities(EntityType.PLAYER, Box(
+            pos.x - EFFECTIVE_AREA_RADIUS,
+            pos.y - 1.0,
+            pos.z - EFFECTIVE_AREA_RADIUS,
+            pos.x + EFFECTIVE_AREA_RADIUS,
+            pos.y + EFFECTIVE_AREA_RADIUS,
+            pos.z + EFFECTIVE_AREA_RADIUS
+        )) {
+            it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= EFFECTIVE_AREA_RADIUS_SQUARED
+        } ?: emptyList()
+    }
+
+    private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
+        (1..360).forEach { angle ->
+            BlockPos(
+                pos.x + (EFFECTIVE_AREA_RADIUS * cos(angle * Math.PI / 180)),
+                pos.y.toDouble(),
+                pos.z + (EFFECTIVE_AREA_RADIUS * sin(angle * Math.PI / 180))
+            ).let {
+                if (it !in list) {
+                    list += it
+                }
+            }
+        }
+    }.toList()
 }
