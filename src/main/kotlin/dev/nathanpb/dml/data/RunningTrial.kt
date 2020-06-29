@@ -33,7 +33,7 @@ data class RunningTrialWaveData (
     val entityCount: Int,
     val entityType: EntityType<*>
 ) {
-    private val spawnedEntities = mutableListOf<LivingEntity>()
+    val spawnedEntities = mutableListOf<LivingEntity>()
     var isSpawned = false
     fun isFinished() = isSpawned && !spawnedEntities.any(LivingEntity::isAlive)
 

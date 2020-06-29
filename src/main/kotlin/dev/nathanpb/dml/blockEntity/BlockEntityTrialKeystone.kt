@@ -15,10 +15,11 @@ import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
+import net.minecraft.command.arguments.EntityArgumentType.getPlayer
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.particle.ParticleEffect
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
@@ -26,11 +27,9 @@ import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sin
+import kotlin.math.*
 import kotlin.random.Random
+
 
 class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
@@ -78,6 +77,7 @@ class BlockEntityTrialKeystone :
                 return
             }
             if (currentWave < currentTrial.waves.size) {
+                pullMobsInBorders()
                 val wave = currentTrial.waves[currentWave]
                 if (!wave.isSpawned) {
                     // Will spawn the current wave if its not spawned yet
@@ -119,6 +119,21 @@ class BlockEntityTrialKeystone :
             currentWave = 0
             tickCount = 0
         } else throw TrialKeystoneAlreadyRunningException(this)
+    }
+
+    private fun pullMobsInBorders() {
+        currentTrial?.waves
+            ?.get(currentWave)
+            ?.spawnedEntities
+            ?.filter(LivingEntity::isAlive)
+            ?.filter {
+                val squaredDistance = it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+                squaredDistance >=  EFFECTIVE_AREA_RADIUS_SQUARED - 9
+            }?.forEach {
+                val to = Vec3d(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+                val vector = it.posVector.subtract(to).multiply(-0.1)
+                it.addVelocity(vector.x, vector.y, vector.z)
+            }
     }
 
     private fun dropRewards() {
