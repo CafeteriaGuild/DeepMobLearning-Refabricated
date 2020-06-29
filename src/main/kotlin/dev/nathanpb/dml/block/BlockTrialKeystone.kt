@@ -8,6 +8,8 @@
 
 package dev.nathanpb.dml.block
 
+import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
+import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
@@ -20,6 +22,7 @@ import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -42,11 +45,20 @@ class BlockTrialKeystone : Block(
                 if (stackInHand.item is ItemTrialKey) {
                     stackInHand.trialKeyData?.let { data ->
                         TrialKeystoneRecipe.findOrNull(world, data)
-                    }?.let {
-                        try {
-                            blockEntity.startTrial(it)
-                            return ActionResult.CONSUME
-                        } catch (e: Exception) {/* Ignore */}
+                    }.let { data ->
+                        if (data != null) {
+                            try {
+                                blockEntity.startTrial(data)
+                                return ActionResult.CONSUME
+                            } catch (ex: TrialKeystoneAlreadyRunningException) {
+                                return ActionResult.PASS
+                            } catch (ex: TrialKeystoneWrongTerrainException) {
+                                player.addChatMessage(TranslatableText("chat.deepmoblearning.trial_wrong_terrain"), false)
+                            }
+                        } else {
+                            player.addChatMessage(TranslatableText("chat.deepmoblearning.trial_no_recipe"), false)
+                        }
+                        return ActionResult.FAIL
                     }
                 }
             }
