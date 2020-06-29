@@ -47,7 +47,7 @@ data class RunningTrialWaveData (
                 null, null, null,
                 BlockPos(
                     blockEntity.pos.x + Random.nextInt(-2, 2),
-                    blockEntity.pos.y + 1,
+                    blockEntity.pos.y + 5,
                     blockEntity.pos.z + Random.nextInt(-2, 2)
                 ),
                 SpawnType.SPAWNER,
