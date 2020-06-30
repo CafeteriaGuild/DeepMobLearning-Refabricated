@@ -15,6 +15,7 @@ import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
+import dev.nathanpb.dml.utils.toVec3d
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
@@ -25,7 +26,6 @@ import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import kotlin.math.*
 import kotlin.random.Random
@@ -49,9 +49,8 @@ class BlockEntityTrialKeystone :
 
     override fun tick() {
         if (world?.isClient == true) {
-            val vec3d = Vec3d(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
             MinecraftClient.getInstance().player?.let { clientPlayer ->
-                if (clientPlayer.squaredDistanceTo(vec3d) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
+                if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
                     checkTerrain().let { wrongTerrain ->
                         if (wrongTerrain.isNotEmpty()) {
                             (0 .. min(wrongTerrain.size / 4, 1)).let { _ ->
@@ -128,16 +127,16 @@ class BlockEntityTrialKeystone :
     }
 
     private fun pullMobsInBorders() {
+        val posVector = pos.toVec3d()
         currentTrial?.waves
             ?.get(currentWave)
             ?.spawnedEntities
             ?.filter(LivingEntity::isAlive)
             ?.filter {
-                val squaredDistance = it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+                val squaredDistance = it.squaredDistanceTo(posVector.x, posVector.y, posVector.z)
                 squaredDistance >=  EFFECTIVE_AREA_RADIUS_SQUARED - 9
             }?.forEach {
-                val to = Vec3d(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
-                val vector = it.posVector.subtract(to).multiply(-0.1)
+                val vector = it.posVector.subtract(pos.toVec3d()).multiply(-0.1)
                 it.addVelocity(vector.x, vector.y, vector.z)
             }
     }
@@ -159,8 +158,10 @@ class BlockEntityTrialKeystone :
         circleBounds = getCircleBoundBlocks()
     }
 
-    private fun integrantsAreAround() = players.orEmpty().any {
-        it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= EFFECTIVE_AREA_RADIUS_SQUARED
+    private fun integrantsAreAround() = pos.toVec3d().let { posVec ->
+        players.orEmpty().any {
+            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= EFFECTIVE_AREA_RADIUS_SQUARED
+        }
     }
 
     /**
