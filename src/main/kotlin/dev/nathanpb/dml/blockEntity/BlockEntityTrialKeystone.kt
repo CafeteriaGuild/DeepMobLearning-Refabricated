@@ -72,7 +72,7 @@ class BlockEntityTrialKeystone :
             return
         }
         currentTrial?.let { currentTrial ->
-            if (!integrantsAreAround()) {
+            if (!areIntegrantsAround()) {
                 endTrial(TrialEndReason.NO_ONE_IS_AROUND)
                 return
             }
@@ -158,7 +158,7 @@ class BlockEntityTrialKeystone :
         circleBounds = getCircleBoundBlocks()
     }
 
-    private fun integrantsAreAround() = pos.toVec3d().let { posVec ->
+    private fun areIntegrantsAround() = pos.toVec3d().let { posVec ->
         players.orEmpty().any {
             it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= EFFECTIVE_AREA_RADIUS_SQUARED
         }
