@@ -51,22 +51,7 @@ class BlockEntityTrialKeystone :
         if (world?.isClient == true) {
             MinecraftClient.getInstance().player?.let { clientPlayer ->
                 if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
-                    checkTerrain().let { wrongTerrain ->
-                        if (wrongTerrain.isNotEmpty()) {
-                            (0 .. min(wrongTerrain.size / 4, 1)).let { _ ->
-                                wrongTerrain.random().let {
-                                    world?.addParticle(
-                                        ParticleTypes.FLAME,
-                                        true,
-                                        it.x + Random.nextDouble() - .1,
-                                        it.y + 1.0,
-                                        it.z + Random.nextDouble() - .1,
-                                        0.0, 0.0, 0.0
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    spawnParticlesInWrongTerrain()
                 }
             }
             return
@@ -126,6 +111,31 @@ class BlockEntityTrialKeystone :
         } else throw TrialKeystoneAlreadyRunningException(this)
     }
 
+    /**
+     * Spawns fire particles above the blocks in wrong place
+     */
+    private fun spawnParticlesInWrongTerrain() {
+        checkTerrain().let { wrongTerrain ->
+            if (wrongTerrain.isNotEmpty()) {
+                (0 .. min(wrongTerrain.size / 4, 1)).let { _ ->
+                    wrongTerrain.random().let {
+                        world?.addParticle(
+                            ParticleTypes.FLAME,
+                            true,
+                            it.x + Random.nextDouble() - .1,
+                            it.y + 1.0,
+                            it.z + Random.nextDouble() - .1,
+                            0.0, 0.0, 0.0
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Pulls the mobs spawned by the waves back to the center
+     */
     private fun pullMobsInBorders() {
         val posVector = pos.toVec3d()
         currentTrial?.waves
