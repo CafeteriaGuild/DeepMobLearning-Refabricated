@@ -9,13 +9,14 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
+import dev.nathanpb.dml.TrialKeystoneNoPlayersAround
 import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
-import net.minecraft.command.arguments.EntityArgumentType.getPlayer
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
@@ -23,7 +24,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
@@ -43,6 +43,7 @@ class BlockEntityTrialKeystone :
 
     private var circleBounds: List<BlockPos>? = null
     private var currentTrial: RunningTrialData? = null
+    private var players: List<PlayerEntity>? = null
     private var currentWave = 0
     private var tickCount = 0
 
@@ -72,7 +73,7 @@ class BlockEntityTrialKeystone :
             return
         }
         currentTrial?.let { currentTrial ->
-            if (getPlayersAround().isEmpty()) {
+            if (!integrantsAreAround()) {
                 endTrial(TrialEndReason.NO_ONE_IS_AROUND)
                 return
             }
@@ -102,7 +103,12 @@ class BlockEntityTrialKeystone :
         if (!isRunning()) {
             checkTerrain().let { wrongTerrain ->
                 if (wrongTerrain.isEmpty()) {
-                    currentTrial = RunningTrialData(recipe, this)
+                    world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS)?.let { playersAround ->
+                        if (playersAround.isNotEmpty()) {
+                            players = playersAround
+                            currentTrial = RunningTrialData(recipe, this)
+                        } else throw TrialKeystoneNoPlayersAround(this)
+                    }
                 } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
             }
         } else throw TrialKeystoneAlreadyRunningException(this)
@@ -153,17 +159,8 @@ class BlockEntityTrialKeystone :
         circleBounds = getCircleBoundBlocks()
     }
 
-    private fun getPlayersAround() : List<PlayerEntity> {
-        return world?.getEntities(EntityType.PLAYER, Box(
-            pos.x - EFFECTIVE_AREA_RADIUS,
-            pos.y - 1.0,
-            pos.z - EFFECTIVE_AREA_RADIUS,
-            pos.x + EFFECTIVE_AREA_RADIUS,
-            pos.y + EFFECTIVE_AREA_RADIUS,
-            pos.z + EFFECTIVE_AREA_RADIUS
-        )) {
-            it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= EFFECTIVE_AREA_RADIUS_SQUARED
-        } ?: emptyList()
+    private fun integrantsAreAround() = players.orEmpty().any {
+        it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= EFFECTIVE_AREA_RADIUS_SQUARED
     }
 
     /**

@@ -29,5 +29,10 @@ class TrialKeystoneNotRunningException(
 }
 class TrialKeystoneWrongTerrainException(
     blockEntity: BlockEntityTrialKeystone,
-    pos: List<BlockPos>
-) : Exception("The trial keystone cannot be started due wrong terrain")
+    val pos: List<BlockPos>
+) : TrialKeystoneException(blockEntity) {
+    override val message = "The trial keystone cannot be started due wrong terrain"
+}
+class TrialKeystoneNoPlayersAround(blockEntity: BlockEntityTrialKeystone) : TrialKeystoneException(blockEntity) {
+    override val message = "Could not start the Trial because no players are around"
+}
