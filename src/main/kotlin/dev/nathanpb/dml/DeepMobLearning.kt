@@ -4,11 +4,14 @@ import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.container.registerContainerTypes
 import dev.nathanpb.dml.event.LivingEntityDieCallback
+import dev.nathanpb.dml.gui.hud.TrialHud
 import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.DataCollectListener
+import dev.nathanpb.dml.net.registerClientSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.util.Identifier
 
 /*
@@ -27,6 +30,7 @@ fun init() {
     registerContainerTypes()
     registerRecipeSerializers()
     registerRecipeTypes()
+    registerClientSidePackets()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
     println("Deep Mob Learning good to go")
 }
@@ -34,6 +38,7 @@ fun init() {
 @Suppress("unused")
 fun initClient() {
     registerGuis()
+    HudRenderCallback.EVENT.register(TrialHud.INSTANCE)
 }
 
 fun identifier(path: String) = Identifier("deepmoblearning", path)

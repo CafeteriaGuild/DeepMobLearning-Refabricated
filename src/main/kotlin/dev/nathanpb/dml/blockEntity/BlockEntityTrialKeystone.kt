@@ -12,10 +12,16 @@ import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
 import dev.nathanpb.dml.TrialKeystoneNoPlayersAround
 import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.data.RunningTrialData
+import dev.nathanpb.dml.data.TrialPlayerData
+import dev.nathanpb.dml.data.writeTrialPlayerData
 import dev.nathanpb.dml.enum.TrialEndReason
+import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
+import dev.nathanpb.dml.net.TRIAL_UPDATED_PACKET
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.toVec3d
+import io.netty.buffer.Unpooled
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
@@ -23,6 +29,7 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.ParticleTypes
+import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -108,6 +115,7 @@ class BlockEntityTrialKeystone :
             currentTrial = null
             currentWave = 0
             tickCount = 0
+            sendTrialEndPackets(reason)
         } else throw TrialKeystoneAlreadyRunningException(this)
     }
 
@@ -160,6 +168,7 @@ class BlockEntityTrialKeystone :
     }
 
     private fun startCurrentWave() {
+        sendTrialUpdatePackets()
         currentTrial?.waves?.get(currentWave)?.spawnWave(this)
     }
 
@@ -208,6 +217,33 @@ class BlockEntityTrialKeystone :
             }
         }
     }.toList()
+
+    fun sendTrialUpdatePackets() {
+        TrialPlayerData(players?.size ?: 0, currentWave, currentTrial?.waves?.size ?: 0)
+            .let { data ->
+                players?.forEach { player ->
+                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(
+                        player,
+                        TRIAL_UPDATED_PACKET,
+                        data.toPacketByteBuff()
+                    )
+                }
+            }
+    }
+
+    fun sendTrialEndPackets(reason: TrialEndReason) {
+        PacketByteBuf(Unpooled.buffer())
+            .writeString(reason.toString())
+            .let { packet ->
+                players?.forEach { player ->
+                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(
+                        player,
+                        TRIAL_ENDED_PACKET,
+                        packet
+                    )
+                }
+            }
+    }
 
     private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
         (1..360).forEach { angle ->

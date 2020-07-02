@@ -1,0 +1,35 @@
+/*
+ * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
+ */
+
+package dev.nathanpb.dml.net
+
+import dev.nathanpb.dml.data.readTrialPlayerData
+import dev.nathanpb.dml.gui.hud.TrialHud
+import net.fabricmc.fabric.api.network.PacketConsumer
+
+class TrialUpdatedPacket {
+    companion object {
+        val CONSUMER = PacketConsumer { context, buff ->
+            buff.readTrialPlayerData().let {
+                context.taskQueue.execute {
+                    TrialHud.INSTANCE.data = it
+                }
+            }
+        }
+    }
+}
+
+class TrialEndedPacket {
+    companion object {
+        val CONSUMER = PacketConsumer { context, _ ->
+            context.taskQueue.execute {
+                TrialHud.INSTANCE.data = null
+            }
+        }
+    }
+}
