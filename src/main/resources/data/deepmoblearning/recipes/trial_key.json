@@ -1,12 +1,26 @@
 {
-  "type": "deepmoblearning:trial_key_attune",
-  "ingredients": [
-    {
-      "item": "deepmoblearning:trial_key"
-    },
-    {
-      "item": "deepmoblearning:data_model"
-    }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  R",
+    "EDD",
+    " II"
   ],
-  "result": "deepmoblearning:trial_key"
+  "key": {
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "minecraft:iron_nugget"
+    },
+    "R": {
+      "item": "deepmoblearning:soot_redstone"
+    }
+  },
+  "result": {
+    "item": "deepmoblearning:trial_key",
+    "count": 1
+  }
 }
