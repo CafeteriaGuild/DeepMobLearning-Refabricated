@@ -16,6 +16,7 @@ import net.minecraft.util.registry.Registry
 
 lateinit var RECIPE_TRIAL_KEY_ATTUNE: RecipeType<TrialKeyAttuneRecipe>
 lateinit var RECIPE_TRIAL_KEYSTONE: RecipeType<TrialKeystoneRecipe>
+lateinit var RECIPE_CRUSHING: RecipeType<CrushingRecipe>
 
 private fun <T : Recipe<*>?> register(id: Identifier) = Registry.register(
     Registry.RECIPE_TYPE,
@@ -27,4 +28,5 @@ private fun <T : Recipe<*>?> register(id: Identifier) = Registry.register(
 fun registerRecipeTypes() {
     RECIPE_TRIAL_KEY_ATTUNE = register(identifier("trial_key_attune"))
     RECIPE_TRIAL_KEYSTONE = register(identifier("trial_keystone"))
+    RECIPE_CRUSHING = register(identifier("crushing"))
 }

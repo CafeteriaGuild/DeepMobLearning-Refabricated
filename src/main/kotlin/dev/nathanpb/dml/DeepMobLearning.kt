@@ -7,11 +7,14 @@ import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.gui.hud.TrialHud
 import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
+import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
 import dev.nathanpb.dml.net.registerClientSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
+import net.fabricmc.fabric.api.block.BlockAttackInteractionAware
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.minecraft.util.Identifier
 
 /*
@@ -32,6 +35,7 @@ fun init() {
     registerRecipeTypes()
     registerClientSidePackets()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
+    AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     println("Deep Mob Learning good to go")
 }
 

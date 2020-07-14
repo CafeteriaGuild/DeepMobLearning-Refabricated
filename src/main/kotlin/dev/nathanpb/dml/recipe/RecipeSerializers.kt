@@ -15,6 +15,7 @@ import net.minecraft.util.registry.Registry
 
 lateinit var TRIAL_KEY_ATTUNEMENT_SERIALIZER: TrialKeyAttunementRecipeSerializer
 lateinit var TRIAL_KEYSTONE_RECIPE_SERIALIZER: TrialKeystoneRecipe.Serializer
+lateinit var CRUSHING_RECIPE_SERIALIZER: CrushingRecipe.Serializer
 
 private fun <S: RecipeSerializer<T>, T: Recipe<*>>register(id: String, serializer: S) = Registry.register(
     Registry.RECIPE_SERIALIZER,
@@ -25,4 +26,5 @@ private fun <S: RecipeSerializer<T>, T: Recipe<*>>register(id: String, serialize
 fun registerRecipeSerializers() {
     TRIAL_KEY_ATTUNEMENT_SERIALIZER = register("trial_key_attune", TrialKeyAttunementRecipeSerializer())
     TRIAL_KEYSTONE_RECIPE_SERIALIZER = register("trial_keystone", TrialKeystoneRecipe.Serializer())
+    CRUSHING_RECIPE_SERIALIZER = register("crushing", CrushingRecipe.Serializer())
 }
