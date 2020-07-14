@@ -28,13 +28,20 @@ val ITEM_DEEP_LEARNER = ItemDeepLearner()
 val ITEM_DATA_MODEL = ItemDataModel()
 val ITEM_TRIAL_KEY = ItemTrialKey()
 
+val ITEM_SOOT_REDSTONE = Item(settings())
+val ITEM_SOOT_PLATE = Item(settings())
+val ITEM_SOOT_MACHINE_CASE = Item(settings())
+
 
 fun registerItems() {
     mapOf(
         ITEM_DML to "deepmoblearning",
         ITEM_DEEP_LEARNER to "deep_learner",
         ITEM_DATA_MODEL to "data_model",
-        ITEM_TRIAL_KEY to "trial_key"
+        ITEM_TRIAL_KEY to "trial_key",
+        ITEM_SOOT_REDSTONE to "soot_redstone",
+        ITEM_SOOT_PLATE to "soot_plate",
+        ITEM_SOOT_MACHINE_CASE to "machine_casing"
     ).forEach { (item, id) ->
         Registry.register(Registry.ITEM, identifier(id), item)
     }
