@@ -17,5 +17,5 @@ fun PlayerInventory.hotbar() = (0..8).map { this.getInvStack(it) }
 
 fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
     ItemStack.EMPTY,
-    *(0..invSize).map { getInvStack(it) }.toTypedArray()
+    *(0 until invSize).map { getInvStack(it) }.toTypedArray()
 )
