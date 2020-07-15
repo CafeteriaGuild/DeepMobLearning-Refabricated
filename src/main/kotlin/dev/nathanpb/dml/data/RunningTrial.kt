@@ -8,12 +8,12 @@
 
 package dev.nathanpb.dml.data
 
-import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnType
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import kotlin.random.Random
 
 data class RunningTrialData (
@@ -21,7 +21,7 @@ data class RunningTrialData (
     val waves: List<RunningTrialWaveData>
 ) {
 
-    constructor(recipe: TrialKeystoneRecipe, blockEntity: BlockEntityTrialKeystone) : this(
+    constructor(recipe: TrialKeystoneRecipe) : this(
         recipe, recipe.waves.mapIndexed { index, mobCount ->
             RunningTrialWaveData(index, mobCount, recipe.entity)
         }
@@ -39,17 +39,13 @@ data class RunningTrialWaveData (
 
     fun despawnWave() = spawnedEntities.forEach(LivingEntity::remove)
 
-    fun spawnWave(blockEntity: BlockEntityTrialKeystone) {
+    fun spawnWave(world: World, pos: BlockPos) {
         isSpawned = true
         (1..entityCount).forEach { _ ->
             entityType.spawn(
-                blockEntity.world,
+                world,
                 null, null, null,
-                BlockPos(
-                    blockEntity.pos.x + Random.nextInt(-2, 2),
-                    blockEntity.pos.y + 5,
-                    blockEntity.pos.z + Random.nextInt(-2, 2)
-                ),
+                pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
                 SpawnType.SPAWNER,
                 false, false
             ).let {

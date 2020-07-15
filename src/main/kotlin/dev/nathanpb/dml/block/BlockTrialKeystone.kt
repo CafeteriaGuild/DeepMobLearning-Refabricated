@@ -8,12 +8,13 @@
 
 package dev.nathanpb.dml.block
 
-import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
-import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
+import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
@@ -48,9 +49,11 @@ class BlockTrialKeystone : Block(
                         if (data != null) {
                             try {
                                 stackInHand.decrement(1)
-                                blockEntity.startTrial(data)
+                                val trialData = RunningTrialData(data)
+                                val trial = blockEntity.createTrial(trialData)
+                                blockEntity.startTrial(trial)
                                 return ActionResult.CONSUME
-                            } catch (ex: TrialKeystoneAlreadyRunningException) {
+                            } catch (ex: TrialKeystoneIllegalStartException) {
                                 return ActionResult.PASS
                             } catch (ex: TrialKeystoneWrongTerrainException) {
                                 player.addChatMessage(TranslatableText("chat.deepmoblearning.trial_wrong_terrain"), false)

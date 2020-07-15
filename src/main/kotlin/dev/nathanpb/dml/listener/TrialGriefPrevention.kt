@@ -10,6 +10,7 @@ package dev.nathanpb.dml.listener
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.event.WorldExplosionCallback
+import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
@@ -26,13 +27,13 @@ import net.minecraft.world.explosion.Explosion
 
 class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback, WorldExplosionCallback {
 
-    private fun isInArea(entity: BlockEntityTrialKeystone, pos: BlockPos): Boolean {
-        return entity.pos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
+    private fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
+        return trialPos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
     }
 
     private fun isBlockProtected(pos: BlockPos): Boolean {
-        return BlockEntityTrialKeystone.RUNNING_TRIALS.any {
-            isInArea(it, pos) && pos.y >= it.pos.y - 1
+        return Trial.RUNNING_TRIALS.any {
+            isInArea(it.pos, pos) && pos.y >= it.pos.y - 1
         }
     }
 

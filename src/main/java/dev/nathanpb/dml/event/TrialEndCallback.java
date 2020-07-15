@@ -1,3 +1,5 @@
+package dev.nathanpb.dml.event;
+
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -6,9 +8,19 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.enum
+import dev.nathanpb.dml.trial.Trial;
+import dev.nathanpb.dml.trial.TrialEndReason;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-enum class TrialEndReason {
-    SUCCESS,
-    NO_ONE_IS_AROUND
+public interface TrialEndCallback {
+    Event<TrialEndCallback> EVENT = EventFactory.createArrayBacked(TrialEndCallback.class, listeners ->
+        (trial, reason) -> {
+            for(TrialEndCallback listener : listeners) {
+                listener.onTrialEnd(trial, reason);
+            }
+        }
+    );
+
+    void onTrialEnd(Trial trial, TrialEndReason reason);
 }

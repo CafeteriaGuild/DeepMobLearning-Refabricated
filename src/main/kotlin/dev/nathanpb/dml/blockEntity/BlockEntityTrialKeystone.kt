@@ -8,27 +8,17 @@
 
 package dev.nathanpb.dml.blockEntity
 
-import dev.nathanpb.dml.TrialKeystoneAlreadyRunningException
-import dev.nathanpb.dml.TrialKeystoneNoPlayersAround
-import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.data.RunningTrialData
-import dev.nathanpb.dml.data.TrialPlayerData
-import dev.nathanpb.dml.enum.TrialEndReason
-import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
-import dev.nathanpb.dml.net.TRIAL_UPDATED_PACKET
-import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.event.TrialEndCallback
+import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.toVec3d
-import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.ParticleTypes
-import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -41,23 +31,31 @@ import kotlin.random.Random
 
 class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
+    TrialEndCallback,
     Tickable
 {
 
     companion object {
         const val EFFECTIVE_AREA_RADIUS = 12.0
         const val EFFECTIVE_AREA_RADIUS_SQUARED = EFFECTIVE_AREA_RADIUS * EFFECTIVE_AREA_RADIUS
-        val RUNNING_TRIALS = mutableListOf<BlockEntityTrialKeystone>()
     }
 
     private var circleBounds: List<BlockPos>? = null
-    private var currentTrial: RunningTrialData? = null
-    private var players: List<PlayerEntity>? = null
-    private var currentWave = 0
-    private var tickCount = 0
+    private var currentTrial: Trial? = null
+
+    init {
+        TrialEndCallback.EVENT.register(this)
+    }
+
+    override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
+        if (currentTrial == trial) {
+            currentTrial = null
+        }
+    }
 
     override fun tick() {
-        if (world?.isClient == true) {
+        val state = currentTrial?.state ?: TrialState.NOT_STARTED
+        if (world?.isClient == true && state == TrialState.NOT_STARTED) {
             MinecraftClient.getInstance().player?.let { clientPlayer ->
                 if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
                     spawnParticlesInWrongTerrain()
@@ -65,62 +63,31 @@ class BlockEntityTrialKeystone :
             }
             return
         }
-        currentTrial?.let { currentTrial ->
-            if (!areIntegrantsAround()) {
-                endTrial(TrialEndReason.NO_ONE_IS_AROUND)
-                return
-            }
-            if (currentWave < currentTrial.waves.size) {
-                pullMobsInBorders()
-                val wave = currentTrial.waves[currentWave]
-                if (!wave.isSpawned) {
-                    // Will spawn the current wave if its not spawned yet
-                    // Applied when the last tick just moved to the next wave but did not spawned it yet
-                    startCurrentWave()
-                } else if (wave.isFinished()) {
-                    // Will move to the next wave in the current tick
-                    // The next tick will check if the wave exists and
-                    // spawn the wave if so, or finish the trial if not
-                    currentWave++
+        currentTrial?.let { trial ->
+            if (state == TrialState.RUNNING) {
+                pullMobsInBorders(trial.data.waves[trial.currentWave].spawnedEntities)
+                if (!arePlayersAround(trial.players)) {
+                    trial.end(TrialEndReason.NO_ONE_IS_AROUND)
                 }
-            } else endTrial(TrialEndReason.SUCCESS)
-            tickCount++
+                trial.tick()
+            }
         }
     }
 
-    @Suppress("private")
-    fun isRunning() = currentTrial != null
-
-    @Suppress("private")
-    fun startTrial(recipe: TrialKeystoneRecipe) {
-        if (!isRunning()) {
-            checkTerrain().let { wrongTerrain ->
-                if (wrongTerrain.isEmpty()) {
-                    world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS)?.let { playersAround ->
-                        if (playersAround.isNotEmpty()) {
-                            players = playersAround
-                            currentTrial = RunningTrialData(recipe, this)
-                            RUNNING_TRIALS += this
-                        } else throw TrialKeystoneNoPlayersAround(this)
-                    }
-                } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
-            }
-        } else throw TrialKeystoneAlreadyRunningException(this)
+    fun createTrial(data: RunningTrialData): Trial {
+        val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS).orEmpty()
+        if (players.isNotEmpty()) {
+            return Trial(this, data, players)
+        } else throw TrialKeystoneNoPlayersAround(this)
     }
 
-    @Suppress("private")
-    fun endTrial(reason: TrialEndReason) {
-        if (isRunning()) {
-            when (reason) {
-                TrialEndReason.SUCCESS -> dropRewards()
-                TrialEndReason.NO_ONE_IS_AROUND -> currentTrial?.waves?.get(currentWave)?.despawnWave()
-            }
-            currentTrial = null
-            currentWave = 0
-            tickCount = 0
-            RUNNING_TRIALS -= this
-            sendTrialEndPackets(reason)
-        } else throw TrialKeystoneAlreadyRunningException(this)
+    fun startTrial(trial: Trial) {
+        checkTerrain().let { wrongTerrain ->
+            if (wrongTerrain.isEmpty()) {
+                currentTrial = trial
+                trial.start()
+            } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
+        }
     }
 
     /**
@@ -148,32 +115,16 @@ class BlockEntityTrialKeystone :
     /**
      * Pulls the mobs spawned by the waves back to the center
      */
-    private fun pullMobsInBorders() {
+    private fun pullMobsInBorders(mobs: List<LivingEntity>) {
         val posVector = pos.toVec3d()
-        currentTrial?.waves
-            ?.get(currentWave)
-            ?.spawnedEntities
-            ?.filter(LivingEntity::isAlive)
-            ?.filter {
+        mobs.filter(LivingEntity::isAlive)
+            .filter {
                 val squaredDistance = it.squaredDistanceTo(posVector.x, posVector.y, posVector.z)
                 squaredDistance >=  EFFECTIVE_AREA_RADIUS_SQUARED - 9
-            }?.forEach {
+            }.forEach {
                 val vector = it.posVector.subtract(pos.toVec3d()).multiply(-0.1)
                 it.addVelocity(vector.x, vector.y, vector.z)
             }
-    }
-
-    private fun dropRewards() {
-        currentTrial?.recipe?.copyRewards()?.map {
-            ItemEntity(world, pos.x.toDouble(), pos.y + 1.0, pos.z.toDouble(), it)
-        }?.forEach {
-            world?.spawnEntity(it)
-        }
-    }
-
-    private fun startCurrentWave() {
-        sendTrialUpdatePackets()
-        currentTrial?.waves?.get(currentWave)?.spawnWave(this)
     }
 
     override fun setLocation(world: World, pos: BlockPos) {
@@ -181,9 +132,9 @@ class BlockEntityTrialKeystone :
         circleBounds = getCircleBoundBlocks()
     }
 
-    private fun areIntegrantsAround() = pos.toVec3d().let { posVec ->
-        players.orEmpty().any {
-            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= EFFECTIVE_AREA_RADIUS_SQUARED
+    private fun arePlayersAround(players: List<PlayerEntity>) = pos.toVec3d().let { posVec ->
+        players.any {
+            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
         }
     }
 
@@ -221,33 +172,6 @@ class BlockEntityTrialKeystone :
             }
         }
     }.toList()
-
-    fun sendTrialUpdatePackets() {
-        TrialPlayerData(players?.size ?: 0, currentWave, currentTrial?.waves?.size ?: 0)
-            .let { data ->
-                players?.forEach { player ->
-                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(
-                        player,
-                        TRIAL_UPDATED_PACKET,
-                        data.toPacketByteBuff()
-                    )
-                }
-            }
-    }
-
-    fun sendTrialEndPackets(reason: TrialEndReason) {
-        PacketByteBuf(Unpooled.buffer())
-            .writeString(reason.toString())
-            .let { packet ->
-                players?.forEach { player ->
-                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(
-                        player,
-                        TRIAL_ENDED_PACKET,
-                        packet
-                    )
-                }
-            }
-    }
 
     private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
         (1..360).forEach { angle ->

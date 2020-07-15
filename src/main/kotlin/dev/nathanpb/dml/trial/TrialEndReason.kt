@@ -1,5 +1,3 @@
-package dev.nathanpb.dml
-
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -8,7 +6,9 @@ package dev.nathanpb.dml
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
+package dev.nathanpb.dml.trial
 
-class NotDeepLearnerException : Exception("The current item stack is not a valid Deep Learner")
-class NotDataModelException : Exception("The current item stack is not a valid Data Model")
-class InvalidTrialKeyBase : IllegalArgumentException("The given argument cannot be converted into TrialKeyData")
+enum class TrialEndReason {
+    SUCCESS,
+    NO_ONE_IS_AROUND
+}
