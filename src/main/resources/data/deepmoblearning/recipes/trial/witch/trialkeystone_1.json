@@ -1,0 +1,11 @@
+{
+  "type": "deepmoblearning:trial_keystone",
+  "tier": 1,
+  "entity": "minecraft:witch",
+  "rewards": [
+    {
+      "item": "minecraft:iron",
+      "count": 2
+    }
+  ]
+}

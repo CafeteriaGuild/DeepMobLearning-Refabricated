@@ -1,0 +1,11 @@
+{
+  "type": "deepmoblearning:trial_keystone",
+  "tier": 0,
+  "entity": "minecraft:pillager",
+  "rewards": [
+    {
+      "item": "minecraft:coal",
+      "count": 2
+    }
+  ]
+}

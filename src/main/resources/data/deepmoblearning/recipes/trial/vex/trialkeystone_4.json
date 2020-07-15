@@ -1,0 +1,15 @@
+{
+  "type": "deepmoblearning:trial_keystone",
+  "tier": 4,
+  "entity": "minecraft:vex",
+  "rewards": [
+    {
+      "item": "minecraft:gold",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 4
+    }
+  ]
+}
