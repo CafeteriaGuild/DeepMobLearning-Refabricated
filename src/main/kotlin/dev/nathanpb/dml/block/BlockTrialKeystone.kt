@@ -19,7 +19,6 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.Material
-import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.TranslatableText
@@ -48,6 +47,7 @@ class BlockTrialKeystone : Block(
                     }.let { data ->
                         if (data != null) {
                             try {
+                                stackInHand.decrement(1)
                                 blockEntity.startTrial(data)
                                 return ActionResult.CONSUME
                             } catch (ex: TrialKeystoneAlreadyRunningException) {
