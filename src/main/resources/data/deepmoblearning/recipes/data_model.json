@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LRL",
+    "SES",
+    "LGL"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "S": {
+      "item": "deepmoblearning:soot_redstone"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "item": "deepmoblearning:data_model",
+    "count": 1
+  }
+}
