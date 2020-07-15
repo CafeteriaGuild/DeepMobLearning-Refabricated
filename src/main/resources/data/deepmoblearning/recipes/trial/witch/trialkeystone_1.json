@@ -4,7 +4,7 @@
   "entity": "minecraft:witch",
   "rewards": [
     {
-      "item": "minecraft:iron",
+      "item": "minecraft:iron_ingot",
       "count": 2
     }
   ]
