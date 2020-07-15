@@ -68,11 +68,12 @@ class TrialKeystoneRecipe (
         }
 
         override fun read(id: Identifier, json: JsonObject): TrialKeystoneRecipe {
+            val tier = DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY
             return TrialKeystoneRecipe(
                 id,
                 Registry.ENTITY_TYPE[Identifier(json.getAsJsonPrimitive("entity").asString)],
-                DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY,
-                json.getAsJsonArray("waves").map { it.asInt },
+                tier,
+                json.getAsJsonArray("waves")?.map { it.asInt } ?: tier.defaultWave,
                 json.getAsJsonArray("rewards").map {
                     ShapedRecipe.getItemStack(it.asJsonObject)
                 }

@@ -11,13 +11,15 @@ package dev.nathanpb.dml.data
 import net.minecraft.text.TranslatableText
 import kotlin.math.max
 
+private val defaultWave = listOf(1, 1, 2, 3, 4, 4, 5, 5)
+
 // TODO remove the hardcoded dataAmount
-enum class DataModelTier(textEntry: String, val dataAmount: Int) {
-    FAULTY("tier.deepmoblearning.faulty", 0),
-    BASIC("tier.deepmoblearning.basic", 8),
-    ADVANCED("tier.deepmoblearning.advanced", 16),
-    SUPERIOR("tier.deepmoblearning.superior", 32),
-    SELF_AWARE("tier.deepmoblearning.self_aware", 64);
+enum class DataModelTier(textEntry: String, val dataAmount: Int, val defaultWave: List<Int>) {
+    FAULTY("tier.deepmoblearning.faulty", 0, defaultWave),
+    BASIC("tier.deepmoblearning.basic", 8, defaultWave.map { it * 2 }),
+    ADVANCED("tier.deepmoblearning.advanced", 16, defaultWave.map { it * 3 }),
+    SUPERIOR("tier.deepmoblearning.superior", 32, defaultWave.map { it * 4 }),
+    SELF_AWARE("tier.deepmoblearning.self_aware", 64, defaultWave.map { it * 5 });
 
     companion object {
         fun fromDataAmount(amount: Int) = values().last {
