@@ -13,7 +13,6 @@ import dev.nathanpb.dml.TrialKeystoneNoPlayersAround
 import dev.nathanpb.dml.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.data.TrialPlayerData
-import dev.nathanpb.dml.data.writeTrialPlayerData
 import dev.nathanpb.dml.enum.TrialEndReason
 import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
 import dev.nathanpb.dml.net.TRIAL_UPDATED_PACKET
@@ -34,7 +33,9 @@ import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
-import kotlin.math.*
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
 import kotlin.random.Random
 
 
@@ -46,6 +47,7 @@ class BlockEntityTrialKeystone :
     companion object {
         const val EFFECTIVE_AREA_RADIUS = 12.0
         const val EFFECTIVE_AREA_RADIUS_SQUARED = EFFECTIVE_AREA_RADIUS * EFFECTIVE_AREA_RADIUS
+        val RUNNING_TRIALS = mutableListOf<BlockEntityTrialKeystone>()
     }
 
     private var circleBounds: List<BlockPos>? = null
@@ -98,6 +100,7 @@ class BlockEntityTrialKeystone :
                         if (playersAround.isNotEmpty()) {
                             players = playersAround
                             currentTrial = RunningTrialData(recipe, this)
+                            RUNNING_TRIALS += this
                         } else throw TrialKeystoneNoPlayersAround(this)
                     }
                 } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
@@ -115,6 +118,7 @@ class BlockEntityTrialKeystone :
             currentTrial = null
             currentWave = 0
             tickCount = 0
+            RUNNING_TRIALS -= this
             sendTrialEndPackets(reason)
         } else throw TrialKeystoneAlreadyRunningException(this)
     }

@@ -4,17 +4,19 @@ import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.container.registerContainerTypes
 import dev.nathanpb.dml.event.LivingEntityDieCallback
+import dev.nathanpb.dml.event.WorldExplosionCallback
 import dev.nathanpb.dml.gui.hud.TrialHud
 import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
+import dev.nathanpb.dml.listener.TrialGriefPrevention
 import dev.nathanpb.dml.net.registerClientSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
-import net.fabricmc.fabric.api.block.BlockAttackInteractionAware
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
+import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.util.Identifier
 
 /*
@@ -36,6 +38,11 @@ fun init() {
     registerClientSidePackets()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
+    TrialGriefPrevention().apply {
+        AttackBlockCallback.EVENT.register(this)
+        UseBlockCallback.EVENT.register(this)
+        WorldExplosionCallback.EVENT.register(this)
+    }
     println("Deep Mob Learning good to go")
 }
 

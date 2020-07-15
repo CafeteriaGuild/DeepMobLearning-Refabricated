@@ -10,5 +10,7 @@ package dev.nathanpb.dml.utils
 
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.Vec3i
 
 fun BlockPos.toVec3d() = Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
+fun BlockPos.toVec3i() = Vec3i(x, y, z)
