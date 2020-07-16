@@ -9,7 +9,6 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
-import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
@@ -67,7 +66,7 @@ class BlockEntityTrialKeystone :
         currentTrial?.let { trial ->
             if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
                 if (state == TrialState.RUNNING) {
-                    pullMobsInBorders(trial.data.waves[trial.currentWave].spawnedEntities)
+                    pullMobsInBorders(trial.waves[trial.currentWave].spawnedEntities)
                     if (!arePlayersAround(trial.players)) {
                         trial.end(TrialEndReason.NO_ONE_IS_AROUND)
                     }
@@ -77,7 +76,7 @@ class BlockEntityTrialKeystone :
         }
     }
 
-    fun createTrial(data: RunningTrialData): Trial {
+    fun createTrial(data: TrialData): Trial {
         val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS).orEmpty()
         if (players.isNotEmpty()) {
             return Trial(this, data, players)
@@ -137,7 +136,7 @@ class BlockEntityTrialKeystone :
 
     private fun arePlayersAround(players: List<PlayerEntity>) = pos.toVec3d().let { posVec ->
         players.any {
-            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
+            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= EFFECTIVE_AREA_RADIUS_SQUARED
         }
     }
 

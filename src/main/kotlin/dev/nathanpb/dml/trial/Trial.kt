@@ -9,7 +9,6 @@
 package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.data.TrialPlayerData
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
@@ -35,11 +34,11 @@ import net.minecraft.world.World
 class Trial (
     val world: World,
     val pos: BlockPos,
-    val data: RunningTrialData,
+    val data: TrialData,
     val players: List<PlayerEntity>
 ) : Tickable {
 
-    constructor(keystone: BlockEntityTrialKeystone, data: RunningTrialData, players: List<PlayerEntity>): this(
+    constructor(keystone: BlockEntityTrialKeystone, data: TrialData, players: List<PlayerEntity>): this(
         keystone.world!!, // TODO why is World nullable? Assert this
         keystone.pos,
         data,
@@ -72,6 +71,7 @@ class Trial (
 
     private var tickCount = 0
     private var endsdAt = 0
+    val waves = data.waves.map(::TrialWave)
     private val bar = ServerBossBar(BAR_TEXT, BossBar.Color.BLUE, BossBar.Style.NOTCHED_10).also {
         it.isVisible = false
         players
@@ -83,10 +83,10 @@ class Trial (
         if (!world.isClient && state != TrialState.NOT_STARTED) {
             when (state) {
                 TrialState.RUNNING -> {
-                    if (currentWave < data.waves.size) {
-                        val wave = data.waves[currentWave]
+                    if (currentWave < waves.size) {
+                        val wave = waves[currentWave]
                         wave.spawnedEntities.filter(LivingEntity::isAlive).size.let { alive ->
-                            bar.percent = MathHelper.clamp(alive / wave.entityCount.toFloat(), 0F, 1F)
+                            bar.percent = MathHelper.clamp(alive / wave.waveData.entityCount.toFloat(), 0F, 1F)
                         }
                         if (!wave.isSpawned) {
                             // Will spawn the current wave if its not spawned yet
@@ -97,7 +97,7 @@ class Trial (
                             // The next tick will check if the wave exists and
                             // spawn the wave if so, or finish the trial if not
                             currentWave++
-                            if (currentWave >= data.waves.size) {
+                            if (currentWave >= waves.size) {
                                 end(TrialEndReason.SUCCESS)
                             }
                         }
@@ -112,6 +112,7 @@ class Trial (
                         bar.isVisible = false
                     }
                 }
+                else -> {} // Suppress non-exhaustive when
             }
             tickCount++
         }
@@ -147,7 +148,7 @@ class Trial (
                         it.playSound(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1F, 1F)
                     }
 
-                    data.waves[currentWave].despawnWave()
+                    waves[currentWave].despawnWave()
                 }
             }
 
@@ -170,13 +171,9 @@ class Trial (
         }
     }
 
-    /*
-     * Wave Control
-     */
-
     private fun startCurrentWave() {
         sendTrialUpdatePackets()
-        data.waves[currentWave].spawnWave(world, pos)
+        waves[currentWave].spawnWave(world, pos)
     }
 
 

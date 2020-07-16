@@ -9,12 +9,13 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.trial.TrialData
 import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
 import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
+import dev.nathanpb.dml.trial.TrialWaveData
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
@@ -51,7 +52,7 @@ class BlockTrialKeystone : Block(
                         if (data != null) {
                             try {
                                 stackInHand.decrement(1)
-                                val trialData = RunningTrialData(data)
+                                val trialData = TrialData(data, TrialWaveData.fromRecipe(data))
                                 val trial = blockEntity.createTrial(trialData)
                                 blockEntity.startTrial(trial)
                                 return ActionResult.CONSUME

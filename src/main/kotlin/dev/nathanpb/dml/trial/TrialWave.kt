@@ -6,32 +6,16 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.data
+package dev.nathanpb.dml.trial
 
-import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnType
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.random.Random
 
-data class RunningTrialData (
-    val recipe: TrialKeystoneRecipe,
-    val waves: List<RunningTrialWaveData>
-) {
-
-    constructor(recipe: TrialKeystoneRecipe) : this(
-        recipe, recipe.waves.mapIndexed { index, mobCount ->
-            RunningTrialWaveData(index, mobCount, recipe.entity)
-        }
-    )
-}
-
-data class RunningTrialWaveData (
-    val wave: Int,
-    val entityCount: Int,
-    val entityType: EntityType<*>
+class TrialWave (
+    val waveData: TrialWaveData
 ) {
     val spawnedEntities = mutableListOf<LivingEntity>()
     var isSpawned = false
@@ -41,8 +25,8 @@ data class RunningTrialWaveData (
 
     fun spawnWave(world: World, pos: BlockPos) {
         isSpawned = true
-        (1..entityCount).forEach { _ ->
-            entityType.spawn(
+        (1..waveData.entityCount).forEach { _ ->
+            waveData.entityType.spawn(
                 world,
                 null, null, null,
                 pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
