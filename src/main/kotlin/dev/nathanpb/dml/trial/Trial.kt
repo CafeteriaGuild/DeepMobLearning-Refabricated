@@ -70,7 +70,7 @@ class Trial (
 
 
     private var tickCount = 0
-    private var endsdAt = 0
+    private var endsAt = 0
     val waves = data.waves.map(::TrialWave)
     private val bar = ServerBossBar(BAR_TEXT, BossBar.Color.BLUE, BossBar.Style.NOTCHED_10).also {
         it.isVisible = false
@@ -107,7 +107,7 @@ class Trial (
                     }
                 }
                 TrialState.WAITING_POST_FINISHED -> {
-                    if (tickCount >= endsdAt) {
+                    if (tickCount >= endsAt) {
                         state = TrialState.FINISHED
                         bar.isVisible = false
                     }
@@ -152,7 +152,7 @@ class Trial (
                 }
             }
 
-            endsdAt = tickCount + POST_END_TIMEOUT
+            endsAt = tickCount + POST_END_TIMEOUT
             bar.percent = 1F
             RUNNING_TRIALS -= this
             state = TrialState.WAITING_POST_FINISHED
