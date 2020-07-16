@@ -41,8 +41,12 @@ class TrialGriefPrevention :
 
     private fun isBlockProtected(pos: BlockPos): Boolean {
         return Trial.RUNNING_TRIALS.any {
-            isInArea(it.pos, pos) && pos.y >= it.pos.y - 1
+            isBlockProtected(pos, it)
         }
+    }
+
+    private fun isBlockProtected(pos: BlockPos, trial: Trial) : Boolean {
+        return isInArea(trial.pos, pos) && pos.y >= trial.pos.y - 1
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, pos: BlockPos, direction: Direction): ActionResult {
@@ -75,7 +79,7 @@ class TrialGriefPrevention :
     }
 
     override fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
-        val belongsToTrial = Trial.RUNNING_TRIALS.any { trial ->
+        Trial.RUNNING_TRIALS.firstOrNull { trial ->
             trial.waves
                 .asSequence()
                 .filter(TrialWave::isSpawned)
@@ -83,9 +87,10 @@ class TrialGriefPrevention :
                 .map(TrialWave::spawnedEntities)
                 .flatten()
                 .any(entity::equals)
-        }
-        if (belongsToTrial && !isBlockProtected(pos.toBlockPos())) {
-            return ActionResult.FAIL
+        }?.let { trial ->
+            if (!isBlockProtected(pos.toBlockPos(), trial)) {
+                return ActionResult.FAIL
+            }
         }
         return ActionResult.PASS
     }
