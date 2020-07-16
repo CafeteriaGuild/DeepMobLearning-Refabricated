@@ -6,13 +6,11 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.listener
+package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
-import dev.nathanpb.dml.trial.Trial
-import dev.nathanpb.dml.trial.TrialWave
 import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback

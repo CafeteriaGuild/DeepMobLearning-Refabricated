@@ -11,10 +11,10 @@ import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
-import dev.nathanpb.dml.listener.TrialGriefPrevention
 import dev.nathanpb.dml.net.registerClientSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
+import dev.nathanpb.dml.trial.TrialGriefPrevention
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
