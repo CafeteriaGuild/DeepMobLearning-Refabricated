@@ -22,6 +22,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.Material
 import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -31,6 +32,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import java.util.*
 
 class BlockTrialKeystone : Block(
     FabricBlockSettings.of(Material.STONE)
@@ -76,6 +78,13 @@ class BlockTrialKeystone : Block(
         context: EntityContext?
     ): VoxelShape {
         return VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
+    }
+
+    override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        (world.getBlockEntity(pos) as? BlockEntityTrialKeystone)?.let { entity ->
+            entity.currentTrial = null
+        }
+        super.scheduledTick(state, world, pos, random)
     }
 
     override fun createBlockEntity(view: BlockView?) = BlockEntityTrialKeystone()

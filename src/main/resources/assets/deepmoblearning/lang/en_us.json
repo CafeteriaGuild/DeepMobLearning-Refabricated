@@ -24,5 +24,8 @@
   "gui.deepmoblearning.previous": "Previous",
   "chat.deepmoblearning.trial_wrong_terrain": "§4The terrain is not proper to start a trial",
   "chat.deepmoblearning.trial_no_recipe": "§4That Trial Key seem to be broken",
+  "bar.deepmoblearning.trial": "Trial",
+  "bar.deepmoblearning.trial_success": "Trial Succeeded",
+  "bar.deepmoblearning.trial_fail": "Trial Failed",
   "block.deepmoblearning.trial_keystone": "Trial Keystone"
 }

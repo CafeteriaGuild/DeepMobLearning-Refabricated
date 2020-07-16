@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.blockEntity
 
+import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import dev.nathanpb.dml.data.RunningTrialData
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.trial.*
@@ -41,7 +42,7 @@ class BlockEntityTrialKeystone :
     }
 
     private var circleBounds: List<BlockPos>? = null
-    private var currentTrial: Trial? = null
+    var currentTrial: Trial? = null
 
     init {
         TrialEndCallback.EVENT.register(this)
@@ -49,7 +50,7 @@ class BlockEntityTrialKeystone :
 
     override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
         if (currentTrial == trial) {
-            currentTrial = null
+            trial.world.blockTickScheduler.schedule(pos, BLOCK_TRIAL_KEYSTONE, Trial.POST_END_TIMEOUT + 1)
         }
     }
 
@@ -64,10 +65,12 @@ class BlockEntityTrialKeystone :
             return
         }
         currentTrial?.let { trial ->
-            if (state == TrialState.RUNNING) {
-                pullMobsInBorders(trial.data.waves[trial.currentWave].spawnedEntities)
-                if (!arePlayersAround(trial.players)) {
-                    trial.end(TrialEndReason.NO_ONE_IS_AROUND)
+            if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
+                if (state == TrialState.RUNNING) {
+                    pullMobsInBorders(trial.data.waves[trial.currentWave].spawnedEntities)
+                    if (!arePlayersAround(trial.players)) {
+                        trial.end(TrialEndReason.NO_ONE_IS_AROUND)
+                    }
                 }
                 trial.tick()
             }

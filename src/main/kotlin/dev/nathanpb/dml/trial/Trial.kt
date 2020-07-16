@@ -18,10 +18,18 @@ import dev.nathanpb.dml.utils.toVec3d
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.boss.BossBar
+import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
 
 class Trial (
@@ -40,6 +48,19 @@ class Trial (
 
     companion object {
         val RUNNING_TRIALS = mutableListOf<Trial>()
+        const val POST_END_TIMEOUT = 60
+
+        val BAR_TEXT by lazy {
+            TranslatableText("bar.deepmoblearning.trial")
+        }
+
+        val BAR_TEXT_SUCCESS by lazy {
+            TranslatableText("bar.deepmoblearning.trial_success")
+        }
+
+        val BAR_TEXT_FAIL by lazy {
+            TranslatableText("bar.deepmoblearning.trial_fail")
+        }
     }
 
     var currentWave = 0
@@ -50,27 +71,47 @@ class Trial (
 
 
     private var tickCount = 0
+    private var endsdAt = 0
+    private val bar = ServerBossBar(BAR_TEXT, BossBar.Color.BLUE, BossBar.Style.NOTCHED_10).also {
+        it.isVisible = false
+        players
+            .filterIsInstance<ServerPlayerEntity>()
+            .forEach(it::addPlayer)
+    }
 
     override fun tick() {
-        if (!world.isClient && state == TrialState.RUNNING) {
-            if (currentWave < data.waves.size) {
-                val wave = data.waves[currentWave]
-                if (!wave.isSpawned) {
-                    // Will spawn the current wave if its not spawned yet
-                    // Applied when the last tick just moved to the next wave but did not spawned it yet
-                    startCurrentWave()
-                } else if (wave.isFinished()) {
-                    // Will move to the next wave in the current tick
-                    // The next tick will check if the wave exists and
-                    // spawn the wave if so, or finish the trial if not
-                    currentWave++
-                    if (currentWave >= data.waves.size) {
+        if (!world.isClient && state != TrialState.NOT_STARTED) {
+            when (state) {
+                TrialState.RUNNING -> {
+                    if (currentWave < data.waves.size) {
+                        val wave = data.waves[currentWave]
+                        wave.spawnedEntities.filter(LivingEntity::isAlive).size.let { alive ->
+                            bar.percent = MathHelper.clamp(alive / wave.entityCount.toFloat(), 0F, 1F)
+                        }
+                        if (!wave.isSpawned) {
+                            // Will spawn the current wave if its not spawned yet
+                            // Applied when the last tick just moved to the next wave but did not spawned it yet
+                            startCurrentWave()
+                        } else if (wave.isFinished()) {
+                            // Will move to the next wave in the current tick
+                            // The next tick will check if the wave exists and
+                            // spawn the wave if so, or finish the trial if not
+                            currentWave++
+                            if (currentWave >= data.waves.size) {
+                                end(TrialEndReason.SUCCESS)
+                            }
+                        }
+                    } else {
+                        // Just as fallback if somehow the last wave was skipped
                         end(TrialEndReason.SUCCESS)
                     }
                 }
-            } else {
-                // Just as fallback if somehow the last wave was skipped
-                end(TrialEndReason.SUCCESS)
+                TrialState.WAITING_POST_FINISHED -> {
+                    if (tickCount >= endsdAt) {
+                        state = TrialState.FINISHED
+                        bar.isVisible = false
+                    }
+                }
             }
             tickCount++
         }
@@ -84,6 +125,7 @@ class Trial (
         if (state == TrialState.NOT_STARTED) {
             state = TrialState.RUNNING
             RUNNING_TRIALS += this
+            bar.isVisible = true
             sendTrialUpdatePackets()
         } else throw TrialKeystoneIllegalStartException(this)
     }
@@ -91,11 +133,28 @@ class Trial (
     fun end(reason: TrialEndReason) {
         if (state == TrialState.RUNNING) {
             when (reason) {
-                TrialEndReason.SUCCESS -> dropRewards()
-                TrialEndReason.NO_ONE_IS_AROUND -> data.waves[currentWave].despawnWave()
+                TrialEndReason.SUCCESS -> {
+                    bar.color = BossBar.Color.GREEN
+                    bar.name = BAR_TEXT_SUCCESS
+
+                    dropRewards()
+                }
+                TrialEndReason.NO_ONE_IS_AROUND -> {
+                    bar.color = BossBar.Color.RED
+                    bar.name = BAR_TEXT_FAIL
+
+                    players.forEach {
+                        it.playSound(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1F, 1F)
+                    }
+
+                    data.waves[currentWave].despawnWave()
+                }
             }
+
+            endsdAt = tickCount + POST_END_TIMEOUT
+            bar.percent = 1F
             RUNNING_TRIALS -= this
-            state = TrialState.FINISHED
+            state = TrialState.WAITING_POST_FINISHED
             sendTrialEndPackets(reason)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
