@@ -3,6 +3,7 @@ package dev.nathanpb.dml
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.container.registerContainerTypes
+import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
 import dev.nathanpb.dml.gui.hud.TrialHud
@@ -42,6 +43,7 @@ fun init() {
         AttackBlockCallback.EVENT.register(this)
         UseBlockCallback.EVENT.register(this)
         WorldExplosionCallback.EVENT.register(this)
+        EndermanTeleportCallback.EVENT.register(this)
     }
     println("Deep Mob Learning good to go")
 }

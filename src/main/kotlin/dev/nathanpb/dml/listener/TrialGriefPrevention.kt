@@ -9,23 +9,33 @@
 package dev.nathanpb.dml.listener
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
 import dev.nathanpb.dml.trial.Trial
+import dev.nathanpb.dml.trial.TrialWave
+import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.entity.Entity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.mob.EndermanEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
 
-class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback, WorldExplosionCallback {
+class TrialGriefPrevention :
+    AttackBlockCallback,
+    UseBlockCallback,
+    WorldExplosionCallback,
+    EndermanTeleportCallback
+{
 
     private fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
         return trialPos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
@@ -61,6 +71,22 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback, WorldExplosi
     ): ActionResult {
         if (!world.isClient && destructionType != Explosion.DestructionType.NONE && isBlockProtected(pos)) {
             world.createExplosion(entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), power, createFire, Explosion.DestructionType.NONE)
+            return ActionResult.FAIL
+        }
+        return ActionResult.PASS
+    }
+
+    override fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
+        val belongsToTrial = Trial.RUNNING_TRIALS.any { trial ->
+            trial.waves
+                .asSequence()
+                .filter(TrialWave::isSpawned)
+                .filter { !it.isFinished() }
+                .map(TrialWave::spawnedEntities)
+                .flatten()
+                .any(entity::equals)
+        }
+        if (belongsToTrial && !isBlockProtected(pos.toBlockPos())) {
             return ActionResult.FAIL
         }
         return ActionResult.PASS
