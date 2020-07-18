@@ -51,7 +51,8 @@ class BlockTrialKeystone : Block(
                     }.let { data ->
                         if (data != null) {
                             try {
-                                stackInHand.decrement(1)
+                                if (!player.isCreative)
+                                    stackInHand.decrement(1)
                                 val trialData = TrialData(data, TrialWaveData.fromRecipe(data))
                                 val trial = blockEntity.createTrial(trialData)
                                 blockEntity.startTrial(trial)
