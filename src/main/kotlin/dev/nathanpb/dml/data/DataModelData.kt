@@ -2,7 +2,6 @@ package dev.nathanpb.dml.data
 
 import dev.nathanpb.dml.NotDataModelException
 import dev.nathanpb.dml.item.ItemDataModel
-import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemStack
 
 /*
@@ -17,7 +16,7 @@ import net.minecraft.item.ItemStack
 class DataModelData(val stack: ItemStack) {
 
     companion object {
-        const val ENTITY_TAG_KEY = "deepmoblearning.datamodel.entity"
+        const val CATEGORY_TAG_KEY = "deepmoblearning.datamodel.category"
         const val DATA_AMOUNT_TAG_KEY = "deepmoblearning.datamodel.dataAmount"
     }
 
@@ -27,21 +26,21 @@ class DataModelData(val stack: ItemStack) {
         }
     }
 
-    var entity: EntityType<*>?
-        get() = EntityType.get(stack.orCreateTag.getString(ENTITY_TAG_KEY)).orElse(null)
-        set(value) {
-            (if(value != null) {
-                EntityType.getId(value)
-            } else null).let { id ->
-                stack.orCreateTag.putString(ENTITY_TAG_KEY, id?.toString())
+    var category: EntityCategory?
+        get() {
+            stack.orCreateTag.getString(CATEGORY_TAG_KEY)?.let {
+                return if (it.isNotEmpty())  EntityCategory.valueOf(it) else null
             }
+            return null
+        }
+        set(value) {
+            stack.orCreateTag.putString(CATEGORY_TAG_KEY, value?.name)
         }
 
     var dataAmount: Int
         get() = stack.orCreateTag.getInt(DATA_AMOUNT_TAG_KEY)
         set(value) = stack.orCreateTag.putInt(DATA_AMOUNT_TAG_KEY, value)
 
-    fun isBound() = entity != null
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
 
 }

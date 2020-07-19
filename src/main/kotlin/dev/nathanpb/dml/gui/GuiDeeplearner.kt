@@ -101,7 +101,8 @@ class GuiDeeplearner (
         blit((this.width - this.containerWidth) / 2, (this.height - this.containerHeight) / 2, 0, 0, containerWidth, containerHeight)
         container.inventory.getInvStack(currentSlot)?.let { stack ->
             if (stack.item is ItemDataModel) {
-                stack.dataModel.entity?.let {
+                // TODO cycle entities
+                stack.dataModel.category?.tag?.values()?.first()?.let {
                     drawBackgroundEntity(it)
                 }
             }
@@ -113,7 +114,8 @@ class GuiDeeplearner (
         container.inventory.getInvStack(currentSlot)?.let { stack ->
             if (stack.item is ItemDataModel) {
                 stack.dataModel.let{data ->
-                    data.entity?.let {
+                    // TODO cycle entities
+                    stack.dataModel.category?.tag?.values()?.first()?.let {
                         super.font.draw(it.name.asFormattedString(), 8F, 20F, 0x373737)
                     }
                     super.font.draw(

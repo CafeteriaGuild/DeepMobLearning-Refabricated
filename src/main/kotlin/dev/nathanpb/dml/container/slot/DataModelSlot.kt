@@ -20,8 +20,8 @@ enum class DataModelSlotPolicy {
     UNBOUND;
 
     fun assert(data: DataModelData) = when(this) {
-        BOUND -> data.isBound()
-        UNBOUND -> !data.isBound()
+        BOUND -> data.category != null
+        UNBOUND -> data.category == null
         else -> true
     }
 }

@@ -33,7 +33,7 @@ class TrialKeystoneRecipe (
     companion object {
         fun findOrNull(world: World, data: TrialKeyData) = world.recipeManager.values()
             .filterIsInstance(TrialKeystoneRecipe::class.java)
-            .firstOrNull { it.entity == data.entity && it.tier == data.tier() }
+            .firstOrNull { it.entity in data.category.tag && it.tier == data.tier() }
     }
 
     fun copyRewards() = rewards.map(ItemStack::copy)

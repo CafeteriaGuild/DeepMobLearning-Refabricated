@@ -63,7 +63,7 @@ class TrialKeyAttuneRecipe (
     }
 
     private fun findDataModel(inv: Inventory) = inv.items().firstOrNull {
-        it.item is ItemDataModel && it.dataModel.isBound()
+        it.item is ItemDataModel && it.dataModel.category != null
     }?.dataModel
 
     private fun hasBoundedTrialKey(inv: Inventory) = inv.items().any {
@@ -74,7 +74,7 @@ class TrialKeyAttuneRecipe (
         return world.recipeManager.values()
             .filterIsInstance(TrialKeystoneRecipe::class.java)
             .any {
-                it.entity == model.entity && it.tier == model.tier()
+                model.category?.tag?.contains(it.entity) ?: false && it.tier == model.tier()
             }
     }
 

@@ -11,23 +11,20 @@ package dev.nathanpb.dml.data
 import dev.nathanpb.dml.InvalidTrialKeyBase
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemTrialKey
-import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 
-data class TrialKeyData (val entity: EntityType<*>, val dataAmount: Int = 0) {
+data class TrialKeyData (val category: EntityCategory, val dataAmount: Int = 0) {
 
     companion object {
         const val DATA_TAG_KEY = "deepmoblearning.trialkey"
-        const val ENTITY_TAG_KEY = "entity"
+        const val CATEGORY_TAG_KEY = "category"
         const val DATA_AMOUNT_TAG_KEY = "dataAmount"
 
         fun fromStack(stack: ItemStack) = when (stack.item) {
             is ItemTrialKey -> stack.getSubTag(DATA_TAG_KEY)?.let {
                 TrialKeyData(
-                    EntityType.get(it.getString(ENTITY_TAG_KEY)).orElseThrow {
-                        InvalidTrialKeyBase()
-                    },
+                    EntityCategory.valueOf(it.getString(CATEGORY_TAG_KEY) ?: throw InvalidTrialKeyBase()),
                     it.getInt(DATA_AMOUNT_TAG_KEY)
                 )
             }
@@ -35,14 +32,14 @@ data class TrialKeyData (val entity: EntityType<*>, val dataAmount: Int = 0) {
             else -> throw InvalidTrialKeyBase()
         }
 
-        fun fromDataModelData(data: DataModelData) = data.entity?.let {
+        fun fromDataModelData(data: DataModelData) = data.category?.let {
             TrialKeyData(it, data.dataAmount)
         }
     }
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
     fun toTag() = CompoundTag().apply {
-        putString(ENTITY_TAG_KEY, EntityType.getId(entity).toString())
+        putString(CATEGORY_TAG_KEY, category.name)
         putInt(DATA_AMOUNT_TAG_KEY, dataAmount)
     }
 }

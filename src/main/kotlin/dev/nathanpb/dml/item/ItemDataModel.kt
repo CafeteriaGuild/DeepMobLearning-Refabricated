@@ -8,11 +8,10 @@
 
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
 import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -23,48 +22,9 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
 class ItemDataModel : Item(settings().maxCount(1)) {
-
-    companion object {
-        val MODEL_OVERRIDE_MAP = arrayOf(
-            EntityType.BLAZE,
-            EntityType.CREEPER,
-            EntityType.ENDER_DRAGON,
-            EntityType.ENDERMAN,
-            EntityType.GHAST,
-            EntityType.GUARDIAN,
-            EntityType.SHULKER,
-            EntityType.SKELETON,
-            EntityType.SLIME,
-            EntityType.SPIDER,
-            EntityType.WITCH,
-            EntityType.WITHER,
-            EntityType.WITHER_SKELETON,
-            EntityType.ZOMBIE,
-            EntityType.DROWNED,
-            EntityType.EVOKER,
-            EntityType.HUSK,
-            EntityType.MAGMA_CUBE,
-            EntityType.PHANTOM,
-            EntityType.PILLAGER,
-            EntityType.RAVAGER,
-            EntityType.STRAY,
-            EntityType.VEX,
-            EntityType.VINDICATOR,
-            EntityType.ZOMBIE_PIGMAN,
-            EntityType.ZOMBIE_VILLAGER
-        )
-    }
-
     init {
         addPropertyGetter(Identifier("entity")) { stack, _, _ ->
-            stack.dataModel.let { data ->
-                if(data.isBound()) {
-                    MODEL_OVERRIDE_MAP
-                        .indexOf(data.entity)
-                        .inc()
-                        .toFloat()
-                } else 0F
-            }
+            stack.dataModel.category?.ordinal?.inc()?.toFloat() ?: 0F
         }
     }
 
@@ -75,10 +35,10 @@ class ItemDataModel : Item(settings().maxCount(1)) {
         context: TooltipContext?
     ) {
         super.appendTooltip(stack, world, tooltip, context)
-        if (stack != null && tooltip != null) {
+        if (world != null && stack != null && tooltip != null) {
             stack.dataModel.let { data ->
-                if (data.isBound()) {
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.entity?.name))
+                if (data.category != null) {
+                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.category?.displayName?.formatted()))
                     if (!data.tier().isMaxTier()) {
                         tooltip.add(TranslatableText(
                             "tooltip.deepmoblearning.data_model.data_amount",
@@ -100,8 +60,10 @@ class ItemDataModel : Item(settings().maxCount(1)) {
             val stack = user.getStackInHand(hand)
             if (!entity.world.isClient) {
                 stack.dataModel.let { data ->
-                    if (entity is Monster && !data.isBound()) {
-                        data.entity = entity.type
+                    if (data.category == null) {
+                        data.category = EntityCategory.values().firstOrNull {
+                            entity.type in it.tag
+                        }
                     }
                 }
             }
