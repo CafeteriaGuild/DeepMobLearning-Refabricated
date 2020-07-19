@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "deepmoblearning:item/data_model_husk"
+    "layer0": "deepmoblearning:item/data_model_slimy"
   }
 }

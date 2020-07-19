@@ -8,157 +8,55 @@
       "predicate": {
         "entity": 1
       },
-      "model": "deepmoblearning:item/data_model_blaze"
+      "model": "deepmoblearning:item/data_model_nether"
     },
     {
       "predicate": {
         "entity": 2
       },
-      "model": "deepmoblearning:item/data_model_creeper"
+      "model": "deepmoblearning:item/data_model_slimy"
     },
     {
       "predicate": {
         "entity": 3
       },
-      "model": "deepmoblearning:item/data_model_dragon"
+      "model": "deepmoblearning:item/data_model_overworld"
     },
     {
       "predicate": {
         "entity": 4
       },
-      "model": "deepmoblearning:item/data_model_enderman"
+      "model": "deepmoblearning:item/data_model_zombie"
     },
     {
       "predicate": {
         "entity": 5
       },
-      "model": "deepmoblearning:item/data_model_ghast"
+      "model": "deepmoblearning:item/data_model_skeleton"
     },
     {
       "predicate": {
         "entity": 6
       },
-      "model": "deepmoblearning:item/data_model_guardian"
+      "model": "deepmoblearning:item/data_model_end"
     },
     {
       "predicate": {
         "entity": 7
       },
-      "model": "deepmoblearning:item/data_model_shulker"
+      "model": "deepmoblearning:item/data_model_ghost"
     },
     {
       "predicate": {
         "entity": 8
       },
-      "model": "deepmoblearning:item/data_model_skeleton"
+      "model": "deepmoblearning:item/data_model_illager"
     },
     {
       "predicate": {
         "entity": 9
       },
-      "model": "deepmoblearning:item/data_model_slime"
-    },
-    {
-      "predicate": {
-        "entity": 10
-      },
-      "model": "deepmoblearning:item/data_model_spider"
-    },
-    {
-      "predicate": {
-        "entity": 11
-      },
-      "model": "deepmoblearning:item/data_model_witch"
-    },
-    {
-      "predicate": {
-        "entity": 12
-      },
-      "model": "deepmoblearning:item/data_model_wither"
-    },
-    {
-      "predicate": {
-        "entity": 13
-      },
-      "model": "deepmoblearning:item/data_model_wither_skeleton"
-    },
-    {
-      "predicate": {
-        "entity": 14
-      },
-      "model": "deepmoblearning:item/data_model_zombie"
-    },
-    {
-      "predicate": {
-        "entity": 15
-      },
-      "model": "deepmoblearning:item/data_model_drowned"
-    },
-    {
-      "predicate": {
-        "entity": 16
-      },
-      "model": "deepmoblearning:item/data_model_evoker"
-    },
-    {
-      "predicate": {
-        "entity": 17
-      },
-      "model": "deepmoblearning:item/data_model_husk"
-    },
-    {
-      "predicate": {
-        "entity": 18
-      },
-      "model": "deepmoblearning:item/data_model_magma_cube"
-    },
-    {
-      "predicate": {
-        "entity": 19
-      },
-      "model": "deepmoblearning:item/data_model_phantom"
-    },
-    {
-      "predicate": {
-        "entity": 20
-      },
-      "model": "deepmoblearning:item/data_model_pillager"
-    },
-    {
-      "predicate": {
-        "entity": 21
-      },
-      "model": "deepmoblearning:item/data_model_ravanger"
-    },
-    {
-      "predicate": {
-        "entity": 22
-      },
-      "model": "deepmoblearning:item/data_model_stray"
-    },
-    {
-      "predicate": {
-        "entity": 23
-      },
-      "model": "deepmoblearning:item/data_model_vex"
-    },
-    {
-      "predicate": {
-        "entity": 24
-      },
-      "model": "deepmoblearning:item/data_model_vindicator"
-    },
-    {
-      "predicate": {
-        "entity": 25
-      },
-      "model": "deepmoblearning:item/data_model_zombie_pigman"
-    },
-    {
-      "predicate": {
-        "entity": 26
-      },
-      "model": "deepmoblearning:item/data_model_zombie_villager"
+      "model": "deepmoblearning:item/data_model_ocean"
     }
   ]
 }
