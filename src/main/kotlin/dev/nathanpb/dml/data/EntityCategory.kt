@@ -17,7 +17,6 @@ import net.minecraft.util.Identifier
 
 
 enum class EntityCategory (val id: Identifier) {
-    FIRE(identifier("fire_mobs")),
     NETHER(identifier("nether_mobs")),
     SLIMY(identifier("slimy_mobs")),
     OVERWORLD(identifier("overworld_mobs")),
