@@ -13,10 +13,9 @@ import net.minecraft.item.ItemStack
  */
 
 
-class DataModelData(val stack: ItemStack) {
+class DataModelData(val stack: ItemStack, val category: EntityCategory?) {
 
     companion object {
-        const val CATEGORY_TAG_KEY = "deepmoblearning.datamodel.category"
         const val DATA_AMOUNT_TAG_KEY = "deepmoblearning.datamodel.dataAmount"
     }
 
@@ -25,17 +24,6 @@ class DataModelData(val stack: ItemStack) {
             throw NotDataModelException()
         }
     }
-
-    var category: EntityCategory?
-        get() {
-            stack.orCreateTag.getString(CATEGORY_TAG_KEY)?.let {
-                return if (it.isNotEmpty())  EntityCategory.valueOf(it) else null
-            }
-            return null
-        }
-        set(value) {
-            stack.orCreateTag.putString(CATEGORY_TAG_KEY, value?.name)
-        }
 
     var dataAmount: Int
         get() = stack.orCreateTag.getInt(DATA_AMOUNT_TAG_KEY)
@@ -46,4 +34,11 @@ class DataModelData(val stack: ItemStack) {
 }
 
 val ItemStack.dataModel: DataModelData
-    get() = DataModelData(this)
+    get() {
+        item.let { item ->
+            if (item is ItemDataModel) {
+                return DataModelData(this, item.category)
+            }
+        }
+        throw NotDataModelException()
+    }

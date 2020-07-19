@@ -9,9 +9,7 @@
 package dev.nathanpb.dml.data
 
 import dev.nathanpb.dml.identifier
-import net.minecraft.entity.EntityType
 import net.minecraft.tag.EntityTypeTags
-import net.minecraft.tag.Tag
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 
@@ -27,6 +25,8 @@ enum class EntityCategory (val id: Identifier) {
     ILLAGER(identifier("illager_mobs")),
     OCEAN(identifier("ocean_mobs"));
 
-    val tag: Tag<EntityType<*>> = EntityTypeTags.getContainer().get(id)!!
+    val tag by lazy {
+        EntityTypeTags.getContainer().get(id)!!
+    }
     val displayName = TranslatableText("mobcategory.deepmoblearning.${id.path}")
 }

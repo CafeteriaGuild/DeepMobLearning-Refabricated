@@ -1,5 +1,6 @@
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.item.Item
@@ -25,8 +26,18 @@ fun settings(baseSettings: Item.Settings = Item.Settings()) = baseSettings.apply
 
 val ITEM_DML = Item(Item.Settings())
 val ITEM_DEEP_LEARNER = ItemDeepLearner()
-val ITEM_DATA_MODEL = ItemDataModel()
 val ITEM_TRIAL_KEY = ItemTrialKey()
+
+val ITEM_DATA_MODEL = ItemDataModel()
+val ITEM_DATA_MODEL_NETHER = ItemDataModel(EntityCategory.NETHER)
+val ITEM_DATA_MODEL_SLIMY = ItemDataModel(EntityCategory.SLIMY)
+val ITEM_DATA_MODEL_OVERWORLD = ItemDataModel(EntityCategory.OVERWORLD)
+val ITEM_DATA_MODEL_ZOMBIE = ItemDataModel(EntityCategory.ZOMBIE)
+val ITEM_DATA_MODEL_SKELETON = ItemDataModel(EntityCategory.SKELETON)
+val ITEM_DATA_MODEL_END = ItemDataModel(EntityCategory.END)
+val ITEM_DATA_MODEL_GHOST = ItemDataModel(EntityCategory.GHOST)
+val ITEM_DATA_MODEL_ILLAGER = ItemDataModel(EntityCategory.ILLAGER)
+val ITEM_DATA_MODEL_OCEAN = ItemDataModel(EntityCategory.OCEAN)
 
 val ITEM_SOOT_REDSTONE = Item(settings())
 val ITEM_SOOT_PLATE = Item(settings())
@@ -37,8 +48,17 @@ fun registerItems() {
     mapOf(
         ITEM_DML to "deepmoblearning",
         ITEM_DEEP_LEARNER to "deep_learner",
-        ITEM_DATA_MODEL to "data_model",
         ITEM_TRIAL_KEY to "trial_key",
+        ITEM_DATA_MODEL to "data_model",
+        ITEM_DATA_MODEL_NETHER to "data_model_nether",
+        ITEM_DATA_MODEL_SLIMY to "data_model_slimy",
+        ITEM_DATA_MODEL_OVERWORLD to "data_model_overworld",
+        ITEM_DATA_MODEL_ZOMBIE to "data_model_zombie",
+        ITEM_DATA_MODEL_SKELETON to "data_model_skeleton",
+        ITEM_DATA_MODEL_END to "data_model_end",
+        ITEM_DATA_MODEL_GHOST to "data_model_ghost",
+        ITEM_DATA_MODEL_ILLAGER to "data_model_illager",
+        ITEM_DATA_MODEL_OCEAN to "data_model_ocean",
         ITEM_SOOT_REDSTONE to "soot_redstone",
         ITEM_SOOT_PLATE to "soot_plate",
         ITEM_SOOT_MACHINE_CASE to "machine_casing"

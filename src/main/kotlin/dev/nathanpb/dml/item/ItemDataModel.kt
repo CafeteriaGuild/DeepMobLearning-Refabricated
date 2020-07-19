@@ -12,24 +12,16 @@ import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
 import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class ItemDataModel : Item(settings().maxCount(1)) {
-    init {
-        addPropertyGetter(Identifier("entity")) { stack, _, _ ->
-            stack.dataModel.category?.ordinal?.inc()?.toFloat() ?: 0F
-        }
-    }
-
+class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxCount(1)) {
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
@@ -38,41 +30,28 @@ class ItemDataModel : Item(settings().maxCount(1)) {
     ) {
         super.appendTooltip(stack, world, tooltip, context)
         if (world != null && stack != null && tooltip != null) {
-            stack.dataModel.let { data ->
-                if (data.category != null) {
+            if (category != null) {
+                stack.dataModel.let { data ->
                     // todo add that tooltip for creative players
                     // tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.category?.displayName?.formatted()))
                     if (!data.tier().isMaxTier()) {
-                        tooltip.add(TranslatableText(
-                            "tooltip.deepmoblearning.data_model.data_amount",
-                            data.dataAmount,
-                            data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
-                        ))
+                        tooltip.add(
+                            TranslatableText(
+                                "tooltip.deepmoblearning.data_model.data_amount",
+                                data.dataAmount,
+                                data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
+                            )
+                        )
                     }
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text.asFormattedString()))
-                } else {
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.unbound"))
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.unbound.tip"))
+                    tooltip.add(
+                        TranslatableText(
+                            "tooltip.deepmoblearning.data_model.tier",
+                            data.tier().text.asFormattedString()
+                        )
+                    )
                 }
             }
         }
-    }
-
-    override fun useOnEntity(_stack: ItemStack?, user: PlayerEntity?, entity: LivingEntity?, hand: Hand?): Boolean {
-        if (entity != null && user != null) {
-            val stack = user.getStackInHand(hand)
-            if (!entity.world.isClient) {
-                stack.dataModel.let { data ->
-                    if (data.category == null) {
-                        data.category = EntityCategory.values().firstOrNull {
-                            entity.type in it.tag
-                        }
-                    }
-                }
-            }
-        }
-        return super.useOnEntity(_stack, user, entity, hand)
     }
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
