@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
 import net.minecraft.client.item.TooltipContext
@@ -19,6 +20,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
+import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 class ItemDataModel : Item(settings().maxCount(1)) {
@@ -38,6 +40,8 @@ class ItemDataModel : Item(settings().maxCount(1)) {
         if (world != null && stack != null && tooltip != null) {
             stack.dataModel.let { data ->
                 if (data.category != null) {
+                    // todo add that tooltip for creative players
+                    // tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.category?.displayName?.formatted()))
                     if (!data.tier().isMaxTier()) {
                         tooltip.add(TranslatableText(
@@ -69,5 +73,18 @@ class ItemDataModel : Item(settings().maxCount(1)) {
             }
         }
         return super.useOnEntity(_stack, user, entity, hand)
+    }
+
+    override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
+        if (user?.isCreative == true && user.isSneaking && hand != null) {
+            val stack = user.getStackInHand(hand)
+            if (stack.item is ItemDataModel) {
+                val tier = stack.dataModel.tier()
+                stack.dataModel.dataAmount = if (tier.isMaxTier()) {
+                    DataModelTier.FAULTY.dataAmount
+                } else tier.nextTierOrCurrent().dataAmount
+            }
+        }
+        return super.use(world, user, hand)
     }
 }

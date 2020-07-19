@@ -13,6 +13,7 @@
   "tooltip.deepmoblearning.data_model.unbound": "§4Unbound",
   "tooltip.deepmoblearning.data_model.unbound.tip": "§9Right click a monster to bind",
   "tooltip.deepmoblearning.data_model.tier": "§9Tier:§r %s",
+  "tooltip.deepmoblearning.data_model.cheat": "Sneak + Right Click to go to cycle tiers",
   "tooltip.deepmoblearning.trial_key.unbound.tip": "§9Combine this with a bounded Data Model in the crafting grid",
   "tooltip.deepmoblearning.trial_key.unbound.tip2": "§9The Data Model will not be consumed",
   "mobcategory.deepmoblearning.nether_mobs": "From Hades",
