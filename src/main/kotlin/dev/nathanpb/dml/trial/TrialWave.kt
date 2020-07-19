@@ -26,7 +26,7 @@ class TrialWave (
     fun spawnWave(world: World, pos: BlockPos) {
         isSpawned = true
         (1..waveData.entityCount).forEach { _ ->
-            waveData.entityType.spawn(
+            waveData.category.tag.getRandom(java.util.Random()).spawn(
                 world,
                 null, null, null,
                 pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),

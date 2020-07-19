@@ -1,7 +1,7 @@
 {
   "type": "deepmoblearning:trial_keystone",
   "tier": 1,
-  "entity": "minecraft:zombie",
+  "category": "ZOMBIE",
   "rewards": [
     {
       "item": "minecraft:iron_ingot",

@@ -10,21 +10,20 @@ package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
 import dev.nathanpb.dml.data.DataModelTier
+import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
-import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 class TrialKeystoneRecipe (
     private val id: Identifier,
-    val entity: EntityType<*>,
+    val category: EntityCategory,
     val tier: DataModelTier,
     val waves: List<Int>,
     private val rewards: List<ItemStack>
@@ -33,7 +32,7 @@ class TrialKeystoneRecipe (
     companion object {
         fun findOrNull(world: World, data: TrialKeyData) = world.recipeManager.values()
             .filterIsInstance(TrialKeystoneRecipe::class.java)
-            .firstOrNull { it.entity in data.category.tag && it.tier == data.tier() }
+            .firstOrNull { it.category == data.category && it.tier == data.tier() }
     }
 
     fun copyRewards() = rewards.map(ItemStack::copy)
@@ -60,7 +59,7 @@ class TrialKeystoneRecipe (
 
     class Serializer : RecipeSerializer<TrialKeystoneRecipe> {
         override fun write(buf: PacketByteBuf, recipe: TrialKeystoneRecipe) {
-            buf.writeString(Registry.ENTITY_TYPE.getId(recipe.entity).toString())
+            buf.writeString(recipe.category.name)
             buf.writeInt(recipe.tier.ordinal)
             buf.writeIntArray(recipe.waves.toIntArray())
             buf.writeInt(recipe.rewards.size)
@@ -71,7 +70,7 @@ class TrialKeystoneRecipe (
             val tier = DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY
             return TrialKeystoneRecipe(
                 id,
-                Registry.ENTITY_TYPE[Identifier(json.getAsJsonPrimitive("entity").asString)],
+                EntityCategory.valueOf(json.getAsJsonPrimitive("category").asString),
                 tier,
                 json.getAsJsonArray("waves")?.map { it.asInt } ?: tier.defaultWave,
                 json.getAsJsonArray("rewards").map {
@@ -81,14 +80,14 @@ class TrialKeystoneRecipe (
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): TrialKeystoneRecipe {
-            val entity = Registry.ENTITY_TYPE[Identifier(buf.readString())]
+            val category = EntityCategory.valueOf(buf.readString())
             val tier = DataModelTier.fromIndex(buf.readInt()) ?: DataModelTier.FAULTY
             val waves = buf.readIntArray()
             val stacks = (1 .. buf.readInt()).map {
                 buf.readItemStack()
             }
 
-            return TrialKeystoneRecipe(id, entity, tier, waves.toList(), stacks)
+            return TrialKeystoneRecipe(id, category, tier, waves.toList(), stacks)
         }
     }
 }

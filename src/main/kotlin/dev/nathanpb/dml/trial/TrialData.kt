@@ -8,8 +8,8 @@
 
 package dev.nathanpb.dml.trial
 
+import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import net.minecraft.entity.EntityType
 
 data class TrialData (
     val recipe: TrialKeystoneRecipe,
@@ -19,11 +19,11 @@ data class TrialData (
 data class TrialWaveData (
     val wave: Int,
     val entityCount: Int,
-    val entityType: EntityType<*>
+    val category: EntityCategory
 ) {
     companion object {
         fun fromRecipe(recipe: TrialKeystoneRecipe) = recipe.waves.mapIndexed { index, mobCount ->
-            TrialWaveData(index, mobCount, recipe.entity)
+            TrialWaveData(index, mobCount, recipe.category)
         }
     }
 }

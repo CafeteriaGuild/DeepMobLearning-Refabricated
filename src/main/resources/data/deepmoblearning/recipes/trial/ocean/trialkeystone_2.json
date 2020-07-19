@@ -1,7 +1,7 @@
 {
   "type": "deepmoblearning:trial_keystone",
   "tier": 2,
-  "category": "ZOMBIE",
+  "category": "OCEAN",
   "rewards": [
     {
       "item": "minecraft:diamond",

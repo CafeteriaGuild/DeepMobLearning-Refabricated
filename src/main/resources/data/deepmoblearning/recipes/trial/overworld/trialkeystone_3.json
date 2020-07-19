@@ -1,7 +1,7 @@
 {
   "type": "deepmoblearning:trial_keystone",
-  "tier": 4,
-  "category": "ZOMBIE",
+  "tier": 3,
+  "category": "OVERWORLD",
   "rewards": [
     {
       "item": "minecraft:gold_ingot",

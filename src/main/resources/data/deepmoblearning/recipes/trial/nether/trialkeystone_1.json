@@ -1,7 +1,7 @@
 {
   "type": "deepmoblearning:trial_keystone",
   "tier": 1,
-  "category": "SKELETON",
+  "category": "NETHER",
   "rewards": [
     {
       "item": "minecraft:iron_ingot",

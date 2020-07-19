@@ -1,10 +1,10 @@
 {
   "type": "deepmoblearning:trial_keystone",
-  "tier": 1,
-  "category": "SKELETON",
+  "tier": 0,
+  "category": "NETHER",
   "rewards": [
     {
-      "item": "minecraft:iron_ingot",
+      "item": "minecraft:coal",
       "count": 2
     }
   ]

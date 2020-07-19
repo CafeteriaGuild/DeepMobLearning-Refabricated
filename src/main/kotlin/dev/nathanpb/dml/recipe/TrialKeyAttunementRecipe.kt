@@ -74,7 +74,7 @@ class TrialKeyAttuneRecipe (
         return world.recipeManager.values()
             .filterIsInstance(TrialKeystoneRecipe::class.java)
             .any {
-                model.category?.tag?.contains(it.entity) ?: false && it.tier == model.tier()
+                model.category == it.category && it.tier == model.tier()
             }
     }
 

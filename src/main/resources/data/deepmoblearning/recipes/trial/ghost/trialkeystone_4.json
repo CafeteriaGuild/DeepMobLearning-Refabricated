@@ -1,7 +1,7 @@
 {
   "type": "deepmoblearning:trial_keystone",
   "tier": 4,
-  "category": "ZOMBIE",
+  "category": "GHOST",
   "rewards": [
     {
       "item": "minecraft:gold_ingot",
