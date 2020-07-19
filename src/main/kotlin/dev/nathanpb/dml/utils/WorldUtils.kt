@@ -8,6 +8,8 @@
 
 package dev.nathanpb.dml.utils
 
+import dev.nathanpb.dml.accessor.ITrialWorldPersistenceAccessor
+import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.util.math.BlockPos
@@ -27,3 +29,6 @@ fun <T : Entity>World.getEntitiesAroundCircle(type: EntityType<T>?, pos: BlockPo
         it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= squaredRadius
     } ?: emptyList())
 }
+
+val World.runningTrials: MutableList<Trial>
+    get() = (this as ITrialWorldPersistenceAccessor).runningTrials

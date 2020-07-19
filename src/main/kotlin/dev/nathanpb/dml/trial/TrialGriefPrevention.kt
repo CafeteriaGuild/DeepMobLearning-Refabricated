@@ -11,6 +11,7 @@ package dev.nathanpb.dml.trial
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
+import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -39,8 +40,8 @@ class TrialGriefPrevention :
         return trialPos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
     }
 
-    private fun isBlockProtected(pos: BlockPos): Boolean {
-        return Trial.RUNNING_TRIALS.any {
+    private fun isBlockProtected(world: World, pos: BlockPos): Boolean {
+        return world.runningTrials.any {
             isBlockProtected(pos, it)
         }
     }
@@ -50,14 +51,14 @@ class TrialGriefPrevention :
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, pos: BlockPos, direction: Direction): ActionResult {
-        return if (!world.isClient && isBlockProtected(pos)) {
+        return if (!world.isClient && isBlockProtected(world, pos)) {
             ActionResult.FAIL
         } else ActionResult.PASS
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, hitResult: BlockHitResult): ActionResult {
         val posOfPlacedBlock = hitResult.blockPos.offset(hitResult.side)
-        return if (!world.isClient && isBlockProtected(posOfPlacedBlock)) {
+        return if (!world.isClient && isBlockProtected(world, posOfPlacedBlock)) {
             ActionResult.FAIL
         } else ActionResult.PASS
     }
@@ -71,7 +72,7 @@ class TrialGriefPrevention :
         createFire: Boolean,
         destructionType: Explosion.DestructionType?
     ): ActionResult {
-        if (!world.isClient && destructionType != Explosion.DestructionType.NONE && isBlockProtected(pos)) {
+        if (!world.isClient && destructionType != Explosion.DestructionType.NONE && isBlockProtected(world, pos)) {
             world.createExplosion(entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), power, createFire, Explosion.DestructionType.NONE)
             return ActionResult.FAIL
         }
@@ -79,7 +80,7 @@ class TrialGriefPrevention :
     }
 
     override fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
-        Trial.RUNNING_TRIALS.firstOrNull { trial ->
+        entity.world.runningTrials.firstOrNull { trial ->
             trial.waves
                 .asSequence()
                 .filter(TrialWave::isSpawned)

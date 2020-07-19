@@ -5,7 +5,8 @@
   "mixins": [
     "EndermanEntityMixin",
     "ExplosionPreventMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "WorldMixin"
   ],
   "client": [],
   "injectors": {

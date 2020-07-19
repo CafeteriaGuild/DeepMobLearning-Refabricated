@@ -13,6 +13,7 @@ import dev.nathanpb.dml.data.TrialPlayerData
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
 import dev.nathanpb.dml.net.TRIAL_UPDATED_PACKET
+import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.toVec3d
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
@@ -46,7 +47,6 @@ class Trial (
     )
 
     companion object {
-        val RUNNING_TRIALS = mutableListOf<Trial>()
         const val POST_END_TIMEOUT = 60
 
         val BAR_TEXT by lazy {
@@ -125,7 +125,7 @@ class Trial (
     fun start() {
         if (state == TrialState.NOT_STARTED) {
             state = TrialState.RUNNING
-            RUNNING_TRIALS += this
+            world.runningTrials += this
             bar.isVisible = true
             sendTrialUpdatePackets()
         } else throw TrialKeystoneIllegalStartException(this)
@@ -154,7 +154,7 @@ class Trial (
 
             endsAt = tickCount + POST_END_TIMEOUT
             bar.percent = 1F
-            RUNNING_TRIALS -= this
+            world.runningTrials -= this
             state = TrialState.WAITING_POST_FINISHED
             sendTrialEndPackets(reason)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
