@@ -1,16 +1,16 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.NotDeepLearnerException
-import dev.nathanpb.dml.container.CONTAINER_DEEP_LEARNER
+import dev.nathanpb.dml.screen.handler.CONTAINER_DEEP_LEARNER
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.DefaultedList
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 
 /*

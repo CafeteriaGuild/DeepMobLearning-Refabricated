@@ -15,8 +15,8 @@ import net.minecraft.recipe.CraftingRecipe
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeType
 import net.minecraft.recipe.ShapelessRecipe
-import net.minecraft.util.DefaultedList
 import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 
 /*
@@ -79,7 +79,7 @@ class TrialKeyAttuneRecipe (
     }
 
     override fun getRemainingStacks(inventory: CraftingInventory): DefaultedList<ItemStack> {
-        return DefaultedList.ofSize(inventory.invSize, ItemStack.EMPTY).also { defaultedList ->
+        return DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY).also { defaultedList ->
             inventory.items().forEachIndexed { index, itemStack ->
                 if (itemStack.item.hasRecipeRemainder()) {
                     defaultedList[index] = ItemStack(itemStack.item.recipeRemainder)

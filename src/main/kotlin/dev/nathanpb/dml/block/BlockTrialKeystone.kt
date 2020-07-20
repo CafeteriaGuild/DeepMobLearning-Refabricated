@@ -17,11 +17,7 @@ import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
 import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.trial.TrialWaveData
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockEntityProvider
-import net.minecraft.block.BlockState
-import net.minecraft.block.Material
-import net.minecraft.entity.EntityContext
+import net.minecraft.block.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.TranslatableText
@@ -60,10 +56,10 @@ class BlockTrialKeystone : Block(
                             } catch (ex: TrialKeystoneIllegalStartException) {
                                 return ActionResult.PASS
                             } catch (ex: TrialKeystoneWrongTerrainException) {
-                                player.addChatMessage(TranslatableText("chat.deepmoblearning.trial_wrong_terrain"), false)
+                                player.sendMessage(TranslatableText("chat.deepmoblearning.trial_wrong_terrain"), false)
                             }
                         } else {
-                            player.addChatMessage(TranslatableText("chat.deepmoblearning.trial_no_recipe"), false)
+                            player.sendMessage(TranslatableText("chat.deepmoblearning.trial_no_recipe"), false)
                         }
                         return ActionResult.FAIL
                     }
@@ -73,12 +69,11 @@ class BlockTrialKeystone : Block(
         return super.onUse(state, world, pos, player, hand, hit)
     }
 
-    override fun getOutlineShape(
-        state: BlockState?,
-        view: BlockView?,
-        pos: BlockPos?,
-        context: EntityContext?
-    ): VoxelShape {
+    override fun getVisualShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
+        return getCollisionShape(state, world, pos, context)
+    }
+
+    override fun getCollisionShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
         return VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
     }
 

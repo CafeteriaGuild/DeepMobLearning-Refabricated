@@ -28,6 +28,7 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
+import net.minecraft.world.explosion.ExplosionBehavior
 
 class TrialGriefPrevention :
     AttackBlockCallback,
@@ -67,6 +68,7 @@ class TrialGriefPrevention :
         world: World,
         entity: Entity?,
         damageSource: DamageSource?,
+        behavior: ExplosionBehavior?,
         pos: BlockPos,
         power: Float,
         createFire: Boolean,

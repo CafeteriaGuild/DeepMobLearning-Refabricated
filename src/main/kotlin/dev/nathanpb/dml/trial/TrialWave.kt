@@ -9,7 +9,7 @@
 package dev.nathanpb.dml.trial
 
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.SpawnType
+import net.minecraft.entity.SpawnReason
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.random.Random
@@ -30,7 +30,7 @@ class TrialWave (
                 world,
                 null, null, null,
                 pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
-                SpawnType.SPAWNER,
+                SpawnReason.SPAWNER,
                 false, false
             ).let {
                 if (it is LivingEntity) {

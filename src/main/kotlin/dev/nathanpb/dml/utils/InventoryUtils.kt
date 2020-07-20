@@ -11,11 +11,11 @@ package dev.nathanpb.dml.utils
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
+import net.minecraft.util.collection.DefaultedList
 
-fun PlayerInventory.hotbar() = (0..8).map { this.getInvStack(it) }
+fun PlayerInventory.hotbar() = (0..8).map { this.getStack(it) }
 
 fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
     ItemStack.EMPTY,
-    *(0 until invSize).map { getInvStack(it) }.toTypedArray()
+    *(0 until size()).map { getStack(it) }.toTypedArray()
 )

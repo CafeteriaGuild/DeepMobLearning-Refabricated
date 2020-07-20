@@ -9,7 +9,7 @@
 package dev.nathanpb.dml.data
 
 import io.netty.buffer.Unpooled
-import net.minecraft.util.PacketByteBuf
+import net.minecraft.network.PacketByteBuf
 
 data class TrialPlayerData (
     val participants: Int,

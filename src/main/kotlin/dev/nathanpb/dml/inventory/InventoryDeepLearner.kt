@@ -8,27 +8,15 @@ package dev.nathanpb.dml.inventory
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import dev.nathanpb.dml.container.ContainerDeepLearner
 import dev.nathanpb.dml.item.deepLearnerInventory
-import dev.nathanpb.dml.utils.ImplementedInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
+import dev.nathanpb.dml.screen.handler.ContainerDeepLearner
+import net.minecraft.inventory.SimpleInventory
 
-class InventoryDeepLearner(val container: ContainerDeepLearner) : ImplementedInventory {
+class InventoryDeepLearner(val container: ContainerDeepLearner) :
+    SimpleInventory(container.stack.deepLearnerInventory.size) {
 
-    private val _items = DefaultedList.ofSize(container.stack.deepLearnerInventory.size, ItemStack.EMPTY)
-
-    override fun getItems() = _items
-
-    override fun takeInvStack(slot: Int, count: Int): ItemStack {
-        return super.takeInvStack(slot, count).also {
-            container.onContentChanged(this)
-        }
-    }
-
-    override fun setInvStack(slot: Int, stack: ItemStack?) {
-        super.setInvStack(slot, stack).also {
-            container.onContentChanged(this)
-        }
+    override fun markDirty() {
+        super.markDirty()
+        container.onContentChanged(this)
     }
 }

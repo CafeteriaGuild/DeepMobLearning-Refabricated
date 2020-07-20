@@ -16,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.explosion.ExplosionBehavior;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,12 +27,13 @@ public class ExplosionPreventMixin {
 
     @Inject(
             at = @At("HEAD"),
-            method = "createExplosion(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;DDDFZLnet/minecraft/world/explosion/Explosion$DestructionType;)Lnet/minecraft/world/explosion/Explosion;",
+            method = "createExplosion",
             cancellable = true
     )
     public void explode(
             Entity entity,
             DamageSource damageSource,
+            ExplosionBehavior behavior,
             double x,
             double y,
             double z,
@@ -42,7 +44,7 @@ public class ExplosionPreventMixin {
     ) {
         World world = (World)((Object)this);
         BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
-        ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, pos, power, createFire, destructionType);
+        ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
         if (result == ActionResult.FAIL) {
             Explosion explosion = new Explosion(world, entity, x, y, z, 0, false, Explosion.DestructionType.NONE);
             ci.setReturnValue(explosion);

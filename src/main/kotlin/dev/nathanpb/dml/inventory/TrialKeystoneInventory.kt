@@ -8,12 +8,8 @@
 
 package dev.nathanpb.dml.inventory
 
-import dev.nathanpb.dml.utils.ImplementedInventory
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
+import net.minecraft.util.collection.DefaultedList
 
-class TrialKeystoneInventory (
-    private val items: DefaultedList<ItemStack>
-) : ImplementedInventory {
-    override fun getItems() = items
-}
+class TrialKeystoneInventory (items: DefaultedList<ItemStack>) : SimpleInventory(*items.toTypedArray())

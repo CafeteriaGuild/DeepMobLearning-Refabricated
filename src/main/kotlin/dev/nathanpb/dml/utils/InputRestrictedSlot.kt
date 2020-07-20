@@ -1,8 +1,8 @@
-package dev.nathanpb.dml.utils;
+package dev.nathanpb.dml.utils
 
-import net.minecraft.container.Slot
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.screen.slot.Slot
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk

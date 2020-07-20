@@ -16,12 +16,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.explosion.ExplosionBehavior;
 
 public interface WorldExplosionCallback {
     Event<WorldExplosionCallback> EVENT = EventFactory.createArrayBacked(WorldExplosionCallback.class, listeners ->
-        (World world, Entity entity, DamageSource damageSource, BlockPos pos, float power, boolean createFire, Explosion.DestructionType destructionType) -> {
+        (World world, Entity entity, DamageSource damageSource, ExplosionBehavior behavior, BlockPos pos, float power, boolean createFire, Explosion.DestructionType destructionType) -> {
             for (WorldExplosionCallback listener : listeners) {
-                ActionResult result = listener.explode(world, entity, damageSource, pos, power, createFire, destructionType);
+                ActionResult result = listener.explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
                 if (result != ActionResult.FAIL) {
                     return ActionResult.PASS;
                 }
@@ -30,5 +31,5 @@ public interface WorldExplosionCallback {
         }
     );
 
-    ActionResult explode(World world, Entity entity, DamageSource damageSource, BlockPos pos, float power, boolean createFire, Explosion.DestructionType destructionType);
+    ActionResult explode(World world, Entity entity, DamageSource damageSource, ExplosionBehavior behavior, BlockPos pos, float power, boolean createFire, Explosion.DestructionType destructionType);
 }

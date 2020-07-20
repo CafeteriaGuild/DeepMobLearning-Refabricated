@@ -8,16 +8,7 @@
 
 package dev.nathanpb.dml.inventory
 
-import dev.nathanpb.dml.utils.ImplementedInventory
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
 
-class CrushingRecipeTempInventory(start: ItemStack = ItemStack.EMPTY) : ImplementedInventory {
-    private val _items = DefaultedList.ofSize(9, ItemStack.EMPTY)
-
-    init {
-        _items[0] = start
-    }
-
-    override fun getItems(): DefaultedList<ItemStack> = _items
-}
+class CrushingRecipeTempInventory(start: ItemStack = ItemStack.EMPTY) : SimpleInventory(start)

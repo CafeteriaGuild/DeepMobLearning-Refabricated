@@ -14,11 +14,11 @@ import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.util.Identifier
-import net.minecraft.util.PacketByteBuf
 import net.minecraft.world.World
 
 class TrialKeystoneRecipe (
@@ -38,10 +38,10 @@ class TrialKeystoneRecipe (
     fun copyRewards() = rewards.map(ItemStack::copy)
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun craft(inv: TrialKeystoneInventory?) = ItemStack.EMPTY
+    override fun craft(inv: TrialKeystoneInventory?): ItemStack = ItemStack.EMPTY
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun getOutput() = ItemStack.EMPTY
+    override fun getOutput(): ItemStack = ItemStack.EMPTY
 
     override fun getId() = id
 
@@ -50,8 +50,6 @@ class TrialKeystoneRecipe (
     override fun fits(width: Int, height: Int) = true
 
     override fun getSerializer() = TRIAL_KEYSTONE_RECIPE_SERIALIZER
-
-
 
     override fun matches(inv: TrialKeystoneInventory?, world: World?): Boolean {
         TODO("Not yet implemented")

@@ -1,7 +1,7 @@
 package dev.nathanpb.dml.gui
 
-import dev.nathanpb.dml.container.CONTAINER_DEEP_LEARNER
-import dev.nathanpb.dml.container.ContainerDeepLearner
+import dev.nathanpb.dml.screen.handler.CONTAINER_DEEP_LEARNER
+import dev.nathanpb.dml.screen.handler.ContainerDeepLearner
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.minecraft.util.Hand
 
@@ -16,6 +16,12 @@ import net.minecraft.util.Hand
 fun registerGuis() {
     ScreenProviderRegistry.INSTANCE.registerFactory(CONTAINER_DEEP_LEARNER) {
         syncId, _, player, buff ->
-        GuiDeeplearner(ContainerDeepLearner(syncId, player.inventory, Hand.valueOf(buff.readString())))
+        GuiDeeplearner(
+            ContainerDeepLearner(
+                syncId,
+                player.inventory,
+                Hand.valueOf(buff.readString())
+            )
+        )
     }
 }

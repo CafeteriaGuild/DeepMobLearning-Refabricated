@@ -27,8 +27,8 @@ class ItemTrialKey : Item(settings().maxCount(1)) {
         if (stack != null && tooltip != null) {
             TrialKeyData.fromStack(stack).let { data ->
                 if (data != null) {
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.category.displayName.asFormattedString()))
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text.asFormattedString()))
+                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.bound_to", data.category.displayName))
+                    tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text))
                 } else {
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.unbound"))
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.trial_key.unbound.tip"))

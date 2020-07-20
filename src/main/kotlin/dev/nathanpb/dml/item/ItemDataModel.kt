@@ -41,7 +41,7 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
                     tooltip.add(
                         TranslatableText(
                             "tooltip.deepmoblearning.data_model.tier",
-                            data.tier().text.asFormattedString()
+                            data.tier().text
                         )
                     )
                     MinecraftClient.getInstance().player?.let { player ->

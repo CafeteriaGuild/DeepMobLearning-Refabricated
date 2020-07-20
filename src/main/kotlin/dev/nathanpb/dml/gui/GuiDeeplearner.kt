@@ -2,17 +2,20 @@ package dev.nathanpb.dml.gui
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import dev.nathanpb.dml.container.ContainerDeepLearner
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.screen.handler.ContainerDeepLearner
+import dev.nathanpb.dml.utils.items
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.ingame.ContainerScreen
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.widget.AbstractPressableButtonWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.client.util.math.Vector3f
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
+import net.minecraft.text.LiteralText
+import net.minecraft.text.StringRenderable
 import net.minecraft.text.TranslatableText
 
 /*
@@ -25,7 +28,7 @@ import net.minecraft.text.TranslatableText
 
 class GuiDeeplearner (
     container: ContainerDeepLearner
-) : ContainerScreen<ContainerDeepLearner>(
+) : HandledScreen<ContainerDeepLearner>(
     container,
     container.playerInventory,
     TranslatableText("item.deepmoblearning.deep_learner")
@@ -36,7 +39,7 @@ class GuiDeeplearner (
     }
 
     private fun firstDataModelIndex() : Int {
-        return container.inventory.items.indexOfFirst {
+        return handler.inventory.items().indexOfFirst {
             it.item is ItemDataModel
         }.let {
             if (it == -1) 0 else it
@@ -44,7 +47,7 @@ class GuiDeeplearner (
     }
 
     private fun lastDataModelIndex() : Int {
-        return container.inventory.items.indexOfLast {
+        return handler.inventory.items().indexOfLast {
             it.item is ItemDataModel
         }.let {
             if (it == -1) 0 else it
@@ -53,7 +56,7 @@ class GuiDeeplearner (
 
     private fun nextForwardDataModelIndex() : Int {
         return if (currentSlot != lastDataModelIndex()) {
-            container.inventory.items.mapIndexed { index, stack ->
+            handler.inventory.items().mapIndexed { index, stack ->
                 Pair(stack, index)
             }.indexOfFirst { (stack, index) ->
                 stack.item is ItemDataModel && index > currentSlot
@@ -65,7 +68,7 @@ class GuiDeeplearner (
 
     private fun nextReverseDataModelIndex() : Int {
         return if (currentSlot != firstDataModelIndex()) {
-            container.inventory.items.mapIndexed { index, stack ->
+            handler.inventory.items().mapIndexed { index, stack ->
                 Pair(stack, index)
             }.indexOfLast { (stack, index) ->
                 stack.item is ItemDataModel && index < currentSlot
@@ -80,7 +83,7 @@ class GuiDeeplearner (
 
     private val currentRenderEntity: EntityType<*>?
         get() {
-            container.inventory.getInvStack(currentSlot)?.item?.let { item ->
+            handler.inventory.getStack(currentSlot)?.item?.let { item ->
                 (item as? ItemDataModel)?.category?.tag?.values()?.let { values ->
                     return values.toTypedArray()[(tickCount / 60)% values.size]
                 }
@@ -99,43 +102,48 @@ class GuiDeeplearner (
         super.tick()
     }
 
-    override fun render(mouseX: Int, mouseY: Int, delta: Float) {
-        this.renderBackground()
-        super.render(mouseX, mouseY, delta)
-        this.drawMouseoverTooltip(mouseX, mouseY)
+    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        this.renderBackground(matrices)
+        super.render(matrices, mouseX, mouseY, delta)
+        this.drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
-    override fun drawBackground(delta: Float, mouseX: Int, mouseY: Int) {
+    override fun drawBackground(matrices: MatrixStack?, delta: Float, mouseX: Int, mouseY: Int) {
         GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f)
-        minecraft?.textureManager?.bindTexture(BACKGROUND)
-        blit((this.width - this.containerWidth) / 2, (this.height - this.containerHeight) / 2, 0, 0, containerWidth, containerHeight)
+        MinecraftClient.getInstance()?.textureManager?.bindTexture(BACKGROUND)
+        this.drawTexture(
+            matrices,
+            (this.width - this.backgroundWidth) / 2,
+            (this.height - this.backgroundHeight) / 2,
+            0, 0,
+            backgroundWidth,
+            backgroundHeight
+        )
+        // blit((this.width - this.containerWidth) / 2, (this.height - this.containerHeight) / 2, 0, 0, containerWidth, containerHeight)
         drawBackgroundEntity(currentRenderEntity)
     }
 
-    override fun drawForeground(mouseX: Int, mouseY: Int) {
-        super.font.draw(title.asFormattedString(), 8F, 6F, 0x40A0D3)
-        container.inventory.getInvStack(currentSlot)?.let { stack ->
+    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
+        textRenderer.draw(matrices, title, 8F, 6F, 0x40A0D3)
+        handler.inventory.getStack(currentSlot)?.let { stack ->
             if (stack.item is ItemDataModel) {
-                stack.dataModel.let{data ->
-                    // TODO cycle entities
+                stack.dataModel.let { data ->
                     currentRenderEntity?.let {
-                        super.font.draw(it.name.asFormattedString(), 8F, 20F, 0x373737)
+                        textRenderer.draw(matrices, it.name, 8F, 20F, 0x373737)
                     }
-                    super.font.draw(
-                        TranslatableText(
-                            "tooltip.deepmoblearning.data_model.tier",
-                            data.tier().text.asFormattedString()
-                        ).asFormattedString(),
+                    textRenderer.draw(
+                        matrices,
+                        TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text),
                         46F, 72F, 0x373737
                     )
                     if (!data.tier().isMaxTier()) {
-                        super.font.draw(
+                        textRenderer.draw(
+                            matrices,
                             TranslatableText(
                                 "tooltip.deepmoblearning.data_model.data_amount_simple",
                                 data.dataAmount,
                                 data.tier().nextTierOrCurrent().dataAmount
-                            ).asFormattedString(),
-                            46F, 62F, 0x373737
+                            ), 46F, 62F, 0x373737
                         )
                     }
                 }
@@ -144,65 +152,66 @@ class GuiDeeplearner (
     }
 
     private fun drawBackgroundEntity(entityType: EntityType<*>?) {
-        entityType?.let { entityType ->
-            // I have no idea about what mostly of this code do, I just copy/pasted from IngGameHud
-            (entityType.create(MinecraftClient.getInstance().world) as? LivingEntity)?.let { entity ->
-                RenderSystem.pushMatrix()
-                RenderSystem.translatef(x.toFloat() + 24, y.toFloat() + 77, 1050.0F)
-                RenderSystem.scalef(1.0f, 1.0f, -1.0f)
+        if (entityType == null) return
 
-                val matrixStack = MatrixStack()
-                matrixStack.translate(0.0, 0.0, 1000.0)
-                matrixStack.scale(24F, 24F, 24F)
+        // I have no idea about what mostly of this code do, I just copy/pasted from IngGameHud
+        (entityType.create(MinecraftClient.getInstance().world) as? LivingEntity)?.let { entity ->
+            RenderSystem.pushMatrix()
+            RenderSystem.translatef(x.toFloat() + 24, y.toFloat() + 77, 1050.0F)
+            RenderSystem.scalef(1.0f, 1.0f, -1.0f)
 
-                val quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180F)
-                val quaternion2 = Vector3f.POSITIVE_Y.getDegreesQuaternion((tickCount % 360F) * 2F + 150F)
+            val matrixStack = MatrixStack()
+            matrixStack.translate(0.0, 0.0, 1000.0)
+            matrixStack.scale(24F, 24F, 24F)
 
-                quaternion.hamiltonProduct(quaternion2)
-                matrixStack.multiply(quaternion)
-                quaternion2.conjugate()
+            val quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180F)
+            val quaternion2 = Vector3f.POSITIVE_Y.getDegreesQuaternion((tickCount % 360F) * 2F + 150F)
 
-                val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderManager
-                entityRenderDispatcher.rotation = quaternion2
-                entityRenderDispatcher.setRenderShadows(false)
+            quaternion.hamiltonProduct(quaternion2)
+            matrixStack.multiply(quaternion)
+            quaternion2.conjugate()
 
-                val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
-                entityRenderDispatcher.render(
-                    entity,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0f,
-                    0F,
-                    matrixStack,
-                    immediate,
-                    15728880
-                )
-                immediate.draw()
-                entityRenderDispatcher.setRenderShadows(true)
-                RenderSystem.popMatrix()
-            }
+            val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderManager
+            entityRenderDispatcher.rotation = quaternion2
+            entityRenderDispatcher.setRenderShadows(false)
+
+            val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
+            entityRenderDispatcher.render(
+                entity,
+                0.0,
+                0.0,
+                0.0,
+                0.0f,
+                0F,
+                matrixStack,
+                immediate,
+                15728880
+            )
+            immediate.draw()
+            entityRenderDispatcher.setRenderShadows(true)
+            RenderSystem.popMatrix()
         }
     }
 
-    private abstract class BaseButtonWidget (
-        x: Int, y: Int, val startX: Int = 0
-    ) : AbstractPressableButtonWidget(x, y, 16, 16, "") {
-        override fun renderButton(mouseX: Int, mouseY: Int, delta: Float) {
+    private abstract class BaseButtonWidget (x: Int, y: Int, val startX: Int = 0)
+        : AbstractPressableButtonWidget(x, y, 16, 16, LiteralText("")) {
+
+        override fun renderButton(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
             MinecraftClient.getInstance().textureManager.bindTexture(BACKGROUND)
             RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
             var j = startX
             if (!isActive()) {
                 j += width
             }
-            this.blit(x, y, j, 166, width, height)
+            this.drawTexture(matrices, x, y, j, 166, width, height)
+            // this.blit(x, y, j, 166, width, height)
         }
 
-        override fun render(mouseX: Int, mouseY: Int, delta: Float) {
+        override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
             if (isHovered) {
-                renderToolTip(mouseX, mouseY)
+                renderToolTip(matrices, mouseX, mouseY)
             }
-            super.render(mouseX, mouseY, delta)
+            super.render(matrices, mouseX, mouseY, delta)
         }
 
         abstract fun isActive() : Boolean
@@ -217,8 +226,12 @@ class GuiDeeplearner (
                 gui.currentSlot = gui.nextReverseDataModelIndex()
         }
 
-        override fun renderToolTip(mouseX: Int, mouseY: Int) {
-            gui.renderTooltip(TranslatableText("gui.deepmoblearning.previous").asFormattedString(), mouseX, mouseY)
+        override fun renderToolTip(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
+            gui.renderTooltip(
+                matrices,
+                TranslatableText("gui.deepmoblearning.previous").formatted(),
+                mouseX, mouseY
+            )
         }
     }
 
@@ -230,8 +243,12 @@ class GuiDeeplearner (
                 gui.currentSlot = gui.nextForwardDataModelIndex()
         }
 
-        override fun renderToolTip(mouseX: Int, mouseY: Int) {
-            gui.renderTooltip(TranslatableText("gui.deepmoblearning.next").asFormattedString(), mouseX, mouseY)
+        override fun renderToolTip(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
+            gui.renderTooltip(
+                matrices,
+                StringRenderable.plain(TranslatableText("gui.deepmoblearning.next").formatted().string),
+                mouseX, mouseY
+            )
         }
     }
 }

@@ -10,14 +10,15 @@ package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
 import dev.nathanpb.dml.inventory.CrushingRecipeTempInventory
+import dev.nathanpb.dml.utils.items
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.util.Identifier
-import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
@@ -36,13 +37,13 @@ class CrushingRecipe (
 
     override fun craft(inv: CrushingRecipeTempInventory): ItemStack {
         return getOutput().copy().also {
-            inv.items.firstOrNull {
+            inv.items().firstOrNull {
                 input.test(it)
             }?.decrement(1)
         }
     }
 
-    override fun matches(inv: CrushingRecipeTempInventory, world: World) = inv.items.any {
+    override fun matches(inv: CrushingRecipeTempInventory, world: World) = inv.items().any {
         input.test(it)
     }
 

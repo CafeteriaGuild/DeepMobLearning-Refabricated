@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.util.math.MatrixStack
 
 class TrialHud : DrawableHelper(), HudRenderCallback {
 
@@ -26,23 +27,21 @@ class TrialHud : DrawableHelper(), HudRenderCallback {
 
     var data: TrialPlayerData? = null
 
-    override fun onHudRender(p0: Float) {
+    override fun onHudRender(matrices: MatrixStack, p1: Float) {
         data?.let { data ->
-            drawString(
-                textRenderer,
+            textRenderer.draw(
+                matrices,
                 "${data.participants} Player${if (data.participants != 1) "s" else ""} Trial",
-                4, 4,
+                4F, 4F,
                 0xFFFFFF
             )
 
-            drawString(
-                textRenderer,
+            textRenderer.draw(
+                matrices,
                 "Wave ${data.currentWave + 1}/${data.maxWaves}",
-                4, 12,
+                4F, 12F,
                 0xFFFFFF
             )
         }
     }
-
-
 }

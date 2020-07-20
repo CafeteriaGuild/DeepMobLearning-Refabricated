@@ -124,7 +124,7 @@ class BlockEntityTrialKeystone :
                 val squaredDistance = it.squaredDistanceTo(posVector.x, posVector.y, posVector.z)
                 squaredDistance >=  EFFECTIVE_AREA_RADIUS_SQUARED - 9
             }.forEach {
-                val vector = it.posVector.subtract(pos.toVec3d()).multiply(-0.1)
+                val vector = it.pos.subtract(pos.toVec3d()).multiply(-0.1)
                 it.addVelocity(vector.x, vector.y, vector.z)
             }
     }

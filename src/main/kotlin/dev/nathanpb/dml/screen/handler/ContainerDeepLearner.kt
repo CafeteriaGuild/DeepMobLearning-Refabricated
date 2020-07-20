@@ -1,20 +1,27 @@
-package dev.nathanpb.dml.container
+/*
+ * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
+ */
+
+package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.NotDeepLearnerException
-import dev.nathanpb.dml.container.slot.DataModelSlot
-import dev.nathanpb.dml.container.slot.DataModelSlotPolicy
 import dev.nathanpb.dml.inventory.InventoryDeepLearner
 import dev.nathanpb.dml.item.ItemDeepLearner
 import dev.nathanpb.dml.item.deepLearnerInventory
-import net.minecraft.container.Container
-import net.minecraft.container.ContainerListener
-import net.minecraft.container.Slot
-import net.minecraft.container.SlotActionType
+import dev.nathanpb.dml.screen.handler.slot.DataModelSlot
+import dev.nathanpb.dml.screen.handler.slot.DataModelSlotPolicy
+import dev.nathanpb.dml.utils.items
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.DefaultedList
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.slot.Slot
+import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.Hand
 
 
@@ -30,9 +37,9 @@ class ContainerDeepLearner (
     syncId: Int,
     val playerInventory: PlayerInventory,
     hand: Hand
-) : Container(null, syncId) {
-    val player = playerInventory.player
-    val stack = player.getStackInHand(hand)
+) : ScreenHandler(null, syncId) {
+    val player: PlayerEntity = playerInventory.player
+    val stack: ItemStack = player.getStackInHand(hand)
     val inventory = InventoryDeepLearner(this)
 
     init {
@@ -41,10 +48,42 @@ class ContainerDeepLearner (
             throw NotDeepLearnerException()
         }
 
-        addSlot(DataModelSlot(inventory, 0, 134, 45, DataModelSlotPolicy.BOUND))
-        addSlot(DataModelSlot(inventory, 1, 152, 45, DataModelSlotPolicy.BOUND))
-        addSlot(DataModelSlot(inventory, 2, 134, 63, DataModelSlotPolicy.BOUND))
-        addSlot(DataModelSlot(inventory, 3, 152, 63, DataModelSlotPolicy.BOUND))
+        addSlot(
+            DataModelSlot(
+                inventory,
+                0,
+                134,
+                45,
+                DataModelSlotPolicy.BOUND
+            )
+        )
+        addSlot(
+            DataModelSlot(
+                inventory,
+                1,
+                152,
+                45,
+                DataModelSlotPolicy.BOUND
+            )
+        )
+        addSlot(
+            DataModelSlot(
+                inventory,
+                2,
+                134,
+                63,
+                DataModelSlotPolicy.BOUND
+            )
+        )
+        addSlot(
+            DataModelSlot(
+                inventory,
+                3,
+                152,
+                63,
+                DataModelSlotPolicy.BOUND
+            )
+        )
 
         (0..2).forEach { i ->
             (0..8).forEach { m ->
@@ -64,22 +103,6 @@ class ContainerDeepLearner (
         stack.deepLearnerInventory.forEachIndexed { index, itemStack ->
             getSlot(index).stack = itemStack
         }
-
-        addListener(object : ContainerListener {
-            override fun onContainerRegistered(container: Container?, defaultedList: DefaultedList<ItemStack>?) {
-                // Not Implemented
-            }
-
-            override fun onContainerPropertyUpdate(container: Container?, propertyId: Int, i: Int) {
-                // Not Implemented
-            }
-
-            override fun onContainerSlotUpdate(container: Container?, slotId: Int, itemStack: ItemStack?) {
-                if (container === this@ContainerDeepLearner && slotId <= 3) {
-                    container.onContentChanged(container.inventory)
-                }
-            }
-        })
     }
 
     override fun onContentChanged(inventory: Inventory?) {
@@ -90,7 +113,7 @@ class ContainerDeepLearner (
 
     override fun close(player: PlayerEntity) {
         super.close(player)
-        stack.deepLearnerInventory = inventory.items
+        stack.deepLearnerInventory = inventory.items()
     }
 
     override fun transferSlot(player: PlayerEntity?, slotNum: Int): ItemStack? {
@@ -98,11 +121,11 @@ class ContainerDeepLearner (
         if (clickedSlot != null && clickedSlot.hasStack()) {
             val clickedStack = clickedSlot.stack
             return clickedStack.copy().also {
-                if (slotNum < inventory.invSize) {
-                    if (!insertItem(clickedStack,  inventory.invSize, slots.size, true)) {
+                if (slotNum < inventory.size()) {
+                    if (!insertItem(clickedStack,  inventory.size(), slots.size, true)) {
                         return ItemStack.EMPTY
                     }
-                } else if (!insertItem(clickedStack, 0, inventory.invSize, false)) {
+                } else if (!insertItem(clickedStack, 0, inventory.size(), false)) {
                     return ItemStack.EMPTY
                 }
                 if (clickedStack.isEmpty) {

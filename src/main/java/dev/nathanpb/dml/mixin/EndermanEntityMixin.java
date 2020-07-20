@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EndermanEntity.class)
 public class EndermanEntityMixin {
 
-    @Inject(at = @At("HEAD"), method = "teleport", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "teleportTo(DDD)Z", cancellable = true)
     public void teleport(double x, double y, double z, CallbackInfoReturnable<Boolean> ci) {
         EndermanEntity entity = (EndermanEntity) ((Object) this);
         Vec3d pos = new Vec3d(x, y, z);
