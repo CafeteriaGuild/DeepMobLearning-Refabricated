@@ -32,7 +32,6 @@ class ItemTrialKey : Item(settings().maxCount(1)) {
                 } else {
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.unbound"))
                     tooltip.add(TranslatableText("tooltip.deepmoblearning.trial_key.unbound.tip"))
-                    tooltip.add(TranslatableText("tooltip.deepmoblearning.trial_key.unbound.tip2"))
                 }
             }
         }

@@ -77,16 +77,4 @@ class TrialKeyAttuneRecipe (
                 model.category == it.category && it.tier == model.tier()
             }
     }
-
-    override fun getRemainingStacks(inventory: CraftingInventory): DefaultedList<ItemStack> {
-        return DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY).also { defaultedList ->
-            inventory.items().forEachIndexed { index, itemStack ->
-                if (itemStack.item.hasRecipeRemainder()) {
-                    defaultedList[index] = ItemStack(itemStack.item.recipeRemainder)
-                } else if (itemStack.item is ItemDataModel) {
-                    defaultedList[index] = itemStack.copy()
-                }
-            }
-        }
-    }
 }
