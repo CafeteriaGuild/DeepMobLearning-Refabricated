@@ -13,11 +13,13 @@ import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.toVec3d
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
@@ -32,16 +34,20 @@ import kotlin.random.Random
 class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
     TrialEndCallback,
+    BlockEntityClientSerializable,
     Tickable
 {
 
     companion object {
         const val EFFECTIVE_AREA_RADIUS = 12.0
         const val EFFECTIVE_AREA_RADIUS_SQUARED = EFFECTIVE_AREA_RADIUS * EFFECTIVE_AREA_RADIUS
+        val BORDERS_RANGE = (EFFECTIVE_AREA_RADIUS_SQUARED - 9) .. (EFFECTIVE_AREA_RADIUS_SQUARED + 9)
     }
 
     private var circleBounds: List<BlockPos>? = null
     var currentTrial: Trial? = null
+
+    var clientTrialState = TrialState.NOT_STARTED
 
     init {
         TrialEndCallback.EVENT.register(this)
@@ -49,21 +55,30 @@ class BlockEntityTrialKeystone :
 
     override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
         if (currentTrial == trial) {
+            sync()
             trial.world.blockTickScheduler.schedule(pos, BLOCK_TRIAL_KEYSTONE, Trial.POST_END_TIMEOUT + 1)
         }
     }
 
     override fun tick() {
-        val state = currentTrial?.state ?: TrialState.NOT_STARTED
-        if (world?.isClient == true && state == TrialState.NOT_STARTED) {
-            MinecraftClient.getInstance().player?.let { clientPlayer ->
-                if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
-                    spawnParticlesInWrongTerrain()
+        if (world?.isClient == true) {
+            when (clientTrialState) {
+                TrialState.NOT_STARTED -> {
+                    MinecraftClient.getInstance().player?.let { clientPlayer ->
+                        if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
+                            spawnParticlesInWrongTerrain()
+                        }
+                    }
                 }
+                TrialState.RUNNING -> {
+                    pullMobsInBorders(listOf(MinecraftClient.getInstance().player as LivingEntity))
+                }
+                else -> {}
             }
             return
         }
         currentTrial?.let { trial ->
+            val state = currentTrial?.state ?: TrialState.NOT_STARTED
             if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
                 if (state == TrialState.RUNNING) {
                     pullMobsInBorders(trial.waves[trial.currentWave].spawnedEntities)
@@ -88,6 +103,7 @@ class BlockEntityTrialKeystone :
             if (wrongTerrain.isEmpty()) {
                 currentTrial = trial
                 trial.start()
+                sync()
             } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
         }
     }
@@ -122,7 +138,7 @@ class BlockEntityTrialKeystone :
         mobs.filter(LivingEntity::isAlive)
             .filter {
                 val squaredDistance = it.squaredDistanceTo(posVector.x, posVector.y, posVector.z)
-                squaredDistance >=  EFFECTIVE_AREA_RADIUS_SQUARED - 9
+                squaredDistance in BORDERS_RANGE
             }.forEach {
                 val vector = it.pos.subtract(pos.toVec3d()).multiply(-0.1)
                 it.addVelocity(vector.x, vector.y, vector.z)
@@ -188,4 +204,14 @@ class BlockEntityTrialKeystone :
             }
         }
     }.toList()
+
+    override fun toClientTag(tag: CompoundTag) = tag.also {
+        it.putString("deepmoblearning:state", (currentTrial?.state ?: TrialState.NOT_STARTED).name)
+    }
+
+    override fun fromClientTag(tag: CompoundTag) {
+        clientTrialState = tag.getString("deepmoblearning:state").let { name ->
+            if (name.isNotEmpty())  TrialState.valueOf(name) else TrialState.NOT_STARTED
+        }
+    }
 }

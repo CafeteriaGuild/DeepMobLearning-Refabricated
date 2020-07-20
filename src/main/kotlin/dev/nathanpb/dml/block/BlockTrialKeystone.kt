@@ -12,10 +12,7 @@ import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import dev.nathanpb.dml.trial.TrialData
-import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
-import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
-import dev.nathanpb.dml.trial.TrialWaveData
+import dev.nathanpb.dml.trial.*
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.entity.player.PlayerEntity
@@ -80,6 +77,8 @@ class BlockTrialKeystone : Block(
     override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         (world.getBlockEntity(pos) as? BlockEntityTrialKeystone)?.let { entity ->
             entity.currentTrial = null
+            entity.clientTrialState = TrialState.NOT_STARTED
+            entity.sync()
         }
         super.scheduledTick(state, world, pos, random)
     }
