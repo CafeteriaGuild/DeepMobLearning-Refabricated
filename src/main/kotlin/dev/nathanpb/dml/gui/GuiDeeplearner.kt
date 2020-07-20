@@ -78,6 +78,16 @@ class GuiDeeplearner (
     var currentSlot = firstDataModelIndex()
     var tickCount = 0
 
+    private val currentRenderEntity: EntityType<*>?
+        get() {
+            container.inventory.getInvStack(currentSlot)?.item?.let { item ->
+                (item as? ItemDataModel)?.category?.tag?.values()?.let { values ->
+                    return values.toTypedArray()[(tickCount / 60)% values.size]
+                }
+            }
+            return null
+        }
+
     override fun init() {
         super.init()
         addButton(PaginatorPrevButtonWidget(x + 133, y + 24, this))
@@ -99,14 +109,7 @@ class GuiDeeplearner (
         GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f)
         minecraft?.textureManager?.bindTexture(BACKGROUND)
         blit((this.width - this.containerWidth) / 2, (this.height - this.containerHeight) / 2, 0, 0, containerWidth, containerHeight)
-        container.inventory.getInvStack(currentSlot)?.let { stack ->
-            if (stack.item is ItemDataModel) {
-                // TODO cycle entities
-                stack.dataModel.category?.tag?.values()?.first()?.let {
-                    drawBackgroundEntity(it)
-                }
-            }
-        }
+        drawBackgroundEntity(currentRenderEntity)
     }
 
     override fun drawForeground(mouseX: Int, mouseY: Int) {
@@ -115,7 +118,7 @@ class GuiDeeplearner (
             if (stack.item is ItemDataModel) {
                 stack.dataModel.let{data ->
                     // TODO cycle entities
-                    stack.dataModel.category?.tag?.values()?.first()?.let {
+                    currentRenderEntity?.let {
                         super.font.draw(it.name.asFormattedString(), 8F, 20F, 0x373737)
                     }
                     super.font.draw(
@@ -140,43 +143,45 @@ class GuiDeeplearner (
         }
     }
 
-    private fun drawBackgroundEntity(entityType: EntityType<*>) {
-        // I have no idea about what mostly of this code do, I just copy/pasted from IngGameHud
-        (entityType.create(MinecraftClient.getInstance().world) as? LivingEntity)?.let { entity ->
-            RenderSystem.pushMatrix()
-            RenderSystem.translatef(x.toFloat() + 24, y.toFloat() + 77, 1050.0F)
-            RenderSystem.scalef(1.0f, 1.0f, -1.0f)
+    private fun drawBackgroundEntity(entityType: EntityType<*>?) {
+        entityType?.let { entityType ->
+            // I have no idea about what mostly of this code do, I just copy/pasted from IngGameHud
+            (entityType.create(MinecraftClient.getInstance().world) as? LivingEntity)?.let { entity ->
+                RenderSystem.pushMatrix()
+                RenderSystem.translatef(x.toFloat() + 24, y.toFloat() + 77, 1050.0F)
+                RenderSystem.scalef(1.0f, 1.0f, -1.0f)
 
-            val matrixStack = MatrixStack()
-            matrixStack.translate(0.0, 0.0, 1000.0)
-            matrixStack.scale(24F, 24F, 24F)
+                val matrixStack = MatrixStack()
+                matrixStack.translate(0.0, 0.0, 1000.0)
+                matrixStack.scale(24F, 24F, 24F)
 
-            val quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180F)
-            val quaternion2 = Vector3f.POSITIVE_Y.getDegreesQuaternion((tickCount % 360F) * 2F + 150F)
+                val quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180F)
+                val quaternion2 = Vector3f.POSITIVE_Y.getDegreesQuaternion((tickCount % 360F) * 2F + 150F)
 
-            quaternion.hamiltonProduct(quaternion2)
-            matrixStack.multiply(quaternion)
-            quaternion2.conjugate()
+                quaternion.hamiltonProduct(quaternion2)
+                matrixStack.multiply(quaternion)
+                quaternion2.conjugate()
 
-            val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderManager
-            entityRenderDispatcher.rotation = quaternion2
-            entityRenderDispatcher.setRenderShadows(false)
+                val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderManager
+                entityRenderDispatcher.rotation = quaternion2
+                entityRenderDispatcher.setRenderShadows(false)
 
-            val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
-            entityRenderDispatcher.render(
-                entity,
-                0.0,
-                0.0,
-                0.0,
-                0.0f,
-                0F,
-                matrixStack,
-                immediate,
-                15728880
-            )
-            immediate.draw()
-            entityRenderDispatcher.setRenderShadows(true)
-            RenderSystem.popMatrix()
+                val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
+                entityRenderDispatcher.render(
+                    entity,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0f,
+                    0F,
+                    matrixStack,
+                    immediate,
+                    15728880
+                )
+                immediate.draw()
+                entityRenderDispatcher.setRenderShadows(true)
+                RenderSystem.popMatrix()
+            }
         }
     }
 
