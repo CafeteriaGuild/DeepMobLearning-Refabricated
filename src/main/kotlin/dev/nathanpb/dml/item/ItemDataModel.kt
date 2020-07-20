@@ -33,11 +33,6 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
         if (world?.isClient == true && stack != null && tooltip != null) {
             if (category != null) {
                 stack.dataModel.let { data ->
-                    MinecraftClient.getInstance().player?.let { player ->
-                        if (player.isCreative) {
-                            tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
-                        }
-                    }
                     if (!data.tier().isMaxTier()) {
                         tooltip.add(
                             TranslatableText(
@@ -53,6 +48,11 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
                             data.tier().text.asFormattedString()
                         )
                     )
+                    MinecraftClient.getInstance().player?.let { player ->
+                        if (player.isCreative) {
+                            tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
+                        }
+                    }
                 }
             }
         }
