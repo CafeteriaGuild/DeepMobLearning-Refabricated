@@ -4,8 +4,8 @@
   "category": "SKELETON",
   "rewards": [
     {
-      "item": "minecraft:coal",
-      "count": 2
+      "item": "deepmoblearning:pristine_matter_skeleton",
+      "count": 1
     }
   ]
 }

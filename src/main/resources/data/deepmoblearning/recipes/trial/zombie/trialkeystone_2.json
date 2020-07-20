@@ -4,8 +4,8 @@
   "category": "ZOMBIE",
   "rewards": [
     {
-      "item": "minecraft:diamond",
-      "count": 3
+      "item": "deepmoblearning:pristine_matter_zombie",
+      "count": 4
     }
   ]
 }

@@ -4,7 +4,7 @@
   "category": "OCEAN",
   "rewards": [
     {
-      "item": "minecraft:iron_ingot",
+      "item": "deepmoblearning:pristine_matter_ocean",
       "count": 2
     }
   ]

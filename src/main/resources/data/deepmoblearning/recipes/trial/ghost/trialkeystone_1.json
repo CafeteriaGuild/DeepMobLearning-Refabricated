@@ -4,7 +4,7 @@
   "category": "GHOST",
   "rewards": [
     {
-      "item": "minecraft:iron_ingot",
+      "item": "deepmoblearning:pristine_matter_ghost",
       "count": 2
     }
   ]

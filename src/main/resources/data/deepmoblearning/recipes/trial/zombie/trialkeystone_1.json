@@ -4,7 +4,7 @@
   "category": "ZOMBIE",
   "rewards": [
     {
-      "item": "minecraft:iron_ingot",
+      "item": "deepmoblearning:pristine_matter_zombie",
       "count": 2
     }
   ]

@@ -4,7 +4,7 @@
   "category": "SKELETON",
   "rewards": [
     {
-      "item": "minecraft:iron_ingot",
+      "item": "deepmoblearning:pristine_matter_skeleton",
       "count": 2
     }
   ]

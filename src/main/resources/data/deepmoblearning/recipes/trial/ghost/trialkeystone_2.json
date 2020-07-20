@@ -4,8 +4,8 @@
   "category": "GHOST",
   "rewards": [
     {
-      "item": "minecraft:diamond",
-      "count": 3
+      "item": "deepmoblearning:pristine_matter_ghost",
+      "count": 4
     }
   ]
 }

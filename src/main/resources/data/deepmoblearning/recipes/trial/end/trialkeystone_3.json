@@ -4,12 +4,8 @@
   "category": "END",
   "rewards": [
     {
-      "item": "minecraft:gold_ingot",
-      "count": 2
-    },
-    {
-      "item": "minecraft:redstone",
-      "count": 4
+      "item": "deepmoblearning:pristine_matter_end",
+      "count": 8
     }
   ]
 }

@@ -4,8 +4,8 @@
   "category": "SKELETON",
   "rewards": [
     {
-      "item": "minecraft:diamond",
-      "count": 3
+      "item": "deepmoblearning:pristine_matter_skeleton",
+      "count": 4
     }
   ]
 }

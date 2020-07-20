@@ -4,8 +4,8 @@
   "category": "OCEAN",
   "rewards": [
     {
-      "item": "minecraft:coal",
-      "count": 2
+      "item": "deepmoblearning:pristine_matter_ocean",
+      "count": 1
     }
   ]
 }

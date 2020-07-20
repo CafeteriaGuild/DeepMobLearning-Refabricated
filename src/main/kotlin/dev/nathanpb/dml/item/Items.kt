@@ -39,6 +39,16 @@ val ITEM_DATA_MODEL_GHOST = ItemDataModel(EntityCategory.GHOST)
 val ITEM_DATA_MODEL_ILLAGER = ItemDataModel(EntityCategory.ILLAGER)
 val ITEM_DATA_MODEL_OCEAN = ItemDataModel(EntityCategory.OCEAN)
 
+val ITEM_PRISTINE_MATTER_NETHER = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_SLIMY = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_OVERWORLD = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_ZOMBIE = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_SKELETON = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_END = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_GHOST = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_ILLAGER = ItemPristineMatter(settings())
+val ITEM_PRISTINE_MATTER_OCEAN = ItemPristineMatter(settings())
+
 val ITEM_SOOT_REDSTONE = Item(settings())
 val ITEM_SOOT_PLATE = Item(settings())
 val ITEM_SOOT_MACHINE_CASE = Item(settings())
@@ -61,7 +71,16 @@ fun registerItems() {
         ITEM_DATA_MODEL_OCEAN to "data_model_ocean",
         ITEM_SOOT_REDSTONE to "soot_redstone",
         ITEM_SOOT_PLATE to "soot_plate",
-        ITEM_SOOT_MACHINE_CASE to "machine_casing"
+        ITEM_SOOT_MACHINE_CASE to "machine_casing",
+        ITEM_PRISTINE_MATTER_NETHER to "pristine_matter_nether",
+        ITEM_PRISTINE_MATTER_SLIMY to "pristine_matter_slimy",
+        ITEM_PRISTINE_MATTER_OVERWORLD to "pristine_matter_overworld",
+        ITEM_PRISTINE_MATTER_ZOMBIE to "pristine_matter_zombie",
+        ITEM_PRISTINE_MATTER_SKELETON to "pristine_matter_skeleton",
+        ITEM_PRISTINE_MATTER_END to "pristine_matter_end",
+        ITEM_PRISTINE_MATTER_GHOST to "pristine_matter_ghost",
+        ITEM_PRISTINE_MATTER_ILLAGER to "pristine_matter_illager",
+        ITEM_PRISTINE_MATTER_OCEAN to "pristine_matter_ocean"
     ).forEach { (item, id) ->
         Registry.register(Registry.ITEM, identifier(id), item)
     }

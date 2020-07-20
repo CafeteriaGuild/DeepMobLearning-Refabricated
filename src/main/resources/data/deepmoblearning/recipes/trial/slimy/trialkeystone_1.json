@@ -4,7 +4,7 @@
   "category": "SLIMY",
   "rewards": [
     {
-      "item": "minecraft:iron_ingot",
+      "item": "deepmoblearning:pristine_matter_slimy",
       "count": 2
     }
   ]

@@ -4,8 +4,8 @@
   "category": "NETHER",
   "rewards": [
     {
-      "item": "minecraft:diamond",
-      "count": 3
+      "item": "deepmoblearning:pristine_matter_nether",
+      "count": 4
     }
   ]
 }
