@@ -11,6 +11,7 @@ package dev.nathanpb.dml.item
 import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -29,11 +30,14 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
         context: TooltipContext?
     ) {
         super.appendTooltip(stack, world, tooltip, context)
-        if (world != null && stack != null && tooltip != null) {
+        if (world?.isClient == true && stack != null && tooltip != null) {
             if (category != null) {
                 stack.dataModel.let { data ->
-                    // todo add that tooltip for creative players
-                    // tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
+                    MinecraftClient.getInstance().player?.let { player ->
+                        if (player.isCreative) {
+                            tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
+                        }
+                    }
                     if (!data.tier().isMaxTier()) {
                         tooltip.add(
                             TranslatableText(
