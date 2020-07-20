@@ -10,21 +10,27 @@ package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import dev.nathanpb.dml.event.TrialEndCallback
+import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.toVec3d
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable
+import net.minecraft.block.BlockState
+import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.SidedInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
+import net.minecraft.world.WorldAccess
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -35,6 +41,7 @@ class BlockEntityTrialKeystone :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
     TrialEndCallback,
     BlockEntityClientSerializable,
+    InventoryProvider,
     Tickable
 {
 
@@ -49,14 +56,22 @@ class BlockEntityTrialKeystone :
 
     var clientTrialState = TrialState.NOT_STARTED
 
+    private val internalInventory = TrialKeystoneInventory()
+
     init {
         TrialEndCallback.EVENT.register(this)
     }
 
     override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
-        if (currentTrial == trial) {
+        if (currentTrial == trial && !trial.world.isClient) {
             sync()
             trial.world.blockTickScheduler.schedule(pos, BLOCK_TRIAL_KEYSTONE, Trial.POST_END_TIMEOUT + 1)
+
+            if (reason == TrialEndReason.SUCCESS) {
+                internalInventory.dropAll(trial.world, pos)
+            } else {
+                internalInventory.clear()
+            }
         }
     }
 
@@ -98,13 +113,20 @@ class BlockEntityTrialKeystone :
         } else throw TrialKeystoneNoPlayersAround(this)
     }
 
-    fun startTrial(trial: Trial) {
-        checkTerrain().let { wrongTerrain ->
-            if (wrongTerrain.isEmpty()) {
-                currentTrial = trial
-                trial.start()
-                sync()
-            } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
+    fun startTrial(trial: Trial, key: ItemStack?) {
+        world?.let { world ->
+            internalInventory.dropAll(world, pos)
+            checkTerrain().let { wrongTerrain ->
+                if (wrongTerrain.isEmpty()) {
+                    currentTrial = trial
+                    trial.start()
+                    sync()
+
+                    if (key != null) {
+                        internalInventory.addStack(key)
+                    }
+                } else throw TrialKeystoneWrongTerrainException(this, wrongTerrain)
+            }
         }
     }
 
@@ -213,5 +235,9 @@ class BlockEntityTrialKeystone :
         clientTrialState = tag.getString("deepmoblearning:state").let { name ->
             if (name.isNotEmpty())  TrialState.valueOf(name) else TrialState.NOT_STARTED
         }
+    }
+
+    override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
+        return (world.getBlockEntity(pos) as BlockEntityTrialKeystone).internalInventory
     }
 }

@@ -44,11 +44,13 @@ class BlockTrialKeystone : Block(
                     }.let { data ->
                         if (data != null) {
                             try {
-                                if (!player.isCreative)
-                                    stackInHand.decrement(1)
                                 val trialData = TrialData(data, TrialWaveData.fromRecipe(data))
                                 val trial = blockEntity.createTrial(trialData)
-                                blockEntity.startTrial(trial)
+                                blockEntity.startTrial(trial, if (player.isCreative) null else stackInHand)
+
+                                if (!player.isCreative)
+                                    stackInHand.decrement(1)
+
                                 return ActionResult.CONSUME
                             } catch (ex: TrialKeystoneIllegalStartException) {
                                 return ActionResult.PASS

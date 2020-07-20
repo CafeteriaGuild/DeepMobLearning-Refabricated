@@ -8,29 +8,8 @@
 
 package dev.nathanpb.dml.inventory
 
-import dev.nathanpb.dml.utils.toVec3d
-import net.minecraft.entity.ItemEntity
-import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.world.World
+import net.minecraft.util.collection.DefaultedList
 
-class TrialKeystoneInventory : SimpleInventory(9), SidedInventory {
-
-    fun dropAll(world: World, pos: BlockPos) {
-        val pos3d = pos.toVec3d()
-        clearToList().map {
-            ItemEntity(world, pos3d.x, pos3d.y, pos3d.z, it)
-        }.forEach {
-            world.spawnEntity(it)
-        }
-    }
-
-    override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?) = false
-
-    override fun canInsert(slot: Int, stack: ItemStack?, dir: Direction?) = false
-
-    override fun getAvailableSlots(side: Direction?) = intArrayOf()
-}
+class TrialKeystoneTemporaryCraftingInventory (items: DefaultedList<ItemStack>) : SimpleInventory(*items.toTypedArray())

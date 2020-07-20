@@ -12,7 +12,7 @@ import com.google.gson.JsonObject
 import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.TrialKeyData
-import dev.nathanpb.dml.inventory.TrialKeystoneInventory
+import dev.nathanpb.dml.inventory.TrialKeystoneTemporaryCraftingInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Recipe
@@ -27,7 +27,7 @@ class TrialKeystoneRecipe (
     val tier: DataModelTier,
     val waves: List<Int>,
     private val rewards: List<ItemStack>
-) : Recipe<TrialKeystoneInventory> {
+) : Recipe<TrialKeystoneTemporaryCraftingInventory> {
 
     companion object {
         fun findOrNull(world: World, data: TrialKeyData) = world.recipeManager.values()
@@ -38,7 +38,7 @@ class TrialKeystoneRecipe (
     fun copyRewards() = rewards.map(ItemStack::copy)
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun craft(inv: TrialKeystoneInventory?): ItemStack = ItemStack.EMPTY
+    override fun craft(inv: TrialKeystoneTemporaryCraftingInventory?): ItemStack = ItemStack.EMPTY
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
     override fun getOutput(): ItemStack = ItemStack.EMPTY
@@ -51,7 +51,7 @@ class TrialKeystoneRecipe (
 
     override fun getSerializer() = TRIAL_KEYSTONE_RECIPE_SERIALIZER
 
-    override fun matches(inv: TrialKeystoneInventory?, world: World?): Boolean {
+    override fun matches(inv: TrialKeystoneTemporaryCraftingInventory?, world: World?): Boolean {
         TODO("Not yet implemented")
     }
 
