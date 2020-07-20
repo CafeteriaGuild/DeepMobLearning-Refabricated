@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GBS",
+    "RDR",
+    "SBG"
+  ],
+  "key": {
+    "D": {
+      "item": "deepmoblearning:data_model"
+    },
+    "G": {
+      "item": "minecraft:gunpowder"
+    },
+    "S": {
+      "item": "minecraft:string"
+    },
+    "R": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    }
+  },
+  "result": {
+    "item": "deepmoblearning:data_model_overworld",
+    "count": 1
+  }
+}
