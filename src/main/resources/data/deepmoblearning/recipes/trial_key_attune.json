@@ -5,7 +5,7 @@
       "item": "deepmoblearning:trial_key"
     },
     {
-      "item": "deepmoblearning:data_model"
+      "tag": "deepmoblearning:attuned_data_models"
     }
   ],
   "result": "deepmoblearning:trial_key"
