@@ -9,9 +9,9 @@
 package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
-import dev.nathanpb.dml.inventory.CrushingRecipeTempInventory
 import dev.nathanpb.dml.utils.items
 import net.minecraft.block.Block
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
@@ -27,7 +27,7 @@ class CrushingRecipe (
     val input: Ingredient,
     val block: Block,
     private val output: ItemStack
-) : Recipe<CrushingRecipeTempInventory> {
+) : Recipe<SimpleInventory> {
 
     override fun getId() = id
     override fun getType() = RECIPE_CRUSHING
@@ -35,7 +35,7 @@ class CrushingRecipe (
     override fun getSerializer() = CRUSHING_RECIPE_SERIALIZER
     override fun getOutput() = output
 
-    override fun craft(inv: CrushingRecipeTempInventory): ItemStack {
+    override fun craft(inv: SimpleInventory): ItemStack {
         return getOutput().copy().also {
             inv.items().firstOrNull {
                 input.test(it)
@@ -43,7 +43,7 @@ class CrushingRecipe (
         }
     }
 
-    override fun matches(inv: CrushingRecipeTempInventory, world: World) = inv.items().any {
+    override fun matches(inv: SimpleInventory, world: World) = inv.items().any {
         input.test(it)
     }
 

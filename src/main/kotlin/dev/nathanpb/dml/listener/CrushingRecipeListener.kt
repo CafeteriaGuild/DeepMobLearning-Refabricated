@@ -8,10 +8,10 @@
 
 package dev.nathanpb.dml.listener
 
-import dev.nathanpb.dml.inventory.CrushingRecipeTempInventory
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
@@ -28,7 +28,7 @@ class CrushingRecipeListener : AttackBlockCallback {
     ): ActionResult {
         if (!world.isClient) {
             player.getStackInHand(hand)?.let { stack ->
-                val inv = CrushingRecipeTempInventory(stack)
+                val inv = SimpleInventory(stack)
                 world.getBlockState(pos)?.let { state ->
                     world.recipeManager
                         .values()
