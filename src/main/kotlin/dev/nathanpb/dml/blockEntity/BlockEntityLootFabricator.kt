@@ -63,8 +63,8 @@ class BlockEntityLootFabricator
     override fun tick() {
         (world as? ServerWorld)?.let { world ->
             if (bufferedInternalInventory.isEmpty) {
-                val stack = inventory.stackInInputSlot ?: return
-                val item = stack.item as? ItemPristineMatter ?: return
+                val stack = inventory.stackInInputSlot ?: return resetProgress()
+                val item = stack.item as? ItemPristineMatter ?: return resetProgress()
 
                 if (progress >= PROCESS_TIME) {
                     val generatedLoot = generateLoot(world, item.category).toTypedArray()
