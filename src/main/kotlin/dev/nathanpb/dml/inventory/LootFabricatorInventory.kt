@@ -22,6 +22,9 @@ class LootFabricatorInventory : SimpleInventory(10), SidedInventory {
         val OUTPUT_SLOTS = (1..9).toIntArray()
     }
 
+    val stackInInputSlot: ItemStack?
+        get() = getStack(INPUT_SLOT)
+
     override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = slot == INPUT_SLOT && stack.item is ItemPristineMatter
     override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = slot in OUTPUT_SLOTS
     override fun getAvailableSlots(side: Direction?) = (0 until size()).toIntArray()

@@ -6,12 +6,19 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.item
+package dev.nathanpb.dml.entity
 
-import dev.nathanpb.dml.data.EntityCategory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import com.mojang.authlib.GameProfile
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import java.util.*
 
-class ItemPristineMatter(settings: Settings, val category: EntityCategory) : Item(settings) {
-    override fun hasGlint(stack: ItemStack?) = true
+class FakePlayerEntity(world: World) : PlayerEntity(world, BlockPos.ORIGIN, GameProfile(UUID, "deepmoblearning_fake_player")) {
+    companion object {
+        val UUID: UUID = java.util.UUID.randomUUID()
+    }
+
+    override fun isSpectator() = true
+    override fun isCreative() = true
 }
