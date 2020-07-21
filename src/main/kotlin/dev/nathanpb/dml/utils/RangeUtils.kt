@@ -8,21 +8,4 @@
 
 package dev.nathanpb.dml.utils
 
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
-
-fun PlayerInventory.hotbar() = (0..8).map { this.getStack(it) }
-
-fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
-    ItemStack.EMPTY,
-    *(0 until size()).map { getStack(it) }.toTypedArray()
-)
-
-fun Inventory.setStacks(stacks: DefaultedList<ItemStack>) {
-    clear()
-    stacks.forEachIndexed { index, stack ->
-        setStack(index, stack)
-    }
-}
+fun IntRange.toIntArray() = this.toList().toIntArray()
