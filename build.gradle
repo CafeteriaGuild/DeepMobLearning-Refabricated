@@ -17,6 +17,10 @@ minecraft {
 
 repositories {
     maven { url = "http://maven.fabricmc.net/" }
+    maven {
+        name = "CottonMC"
+        url = "https://server.bbkr.space/artifactory/libs-release"
+    }
 }
 
 dependencies {
@@ -34,6 +38,9 @@ dependencies {
     // You may need to force-disable transitiveness on them.
 
     modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+
+    modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
+    include "io.github.cottonmc:LibGui:${project.libgui_version}"
 }
 
 processResources {

@@ -14,6 +14,8 @@ import dev.nathanpb.dml.net.registerClientSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
 import dev.nathanpb.dml.screen.handler.registerContainerTypes
+import dev.nathanpb.dml.screen.handler.registerScreenHandlers
+import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -37,6 +39,7 @@ fun init() {
     registerRecipeSerializers()
     registerRecipeTypes()
     registerClientSidePackets()
+    registerScreenHandlers()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
@@ -51,6 +54,7 @@ fun init() {
 @Suppress("unused")
 fun initClient() {
     registerGuis()
+    registerScreens()
     HudRenderCallback.EVENT.register(TrialHud.INSTANCE)
 }
 

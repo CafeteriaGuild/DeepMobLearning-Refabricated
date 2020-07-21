@@ -9,12 +9,18 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityLootFabricator
+import dev.nathanpb.dml.screen.handler.HANDLER_LOOT_FABRICATOR
+import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.*
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
@@ -38,8 +44,21 @@ class BlockLootFabricator : HorizontalFacingBlock (
     }
 
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity?, hand: Hand?, hit: BlockHitResult?): ActionResult {
-        if (world?.isClient == false && pos != null && player != null) {
+        if (world?.isClient == false && pos != null) {
+            player?.openHandledScreen(object: ExtendedScreenHandlerFactory {
+                override fun getDisplayName() = name
 
+                override fun createMenu(syncId: Int, inv: PlayerInventory?, player: PlayerEntity?): ScreenHandler? {
+                    val buf = PacketByteBuf(Unpooled.buffer())
+                    writeScreenOpeningData(player as? ServerPlayerEntity, buf)
+                    return HANDLER_LOOT_FABRICATOR.create(syncId, inv, buf)
+                }
+
+                override fun writeScreenOpeningData(p0: ServerPlayerEntity?, buf: PacketByteBuf?) {
+                    buf?.writeBlockPos(pos)
+                }
+
+            })
         }
         return super.onUse(state, world, pos, player, hand, hit)
     }
