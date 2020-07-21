@@ -60,7 +60,7 @@ class BlockLootFabricator : HorizontalFacingBlock (
 
             })
         }
-        return super.onUse(state, world, pos, player, hand, hit)
+        return ActionResult.SUCCESS
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
