@@ -15,6 +15,7 @@ import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
 import dev.nathanpb.dml.utils.simulateLootDroppedStacks
+import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
@@ -24,6 +25,7 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Tickable
 import net.minecraft.util.collection.DefaultedList
@@ -31,14 +33,20 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
 import kotlin.math.min
 
-class BlockEntityLootFabricator : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR), InventoryProvider, Tickable {
+class BlockEntityLootFabricator
+    : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR),
+    InventoryProvider,
+    PropertyDelegateHolder,
+    Tickable
+{
 
     companion object {
         const val PROCESS_TIME = 20 * 10
         const val MATTER_ENTITY_EXCHANGE = 16
     }
 
-    var isDumpingBufferedInventory = false
+    private val _propertyDelegate = ArrayPropertyDelegate(2)
+    private var isDumpingBufferedInventory = false
     private val bufferedInternalInventory = SimpleInventory(64)
     val inventory = LootFabricatorInventory().apply {
         addListener {
@@ -46,7 +54,11 @@ class BlockEntityLootFabricator : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR), Inve
         }
     }
 
-    var progress = 0
+    private var progress = 0
+
+    init {
+        propertyDelegate[1] = PROCESS_TIME
+    }
 
     override fun tick() {
         (world as? ServerWorld)?.let { world ->
@@ -63,6 +75,7 @@ class BlockEntityLootFabricator : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR), Inve
                     dumpInternalInventory()
                 } else {
                     progress++
+                    propertyDelegate[0] = progress
                     return
                 }
 
@@ -120,6 +133,7 @@ class BlockEntityLootFabricator : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR), Inve
     private fun resetProgress() {
         if (progress != 0) {
             progress = 0
+            propertyDelegate[0] = 0
         }
     }
 
@@ -144,4 +158,6 @@ class BlockEntityLootFabricator : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR), Inve
             }
         }
     }
+
+    override fun getPropertyDelegate() = _propertyDelegate
 }

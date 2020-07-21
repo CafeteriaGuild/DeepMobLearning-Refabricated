@@ -10,6 +10,7 @@ package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.item.ItemPristineMatter
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
+import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import net.minecraft.entity.player.PlayerEntity
@@ -31,15 +32,18 @@ class LootFabricatorHandler(
         setRootPanel(root)
 
         val inputSlot = WItemSlot.of(blockInventory, 0).setFilter { it.item is ItemPristineMatter }
-        root.add(inputSlot, 2, 2)
+        root.add(inputSlot, 1, 2)
 
-        // TODO progress fucking bar
+        val progressBar = WBar(null, null, 0, 1, WBar.Direction.DOWN)
+        progressBar.setSize(1, 128)
+        root.add(progressBar, 3, 1, 1, 3)
+
 
         (0 until 9).forEach {
             val x = (it % 3)
             val y = (it / 3)
             val slot = WItemSlot.of(blockInventory, it + 1).setFilter { false }
-            root.add(slot, x  + 4, y + 1)
+            root.add(slot, x  + 5, y + 1)
         }
 
         root.add(this.createPlayerInventoryPanel(), 0, 5)
