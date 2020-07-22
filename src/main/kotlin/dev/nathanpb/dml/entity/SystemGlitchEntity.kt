@@ -12,6 +12,8 @@ import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.data.DataModelTier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.ai.goal.LookAroundGoal
+import net.minecraft.entity.ai.goal.WanderAroundGoal
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.mob.HostileEntity
@@ -22,6 +24,18 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         fun createMobAttributes(): DefaultAttributeContainer.Builder = LivingEntity.createLivingAttributes()
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS * 2)
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK)
+    }
+
+    override fun initGoals() {
+        super.initGoals()
+        listOf(
+            WanderAroundGoal(this, 1.0),
+            LookAroundGoal(this)
+        ).forEachIndexed(goalSelector::add)
+        // melee attack
+        // follow target
+        // teleport to target
+        // ranged attack
     }
 
     var tier: DataModelTier? = null
