@@ -15,6 +15,7 @@ import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
 
 class LootFabricatorHandler(
@@ -49,6 +50,10 @@ class LootFabricatorHandler(
         root.add(this.createPlayerInventoryPanel(), 0, 5)
 
         root.validate(this)
+
+        (blockInventory as? SimpleInventory)?.addListener {
+            sendContentUpdates()
+        }
     }
 
     override fun canUse(entity: PlayerEntity?) = true

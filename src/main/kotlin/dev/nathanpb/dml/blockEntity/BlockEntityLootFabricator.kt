@@ -124,6 +124,7 @@ class BlockEntityLootFabricator
                         buffStack.count = 0
                     } else if (canCombine(invStack, buffStack)) {
                         transfer(buffStack, invStack)
+                        inventory.markDirty()
                     }
                 }
         }
