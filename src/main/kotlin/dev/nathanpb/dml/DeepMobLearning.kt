@@ -2,6 +2,8 @@ package dev.nathanpb.dml
 
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
+import dev.nathanpb.dml.entity.registerEntityRenderer
+import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
@@ -40,6 +42,7 @@ fun init() {
     registerRecipeTypes()
     registerClientSidePackets()
     registerScreenHandlers()
+    registerEntityTypes()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
@@ -55,6 +58,7 @@ fun init() {
 fun initClient() {
     registerGuis()
     registerScreens()
+    registerEntityRenderer()
     HudRenderCallback.EVENT.register(TrialHud.INSTANCE)
 }
 
