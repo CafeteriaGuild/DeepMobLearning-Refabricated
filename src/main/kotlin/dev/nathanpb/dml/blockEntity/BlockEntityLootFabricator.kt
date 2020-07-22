@@ -47,7 +47,7 @@ class BlockEntityLootFabricator
 
     private val _propertyDelegate = ArrayPropertyDelegate(2)
     private var isDumpingBufferedInventory = false
-    private val bufferedInternalInventory = SimpleInventory(64)
+    val bufferedInternalInventory = SimpleInventory(64)
     val inventory = LootFabricatorInventory().apply {
         addListener {
             dumpInternalInventory()

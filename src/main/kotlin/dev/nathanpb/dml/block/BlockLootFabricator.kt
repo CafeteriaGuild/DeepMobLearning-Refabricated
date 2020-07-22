@@ -14,10 +14,12 @@ import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.*
+import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
@@ -25,10 +27,12 @@ import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
+import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.BlockView
+import net.minecraft.world.ServerWorldAccess
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
@@ -62,6 +66,15 @@ class BlockLootFabricator : HorizontalFacingBlock (
         }
         return ActionResult.SUCCESS
     }
+
+    override fun afterBreak(world: World?, player: PlayerEntity?, pos: BlockPos?, state: BlockState?, blockEntity: BlockEntity?, stack: ItemStack?) {
+        if (world is ServerWorldAccess && blockEntity is BlockEntityLootFabricator) {
+            ItemScatterer.spawn(world, pos, blockEntity.inventory)
+            ItemScatterer.spawn(world, pos, blockEntity.bufferedInternalInventory)
+        }
+        super.afterBreak(world, player, pos, state, blockEntity, stack)
+    }
+
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
         builder?.add(Properties.HORIZONTAL_FACING)
