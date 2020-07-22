@@ -10,6 +10,8 @@ package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.data.TrialPlayerData
+import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
+import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
 import dev.nathanpb.dml.net.TRIAL_UPDATED_PACKET
@@ -19,6 +21,7 @@ import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.player.PlayerEntity
@@ -61,6 +64,9 @@ class Trial (
             TranslatableText("bar.deepmoblearning.trial_fail")
         }
     }
+
+    var systemGlitch: SystemGlitchEntity? = null
+        private set;
 
     var currentWave = 0
         private set
@@ -125,6 +131,7 @@ class Trial (
     fun start() {
         if (state == TrialState.NOT_STARTED) {
             state = TrialState.RUNNING
+            spawnSystemGlitch()
             world.runningTrials += this
             bar.isVisible = true
             sendTrialUpdatePackets()
@@ -156,9 +163,16 @@ class Trial (
             bar.percent = 1F
             world.runningTrials -= this
             state = TrialState.WAITING_POST_FINISHED
+            systemGlitch?.remove()
             sendTrialEndPackets(reason)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
+    }
+
+    private fun spawnSystemGlitch() {
+        systemGlitch = SYSTEM_GLITCH_ENTITY_TYPE.spawn(
+            world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
+        )
     }
 
     private fun dropRewards() {
