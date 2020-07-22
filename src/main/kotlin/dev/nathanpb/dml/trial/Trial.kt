@@ -88,12 +88,12 @@ class Trial (
                         }
                     }
 
-                    if (systemGlitch?.isAlive != true) {
-                        end(TrialEndReason.SUCCESS)
-                    }
-
                     systemGlitch?.let { systemGlitch ->
                         bar.percent = systemGlitch.health / systemGlitch.maxHealth
+                    }
+
+                    if (systemGlitch?.isAlive != true) {
+                        end(TrialEndReason.SUCCESS)
                     }
                 }
                 TrialState.WAITING_POST_FINISHED -> {
