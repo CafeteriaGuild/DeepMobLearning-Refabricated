@@ -8,18 +8,35 @@ package dev.nathanpb.dml.mixin;
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
+import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
+    @Shadow public abstract void heal(float amount);
+
     @Inject(at = @At("HEAD"), method = "onDeath")
     public void onDeath(DamageSource source, CallbackInfo ci) {
         LivingEntityDieCallback.EVENT.invoker().onDeath((LivingEntity) (Object) this, source);
+    }
+
+    @Inject(at = @At("HEAD"), method = "getMaxHealth", cancellable = true)
+    public void getMaxHealth(CallbackInfoReturnable<Float> cir) {
+        if ((Object) this instanceof SystemGlitchEntity) {
+            SystemGlitchEntity dis = (SystemGlitchEntity) ((Object)this);
+            if (dis.getTier() != null) {
+                float health = dis.getTier().getSystemGlitchMaxHealth();
+                cir.setReturnValue(health);
+                cir.cancel();
+            }
+        }
     }
 }

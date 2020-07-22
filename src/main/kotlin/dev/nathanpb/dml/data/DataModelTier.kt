@@ -36,6 +36,7 @@ enum class DataModelTier(textEntry: String, val dataAmount: Int) {
     fun isMaxTier() = this == values().last()
     fun nextTierOrCurrent() = if (isMaxTier()) SELF_AWARE else values()[ordinal+1]
     val defaultWaveEntityCount = ceil((ordinal + 1) * 1.5).toInt()
+    val systemGlitchMaxHealth = (ordinal + 1) * 100F
     val defaultWaveRespawnTimeout by lazy {
         (values().size - ordinal) * 5 * 20
     }

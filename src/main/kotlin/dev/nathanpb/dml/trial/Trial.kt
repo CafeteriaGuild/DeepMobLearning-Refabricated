@@ -91,6 +91,10 @@ class Trial (
                     if (systemGlitch?.isAlive != true) {
                         end(TrialEndReason.SUCCESS)
                     }
+
+                    systemGlitch?.let { systemGlitch ->
+                        bar.percent = systemGlitch.health / systemGlitch.maxHealth
+                    }
                 }
                 TrialState.WAITING_POST_FINISHED -> {
                     if (tickCount >= endsAt) {
@@ -144,7 +148,10 @@ class Trial (
     private fun spawnSystemGlitch() {
         systemGlitch = SYSTEM_GLITCH_ENTITY_TYPE.spawn(
             world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
-        )
+        )?.also {
+            it.tier = recipe.tier
+            it.health = it.maxHealth
+        }
     }
 
     private fun dropRewards() {
