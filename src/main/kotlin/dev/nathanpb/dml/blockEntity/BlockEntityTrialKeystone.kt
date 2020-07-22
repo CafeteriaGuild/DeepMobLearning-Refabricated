@@ -11,6 +11,7 @@ package dev.nathanpb.dml.blockEntity
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
+import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.toVec3d
@@ -96,7 +97,7 @@ class BlockEntityTrialKeystone :
             val state = currentTrial?.state ?: TrialState.NOT_STARTED
             if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
                 if (state == TrialState.RUNNING) {
-                    pullMobsInBorders(trial.waves[trial.currentWave].spawnedEntities)
+                    pullMobsInBorders(trial.getMonstersInArena())
                     if (!arePlayersAround(trial.players)) {
                         trial.end(TrialEndReason.NO_ONE_IS_AROUND)
                     }
@@ -106,10 +107,12 @@ class BlockEntityTrialKeystone :
         }
     }
 
-    fun createTrial(data: TrialData): Trial {
-        val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS).orEmpty()
+    fun createTrial(recipe: TrialKeystoneRecipe): Trial {
+        val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS)
+            ?.filterIsInstance<PlayerEntity>()
+            .orEmpty()
         if (players.isNotEmpty()) {
-            return Trial(this, data, players)
+            return Trial(this, recipe, players)
         } else throw TrialKeystoneNoPlayersAround(this)
     }
 

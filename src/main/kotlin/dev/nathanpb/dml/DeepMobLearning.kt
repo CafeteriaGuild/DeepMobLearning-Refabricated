@@ -7,7 +7,6 @@ import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
-import dev.nathanpb.dml.gui.hud.TrialHud
 import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
@@ -19,7 +18,6 @@ import dev.nathanpb.dml.screen.handler.registerContainerTypes
 import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.util.Identifier
@@ -59,7 +57,6 @@ fun initClient() {
     registerGuis()
     registerScreens()
     registerEntityRenderer()
-    HudRenderCallback.EVENT.register(TrialHud.INSTANCE)
 }
 
 fun identifier(path: String) = Identifier("deepmoblearning", path)

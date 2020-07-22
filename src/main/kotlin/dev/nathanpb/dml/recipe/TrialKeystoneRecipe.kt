@@ -25,9 +25,13 @@ class TrialKeystoneRecipe (
     private val id: Identifier,
     val category: EntityCategory,
     val tier: DataModelTier,
-    val waves: List<Int>,
-    private val rewards: List<ItemStack>
-) : Recipe<SimpleInventory> {
+    private val rewards: List<ItemStack>,
+    waveEntityCount: Int?,
+    waveRespawnTimeout: Int?
+    ) : Recipe<SimpleInventory> {
+
+    val waveEntityCount = waveEntityCount ?: tier.defaultWaveEntityCount
+    val waveRespawnTimeout = waveRespawnTimeout ?: tier.defaultWaveRespawnTimeout
 
     companion object {
         fun findOrNull(world: World, data: TrialKeyData) = world.recipeManager.values()
@@ -59,33 +63,47 @@ class TrialKeystoneRecipe (
         override fun write(buf: PacketByteBuf, recipe: TrialKeystoneRecipe) {
             buf.writeString(recipe.category.name)
             buf.writeInt(recipe.tier.ordinal)
-            buf.writeIntArray(recipe.waves.toIntArray())
+            buf.writeInt(recipe.waveEntityCount)
+            buf.writeInt(recipe.waveRespawnTimeout)
             buf.writeInt(recipe.rewards.size)
             recipe.rewards.forEach { buf.writeItemStack(it) }
         }
 
         override fun read(id: Identifier, json: JsonObject): TrialKeystoneRecipe {
             val tier = DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY
+            val category = EntityCategory.valueOf(json.getAsJsonPrimitive("category").asString)
+            val rewards = json.getAsJsonArray("rewards").map {
+                ShapedRecipe.getItemStack(it.asJsonObject)
+            }
+
+            val waveEntityCount = if (json.has("waveEntityCount")) {
+                json.getAsJsonPrimitive("waveEntityCount").asInt
+            } else null
+
+            val waveRespawnTimeout = if (json.has("waveRespawnTimeout")) {
+                json.getAsJsonPrimitive("waveRespawnTimeout").asInt
+            } else null
+
             return TrialKeystoneRecipe(
                 id,
-                EntityCategory.valueOf(json.getAsJsonPrimitive("category").asString),
+                category,
                 tier,
-                json.getAsJsonArray("waves")?.map { it.asInt } ?: tier.defaultWave,
-                json.getAsJsonArray("rewards").map {
-                    ShapedRecipe.getItemStack(it.asJsonObject)
-                }
+                rewards,
+                waveEntityCount,
+                waveRespawnTimeout
             )
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): TrialKeystoneRecipe {
             val category = EntityCategory.valueOf(buf.readString())
             val tier = DataModelTier.fromIndex(buf.readInt()) ?: DataModelTier.FAULTY
-            val waves = buf.readIntArray()
+            val waveCount = buf.readInt()
+            val waveRespawnTimeout = buf.readInt()
             val stacks = (1 .. buf.readInt()).map {
                 buf.readItemStack()
             }
 
-            return TrialKeystoneRecipe(id, category, tier, waves.toList(), stacks)
+            return TrialKeystoneRecipe(id, category, tier, stacks, waveCount, waveRespawnTimeout)
         }
     }
 }

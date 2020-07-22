@@ -82,19 +82,15 @@ class TrialGriefPrevention :
     }
 
     override fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
-        entity.world.runningTrials.firstOrNull { trial ->
-            trial.waves
-                .asSequence()
-                .filter(TrialWave::isSpawned)
-                .filter { !it.isFinished() }
-                .map(TrialWave::spawnedEntities)
-                .flatten()
-                .any(entity::equals)
-        }?.let { trial ->
-            if (!isBlockProtected(pos.toBlockPos(), trial)) {
-                return ActionResult.FAIL
-            }
+        val isInProtectedArea = isBlockProtected(entity.world, entity.pos.toBlockPos())
+        val toProtectedArea = isBlockProtected(entity.world, pos.toBlockPos())
+
+        // The first real use of xor in my entire life
+        // 22/07/2020, 5:19 AM - Passo Fundo, Brazil
+        return if (isInProtectedArea xor toProtectedArea) {
+            ActionResult.FAIL
+        } else {
+            ActionResult.SUCCESS
         }
-        return ActionResult.PASS
     }
 }

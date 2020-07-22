@@ -16,9 +16,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.world.World
 
-fun <T : Entity>World.getEntitiesAroundCircle(type: EntityType<T>?, pos: BlockPos, radius: Double) : List<T> {
+fun World.getEntitiesAroundCircle(type: EntityType<*>?, pos: BlockPos, radius: Double) : List<Entity> {
     val squaredRadius = radius * radius
-    return (this.getEntities(type, Box(
+    val pos3d = pos.toVec3d()
+    return this.getEntities(type, Box(
         pos.x - radius,
         pos.y - 1.0,
         pos.z - radius,
@@ -26,8 +27,8 @@ fun <T : Entity>World.getEntitiesAroundCircle(type: EntityType<T>?, pos: BlockPo
         pos.y + radius,
         pos.z + radius
     )) {
-        it.squaredDistanceTo(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) <= squaredRadius
-    } ?: emptyList())
+        it.squaredDistanceTo(pos3d) <= squaredRadius
+    }.orEmpty()
 }
 
 val World.runningTrials: MutableList<Trial>

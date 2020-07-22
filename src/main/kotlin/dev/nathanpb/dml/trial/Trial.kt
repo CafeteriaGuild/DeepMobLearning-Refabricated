@@ -9,48 +9,45 @@
 package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.data.TrialPlayerData
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
-import dev.nathanpb.dml.net.TRIAL_ENDED_PACKET
-import dev.nathanpb.dml.net.TRIAL_UPDATED_PACKET
+import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.toVec3d
-import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
+import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
+import kotlin.random.Random
 
 class Trial (
     val world: World,
     val pos: BlockPos,
-    val data: TrialData,
+    val recipe: TrialKeystoneRecipe,
     val players: List<PlayerEntity>
 ) : Tickable {
 
-    constructor(keystone: BlockEntityTrialKeystone, data: TrialData, players: List<PlayerEntity>): this(
+    constructor(keystone: BlockEntityTrialKeystone, recipe: TrialKeystoneRecipe, players: List<PlayerEntity>): this(
         keystone.world!!, // TODO why is World nullable? Assert this
         keystone.pos,
-        data,
+        recipe,
         players
     )
 
     companion object {
         const val POST_END_TIMEOUT = 60
+        const val MAX_MOBS_IN_ARENA = 32
 
         val BAR_TEXT by lazy {
             TranslatableText("bar.deepmoblearning.trial")
@@ -66,9 +63,6 @@ class Trial (
     }
 
     var systemGlitch: SystemGlitchEntity? = null
-        private set;
-
-    var currentWave = 0
         private set
 
     var state: TrialState = TrialState.NOT_STARTED
@@ -77,7 +71,6 @@ class Trial (
 
     private var tickCount = 0
     private var endsAt = 0
-    val waves = data.waves.map(::TrialWave)
     private val bar = ServerBossBar(BAR_TEXT, BossBar.Color.BLUE, BossBar.Style.NOTCHED_10).also {
         it.isVisible = false
         players
@@ -89,26 +82,13 @@ class Trial (
         if (!world.isClient && state != TrialState.NOT_STARTED) {
             when (state) {
                 TrialState.RUNNING -> {
-                    if (currentWave < waves.size) {
-                        val wave = waves[currentWave]
-                        wave.spawnedEntities.filter(LivingEntity::isAlive).size.let { alive ->
-                            bar.percent = MathHelper.clamp(alive / wave.waveData.entityCount.toFloat(), 0F, 1F)
+                    if (tickCount % recipe.waveRespawnTimeout == 0) {
+                        if (getMonstersInArena().size < MAX_MOBS_IN_ARENA) {
+                            spawnWave()
                         }
-                        if (!wave.isSpawned) {
-                            // Will spawn the current wave if its not spawned yet
-                            // Applied when the last tick just moved to the next wave but did not spawned it yet
-                            startCurrentWave()
-                        } else if (wave.isFinished()) {
-                            // Will move to the next wave in the current tick
-                            // The next tick will check if the wave exists and
-                            // spawn the wave if so, or finish the trial if not
-                            currentWave++
-                            if (currentWave >= waves.size) {
-                                end(TrialEndReason.SUCCESS)
-                            }
-                        }
-                    } else {
-                        // Just as fallback if somehow the last wave was skipped
+                    }
+
+                    if (systemGlitch?.isAlive != true) {
                         end(TrialEndReason.SUCCESS)
                     }
                 }
@@ -124,17 +104,12 @@ class Trial (
         }
     }
 
-    /*
-     * Trial Control
-     */
-
     fun start() {
         if (state == TrialState.NOT_STARTED) {
             state = TrialState.RUNNING
             spawnSystemGlitch()
             world.runningTrials += this
             bar.isVisible = true
-            sendTrialUpdatePackets()
         } else throw TrialKeystoneIllegalStartException(this)
     }
 
@@ -154,8 +129,6 @@ class Trial (
                     players.forEach {
                         it.playSound(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1F, 1F)
                     }
-
-                    waves[currentWave].despawnWave()
                 }
             }
 
@@ -164,7 +137,6 @@ class Trial (
             world.runningTrials -= this
             state = TrialState.WAITING_POST_FINISHED
             systemGlitch?.remove()
-            sendTrialEndPackets(reason)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
     }
@@ -176,7 +148,7 @@ class Trial (
     }
 
     private fun dropRewards() {
-        data.recipe.copyRewards().map {
+        recipe.copyRewards().map {
             pos.toVec3d().run {
                 ItemEntity(world, x, y + 1, z, it)
             }
@@ -185,41 +157,20 @@ class Trial (
         }
     }
 
-    private fun startCurrentWave() {
-        sendTrialUpdatePackets()
-        waves[currentWave].spawnWave(world, pos)
+    private fun spawnWave() {
+        (0 until recipe.waveEntityCount).forEach { _ ->
+            recipe.category.tag.getRandom(java.util.Random()).spawn(
+                world,
+                null, null, null,
+                pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
+                SpawnReason.SPAWNER,
+                false, false
+            )
+        }
     }
 
-
-    /*
-     * Networking
-     */
-
-    private fun sendTrialUpdatePackets() {
-        TrialPlayerData(players.size, currentWave, data.waves.size)
-            .let { data ->
-                players.forEach { player ->
-                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(
-                        player,
-                        TRIAL_UPDATED_PACKET,
-                        data.toPacketByteBuff()
-                    )
-                }
-            }
+    fun getMonstersInArena(): List<HostileEntity> {
+        return world.getEntitiesAroundCircle(null, pos, BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED)
+            .filterIsInstance<HostileEntity>()
     }
-
-    private fun sendTrialEndPackets(reason: TrialEndReason) {
-        PacketByteBuf(Unpooled.buffer())
-            .writeString(reason.toString())
-            .let { packet ->
-                players.forEach { player ->
-                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(
-                        player,
-                        TRIAL_ENDED_PACKET,
-                        packet
-                    )
-                }
-            }
-    }
-
 }
