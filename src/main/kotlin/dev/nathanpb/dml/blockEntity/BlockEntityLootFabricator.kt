@@ -145,7 +145,17 @@ class BlockEntityLootFabricator
     override fun toTag(tag: CompoundTag?): CompoundTag {
         return super.toTag(tag).also {
             if (tag != null) {
-                Inventories.toTag(tag, inventory.items())
+                CompoundTag().let { invTag ->
+                    Inventories.toTag(invTag, inventory.items())
+                    tag.put("deepmoblearning:inventory", invTag)
+                }
+
+                CompoundTag().let { invTag ->
+                    Inventories.toTag(invTag, bufferedInternalInventory.items())
+                    tag.put("deepmoblearning:bufferedInventory", invTag)
+                }
+
+                tag.putInt("deepmoblearning:progress", progress)
             }
         }
     }
@@ -154,8 +164,14 @@ class BlockEntityLootFabricator
         super.fromTag(state, tag).also {
             if (tag != null) {
                 val stacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
-                Inventories.fromTag(tag, stacks)
+                Inventories.fromTag(tag.getCompound("deepmoblearning:inventory"), stacks)
                 inventory.setStacks(stacks)
+
+                val stacksBufferedInventory = DefaultedList.ofSize(bufferedInternalInventory.size(), ItemStack.EMPTY)
+                Inventories.fromTag(tag.getCompound("deepmoblearning:bufferedInventory"), stacksBufferedInventory)
+                bufferedInternalInventory.setStacks(stacksBufferedInventory)
+
+                progress = tag.getInt("deepmoblearning:progress")
             }
         }
     }
