@@ -8,14 +8,18 @@
 
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.Hand
+import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxCount(1)) {
@@ -52,5 +56,19 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
                 }
             }
         }
+    }
+
+    // please do not remove me
+    override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
+        if (user?.isCreative == true && user.isSneaking && hand != null) {
+            val stack = user.getStackInHand(hand)
+            if (stack.item is ItemDataModel) {
+                val tier = stack.dataModel.tier()
+                stack.dataModel.dataAmount = if (tier.isMaxTier()) {
+                    DataModelTier.FAULTY.dataAmount
+                } else tier.nextTierOrCurrent().dataAmount
+            }
+        }
+        return super.use(world, user, hand)
     }
 }
