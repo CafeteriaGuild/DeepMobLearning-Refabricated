@@ -9,7 +9,6 @@
 package dev.nathanpb.dml.entity
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
@@ -23,6 +22,4 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS * 2)
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK)
     }
-
-    var trial: Trial? = null
 }

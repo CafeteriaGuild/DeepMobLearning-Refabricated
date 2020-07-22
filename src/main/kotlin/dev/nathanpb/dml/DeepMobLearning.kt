@@ -18,7 +18,6 @@ import dev.nathanpb.dml.recipe.registerRecipeTypes
 import dev.nathanpb.dml.screen.handler.registerContainerTypes
 import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
-import dev.nathanpb.dml.trial.TrialGlitchListener
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -45,7 +44,6 @@ fun init() {
     registerScreenHandlers()
     registerEntityTypes()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
-    LivingEntityDieCallback.EVENT.register(TrialGlitchListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
         AttackBlockCallback.EVENT.register(this)

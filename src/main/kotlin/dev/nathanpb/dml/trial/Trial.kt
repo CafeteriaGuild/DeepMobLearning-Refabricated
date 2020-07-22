@@ -66,7 +66,7 @@ class Trial (
     }
 
     var systemGlitch: SystemGlitchEntity? = null
-        private set
+        private set;
 
     var currentWave = 0
         private set
@@ -164,7 +164,6 @@ class Trial (
             world.runningTrials -= this
             state = TrialState.WAITING_POST_FINISHED
             systemGlitch?.remove()
-            waves.forEach(TrialWave::despawnWave)
             sendTrialEndPackets(reason)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
@@ -173,9 +172,7 @@ class Trial (
     private fun spawnSystemGlitch() {
         systemGlitch = SYSTEM_GLITCH_ENTITY_TYPE.spawn(
             world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
-        ).also {
-            it?.trial = this
-        }
+        )
     }
 
     private fun dropRewards() {
