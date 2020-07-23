@@ -15,6 +15,7 @@ import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.runningTrials
+import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3d
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.SpawnReason
@@ -89,6 +90,12 @@ class Trial (
                     }
 
                     systemGlitch?.let { systemGlitch ->
+                        val glitchPos = systemGlitch.pos.toBlockPos()
+                        if (glitchPos.y < pos.y || !TrialGriefPrevention.isInArea(pos, glitchPos)) {
+                            pos.toVec3d().apply {
+                                systemGlitch.teleport(x, y, z)
+                            }
+                        }
                         bar.percent = systemGlitch.health / systemGlitch.maxHealth
                     }
 
