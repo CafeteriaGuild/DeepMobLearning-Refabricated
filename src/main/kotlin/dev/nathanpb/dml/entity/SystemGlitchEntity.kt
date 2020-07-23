@@ -10,6 +10,7 @@ package dev.nathanpb.dml.entity
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.data.DataModelTier
+import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.goal.LookAroundGoal
@@ -28,13 +29,13 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
 
     override fun initGoals() {
         super.initGoals()
-        listOf(
-            WanderAroundGoal(this, 1.0),
-            LookAroundGoal(this)
-        ).forEachIndexed(goalSelector::add)
+        goalSelector.add(1, WanderAroundGoal(this, 1.0))
+        goalSelector.add(1, LookAroundGoal(this))
+
+        targetSelector.add(1, GlitchTeleportTowardsPlayerGoal(this))
+
         // melee attack
         // follow target
-        // teleport to target
         // ranged attack
     }
 

@@ -37,18 +37,20 @@ class TrialGriefPrevention :
     EndermanTeleportCallback
 {
 
-    private fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
-        return trialPos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
-    }
-
-    private fun isBlockProtected(world: World, pos: BlockPos): Boolean {
-        return world.runningTrials.any {
-            isBlockProtected(pos, it)
+    companion object {
+        fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
+            return trialPos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
         }
-    }
 
-    private fun isBlockProtected(pos: BlockPos, trial: Trial) : Boolean {
-        return isInArea(trial.pos, pos) && pos.y >= trial.pos.y - 1
+        fun isBlockProtected(world: World, pos: BlockPos): Boolean {
+            return world.runningTrials.any {
+                isBlockProtected(pos, it)
+            }
+        }
+
+        fun isBlockProtected(pos: BlockPos, trial: Trial) : Boolean {
+            return isInArea(trial.pos, pos) && pos.y >= trial.pos.y - 1
+        }
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, pos: BlockPos, direction: Direction): ActionResult {

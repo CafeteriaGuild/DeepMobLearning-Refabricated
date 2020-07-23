@@ -11,7 +11,13 @@ package dev.nathanpb.dml.utils
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3i
+import kotlin.random.Random
 
 fun BlockPos.toVec3d() = Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
 fun BlockPos.toVec3i() = Vec3i(x, y, z)
 fun Vec3d.toBlockPos() = BlockPos(x.toInt(), y.toInt(), z.toInt())
+fun BlockPos.randomAround(radiusX: Int, radiusY: Int, radiusZ: Int) = add(
+    Random.nextInt(radiusX*2+1) - radiusX,
+    Random.nextInt(radiusY*2+1) - radiusY,
+    Random.nextInt(radiusZ*2+1) - radiusZ
+)
