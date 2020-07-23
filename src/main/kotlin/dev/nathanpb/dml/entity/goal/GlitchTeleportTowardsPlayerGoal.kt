@@ -10,10 +10,7 @@ package dev.nathanpb.dml.entity.goal
 
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.trial.TrialGriefPrevention
-import dev.nathanpb.dml.utils.randomAround
 import dev.nathanpb.dml.utils.randomOrNull
-import dev.nathanpb.dml.utils.runningTrials
-import dev.nathanpb.dml.utils.toVec3d
 import net.minecraft.entity.ai.TargetPredicate
 import net.minecraft.entity.ai.goal.FollowTargetGoal
 import net.minecraft.entity.player.PlayerEntity
@@ -27,14 +24,8 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
 
     private var ticksToTeleportCountdown = 0
 
-    private val trial by lazy {
-        glitch.world.runningTrials.firstOrNull {
-            it.systemGlitch == glitch
-        }
-    }
-
     override fun canStart(): Boolean {
-        trial.let { trial ->
+        glitch.trial.let { trial ->
             targetEntity = trial?.players?.filter {
                 TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
             }?.randomOrNull() ?: glitch.world.getClosestPlayer(TargetPredicate.DEFAULT, glitch)
@@ -55,21 +46,11 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
         }
         if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= 0.05) {
             if (targetEntity.squaredDistanceTo(glitch) >= 25) {
-                var teleportsAttempt = 0
-                do {
-                    val pos = targetEntity.blockPos.randomAround(2, 0, 2)
-                    val canTeleport = trial?.let { trial ->
-                        TrialGriefPrevention.isBlockProtected(pos, trial)
-                    } ?: true
-
-                    if (canTeleport) {
-                        pos.toVec3d().apply {
-                            glitch.teleport(x, y, z)
-                            ticksToTeleportCountdown = 20 * 5
-                            return
-                        }
-                    }
-                } while (teleportsAttempt++ < 5)
+                if (glitch.tryTeleportRandomly(targetEntity.blockPos, 2)) {
+                    ticksToTeleportCountdown = 20 * 5
+                    glitch.target = targetEntity
+                    return
+                }
             }
         }
     }
