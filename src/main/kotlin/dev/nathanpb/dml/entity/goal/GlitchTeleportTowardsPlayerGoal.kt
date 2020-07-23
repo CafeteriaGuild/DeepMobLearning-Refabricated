@@ -11,6 +11,7 @@ package dev.nathanpb.dml.entity.goal
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomAround
+import dev.nathanpb.dml.utils.randomOrNull
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.toVec3d
 import net.minecraft.entity.ai.TargetPredicate
@@ -36,7 +37,7 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
         trial.let { trial ->
             targetEntity = trial?.players?.filter {
                 TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
-            }?.random() ?: glitch.world.getClosestPlayer(TargetPredicate.DEFAULT, glitch)
+            }?.randomOrNull() ?: glitch.world.getClosestPlayer(TargetPredicate.DEFAULT, glitch)
         }
 
         return targetEntity != null

@@ -14,6 +14,7 @@ import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.goal.LookAroundGoal
+import net.minecraft.entity.ai.goal.MeleeAttackGoal
 import net.minecraft.entity.ai.goal.WanderAroundGoal
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttributes
@@ -25,16 +26,17 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         fun createMobAttributes(): DefaultAttributeContainer.Builder = LivingEntity.createLivingAttributes()
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS * 2)
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK)
+            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 12.0)
     }
 
     override fun initGoals() {
         super.initGoals()
         goalSelector.add(1, WanderAroundGoal(this, 1.0))
         goalSelector.add(1, LookAroundGoal(this))
+        goalSelector.add(2, MeleeAttackGoal(this, 1.0, true))
 
         targetSelector.add(1, GlitchTeleportTowardsPlayerGoal(this))
 
-        // melee attack
         // follow target
         // ranged attack
     }
