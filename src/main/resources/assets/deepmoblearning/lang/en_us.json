@@ -54,5 +54,6 @@
   "bar.deepmoblearning.trial_success": "Trial Succeeded",
   "bar.deepmoblearning.trial_fail": "Trial Failed",
   "block.deepmoblearning.trial_keystone": "Trial Keystone",
-  "block.deepmoblearning.loot_fabricator": "Loot Fabricator"
+  "block.deepmoblearning.loot_fabricator": "Loot Fabricator",
+  "entity_type.deepmoblearning.system_glitch": "System Glitch"
 }
