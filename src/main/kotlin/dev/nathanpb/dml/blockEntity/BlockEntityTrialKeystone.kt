@@ -9,11 +9,13 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
+import dev.nathanpb.dml.utils.squared
 import dev.nathanpb.dml.utils.toVec3d
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable
 import net.minecraft.block.BlockState
@@ -47,9 +49,8 @@ class BlockEntityTrialKeystone :
 {
 
     companion object {
-        const val EFFECTIVE_AREA_RADIUS = 12.0
-        const val EFFECTIVE_AREA_RADIUS_SQUARED = EFFECTIVE_AREA_RADIUS * EFFECTIVE_AREA_RADIUS
-        val BORDERS_RANGE = (EFFECTIVE_AREA_RADIUS_SQUARED - 9) .. (EFFECTIVE_AREA_RADIUS_SQUARED + 9)
+        val BORDERS_RANGE
+            get() = (config.trial.arenaRadius.squared() - 9) .. (config.trial.arenaRadius.squared() + 9)
     }
 
     private var circleBounds: List<BlockPos>? = null
@@ -66,7 +67,7 @@ class BlockEntityTrialKeystone :
     override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
         if (currentTrial == trial && !trial.world.isClient) {
             sync()
-            trial.world.blockTickScheduler.schedule(pos, BLOCK_TRIAL_KEYSTONE, Trial.POST_END_TIMEOUT + 1)
+            trial.world.blockTickScheduler.schedule(pos, BLOCK_TRIAL_KEYSTONE, config.trial.postEndTimeout + 1)
 
             if (reason == TrialEndReason.SUCCESS) {
                 internalInventory.dropAll(trial.world, pos)
@@ -81,7 +82,7 @@ class BlockEntityTrialKeystone :
             when (clientTrialState) {
                 TrialState.NOT_STARTED -> {
                     MinecraftClient.getInstance().player?.let { clientPlayer ->
-                        if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
+                        if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= config.trial.arenaRadius.squared()) {
                             spawnParticlesInWrongTerrain()
                         }
                     }
@@ -108,7 +109,7 @@ class BlockEntityTrialKeystone :
     }
 
     fun createTrial(recipe: TrialKeystoneRecipe): Trial {
-        val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, EFFECTIVE_AREA_RADIUS)
+        val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, config.trial.arenaRadius.toDouble())
             ?.filterIsInstance<PlayerEntity>()
             .orEmpty()
         if (players.isNotEmpty()) {
@@ -177,7 +178,7 @@ class BlockEntityTrialKeystone :
 
     private fun arePlayersAround(players: List<PlayerEntity>) = pos.toVec3d().let { posVec ->
         players.any {
-            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= EFFECTIVE_AREA_RADIUS_SQUARED
+            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= config.trial.arenaRadius.squared()
         }
     }
 
@@ -187,13 +188,13 @@ class BlockEntityTrialKeystone :
      * @return the list of erroneous blocks
      */
     private fun checkTerrain() = mutableListOf<BlockPos>().also { list ->
-        val radInt = EFFECTIVE_AREA_RADIUS.toInt()
+        val radInt = config.trial.arenaRadius
         (pos.x - radInt .. pos.x + radInt).forEach { x ->
             (pos.z - radInt .. pos.z + radInt).forEach { z ->
 
                 // Searching for non-solid blocks bellow the circle
                 val floorPos = BlockPos(x, pos.y - 1, z)
-                if (floorPos.getSquaredDistance(pos) <= EFFECTIVE_AREA_RADIUS_SQUARED) {
+                if (floorPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()) {
                     world?.getBlockState(floorPos)?.let { floorBlock ->
                         if (!floorBlock.isSideSolidFullSquare(world, floorPos, Direction.UP)) {
                             list += floorPos
@@ -206,7 +207,7 @@ class BlockEntityTrialKeystone :
                     val innerBlockPos = BlockPos(x, y, z)
                     if (
                         innerBlockPos != pos
-                        && innerBlockPos.getSquaredDistance(pos) <= EFFECTIVE_AREA_RADIUS_SQUARED
+                        && innerBlockPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()
                         && world?.getBlockState(innerBlockPos)?.isAir != true
                     ) {
                         list += innerBlockPos
@@ -219,9 +220,9 @@ class BlockEntityTrialKeystone :
     private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
         (1..360).forEach { angle ->
             BlockPos(
-                pos.x + (EFFECTIVE_AREA_RADIUS * cos(angle * Math.PI / 180)),
+                pos.x + (config.trial.arenaRadius * cos(angle * Math.PI / 180)),
                 pos.y.toDouble(),
-                pos.z + (EFFECTIVE_AREA_RADIUS * sin(angle * Math.PI / 180))
+                pos.z + (config.trial.arenaRadius * sin(angle * Math.PI / 180))
             ).let {
                 if (it !in list) {
                     list += it

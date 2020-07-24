@@ -8,10 +8,33 @@
 
 package dev.nathanpb.dml.config
 
+import dev.nathanpb.dml.config
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config
+import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry
+import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer
+
+
+fun registerConfigs() {
+    AutoConfig.register(ModConfig::class.java, ::GsonConfigSerializer)
+    config = AutoConfig.getConfigHolder(ModConfig::class.java).config
+}
 
 @Config(name = "deepmoblearning")
 class ModConfig : ConfigData {
-    
+
+    @ConfigEntry.Category("trial")
+    @ConfigEntry.Gui.TransitiveObject
+    var trial = Trial()
+
+}
+
+
+
+@Config(name = "trial")
+class Trial : ConfigData {
+    var maxMobsInArena = 32
+    var postEndTimeout = 60
+    var arenaRadius = 12
 }

@@ -3,6 +3,7 @@ package dev.nathanpb.dml
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.config.ModConfig
+import dev.nathanpb.dml.config.registerConfigs
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportCallback
@@ -19,8 +20,6 @@ import dev.nathanpb.dml.screen.handler.registerContainerTypes
 import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.util.Identifier
@@ -37,8 +36,7 @@ lateinit var config: ModConfig
 
 @Suppress("unused")
 fun init() {
-    AutoConfig.register(ModConfig::class.java, ::GsonConfigSerializer)
-    config = AutoConfig.getConfigHolder(ModConfig::class.java).config
+    registerConfigs()
     registerItems()
     registerBlocks()
     registerBlockEntityTypes()

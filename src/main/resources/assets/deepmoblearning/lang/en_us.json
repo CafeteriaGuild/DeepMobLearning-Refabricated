@@ -55,5 +55,9 @@
   "bar.deepmoblearning.trial_fail": "Trial Failed",
   "block.deepmoblearning.trial_keystone": "Trial Keystone",
   "block.deepmoblearning.loot_fabricator": "Loot Fabricator",
-  "entity_type.deepmoblearning.system_glitch": "System Glitch"
+  "entity_type.deepmoblearning.system_glitch": "System Glitch",
+  "text.autoconfig.deepmoblearning.title": "Deep Mob Learning Configuration",
+  "text.autoconfig.deepmoblearning.option.trial.maxMobsInArena": "Maximum Mobs in Arena",
+  "text.autoconfig.deepmoblearning.option.trial.postEndTimeout": "Post-end Bossbar Timeout",
+  "text.autoconfig.deepmoblearning.option.trial.arenaRadius": "Arena Radius"
 }

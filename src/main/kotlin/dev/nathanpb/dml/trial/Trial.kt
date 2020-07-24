@@ -9,14 +9,12 @@
 package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import dev.nathanpb.dml.utils.getEntitiesAroundCircle
-import dev.nathanpb.dml.utils.runningTrials
-import dev.nathanpb.dml.utils.toBlockPos
-import dev.nathanpb.dml.utils.toVec3d
+import dev.nathanpb.dml.utils.*
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.boss.BossBar
@@ -47,9 +45,6 @@ class Trial (
     )
 
     companion object {
-        const val POST_END_TIMEOUT = 60
-        const val MAX_MOBS_IN_ARENA = 32
-
         val BAR_TEXT by lazy {
             TranslatableText("bar.deepmoblearning.trial")
         }
@@ -84,7 +79,7 @@ class Trial (
             when (state) {
                 TrialState.RUNNING -> {
                     if (tickCount % recipe.waveRespawnTimeout == 0) {
-                        if (getMonstersInArena().size < MAX_MOBS_IN_ARENA) {
+                        if (getMonstersInArena().size < config.trial.maxMobsInArena) {
                             spawnWave()
                         }
                     }
@@ -143,7 +138,7 @@ class Trial (
                 }
             }
 
-            endsAt = tickCount + POST_END_TIMEOUT
+            endsAt = tickCount + config.trial.postEndTimeout
             bar.percent = 1F
             world.runningTrials -= this
             state = TrialState.WAITING_POST_FINISHED
@@ -184,7 +179,7 @@ class Trial (
     }
 
     fun getMonstersInArena(): List<HostileEntity> {
-        return world.getEntitiesAroundCircle(null, pos, BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED)
+        return world.getEntitiesAroundCircle(null, pos, config.trial.arenaRadius.squared().toDouble())
             .filterIsInstance<HostileEntity>()
     }
 }

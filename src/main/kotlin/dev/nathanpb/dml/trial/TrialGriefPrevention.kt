@@ -8,10 +8,11 @@
 
 package dev.nathanpb.dml.trial
 
-import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
 import dev.nathanpb.dml.utils.runningTrials
+import dev.nathanpb.dml.utils.squared
 import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -39,7 +40,7 @@ class TrialGriefPrevention :
 
     companion object {
         fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
-            return trialPos.getSquaredDistance(pos.toVec3i()) <= BlockEntityTrialKeystone.EFFECTIVE_AREA_RADIUS_SQUARED
+            return trialPos.getSquaredDistance(pos.toVec3i()) <= config.trial.arenaRadius.squared()
         }
 
         fun isBlockProtected(world: World, pos: BlockPos): Boolean {
