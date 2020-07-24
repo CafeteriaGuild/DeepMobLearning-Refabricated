@@ -85,13 +85,14 @@ class TrialGriefPrevention :
     }
 
     override fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
-        val isInProtectedArea = isBlockProtected(entity.world, entity.pos.toBlockPos())
-        val toProtectedArea = isBlockProtected(entity.world, pos.toBlockPos())
+        if (!config.trial.allowMobsLeavingArena) {
+            val isInProtectedArea = isBlockProtected(entity.world, entity.pos.toBlockPos())
+            val toProtectedArea = isBlockProtected(entity.world, pos.toBlockPos())
 
-        return if (isInProtectedArea && toProtectedArea) {
-            ActionResult.FAIL
-        } else {
-            ActionResult.SUCCESS
+            if (isInProtectedArea && toProtectedArea) {
+                return ActionResult.FAIL
+            }
         }
+        return ActionResult.SUCCESS
     }
 }

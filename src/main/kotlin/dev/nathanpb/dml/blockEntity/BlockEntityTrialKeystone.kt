@@ -103,7 +103,9 @@ class BlockEntityTrialKeystone :
             val state = currentTrial?.state ?: TrialState.NOT_STARTED
             if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
                 if (state == TrialState.RUNNING) {
-                    pullMobsInBorders(trial.getMonstersInArena())
+                    if (!config.trial.allowMobsLeavingArena) {
+                        pullMobsInBorders(trial.getMonstersInArena())
+                    }
                     if (!config.trial.allowPlayersLeavingArena && !arePlayersAround(trial.players)) {
                         trial.end(TrialEndReason.NO_ONE_IS_AROUND)
                     }

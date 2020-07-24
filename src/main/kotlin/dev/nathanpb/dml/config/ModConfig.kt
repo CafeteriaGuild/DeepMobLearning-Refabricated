@@ -40,4 +40,5 @@ class Trial : ConfigData {
 
     var allowStartInWrongTerrain = false
     var allowPlayersLeavingArena = false
+    var allowMobsLeavingArena = false
 }
