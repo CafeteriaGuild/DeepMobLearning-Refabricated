@@ -33,6 +33,22 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 1.0)
     }
 
+    /**
+     * This property is used to set the glitch's max health in the Trial's start time
+     * Because at that time the entity isn't bound to the trial yet
+     * And the lazy property [trial] will be null at that time, causing it to have null value forever
+     *
+     * If its value is null, the entity is not attuned to a trial yet (in case of reading in the entity spawn time)
+     * Or it just doesn't belong to a trial (in case of reading when a trial is already started)
+     */
+    var tier: DataModelTier? = null
+
+    /**
+     * Find's the trial that this entity belongs to
+     *
+     * PLEASE do not call this during the trial initialization, this will ruin this entity's instance
+     * causing its trial to be null until the game reload
+     */
     val trial by lazy {
         world.runningTrials.firstOrNull {
             it.systemGlitch == this
@@ -53,6 +69,18 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         // ranged attack
     }
 
+    /**
+     * Teleports the entity in a random block of the radius of [radius] around [at]
+     *
+     * If the entity belongs to a trial, the entity will not be teleported to blocks outside its trial area
+     * In that case, the entity will attempt to teleport maximum [maxAttempts] times checking if the random picked block is inside its [trial] area
+     * And successfully teleports if it does
+     *
+     * @param at The initial block to find random ones around
+     * @param radius The radius to find random blocks around
+     * @param maxAttempts The maximum attempts to teleport the entity, in case of trying to teleport outside trials
+     * @returns True if the entity was teleported, false if the max teleport attempts was reached and the entity was not teleported
+     */
     fun tryTeleportRandomly(at: BlockPos, radius: Int, maxAttempts: Int = 5): Boolean {
         var teleportsAttempt = 0
         do {
@@ -70,6 +98,4 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         } while (teleportsAttempt++ < maxAttempts)
         return false
     }
-
-    var tier: DataModelTier? = null
 }

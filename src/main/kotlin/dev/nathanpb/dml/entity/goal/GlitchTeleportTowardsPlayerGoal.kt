@@ -16,6 +16,16 @@ import net.minecraft.entity.ai.goal.FollowTargetGoal
 import net.minecraft.entity.player.PlayerEntity
 import kotlin.random.Random
 
+/**
+ * Makes the Glitch teleports towards a player, in a location of 2 blocks around its target
+ *
+ * If the current glitch is the boss of a trial, it will pick a random participant of the trial as its target
+ * If not, the target picked will be the nearest player
+ *
+ * This has a timeout of 100 ticks between teleports
+ * The entity has 5% chance of teleporting per tick if the timeout its cleared
+ * It also sets the entity's target to the target the goal picked
+ */
 class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : FollowTargetGoal<PlayerEntity?>(
     glitch,
     PlayerEntity::class.java as Class<PlayerEntity?>,
@@ -47,7 +57,7 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
         if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= 0.05) {
             if (targetEntity.squaredDistanceTo(glitch) >= 25) {
                 if (glitch.tryTeleportRandomly(targetEntity.blockPos, 2)) {
-                    ticksToTeleportCountdown = 20 * 5
+                    ticksToTeleportCountdown = 100
                     glitch.target = targetEntity
                     return
                 }
