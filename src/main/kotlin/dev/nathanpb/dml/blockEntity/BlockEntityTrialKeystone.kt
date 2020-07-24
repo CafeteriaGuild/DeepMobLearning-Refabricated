@@ -81,9 +81,11 @@ class BlockEntityTrialKeystone :
         if (world?.isClient == true) {
             when (clientTrialState) {
                 TrialState.NOT_STARTED -> {
-                    MinecraftClient.getInstance().player?.let { clientPlayer ->
-                        if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= config.trial.arenaRadius.squared()) {
-                            spawnParticlesInWrongTerrain()
+                    if (!config.trial.allowStartInWrongTerrain) {
+                        MinecraftClient.getInstance().player?.let { clientPlayer ->
+                            if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= config.trial.arenaRadius.squared()) {
+                                spawnParticlesInWrongTerrain()
+                            }
                         }
                     }
                 }
@@ -187,35 +189,39 @@ class BlockEntityTrialKeystone :
      *
      * @return the list of erroneous blocks
      */
-    private fun checkTerrain() = mutableListOf<BlockPos>().also { list ->
-        val radInt = config.trial.arenaRadius
-        (pos.x - radInt .. pos.x + radInt).forEach { x ->
-            (pos.z - radInt .. pos.z + radInt).forEach { z ->
+    private fun checkTerrain(): List<BlockPos> {
+        return if (!config.trial.allowStartInWrongTerrain) {
+            mutableListOf<BlockPos>().also { list ->
+                val radInt = config.trial.arenaRadius
+                (pos.x - radInt .. pos.x + radInt).forEach { x ->
+                    (pos.z - radInt .. pos.z + radInt).forEach { z ->
 
-                // Searching for non-solid blocks bellow the circle
-                val floorPos = BlockPos(x, pos.y - 1, z)
-                if (floorPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()) {
-                    world?.getBlockState(floorPos)?.let { floorBlock ->
-                        if (!floorBlock.isSideSolidFullSquare(world, floorPos, Direction.UP)) {
-                            list += floorPos
+                        // Searching for non-solid blocks bellow the circle
+                        val floorPos = BlockPos(x, pos.y - 1, z)
+                        if (floorPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()) {
+                            world?.getBlockState(floorPos)?.let { floorBlock ->
+                                if (!floorBlock.isSideSolidFullSquare(world, floorPos, Direction.UP)) {
+                                    list += floorPos
+                                }
+                            }
+                        }
+
+                        // Searching for non-air blocks inside the dome
+                        (pos.y .. pos.y + radInt).forEach { y ->
+                            val innerBlockPos = BlockPos(x, y, z)
+                            if (
+                                innerBlockPos != pos
+                                && innerBlockPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()
+                                && world?.getBlockState(innerBlockPos)?.isAir != true
+                            ) {
+                                list += innerBlockPos
+                            }
                         }
                     }
                 }
-
-                // Searching for non-air blocks inside the dome
-                (pos.y .. pos.y + radInt).forEach { y ->
-                    val innerBlockPos = BlockPos(x, y, z)
-                    if (
-                        innerBlockPos != pos
-                        && innerBlockPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()
-                        && world?.getBlockState(innerBlockPos)?.isAir != true
-                    ) {
-                        list += innerBlockPos
-                    }
-                }
-            }
-        }
-    }.toList()
+            }.toList()
+        } else emptyList()
+    }
 
     private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
         (1..360).forEach { angle ->

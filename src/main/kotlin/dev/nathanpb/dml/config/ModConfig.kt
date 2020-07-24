@@ -37,4 +37,6 @@ class Trial : ConfigData {
     var maxMobsInArena = 32
     var postEndTimeout = 60
     var arenaRadius = 12
+
+    var allowStartInWrongTerrain = false
 }
