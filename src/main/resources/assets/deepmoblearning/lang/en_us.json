@@ -30,7 +30,7 @@
   "tooltip.deepmoblearning.data_model.data_amount_simple": "§9Data:§r %d/%d",
   "tooltip.deepmoblearning.data_model.unbound": "§4Unbound",
   "tooltip.deepmoblearning.data_model.tier": "§9Tier:§r %s",
-  "tooltip.deepmoblearning.data_model.cheat": "§7Sneak + Right Click to go to cycle tiers",
+  "tooltip.deepmoblearning.data_model.cheat": "§7Sneak + Right Click to cycle tiers",
   "tooltip.deepmoblearning.trial_key.unbound.tip": "§9Combine this with a bounded Data Model in the crafting grid",
   "mobcategory.deepmoblearning.nether_mobs": "From Hades",
   "mobcategory.deepmoblearning.slimy_mobs": "Slimy Mobs",
