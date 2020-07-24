@@ -59,5 +59,7 @@
   "text.autoconfig.deepmoblearning.title": "Deep Mob Learning Configuration",
   "text.autoconfig.deepmoblearning.option.trial.maxMobsInArena": "Maximum Mobs in Arena",
   "text.autoconfig.deepmoblearning.option.trial.postEndTimeout": "Post-end Bossbar Timeout",
-  "text.autoconfig.deepmoblearning.option.trial.arenaRadius": "Arena Radius"
+  "text.autoconfig.deepmoblearning.option.trial.arenaRadius": "Arena Radius",
+  "text.autoconfig.deepmoblearning.option.trial.allowStartInWrongTerrain": "Allow Start in Wrong Terrain",
+  "text.autoconfig.deepmoblearning.option.trial.allowPlayersLeavingArena": "Allow Players Leaving Arena"
 }

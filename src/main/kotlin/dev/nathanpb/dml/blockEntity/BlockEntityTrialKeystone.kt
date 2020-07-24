@@ -10,6 +10,7 @@ package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -50,7 +51,7 @@ class BlockEntityTrialKeystone :
 
     companion object {
         val BORDERS_RANGE
-            get() = (config.trial.arenaRadius.squared() - 9) .. (config.trial.arenaRadius.squared() + 9)
+            get() = (config.trial.arenaRadius.squared() - 9).toDouble() .. (config.trial.arenaRadius.squared() + 9).toDouble()
     }
 
     private var circleBounds: List<BlockPos>? = null
@@ -90,7 +91,9 @@ class BlockEntityTrialKeystone :
                     }
                 }
                 TrialState.RUNNING -> {
-                    pullMobsInBorders(listOf(MinecraftClient.getInstance().player as LivingEntity))
+                    if (!config.trial.allowPlayersLeavingArena) {
+                        pullMobsInBorders(listOf(MinecraftClient.getInstance().player as LivingEntity))
+                    }
                 }
                 else -> {}
             }
@@ -101,7 +104,7 @@ class BlockEntityTrialKeystone :
             if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
                 if (state == TrialState.RUNNING) {
                     pullMobsInBorders(trial.getMonstersInArena())
-                    if (!arePlayersAround(trial.players)) {
+                    if (!config.trial.allowPlayersLeavingArena && !arePlayersAround(trial.players)) {
                         trial.end(TrialEndReason.NO_ONE_IS_AROUND)
                     }
                 }
@@ -164,7 +167,11 @@ class BlockEntityTrialKeystone :
     private fun pullMobsInBorders(mobs: List<LivingEntity>) {
         val posVector = pos.toVec3d()
         mobs.filter(LivingEntity::isAlive)
-            .filter {
+            .filterNot {
+                config.trial.allowPlayersLeavingArena
+                && currentTrial != null
+                && (it as? SystemGlitchEntity)?.trial == currentTrial
+            }.filter {
                 val squaredDistance = it.squaredDistanceTo(posVector.x, posVector.y, posVector.z)
                 squaredDistance in BORDERS_RANGE
             }.forEach {

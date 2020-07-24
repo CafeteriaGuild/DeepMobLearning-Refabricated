@@ -85,10 +85,12 @@ class Trial (
                     }
 
                     systemGlitch?.let { systemGlitch ->
-                        val glitchPos = systemGlitch.pos.toBlockPos()
-                        if (glitchPos.y < pos.y || !TrialGriefPrevention.isInArea(pos, glitchPos)) {
-                            pos.toVec3d().apply {
-                                systemGlitch.teleport(x, y, z)
+                        if (!config.trial.allowPlayersLeavingArena) {
+                            val glitchPos = systemGlitch.pos.toBlockPos()
+                            if (glitchPos.y < pos.y || !TrialGriefPrevention.isInArea(pos, glitchPos)) {
+                                pos.toVec3d().apply {
+                                    systemGlitch.teleport(x, y, z)
+                                }
                             }
                         }
                         bar.percent = systemGlitch.health / systemGlitch.maxHealth

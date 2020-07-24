@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.entity
 
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.trial.TrialGriefPrevention
@@ -76,6 +77,9 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
      * In that case, the entity will attempt to teleport maximum [maxAttempts] times checking if the random picked block is inside its [trial] area
      * And successfully teleports if it does
      *
+     * If the config entry "trial.allowPlayersLeavingArena" is set to true, than it will completely
+     * ignore the protections and just teleport the entity
+     *
      * @param at The initial block to find random ones around
      * @param radius The radius to find random blocks around
      * @param maxAttempts The maximum attempts to teleport the entity, in case of trying to teleport outside trials
@@ -85,7 +89,8 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         var teleportsAttempt = 0
         do {
             val pos = at.randomAround(radius, 0, radius)
-            val canTeleport = trial?.let { trial ->
+            val canTeleport =
+            config.trial.allowPlayersLeavingArena || trial?.let { trial ->
                 TrialGriefPrevention.isBlockProtected(pos, trial)
             } ?: true
 
@@ -98,4 +103,6 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         } while (teleportsAttempt++ < maxAttempts)
         return false
     }
+
+    override fun cannotDespawn() = true
 }

@@ -39,4 +39,5 @@ class Trial : ConfigData {
     var arenaRadius = 12
 
     var allowStartInWrongTerrain = false
+    var allowPlayersLeavingArena = false
 }

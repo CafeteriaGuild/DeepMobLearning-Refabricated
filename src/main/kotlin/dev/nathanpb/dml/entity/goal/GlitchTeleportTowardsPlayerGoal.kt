@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.entity.goal
 
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomOrNull
@@ -37,7 +38,7 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
     override fun canStart(): Boolean {
         glitch.trial.let { trial ->
             targetEntity = trial?.players?.filter {
-                TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
+                config.trial.allowPlayersLeavingArena || TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
             }?.randomOrNull() ?: glitch.world.getClosestPlayer(TargetPredicate.DEFAULT, glitch)
         }
 
