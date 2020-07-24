@@ -41,6 +41,14 @@ dependencies {
 
     modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
     include "io.github.cottonmc:LibGui:${project.libgui_version}"
+
+    modCompile "io.github.prospector:modmenu:${project.modmenu_version}"
+
+    modApi "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
+    include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
+
+    modApi "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+    include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
 }
 
 processResources {

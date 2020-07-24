@@ -21,6 +21,12 @@
     ],
     "client": [
       "dev.nathanpb.dml.DeepMobLearningKt::initClient"
+    ],
+    "modmenu": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.nathanpb.dml.config.ModMenuIntegration"
+      }
     ]
   },
   "mixins": [
