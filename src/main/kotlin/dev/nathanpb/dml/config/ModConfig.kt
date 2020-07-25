@@ -32,9 +32,15 @@ class ModConfig : ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     var lootFabricator = LootFabricator()
 
+    @ConfigEntry.Category("data_model")
+    @ConfigEntry.Gui.TransitiveObject
+    var dataModel = DataModel()
+
+    override fun validatePostLoad() {
+       dataModel.validatePostLoad()
+    }
+
 }
-
-
 
 @Config(name = "trial")
 class Trial : ConfigData {
@@ -57,4 +63,28 @@ class Trial : ConfigData {
 class LootFabricator : ConfigData {
     var pristineExchangeRate = 16
     var processTime = 200
+}
+
+@Config(name = "data_model")
+class DataModel : ConfigData {
+
+    var basicDataRequired = 8
+    var advancedDataRequired = 16
+    var superiorDataRequired = 32
+    var selfAwareDataRequired = 64
+
+    override fun validatePostLoad() {
+        if (basicDataRequired <= 0) {
+            basicDataRequired = 1
+        }
+        if (advancedDataRequired <= basicDataRequired) {
+            advancedDataRequired = basicDataRequired + 1
+        }
+        if (superiorDataRequired <= advancedDataRequired) {
+            superiorDataRequired = basicDataRequired + 1
+        }
+        if (selfAwareDataRequired <= advancedDataRequired) {
+            selfAwareDataRequired = advancedDataRequired + 1
+        }
+    }
 }
