@@ -57,6 +57,8 @@
   "block.deepmoblearning.loot_fabricator": "Loot Fabricator",
   "entity_type.deepmoblearning.system_glitch": "System Glitch",
   "text.autoconfig.deepmoblearning.title": "Deep Mob Learning Configuration",
+  "text.autoconfig.deepmoblearning.category.trial": "Trial",
+  "text.autoconfig.deepmoblearning.category.loot_fabricator": "Loot Fabricator",
   "text.autoconfig.deepmoblearning.option.trial.maxMobsInArena": "Maximum Mobs in Arena",
   "text.autoconfig.deepmoblearning.option.trial.postEndTimeout": "Post-end Bossbar Timeout",
   "text.autoconfig.deepmoblearning.option.trial.arenaRadius": "Arena Radius",
@@ -67,5 +69,7 @@
   "text.autoconfig.deepmoblearning.option.trial.buildGriefPrevention": "Build Grief Prevention",
   "text.autoconfig.deepmoblearning.option.trial.explosionGriefPrevention": "Explosion Grief Prevention",
   "text.autoconfig.deepmoblearning.option.trial.trialKeyConsume": "Consume Trial Key",
-  "text.autoconfig.deepmoblearning.option.trial.trialKeyReturnIfSucceed": "Return Trial Key if Succeeded"
+  "text.autoconfig.deepmoblearning.option.trial.trialKeyReturnIfSucceed": "Return Trial Key if Succeeded",
+  "text.autoconfig.deepmoblearning.option.lootFabricator.pristineExchangeRate": "Pristine Exchange Rate",
+  "text.autoconfig.deepmoblearning.option.lootFabricator.processTime": "Process Time"
 }

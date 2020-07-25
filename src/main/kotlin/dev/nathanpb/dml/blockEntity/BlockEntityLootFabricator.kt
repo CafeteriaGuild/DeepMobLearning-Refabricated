@@ -8,10 +8,12 @@
 
 package dev.nathanpb.dml.blockEntity
 
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.entity.FakePlayerEntity
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import dev.nathanpb.dml.item.ItemPristineMatter
+import dev.nathanpb.dml.utils.combineStacksIfPossible
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
 import dev.nathanpb.dml.utils.simulateLootDroppedStacks
@@ -31,7 +33,6 @@ import net.minecraft.util.Tickable
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
-import kotlin.math.min
 
 class BlockEntityLootFabricator
     : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR),
@@ -39,11 +40,6 @@ class BlockEntityLootFabricator
     PropertyDelegateHolder,
     Tickable
 {
-
-    companion object {
-        const val PROCESS_TIME = 20 * 10
-        const val MATTER_ENTITY_EXCHANGE = 16
-    }
 
     private val _propertyDelegate = ArrayPropertyDelegate(2)
     private var isDumpingBufferedInventory = false
@@ -56,20 +52,26 @@ class BlockEntityLootFabricator
 
     private var progress = 0
 
-    init {
-        propertyDelegate[1] = PROCESS_TIME
-    }
-
     override fun tick() {
+        // Is it really needed to be there?
+        propertyDelegate[1] = config.lootFabricator.processTime
+
         (world as? ServerWorld)?.let { world ->
             if (bufferedInternalInventory.isEmpty) {
                 val stack = inventory.stackInInputSlot ?: return resetProgress()
                 val item = stack.item as? ItemPristineMatter ?: return resetProgress()
 
-                if (progress >= PROCESS_TIME) {
-                    val generatedLoot = generateLoot(world, item.category).toTypedArray()
+                if (progress >= config.lootFabricator.processTime) {
+                    val generatedLoot = generateLoot(world, item.category).also {
+                        // O(n²) goes brrrr
+                        it.forEach {  stackSource ->
+                            it.forEach { stackTarget ->
+                                combineStacksIfPossible(stackSource, stackTarget, bufferedInternalInventory.maxCountPerStack)
+                            }
+                        }
+                    }.filterNot(ItemStack::isEmpty)
                     bufferedInternalInventory.setStacks(
-                        DefaultedList.copyOf(ItemStack.EMPTY, *generatedLoot)
+                        DefaultedList.copyOf(ItemStack.EMPTY, *generatedLoot.toTypedArray())
                     )
                     stack.decrement(1)
                     dumpInternalInventory()
@@ -85,7 +87,7 @@ class BlockEntityLootFabricator
     }
 
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
-        return (0 until MATTER_ENTITY_EXCHANGE).map {
+        return (0 until config.lootFabricator.pristineExchangeRate).map {
             category.tag
                 .getRandom(java.util.Random())
                 .simulateLootDroppedStacks(world, FakePlayerEntity(world), DamageSource.GENERIC)
@@ -101,17 +103,6 @@ class BlockEntityLootFabricator
         if (bufferedInternalInventory.isEmpty || isDumpingBufferedInventory) return
         isDumpingBufferedInventory = true
 
-        fun canCombine(a: ItemStack, b: ItemStack) = a.item === b.item && ItemStack.areTagsEqual(a, b)
-
-        fun transfer(source: ItemStack, target: ItemStack) {
-            val i: Int = min(inventory.maxCountPerStack, target.maxCount)
-            val j: Int = min(source.count, i - target.count)
-            if (j > 0) {
-                target.increment(j)
-                source.decrement(j)
-                markDirty()
-            }
-        }
 
         LootFabricatorInventory.OUTPUT_SLOTS.forEach { invIndex ->
             bufferedInternalInventory
@@ -122,9 +113,10 @@ class BlockEntityLootFabricator
                     if (invStack.isEmpty) {
                         inventory.setStack(invIndex, buffStack.copy())
                         buffStack.count = 0
-                    } else if (canCombine(invStack, buffStack)) {
-                        transfer(buffStack, invStack)
-                        inventory.markDirty()
+                    } else {
+                        if (combineStacksIfPossible(buffStack, invStack, inventory.maxCountPerStack)) {
+                            inventory.markDirty()
+                        }
                     }
                 }
         }

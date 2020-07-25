@@ -28,6 +28,10 @@ class ModConfig : ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     var trial = Trial()
 
+    @ConfigEntry.Category("loot_fabricator")
+    @ConfigEntry.Gui.TransitiveObject
+    var lootFabricator = LootFabricator()
+
 }
 
 
@@ -47,4 +51,10 @@ class Trial : ConfigData {
 
     var trialKeyConsume = true
     var trialKeyReturnIfSucceed = true
+}
+
+@Config(name = "loot_fabricator")
+class LootFabricator : ConfigData {
+    var pristineExchangeRate = 16
+    var processTime = 200
 }

@@ -2,6 +2,7 @@ package dev.nathanpb.dml.utils
 
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import kotlin.math.min
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -13,3 +14,28 @@ import net.minecraft.nbt.CompoundTag
 
 
 fun ItemStack.toTag() = this.toTag(CompoundTag())
+
+fun combineStacksIfPossible(source: ItemStack, target: ItemStack, maxInventoryCountPerStack: Int): Boolean {
+    fun canCombine(source: ItemStack, target: ItemStack) : Boolean {
+        return (
+            source.item === target.item
+            && target.count < target.maxCount
+            && ItemStack.areTagsEqual(source, target)
+        )
+    }
+
+    fun transfer(source: ItemStack, target: ItemStack) {
+        val i: Int = min(maxInventoryCountPerStack, target.maxCount)
+        val j: Int = min(source.count, i - target.count)
+        if (j > 0) {
+            target.increment(j)
+            source.decrement(j)
+        }
+    }
+
+    return canCombine(source, target).also {
+        if (it) {
+            transfer(source, target)
+        }
+    }
+}
