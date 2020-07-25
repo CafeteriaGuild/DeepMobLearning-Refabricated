@@ -61,6 +61,7 @@
   "text.autoconfig.deepmoblearning.category.loot_fabricator": "Loot Fabricator",
   "text.autoconfig.deepmoblearning.category.data_model": "Data Model",
   "text.autoconfig.deepmoblearning.category.system_glitch": "System Glitch",
+  "text.autoconfig.deepmoblearning.category.data_collection": "Data Collection",
   "text.autoconfig.deepmoblearning.option.trial.maxMobsInArena": "Maximum Mobs in Arena",
   "text.autoconfig.deepmoblearning.option.trial.postEndTimeout": "Post-end Bossbar Timeout",
   "text.autoconfig.deepmoblearning.option.trial.arenaRadius": "Arena Radius",
@@ -81,5 +82,6 @@
   "text.autoconfig.deepmoblearning.option.systemGlitch.teleportChance": "Teleport Chance",
   "text.autoconfig.deepmoblearning.option.systemGlitch.teleportMinDistance": "Teleport Minimum Distance",
   "text.autoconfig.deepmoblearning.option.systemGlitch.teleportDelay": "Delay Between Teleports",
-  "text.autoconfig.deepmoblearning.option.systemGlitch.teleportAroundPlayerRadius": "Radius of Blocks to Teleport Around Player"
+  "text.autoconfig.deepmoblearning.option.systemGlitch.teleportAroundPlayerRadius": "Radius of Blocks to Teleport Around Player",
+  "text.autoconfig.deepmoblearning.option.dataCollection.baseDataGainPerKill": "Base Data Gain per Kill"
 }

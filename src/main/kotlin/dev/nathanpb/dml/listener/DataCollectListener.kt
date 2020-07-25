@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.listener
 
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.item.ItemDataModel
@@ -33,7 +34,7 @@ class DataCollectListener : LivingEntityDieCallback {
                 }.flatten().firstOrNull {
                     it.category?.tag?.contains(entity.type) ?: false && !it.tier().isMaxTier()
                 }?.let {
-                    it.dataAmount++
+                    it.dataAmount += config.dataCollection.baseDataGainPerKill
                 }
             }
         }

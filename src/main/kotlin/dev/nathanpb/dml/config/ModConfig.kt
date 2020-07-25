@@ -42,6 +42,10 @@ class ModConfig : ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     var systemGlitch = SystemGlitch()
 
+    @ConfigEntry.Category("data_collection")
+    @ConfigEntry.Gui.TransitiveObject
+    var dataCollection = DataCollection()
+
     override fun validatePostLoad() {
         trial.validatePostLoad()
         lootFabricator.validatePostLoad()
@@ -135,4 +139,9 @@ class SystemGlitch : ConfigData {
         teleportDelay = max(0, teleportDelay)
         teleportAroundPlayerRadius = max(1, teleportAroundPlayerRadius)
     }
+}
+
+@Config(name = "data_collection")
+class DataCollection : ConfigData {
+    var baseDataGainPerKill = 1
 }
