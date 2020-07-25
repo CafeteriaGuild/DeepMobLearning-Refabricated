@@ -1,0 +1,11 @@
+{
+  "type": "dml-refabricated:trial_keystone",
+  "tier": 4,
+  "category": "GHOST",
+  "rewards": [
+    {
+      "item": "dml-refabricated:pristine_matter_ghost",
+      "count": 16
+    }
+  ]
+}

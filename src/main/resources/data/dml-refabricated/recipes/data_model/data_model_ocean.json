@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SNS",
+    "CDC",
+    "SCS"
+  ],
+  "key": {
+    "D": {
+      "item": "dml-refabricated:data_model"
+    },
+    "N": {
+      "item": "minecraft:nautilus_shell"
+    },
+    "S": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "C": {
+      "item": "minecraft:prismarine_crystals"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:data_model_ocean",
+    "count": 1
+  }
+}

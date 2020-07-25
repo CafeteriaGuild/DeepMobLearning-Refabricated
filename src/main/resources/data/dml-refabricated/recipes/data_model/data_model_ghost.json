@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MTM",
+    "TDT",
+    "MTM"
+  ],
+  "key": {
+    "D": {
+      "item": "dml-refabricated:data_model"
+    },
+    "M": {
+      "item": "minecraft:phantom_membrane"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:data_model_ghost",
+    "count": 1
+  }
+}

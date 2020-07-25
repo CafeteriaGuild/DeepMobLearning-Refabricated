@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SES",
+    "EDE",
+    "SES"
+  ],
+  "key": {
+    "D": {
+      "item": "dml-refabricated:data_model"
+    },
+    "S": {
+      "item": "minecraft:shulker_shell"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:data_model_end",
+    "count": 1
+  }
+}

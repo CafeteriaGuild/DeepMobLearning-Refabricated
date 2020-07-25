@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MSM",
+    "SDS",
+    "MSM"
+  ],
+  "key": {
+    "D": {
+      "item": "dml-refabricated:data_model"
+    },
+    "S": {
+      "item": "minecraft:slime_ball"
+    },
+    "M": {
+      "item": "minecraft:magma_cream"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:data_model_slimy",
+    "count": 1
+  }
+}

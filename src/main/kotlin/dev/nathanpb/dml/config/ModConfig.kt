@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.config
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData
@@ -23,7 +24,7 @@ fun registerConfigs() {
     config = AutoConfig.getConfigHolder(ModConfig::class.java).config
 }
 
-@Config(name = "deepmoblearning")
+@Config(name = MOD_ID)
 class ModConfig : ConfigData {
 
     @ConfigEntry.Category("trial")

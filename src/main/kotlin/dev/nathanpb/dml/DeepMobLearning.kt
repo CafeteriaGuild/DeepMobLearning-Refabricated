@@ -33,6 +33,7 @@ import net.minecraft.util.Identifier
  */
 
 lateinit var config: ModConfig
+const val MOD_ID = "dml-refabricated"
 
 @Suppress("unused")
 fun init() {
@@ -54,7 +55,7 @@ fun init() {
         WorldExplosionCallback.EVENT.register(this)
         EndermanTeleportCallback.EVENT.register(this)
     }
-    println("Deep Mob Learning good to go")
+    println("Deep Mob Learning: Refabricated is good to go")
 }
 
 @Suppress("unused")
@@ -64,4 +65,4 @@ fun initClient() {
     registerEntityRenderer()
 }
 
-fun identifier(path: String) = Identifier("deepmoblearning", path)
+fun identifier(path: String) = Identifier(MOD_ID, path)

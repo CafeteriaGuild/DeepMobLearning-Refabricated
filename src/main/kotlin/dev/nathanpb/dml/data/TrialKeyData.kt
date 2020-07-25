@@ -9,6 +9,7 @@ package dev.nathanpb.dml.data
  */
 
 import dev.nathanpb.dml.InvalidTrialKeyBase
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemTrialKey
 import net.minecraft.item.ItemStack
@@ -17,7 +18,7 @@ import net.minecraft.nbt.CompoundTag
 data class TrialKeyData (val category: EntityCategory, val dataAmount: Int = 0) {
 
     companion object {
-        const val DATA_TAG_KEY = "deepmoblearning.trialkey"
+        const val DATA_TAG_KEY = "${MOD_ID}.trialkey"
         const val CATEGORY_TAG_KEY = "category"
         const val DATA_AMOUNT_TAG_KEY = "dataAmount"
 

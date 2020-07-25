@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PMP",
+    "MCM",
+    "GDG"
+  ],
+  "key": {
+    "P": {
+      "item": "dml-refabricated:soot_plate"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    },
+    "C": {
+      "item": "dml-refabricated:machine_casing"
+    },
+    "M": {
+      "tag": "dml-refabricated:pristine_matter"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:loot_fabricator",
+    "count": 1
+  }
+}

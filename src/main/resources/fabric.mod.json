@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "id": "deepmoblearning",
+  "id": "dml-refabricated",
   "version": "1.0.0",
-  "name": "Deep Mob Learning",
+  "name": "Deep Mob Learning: Refabricated",
   "description": "Server friendly mob loot acquisition",
   "authors": [
     "NathanPB",
     "IterationFunk"
   ],
   "contact": {
-    "sources": "https://github.com/NathanPB/DeepMobLearning-fabric.git",
-    "issues": "https://github.com/NathanPB/DeepMobLearning-fabric/issues/"
+    "sources": "https://github.com/NathanPB/DeepMobLearning-Refabricated.git",
+    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues/"
   },
   "license": "GPL-v3",
-  "icon": "assets/deepmoblearning/icon.png",
+  "icon": "assets/dml-refabricated/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -30,7 +30,7 @@
     ]
   },
   "mixins": [
-    "mixins.deepmoblearning.json"
+    "mixins.dml-refabricated.json"
   ],
   "depends": {
     "fabricloader": ">=0.8.9",

@@ -1,0 +1,12 @@
+{
+  "type": "dml-refabricated:trial_key_attune",
+  "ingredients": [
+    {
+      "item": "dml-refabricated:trial_key"
+    },
+    {
+      "tag": "dml-refabricated:attuned_data_models"
+    }
+  ],
+  "result": "dml-refabricated:trial_key"
+}

@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
@@ -36,7 +37,7 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
                     if (!data.tier().isMaxTier()) {
                         tooltip.add(
                             TranslatableText(
-                                "tooltip.deepmoblearning.data_model.data_amount",
+                                "tooltip.${MOD_ID}.data_model.data_amount",
                                 data.dataAmount,
                                 data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
                             )
@@ -44,13 +45,13 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
                     }
                     tooltip.add(
                         TranslatableText(
-                            "tooltip.deepmoblearning.data_model.tier",
+                            "tooltip.dml-refabricatedlearning.data_model.tier",
                             data.tier().text
                         )
                     )
                     MinecraftClient.getInstance().player?.let { player ->
                         if (player.isCreative) {
-                            tooltip.add(TranslatableText("tooltip.deepmoblearning.data_model.cheat"))
+                            tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.cheat"))
                         }
                     }
                 }

@@ -9,12 +9,13 @@
 package dev.nathanpb.dml.entity
 
 import com.mojang.authlib.GameProfile
+import dev.nathanpb.dml.MOD_ID
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*
 
-class FakePlayerEntity(world: World) : PlayerEntity(world, BlockPos.ORIGIN, GameProfile(UUID, "deepmoblearning_fake_player")) {
+class FakePlayerEntity(world: World) : PlayerEntity(world, BlockPos.ORIGIN, GameProfile(UUID, "${MOD_ID}_fake_player")) {
     companion object {
         val UUID: UUID = java.util.UUID.randomUUID()
     }

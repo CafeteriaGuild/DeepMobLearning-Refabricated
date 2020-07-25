@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.block
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.trialKeyData
@@ -64,10 +65,10 @@ class BlockTrialKeystone : Block(
                             } catch (ex: TrialKeystoneIllegalStartException) {
                                 return ActionResult.PASS
                             } catch (ex: TrialKeystoneWrongTerrainException) {
-                                player.sendMessage(TranslatableText("chat.deepmoblearning.trial_wrong_terrain"), false)
+                                player.sendMessage(TranslatableText("chat.$MOD_ID.trial_wrong_terrain"), false)
                             }
                         } else {
-                            player.sendMessage(TranslatableText("chat.deepmoblearning.trial_no_recipe"), false)
+                            player.sendMessage(TranslatableText("chat.${MOD_ID}.trial_no_recipe"), false)
                         }
                         return ActionResult.FAIL
                     }

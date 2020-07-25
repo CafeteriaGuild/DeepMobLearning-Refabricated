@@ -1,5 +1,6 @@
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.NotDeepLearnerException
 import dev.nathanpb.dml.screen.handler.CONTAINER_DEEP_LEARNER
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
@@ -24,7 +25,7 @@ import net.minecraft.world.World
 class ItemDeepLearner : Item(settings().maxCount(1)) {
     companion object {
         const val INVENTORY_SIZE = 4
-        const val INVENTORY_TAG = "deepmoblearning.deep_learner.inventory"
+        const val INVENTORY_TAG = "${MOD_ID}.deep_learner.inventory"
 
     }
 

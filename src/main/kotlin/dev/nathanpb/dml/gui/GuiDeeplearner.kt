@@ -2,6 +2,7 @@ package dev.nathanpb.dml.gui
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
@@ -31,7 +32,7 @@ class GuiDeeplearner (
 ) : HandledScreen<ContainerDeepLearner>(
     container,
     container.playerInventory,
-    TranslatableText("item.deepmoblearning.deep_learner")
+    TranslatableText("item.${MOD_ID}.deep_learner")
 ) {
 
     companion object {
@@ -133,14 +134,14 @@ class GuiDeeplearner (
                     }
                     textRenderer.draw(
                         matrices,
-                        TranslatableText("tooltip.deepmoblearning.data_model.tier", data.tier().text),
+                        TranslatableText("tooltip.${MOD_ID}.data_model.tier", data.tier().text),
                         46F, 72F, 0x373737
                     )
                     if (!data.tier().isMaxTier()) {
                         textRenderer.draw(
                             matrices,
                             TranslatableText(
-                                "tooltip.deepmoblearning.data_model.data_amount_simple",
+                                "tooltip.${MOD_ID}.data_model.data_amount_simple",
                                 data.dataAmount,
                                 data.tier().nextTierOrCurrent().dataAmount
                             ), 46F, 62F, 0x373737
@@ -229,7 +230,7 @@ class GuiDeeplearner (
         override fun renderToolTip(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
             gui.renderTooltip(
                 matrices,
-                TranslatableText("gui.deepmoblearning.previous").formatted(),
+                TranslatableText("gui.${MOD_ID}.previous").formatted(),
                 mouseX, mouseY
             )
         }
@@ -246,7 +247,7 @@ class GuiDeeplearner (
         override fun renderToolTip(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
             gui.renderTooltip(
                 matrices,
-                StringRenderable.plain(TranslatableText("gui.deepmoblearning.next").formatted().string),
+                StringRenderable.plain(TranslatableText("gui.${MOD_ID}.next").formatted().string),
                 mouseX, mouseY
             )
         }

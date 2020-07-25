@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DKD",
+    "SCS",
+    "SSS"
+  ],
+  "key": {
+    "K": {
+      "item": "dml-refabricated:trial_key"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "C": {
+      "item": "dml-refabricated:machine_casing"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:trial_keystone",
+    "count": 1
+  }
+}

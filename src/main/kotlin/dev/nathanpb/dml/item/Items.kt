@@ -1,5 +1,6 @@
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
@@ -16,7 +17,7 @@ import net.minecraft.util.registry.Registry
  */
 
 
-val ITEM_GROUP = FabricItemGroupBuilder.build(identifier("tab_deepmoblearning")) {
+val ITEM_GROUP = FabricItemGroupBuilder.build(identifier("tab_${MOD_ID}")) {
     ItemStack(ITEM_DML)
 }
 
@@ -56,7 +57,7 @@ val ITEM_SOOT_MACHINE_CASE = Item(settings())
 
 fun registerItems() {
     mapOf(
-        ITEM_DML to "deepmoblearning",
+        ITEM_DML to MOD_ID,
         ITEM_DEEP_LEARNER to "deep_learner",
         ITEM_TRIAL_KEY to "trial_key",
         ITEM_DATA_MODEL to "data_model",

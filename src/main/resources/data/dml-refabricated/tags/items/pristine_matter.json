@@ -1,0 +1,13 @@
+{
+  "values": [
+    "dml-refabricated:pristine_matter_nether",
+    "dml-refabricated:pristine_matter_slimy",
+    "dml-refabricated:pristine_matter_overworld",
+    "dml-refabricated:pristine_matter_zombie",
+    "dml-refabricated:pristine_matter_skeleton",
+    "dml-refabricated:pristine_matter_end",
+    "dml-refabricated:pristine_matter_ghost",
+    "dml-refabricated:pristine_matter_illager",
+    "dml-refabricated:pristine_matter_ocean"
+  ]
+}

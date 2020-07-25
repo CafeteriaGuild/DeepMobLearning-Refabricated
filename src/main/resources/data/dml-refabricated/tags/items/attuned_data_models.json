@@ -1,0 +1,13 @@
+{
+  "values": [
+    "dml-refabricated:data_model_nether",
+    "dml-refabricated:data_model_slimy",
+    "dml-refabricated:data_model_overworld",
+    "dml-refabricated:data_model_zombie",
+    "dml-refabricated:data_model_skeleton",
+    "dml-refabricated:data_model_end",
+    "dml-refabricated:data_model_ghost",
+    "dml-refabricated:data_model_illager",
+    "dml-refabricated:data_model_ocean"
+  ]
+}

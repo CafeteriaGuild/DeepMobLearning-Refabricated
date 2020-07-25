@@ -1,5 +1,6 @@
 package dev.nathanpb.dml.data
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.NotDataModelException
 import dev.nathanpb.dml.item.ItemDataModel
 import net.minecraft.item.ItemStack
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack
 class DataModelData(val stack: ItemStack, val category: EntityCategory?) {
 
     companion object {
-        const val DATA_AMOUNT_TAG_KEY = "deepmoblearning.datamodel.dataAmount"
+        const val DATA_AMOUNT_TAG_KEY = "${MOD_ID}.datamodel.dataAmount"
     }
 
     init {

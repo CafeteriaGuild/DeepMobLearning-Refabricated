@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.trial
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
@@ -46,15 +47,15 @@ class Trial (
 
     companion object {
         val BAR_TEXT by lazy {
-            TranslatableText("bar.deepmoblearning.trial")
+            TranslatableText("bar.${MOD_ID}.trial")
         }
 
         val BAR_TEXT_SUCCESS by lazy {
-            TranslatableText("bar.deepmoblearning.trial_success")
+            TranslatableText("bar.${MOD_ID}.trial_success")
         }
 
         val BAR_TEXT_FAIL by lazy {
-            TranslatableText("bar.deepmoblearning.trial_fail")
+            TranslatableText("bar.${MOD_ID}.trial_fail")
         }
     }
 

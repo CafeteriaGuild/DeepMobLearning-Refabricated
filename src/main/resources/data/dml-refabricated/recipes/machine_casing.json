@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PIP",
+    "IRI",
+    "PIP"
+  ],
+  "key": {
+    "P": {
+      "item": "dml-refabricated:soot_plate"
+    },
+    "R": {
+      "item": "dml-refabricated:soot_redstone"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:machine_casing",
+    "count": 1
+  }
+}

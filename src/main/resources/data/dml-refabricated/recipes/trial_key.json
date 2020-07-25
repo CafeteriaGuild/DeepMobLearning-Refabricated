@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  R",
+    "EDD",
+    " II"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "minecraft:iron_nugget"
+    },
+    "R": {
+      "item": "dml-refabricated:soot_redstone"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:trial_key",
+    "count": 1
+  }
+}

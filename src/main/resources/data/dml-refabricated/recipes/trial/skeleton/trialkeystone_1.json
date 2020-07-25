@@ -1,0 +1,11 @@
+{
+  "type": "dml-refabricated:trial_keystone",
+  "tier": 1,
+  "category": "SKELETON",
+  "rewards": [
+    {
+      "item": "dml-refabricated:pristine_matter_skeleton",
+      "count": 2
+    }
+  ]
+}

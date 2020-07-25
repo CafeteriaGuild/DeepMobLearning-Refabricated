@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "deepmoblearning:block/loot_fabricator" },
-    "facing=east":  { "model": "deepmoblearning:block/loot_fabricator", "y":  90},
-    "facing=south": { "model": "deepmoblearning:block/loot_fabricator", "y": 180 },
-    "facing=west":  { "model": "deepmoblearning:block/loot_fabricator", "y": 270 }
-  }
-}

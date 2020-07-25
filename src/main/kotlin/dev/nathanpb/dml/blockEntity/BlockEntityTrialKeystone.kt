@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.blockEntity
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.SystemGlitchEntity
@@ -250,11 +251,11 @@ class BlockEntityTrialKeystone :
     }.toList()
 
     override fun toClientTag(tag: CompoundTag) = tag.also {
-        it.putString("deepmoblearning:state", (currentTrial?.state ?: TrialState.NOT_STARTED).name)
+        it.putString("${MOD_ID}:state", (currentTrial?.state ?: TrialState.NOT_STARTED).name)
     }
 
     override fun fromClientTag(tag: CompoundTag) {
-        clientTrialState = tag.getString("deepmoblearning:state").let { name ->
+        clientTrialState = tag.getString("${MOD_ID}:state").let { name ->
             if (name.isNotEmpty())  TrialState.valueOf(name) else TrialState.NOT_STARTED
         }
     }

@@ -1,0 +1,11 @@
+{
+  "type": "dml-refabricated:trial_keystone",
+  "tier": 4,
+  "category": "NETHER",
+  "rewards": [
+    {
+      "item": "dml-refabricated:pristine_matter_nether",
+      "count": 16
+    }
+  ]
+}

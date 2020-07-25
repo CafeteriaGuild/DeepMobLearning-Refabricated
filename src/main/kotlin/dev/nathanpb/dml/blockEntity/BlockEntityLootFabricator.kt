@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.blockEntity
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.entity.FakePlayerEntity
@@ -139,15 +140,15 @@ class BlockEntityLootFabricator
             if (tag != null) {
                 CompoundTag().let { invTag ->
                     Inventories.toTag(invTag, inventory.items())
-                    tag.put("deepmoblearning:inventory", invTag)
+                    tag.put("${MOD_ID}:inventory", invTag)
                 }
 
                 CompoundTag().let { invTag ->
                     Inventories.toTag(invTag, bufferedInternalInventory.items())
-                    tag.put("deepmoblearning:bufferedInventory", invTag)
+                    tag.put("${MOD_ID}:bufferedInventory", invTag)
                 }
 
-                tag.putInt("deepmoblearning:progress", progress)
+                tag.putInt("${MOD_ID}:progress", progress)
             }
         }
     }
@@ -156,14 +157,14 @@ class BlockEntityLootFabricator
         super.fromTag(state, tag).also {
             if (tag != null) {
                 val stacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
-                Inventories.fromTag(tag.getCompound("deepmoblearning:inventory"), stacks)
+                Inventories.fromTag(tag.getCompound("${MOD_ID}:inventory"), stacks)
                 inventory.setStacks(stacks)
 
                 val stacksBufferedInventory = DefaultedList.ofSize(bufferedInternalInventory.size(), ItemStack.EMPTY)
-                Inventories.fromTag(tag.getCompound("deepmoblearning:bufferedInventory"), stacksBufferedInventory)
+                Inventories.fromTag(tag.getCompound("${MOD_ID}:bufferedInventory"), stacksBufferedInventory)
                 bufferedInternalInventory.setStacks(stacksBufferedInventory)
 
-                progress = tag.getInt("deepmoblearning:progress")
+                progress = tag.getInt("${MOD_ID}:progress")
             }
         }
     }

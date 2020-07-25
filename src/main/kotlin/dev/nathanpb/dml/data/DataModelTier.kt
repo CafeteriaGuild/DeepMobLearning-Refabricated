@@ -8,6 +8,7 @@
 
 package dev.nathanpb.dml.data
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import net.minecraft.text.TranslatableText
 import kotlin.math.ceil
@@ -15,11 +16,11 @@ import kotlin.math.max
 
 // TODO remove the hardcoded dataAmount
 enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->Int) {
-    FAULTY("tier.deepmoblearning.faulty", { 0 }),
-    BASIC("tier.deepmoblearning.basic", config.dataModel::basicDataRequired),
-    ADVANCED("tier.deepmoblearning.advanced", config.dataModel::advancedDataRequired),
-    SUPERIOR("tier.deepmoblearning.superior", config.dataModel::superiorDataRequired),
-    SELF_AWARE("tier.deepmoblearning.self_aware", config.dataModel::selfAwareDataRequired);
+    FAULTY("tier.${MOD_ID}.faulty", { 0 }),
+    BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired),
+    ADVANCED("tier.${MOD_ID}.advanced", config.dataModel::advancedDataRequired),
+    SUPERIOR("tier.${MOD_ID}.superior", config.dataModel::superiorDataRequired),
+    SELF_AWARE("tier.${MOD_ID}.self_aware", config.dataModel::selfAwareDataRequired);
 
     val dataAmount: Int
         get() = dataAmountSupplier()

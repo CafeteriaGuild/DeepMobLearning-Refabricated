@@ -18,10 +18,10 @@ import java.util.List;
 
 @Mixin(World.class)
 public class WorldMixin implements ITrialWorldPersistenceAccessor {
-    private final List<Trial> deepmoblearning_runningTrials = new ArrayList<>();
+    private final List<Trial> dmlRefabricatedRunningTrials = new ArrayList<>();
 
     @Override
     public List<Trial> getRunningTrials() {
-        return deepmoblearning_runningTrials;
+        return dmlRefabricatedRunningTrials;
     }
 }
