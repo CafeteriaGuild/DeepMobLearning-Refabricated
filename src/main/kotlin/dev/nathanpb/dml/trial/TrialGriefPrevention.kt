@@ -55,16 +55,23 @@ class TrialGriefPrevention :
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, pos: BlockPos, direction: Direction): ActionResult {
-        return if (!world.isClient && isBlockProtected(world, pos)) {
+        return if (
+            !world.isClient
+            && config.trial.interactGriefPrevention
+            && isBlockProtected(world, pos)
+        ) {
             ActionResult.FAIL
         } else ActionResult.PASS
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, hitResult: BlockHitResult): ActionResult {
-        val posOfPlacedBlock = hitResult.blockPos.offset(hitResult.side)
-        return if (!world.isClient && isBlockProtected(world, posOfPlacedBlock)) {
-            ActionResult.FAIL
-        } else ActionResult.PASS
+        if (config.trial.buildGriefPrevention) {
+            val posOfPlacedBlock = hitResult.blockPos.offset(hitResult.side)
+            if (!world.isClient && isBlockProtected(world, posOfPlacedBlock)) {
+                return ActionResult.FAIL
+            }
+        }
+        return ActionResult.PASS
     }
 
     override fun explode(
@@ -77,7 +84,12 @@ class TrialGriefPrevention :
         createFire: Boolean,
         destructionType: Explosion.DestructionType?
     ): ActionResult {
-        if (!world.isClient && destructionType != Explosion.DestructionType.NONE && isBlockProtected(world, pos)) {
+        if (
+            !world.isClient
+            && config.trial.explosionGriefPrevention
+            && destructionType != Explosion.DestructionType.NONE
+            && isBlockProtected(world, pos)
+        ) {
             world.createExplosion(entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), power, createFire, Explosion.DestructionType.NONE)
             return ActionResult.FAIL
         }

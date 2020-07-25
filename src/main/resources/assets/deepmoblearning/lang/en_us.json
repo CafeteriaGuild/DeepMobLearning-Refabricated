@@ -62,5 +62,8 @@
   "text.autoconfig.deepmoblearning.option.trial.arenaRadius": "Arena Radius",
   "text.autoconfig.deepmoblearning.option.trial.allowStartInWrongTerrain": "Allow Start in Wrong Terrain",
   "text.autoconfig.deepmoblearning.option.trial.allowPlayersLeavingArena": "Allow Players Leaving Arena",
-  "text.autoconfig.deepmoblearning.option.trial.allowMobsLeavingArena": "Allow Mobs Leaving Arena"
+  "text.autoconfig.deepmoblearning.option.trial.allowMobsLeavingArena": "Allow Mobs Leaving Arena",
+  "text.autoconfig.deepmoblearning.option.trial.interactGriefPrevention": "Interaction Grief Prevention",
+  "text.autoconfig.deepmoblearning.option.trial.buildGriefPrevention": "Build Grief Prevention",
+  "text.autoconfig.deepmoblearning.option.trial.explosionGriefPrevention": "Explosion Grief Prevention"
 }

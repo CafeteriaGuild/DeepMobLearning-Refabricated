@@ -41,4 +41,7 @@ class Trial : ConfigData {
     var allowStartInWrongTerrain = false
     var allowPlayersLeavingArena = false
     var allowMobsLeavingArena = false
+    var buildGriefPrevention = true
+    var interactGriefPrevention = true
+    var explosionGriefPrevention = true
 }
