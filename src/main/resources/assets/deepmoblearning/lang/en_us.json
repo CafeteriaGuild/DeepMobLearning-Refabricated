@@ -65,5 +65,7 @@
   "text.autoconfig.deepmoblearning.option.trial.allowMobsLeavingArena": "Allow Mobs Leaving Arena",
   "text.autoconfig.deepmoblearning.option.trial.interactGriefPrevention": "Interaction Grief Prevention",
   "text.autoconfig.deepmoblearning.option.trial.buildGriefPrevention": "Build Grief Prevention",
-  "text.autoconfig.deepmoblearning.option.trial.explosionGriefPrevention": "Explosion Grief Prevention"
+  "text.autoconfig.deepmoblearning.option.trial.explosionGriefPrevention": "Explosion Grief Prevention",
+  "text.autoconfig.deepmoblearning.option.trial.trialKeyConsume": "Consume Trial Key",
+  "text.autoconfig.deepmoblearning.option.trial.trialKeyReturnIfSucceed": "Return Trial Key if Succeeded"
 }

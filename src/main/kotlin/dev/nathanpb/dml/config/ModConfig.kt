@@ -44,4 +44,7 @@ class Trial : ConfigData {
     var buildGriefPrevention = true
     var interactGriefPrevention = true
     var explosionGriefPrevention = true
+
+    var trialKeyConsume = true
+    var trialKeyReturnIfSucceed = true
 }

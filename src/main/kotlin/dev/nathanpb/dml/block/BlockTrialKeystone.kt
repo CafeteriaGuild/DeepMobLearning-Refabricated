@@ -9,6 +9,7 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -47,9 +48,16 @@ class BlockTrialKeystone : Block(
                         if (recipe != null) {
                             try {
                                 val trial = blockEntity.createTrial(recipe)
-                                blockEntity.startTrial(trial, if (player.isCreative) null else stackInHand)
+                                blockEntity.startTrial(
+                                    trial,
+                                    if (
+                                        !player.isCreative
+                                        && config.trial.trialKeyConsume
+                                        && config.trial.trialKeyReturnIfSucceed
+                                    ) stackInHand else null
+                                )
 
-                                if (!player.isCreative)
+                                if (!player.isCreative && config.trial.trialKeyConsume)
                                     stackInHand.decrement(1)
 
                                 return ActionResult.CONSUME
