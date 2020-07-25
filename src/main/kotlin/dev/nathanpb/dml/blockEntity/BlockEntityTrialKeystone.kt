@@ -126,6 +126,9 @@ class BlockEntityTrialKeystone :
 
     fun startTrial(trial: Trial, key: ItemStack?) {
         world?.let { world ->
+            if (currentTrial?.state == TrialState.RUNNING) {
+                throw TrialKeystoneIllegalStartException(trial)
+            }
             internalInventory.dropAll(world, pos)
             checkTerrain().let { wrongTerrain ->
                 if (wrongTerrain.isEmpty()) {
