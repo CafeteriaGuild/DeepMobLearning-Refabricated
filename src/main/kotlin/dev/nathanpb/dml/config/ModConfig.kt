@@ -14,6 +14,8 @@ import me.sargunvohra.mcmods.autoconfig1u.ConfigData
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry
 import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer
+import kotlin.math.max
+import kotlin.math.min
 
 
 fun registerConfigs() {
@@ -35,6 +37,10 @@ class ModConfig : ConfigData {
     @ConfigEntry.Category("data_model")
     @ConfigEntry.Gui.TransitiveObject
     var dataModel = DataModel()
+
+    @ConfigEntry.Category("system_glitch")
+    @ConfigEntry.Gui.TransitiveObject
+    var systemGlitch = SystemGlitch()
 
     override fun validatePostLoad() {
         trial.validatePostLoad()
@@ -112,5 +118,21 @@ class DataModel : ConfigData {
         if (selfAwareDataRequired < advancedDataRequired) {
             selfAwareDataRequired = advancedDataRequired
         }
+    }
+}
+
+@Config(name = "system_glitch")
+class SystemGlitch : ConfigData {
+
+    var teleportChance = 0.05F
+    var teleportMinDistance = 5
+    var teleportDelay = 100
+    var teleportAroundPlayerRadius = 2
+
+    override fun validatePostLoad() {
+        teleportChance = max(0F, min(1F, teleportChance))
+        teleportMinDistance = max(0, teleportMinDistance)
+        teleportDelay = max(0, teleportDelay)
+        teleportAroundPlayerRadius = max(1, teleportAroundPlayerRadius)
     }
 }

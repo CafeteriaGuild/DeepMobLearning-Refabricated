@@ -12,6 +12,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomOrNull
+import dev.nathanpb.dml.utils.squared
 import net.minecraft.entity.ai.TargetPredicate
 import net.minecraft.entity.ai.goal.FollowTargetGoal
 import net.minecraft.entity.player.PlayerEntity
@@ -36,6 +37,10 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
     private var ticksToTeleportCountdown = 0
 
     override fun canStart(): Boolean {
+        if (config.systemGlitch.teleportChance <= 0) {
+            return false
+        }
+
         glitch.trial.let { trial ->
             targetEntity = trial?.players?.filter {
                 config.trial.allowPlayersLeavingArena || TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
@@ -55,10 +60,10 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
         if (ticksToTeleportCountdown > 0) {
             ticksToTeleportCountdown--
         }
-        if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= 0.05) {
-            if (targetEntity.squaredDistanceTo(glitch) >= 25) {
-                if (glitch.tryTeleportRandomly(targetEntity.blockPos, 2)) {
-                    ticksToTeleportCountdown = 100
+        if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= config.systemGlitch.teleportChance) {
+            if (targetEntity.squaredDistanceTo(glitch) >= config.systemGlitch.teleportMinDistance.squared()) {
+                if (glitch.tryTeleportRandomly(targetEntity.blockPos, config.systemGlitch.teleportAroundPlayerRadius)) {
+                    ticksToTeleportCountdown = config.systemGlitch.teleportDelay
                     glitch.target = targetEntity
                     return
                 }
