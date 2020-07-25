@@ -37,7 +37,9 @@ class ModConfig : ConfigData {
     var dataModel = DataModel()
 
     override fun validatePostLoad() {
-       dataModel.validatePostLoad()
+        trial.validatePostLoad()
+        lootFabricator.validatePostLoad()
+        dataModel.validatePostLoad()
     }
 
 }
@@ -57,12 +59,36 @@ class Trial : ConfigData {
 
     var trialKeyConsume = true
     var trialKeyReturnIfSucceed = true
+
+    override fun validatePostLoad() {
+        if (maxMobsInArena < 0) {
+            maxMobsInArena = 0
+        }
+
+        if (postEndTimeout < 0) {
+            postEndTimeout = 0
+        }
+
+        if (arenaRadius < 1) {
+            arenaRadius = 1
+        }
+    }
 }
 
 @Config(name = "loot_fabricator")
 class LootFabricator : ConfigData {
     var pristineExchangeRate = 16
     var processTime = 200
+
+    override fun validatePostLoad() {
+        if (pristineExchangeRate < 0) {
+            pristineExchangeRate = 0
+        }
+
+        if (processTime < 0) {
+            processTime = 0
+        }
+    }
 }
 
 @Config(name = "data_model")
@@ -77,14 +103,14 @@ class DataModel : ConfigData {
         if (basicDataRequired <= 0) {
             basicDataRequired = 1
         }
-        if (advancedDataRequired <= basicDataRequired) {
-            advancedDataRequired = basicDataRequired + 1
+        if (advancedDataRequired < basicDataRequired) {
+            advancedDataRequired = basicDataRequired
         }
-        if (superiorDataRequired <= advancedDataRequired) {
-            superiorDataRequired = basicDataRequired + 1
+        if (superiorDataRequired < advancedDataRequired) {
+            superiorDataRequired = basicDataRequired
         }
-        if (selfAwareDataRequired <= advancedDataRequired) {
-            selfAwareDataRequired = advancedDataRequired + 1
+        if (selfAwareDataRequired < advancedDataRequired) {
+            selfAwareDataRequired = advancedDataRequired
         }
     }
 }
