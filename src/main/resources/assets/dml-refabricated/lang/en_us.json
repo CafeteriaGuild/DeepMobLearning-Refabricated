@@ -83,5 +83,6 @@
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportMinDistance": "Teleport Minimum Distance",
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportDelay": "Delay Between Teleports",
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportAroundPlayerRadius": "Radius of Blocks to Teleport Around Player",
-  "text.autoconfig.dml-refabricated.option.dataCollection.baseDataGainPerKill": "Base Data Gain per Kill"
+  "text.autoconfig.dml-refabricated.option.dataCollection.baseDataGainPerKill": "Base Data Gain per Kill",
+  "rei.dml-refabricated.category.crushing": "Crushing Recipe"
 }

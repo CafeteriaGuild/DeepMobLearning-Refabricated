@@ -27,6 +27,12 @@
         "adapter": "kotlin",
         "value": "dev.nathanpb.dml.config.ModMenuIntegration"
       }
+    ],
+    "rei_plugins": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.nathanpb.dml.compat.rei.ReiPlugin"
+      }
     ]
   },
   "mixins": [
