@@ -6,11 +6,24 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.item
+package dev.nathanpb.dml.compat.rei.display
 
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import dev.nathanpb.dml.recipe.LootFabricatorRecipe
+import me.shedaniel.rei.api.EntryStack
+import me.shedaniel.rei.api.RecipeDisplay
+import net.minecraft.util.Identifier
 
-class ItemPristineMatter(settings: Settings) : Item(settings) {
-    override fun hasGlint(stack: ItemStack?) = true
+class LootFabricatorRecipeDisplay (
+    private val categoryId: Identifier,
+    val recipe: LootFabricatorRecipe
+) : RecipeDisplay {
+
+    private val input = mutableListOf(recipe.input.matchingStacksClient.map(EntryStack::create).toMutableList())
+
+    override fun getRecipeCategory() = categoryId
+
+    override fun getInputEntries() = input
+
+    override fun getOutputEntries() = mutableListOf<EntryStack>()
+
 }

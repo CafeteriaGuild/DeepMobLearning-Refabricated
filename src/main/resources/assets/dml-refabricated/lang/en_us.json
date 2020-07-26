@@ -85,5 +85,6 @@
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportAroundPlayerRadius": "Radius of Blocks to Teleport Around Player",
   "text.autoconfig.dml-refabricated.option.dataCollection.baseDataGainPerKill": "Base Data Gain per Kill",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
-  "rei.dml-refabricated.category.trial": "Trial"
+  "rei.dml-refabricated.category.trial": "Trial",
+  "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator"
 }

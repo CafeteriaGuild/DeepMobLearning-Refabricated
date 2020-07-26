@@ -8,7 +8,6 @@
 
 package dev.nathanpb.dml.inventory
 
-import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.utils.toIntArray
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
@@ -25,7 +24,8 @@ class LootFabricatorInventory : SimpleInventory(10), SidedInventory {
     val stackInInputSlot: ItemStack?
         get() = getStack(INPUT_SLOT)
 
-    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = slot == INPUT_SLOT && stack.item is ItemPristineMatter
+    // TODO find a way to check with the world's recipeManager
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = slot == INPUT_SLOT
     override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = slot in OUTPUT_SLOTS
     override fun getAvailableSlots(side: Direction?) = (0 until size()).toIntArray()
 }

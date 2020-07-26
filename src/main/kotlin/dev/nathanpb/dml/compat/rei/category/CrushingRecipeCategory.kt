@@ -50,7 +50,7 @@ class CrushingRecipeCategory(private val identifier: Identifier, private val log
         ).also { widgets ->
             MinecraftClient.getInstance().player?.let { player ->
                 EntityDisplayWidget(
-                    player,
+                    listOf(player),
                     startPoint.x + 24,
                     startPoint.y + 52,
                     180F,

@@ -1,0 +1,7 @@
+{
+  "type": "dml-refabricated:loot_fabricator",
+  "input": {
+    "item": "dml-refabricated:pristine_matter_illager"
+  },
+  "category": "ILLAGER"
+}

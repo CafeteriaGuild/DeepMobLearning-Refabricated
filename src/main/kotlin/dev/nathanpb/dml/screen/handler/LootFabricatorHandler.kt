@@ -8,7 +8,7 @@
 
 package dev.nathanpb.dml.screen.handler
 
-import dev.nathanpb.dml.item.ItemPristineMatter
+import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
@@ -32,7 +32,10 @@ class LootFabricatorHandler(
         val root = WGridPanel()
         setRootPanel(root)
 
-        val inputSlot = WItemSlot.of(blockInventory, 0).setFilter { it.item is ItemPristineMatter }
+        val inputSlot = WItemSlot.of(blockInventory, 0).setFilter { stack ->
+            world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
+                .any { it.input.test(stack) }
+        }
         root.add(inputSlot, 1, 2)
 
         val progressBar = WBar(null, null, 0, 1, WBar.Direction.DOWN)

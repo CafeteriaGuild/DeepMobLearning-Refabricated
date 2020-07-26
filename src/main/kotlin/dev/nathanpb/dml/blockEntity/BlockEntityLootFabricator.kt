@@ -13,7 +13,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.entity.FakePlayerEntity
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
-import dev.nathanpb.dml.item.ItemPristineMatter
+import dev.nathanpb.dml.recipe.RECIPE_LOOT_FABRICATOR
 import dev.nathanpb.dml.utils.combineStacksIfPossible
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
@@ -28,6 +28,8 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.recipe.RecipeFinder
+import net.minecraft.recipe.RecipeInputProvider
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Tickable
@@ -39,6 +41,7 @@ class BlockEntityLootFabricator
     : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR),
     InventoryProvider,
     PropertyDelegateHolder,
+    RecipeInputProvider,
     Tickable
 {
 
@@ -60,10 +63,10 @@ class BlockEntityLootFabricator
         (world as? ServerWorld)?.let { world ->
             if (bufferedInternalInventory.isEmpty) {
                 val stack = inventory.stackInInputSlot ?: return resetProgress()
-                val item = stack.item as? ItemPristineMatter ?: return resetProgress()
+                val recipe = world.recipeManager.getFirstMatch(RECIPE_LOOT_FABRICATOR, inventory, world).orElse(null) ?: return resetProgress()
 
                 if (progress >= config.lootFabricator.processTime) {
-                    val generatedLoot = generateLoot(world, item.category).also {
+                    val generatedLoot = generateLoot(world, recipe.category).also {
                         // O(n²) goes brrrr
                         it.forEach {  stackSource ->
                             it.forEach { stackTarget ->
@@ -170,4 +173,8 @@ class BlockEntityLootFabricator
     }
 
     override fun getPropertyDelegate() = _propertyDelegate
+
+    override fun provideRecipeInputs(finder: RecipeFinder) {
+        finder.addItem(inventory.stackInInputSlot)
+    }
 }

@@ -65,7 +65,7 @@ class TrialRecipeCategory(private val identifier: Identifier, private val logo: 
         ).also { widgets ->
             MinecraftClient.getInstance().player?.let { player ->
                 widgets += Widgets.wrapVanillaWidget(EntityDisplayWidget(
-                    player,
+                    listOf(player),
                     centerX - 30,
                     centerY + 8,
                     -120F, 20F, 16,
@@ -73,7 +73,7 @@ class TrialRecipeCategory(private val identifier: Identifier, private val logo: 
                 ))
 
                 widgets += Widgets.wrapVanillaWidget(EntityDisplayWidget(
-                    SystemGlitchEntity(SYSTEM_GLITCH_ENTITY_TYPE, player.world),
+                    listOf(SystemGlitchEntity(SYSTEM_GLITCH_ENTITY_TYPE, player.world)),
                     centerX + 45,
                     centerY + 8,
                     120F, 20F, 16

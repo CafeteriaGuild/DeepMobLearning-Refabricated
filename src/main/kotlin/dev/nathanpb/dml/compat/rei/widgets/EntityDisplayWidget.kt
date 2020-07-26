@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
 
 class EntityDisplayWidget(
-    private val entity: LivingEntity,
+    private val entities: List<LivingEntity>,
     private val x: Int,
     private val y: Int,
     private val mouseX: Float,
@@ -27,14 +27,18 @@ class EntityDisplayWidget(
     private val preRender: ((LivingEntity)->Unit) = {}
 ) : Drawable, Element {
 
+    private var tickCount = 0
+
     override fun render(matrices: MatrixStack?, mX: Int, mY: Int, delta: Float) {
+        tickCount++
+        val entity = entities[(tickCount / 60) % entities.size]
         val initialStackMainHand = stackInMainHand?.let {
             entity.getStackInHand(Hand.MAIN_HAND).also {
                 entity.setStackInHand(Hand.MAIN_HAND, stackInMainHand)
             }
         }
 
-        preRender?.invoke(entity)
+        preRender.invoke(entity)
         InventoryScreen.drawEntity(x, y, size, mouseX, mouseY, entity)
 
         if (stackInMainHand != null) {
