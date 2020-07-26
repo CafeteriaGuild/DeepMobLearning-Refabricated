@@ -16,6 +16,9 @@ His version of the mod is focused in providing a better way to acquire mob loot 
 - [Original Deep Mob Learning on GitHub](https://github.com/xt9/DeepMobLearning)
 - [Xt9's Discord Guild](https://discord.com/invite/gj9kVup)
 
+## Can I add it to a modpack?
+Currently, the mod is not released in any distribution websites (like Curseforge), but if you would like to, feel free to compile it by yourself (or just ask me to do so). You don't need my permission to use it, just go ahead =)
+
 ## Will there ever be a Forge version?
 **Well yes but actually no.** If you want a Forge version of this mod you should check out the [xt9's version](#xt9s-version)
 
