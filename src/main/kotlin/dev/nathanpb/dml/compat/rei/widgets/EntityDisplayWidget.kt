@@ -23,8 +23,8 @@ class EntityDisplayWidget(
     private val mouseX: Float,
     private val mouseY: Float,
     private val size: Int,
-    private val stackInMainHand: ItemStack?,
-    private val preRender: ((LivingEntity)->Unit)?
+    private val stackInMainHand: ItemStack? = null,
+    private val preRender: ((LivingEntity)->Unit) = {}
 ) : Drawable, Element {
 
     override fun render(matrices: MatrixStack?, mX: Int, mY: Int, delta: Float) {
