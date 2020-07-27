@@ -6,9 +6,15 @@
  * You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package dev.nathanpb.dml.entity.model
+package dev.nathanpb.dml.item
 
-import dev.nathanpb.dml.entity.SystemGlitchEntity
-import net.minecraft.client.render.entity.model.BipedEntityModel
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Wearable
+import net.minecraft.util.Rarity
 
-class SystemGlitchModel(scale: Float = 1F) : BipedEntityModel<SystemGlitchEntity>(scale, 0F, 64, 64)
+class ItemEmeritusHat : Item(Settings().maxCount(1).fireproof()), Wearable {
+
+    override fun getRarity(stack: ItemStack?) = Rarity.EPIC
+
+}

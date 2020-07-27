@@ -54,6 +54,8 @@ val ITEM_SOOT_REDSTONE = Item(settings())
 val ITEM_SOOT_PLATE = Item(settings())
 val ITEM_SOOT_MACHINE_CASE = Item(settings())
 
+val ITEM_EMERITUS_HAT = ItemEmeritusHat()
+
 
 fun registerItems() {
     mapOf(
@@ -81,7 +83,8 @@ fun registerItems() {
         ITEM_PRISTINE_MATTER_END to "pristine_matter_end",
         ITEM_PRISTINE_MATTER_GHOST to "pristine_matter_ghost",
         ITEM_PRISTINE_MATTER_ILLAGER to "pristine_matter_illager",
-        ITEM_PRISTINE_MATTER_OCEAN to "pristine_matter_ocean"
+        ITEM_PRISTINE_MATTER_OCEAN to "pristine_matter_ocean",
+        ITEM_EMERITUS_HAT to "emeritus_hat"
     ).forEach { (item, id) ->
         Registry.register(Registry.ITEM, identifier(id), item)
     }

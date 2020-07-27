@@ -25,6 +25,7 @@
   "item.dml-refabricated.pristine_matter_ghost": "Emeritu's Pristine Matter",
   "item.dml-refabricated.pristine_matter_illager": "Illager Pristine Matter",
   "item.dml-refabricated.pristine_matter_ocean": "Poseidon Pristine Matter",
+  "item.dml-refabricated.emeritus_hat": "Emeritus Hat",
   "tooltip.dml-refabricated.data_model.bound_to": "§9Bound To:§4 %s",
   "tooltip.dml-refabricated.data_model.data_amount": "§9Data Amount:§r %d (%d to next tier)",
   "tooltip.dml-refabricated.data_model.data_amount_simple": "§9Data:§r %d/%d",

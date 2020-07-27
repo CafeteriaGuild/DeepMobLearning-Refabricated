@@ -11,6 +11,7 @@ package dev.nathanpb.dml.entity
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
+import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomAround
 import dev.nathanpb.dml.utils.runningTrials
@@ -20,10 +21,12 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.goal.*
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import kotlin.random.Random
 
 class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : HostileEntity(type, world) {
     companion object {
@@ -105,4 +108,12 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     }
 
     override fun cannotDespawn() = true
+
+    override fun dropEquipment(source: DamageSource?, lootingMultiplier: Int, allowDrops: Boolean) {
+        armorItems.filter {
+            it.item != ITEM_EMERITUS_HAT && Random.nextFloat() < .0666 // hope this works, i wil not test this
+        }.forEach {
+            dropStack(it)
+        }
+    }
 }

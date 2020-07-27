@@ -1,0 +1,102 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "dml-refabricated:armor/emeritus_mask",
+		"1": "dml-refabricated:armor/emeritus_hat",
+		"particle": "dml-refabricated:armor/emeritus_mask"
+	},
+	"elements": [
+		{
+			"name": "mask",
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [5.66567, 0, 10.33133, 15.9985], "texture": "#0"},
+				"east": {"uv": [0, 0, 5.83283, 15.9985], "texture": "#0"},
+				"west": {"uv": [9.99933, 0, 15.9985, 15.9985], "texture": "#0"},
+				"up": {"uv": [10.6665, 2.4985, 11.33133, 3.994], "texture": "#0"}
+			}
+		},
+		{
+			"name": "right",
+			"from": [1, 16, 3],
+			"to": [2, 24, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 24, 11]},
+			"faces": {
+				"north": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"east": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"south": {"uv": [15.5, 5, 16, 16], "texture": "#1"},
+				"west": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"down": {"uv": [1, 5, 1.5, 16], "texture": "#1"}
+			}
+		},
+		{
+			"name": "left",
+			"from": [14, 16, 3],
+			"to": [15, 24, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [22, 24, 11]},
+			"faces": {
+				"north": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"east": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"south": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"west": {"uv": [1, 5, 1.5, 16], "texture": "#1"},
+				"down": {"uv": [1, 5, 1.5, 16], "texture": "#1"}
+			}
+		},
+		{
+			"name": "right back",
+			"from": [0, 16, 4],
+			"to": [1, 21, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 24, 12]},
+			"faces": {
+				"north": {"uv": [15.5, 9, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 5, 2.5, 16], "texture": "#1"},
+				"south": {"uv": [15.5, 5, 16, 16], "texture": "#1"},
+				"west": {"uv": [13.5, 5, 16, 16], "texture": "#1"},
+				"down": {"uv": [13.5, 5, 16, 16], "texture": "#1"}
+			}
+		},
+		{
+			"name": "left back",
+			"from": [15, 16, 4],
+			"to": [16, 21, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [23, 24, 12]},
+			"faces": {
+				"north": {"uv": [15.5, 9, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 5, 2.5, 16], "texture": "#1"},
+				"south": {"uv": [15.5, 5, 16, 16], "texture": "#1"},
+				"west": {"uv": [13.5, 5, 16, 16], "texture": "#1"},
+				"down": {"uv": [13.5, 5, 16, 16], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "center back",
+			"from": [2, 16, 2],
+			"to": [14, 29, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [20, 24, 10]},
+			"faces": {
+				"north": {"uv": [1, 0, 15, 16], "texture": "#1"},
+				"east": {"uv": [0.5, 0, 1, 16], "texture": "#1"},
+				"south": {"uv": [1.5, 0, 15.5, 16], "texture": "#1"},
+				"west": {"uv": [15, 0, 15.5, 16], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_lefthand": {
+			"translation": [0, -2, 3.75],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"head": {
+			"translation": [0, 0, 0.75]
+		}
+	},
+	"groups": [0,
+		{
+			"name": "hat",
+			"origin": [8, 8, 8],
+			"children": [1, 2, 3, 4, 5, 6]
+		}
+	]
+}

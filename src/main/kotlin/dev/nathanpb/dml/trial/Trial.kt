@@ -11,17 +11,21 @@ package dev.nathanpb.dml.trial
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
+import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.utils.*
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
@@ -156,6 +160,9 @@ class Trial (
         )?.also {
             it.tier = recipe.tier
             it.health = it.maxHealth
+            if (recipe.category == EntityCategory.GHOST && recipe.tier.isMaxTier() && Random.nextFloat() < .0666 ) {
+                it.equipStack(EquipmentSlot.HEAD, ItemStack(ITEM_EMERITUS_HAT))
+            }
         }
     }
 
