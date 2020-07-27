@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "dml-refabricated",
-  "version": "1.0.0",
+  "version": "0.1.0-beta",
   "name": "Deep Mob Learning: Refabricated",
   "description": "Server friendly mob loot acquisition",
   "authors": [
@@ -45,6 +45,8 @@
     "minecraft": "1.16.1"
   },
   "suggests": {
-    "flamingo": "*"
+    "flamingo": "*",
+    "modmenu": ">=1.14.5+build.30",
+    "roughlyenoughitems": ">=4.10.2"
   }
 }
