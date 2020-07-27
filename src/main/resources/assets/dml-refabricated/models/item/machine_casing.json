@@ -190,19 +190,19 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"scale": [0.3, 0.3, 0.3]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"thirdperson_lefthand": {
-			"scale": [0.3, 0.3, 0.3]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"firstperson_righthand": {
-			"scale": [0.3, 0.3, 0.3]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"firstperson_lefthand": {
-			"scale": [0.3, 0.3, 0.3]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"ground": {
-			"scale": [0.3, 0.3, 0.3]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
 			"rotation": [33, 41, 0],
