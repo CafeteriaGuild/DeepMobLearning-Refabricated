@@ -6,6 +6,7 @@
     "EndermanEntityMixin",
     "ExplosionPreventMixin",
     "LivingEntityMixin",
+    "MobEntityMixin",
     "WorldMixin"
   ],
   "client": [],
