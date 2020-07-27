@@ -45,7 +45,7 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
                     }
                     tooltip.add(
                         TranslatableText(
-                            "tooltip.dml-refabricatedlearning.data_model.tier",
+                            "tooltip.${MOD_ID}.data_model.tier",
                             data.tier().text
                         )
                     )
