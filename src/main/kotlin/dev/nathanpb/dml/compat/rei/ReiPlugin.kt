@@ -16,11 +16,14 @@ import dev.nathanpb.dml.compat.rei.display.CrushingRecipeDisplay
 import dev.nathanpb.dml.compat.rei.display.LootFabricatorRecipeDisplay
 import dev.nathanpb.dml.compat.rei.display.TrialRecipeDisplay
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.ITEM_DML
+import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.item.ITEM_SOOT_REDSTONE
 import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import me.shedaniel.rei.RoughlyEnoughItemsCore
 import me.shedaniel.rei.api.EntryStack
 import me.shedaniel.rei.api.RecipeHelper
 import me.shedaniel.rei.api.plugins.REIPluginV0
@@ -60,8 +63,20 @@ class ReiPlugin : REIPluginV0 {
         }
     }
 
+    override fun postRegister() {
+        val hiddenItems = listOf(ITEM_EMERITUS_HAT, ITEM_DML)
+        RoughlyEnoughItemsCore.getEntryRegistry().removeEntryIf {
+            it.item in hiddenItems
+        }
+    }
+
+
     override fun registerOthers(recipeHelper: RecipeHelper?) {
+        recipeHelper?.removeAutoCraftButton(CRUSHING_ID)
+        recipeHelper?.removeAutoCraftButton(TRIAL_ID)
+        recipeHelper?.removeAutoCraftButton(LOOT_FABRICATOR_ID)
         recipeHelper?.registerWorkingStations(CRUSHING_ID, CRUSHING_LOGO)
         recipeHelper?.registerWorkingStations(TRIAL_ID, TRIAL_LOGO)
+        recipeHelper?.registerWorkingStations(LOOT_FABRICATOR_ID, LOOT_FABRICATOR_LOGO)
     }
 }
