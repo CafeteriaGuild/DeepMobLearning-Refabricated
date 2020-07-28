@@ -23,7 +23,7 @@ import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import me.shedaniel.rei.RoughlyEnoughItemsCore
+import me.shedaniel.rei.api.EntryRegistry
 import me.shedaniel.rei.api.EntryStack
 import me.shedaniel.rei.api.RecipeHelper
 import me.shedaniel.rei.api.plugins.REIPluginV0
@@ -65,7 +65,7 @@ class ReiPlugin : REIPluginV0 {
 
     override fun postRegister() {
         val hiddenItems = listOf(ITEM_EMERITUS_HAT, ITEM_DML)
-        RoughlyEnoughItemsCore.getEntryRegistry().removeEntryIf {
+        EntryRegistry.getInstance().removeEntryIf {
             it.item in hiddenItems
         }
     }
