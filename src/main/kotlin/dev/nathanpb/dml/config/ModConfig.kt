@@ -57,7 +57,7 @@ class ModConfig : ConfigData {
 
 @Config(name = "trial")
 class Trial : ConfigData {
-    var maxMobsInArena = 32
+    var maxMobsInArena = 8
     var postEndTimeout = 60
     var arenaRadius = 12
 

@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.goal.*
 import net.minecraft.entity.attribute.DefaultAttributeContainer
+import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
@@ -57,6 +58,18 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         world.runningTrials.firstOrNull {
             it.systemGlitch == this
         }
+    }
+
+    /**
+     * Modify the base attack damage of the glitch based in the current tier of the trial
+     */
+    override fun getAttributeValue(attribute: EntityAttribute?): Double {
+        val tier = tier
+        if (attribute == EntityAttributes.GENERIC_ATTACK_DAMAGE && tier != null) {
+            val tierMultiplier = (tier.ordinal / DataModelTier.values().size.dec()) + .5
+            return super.getAttributeValue(attribute) * tierMultiplier
+        }
+        return super.getAttributeValue(attribute)
     }
 
     override fun initGoals() {
