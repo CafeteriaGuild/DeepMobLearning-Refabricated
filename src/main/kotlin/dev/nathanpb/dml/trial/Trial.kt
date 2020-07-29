@@ -79,6 +79,8 @@ class Trial (
     var state: TrialState = TrialState.NOT_STARTED
         private set
 
+    private val tickableAffixes = affixes.filterIsInstance<TrialAffix.TickableAffix>()
+
 
     private var tickCount = 0
     private var endsAt = 0
@@ -124,6 +126,9 @@ class Trial (
                 else -> {} // Suppress non-exhaustive when
             }
             tickCount++
+            tickableAffixes.forEach {
+                it.tick(this)
+            }
         }
     }
 

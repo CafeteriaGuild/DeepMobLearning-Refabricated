@@ -98,6 +98,9 @@ class TrialAffix : ConfigData {
     var enableMobStrength = true
     var enableMobSpeed = true
     var enableMobResistance = true
+    var enableThunderstorm = true
+
+    var thunderstormBoltChance = .05F
 
     override fun validatePostLoad() {
         maxAffixesInKey = max(0, maxAffixesInKey)

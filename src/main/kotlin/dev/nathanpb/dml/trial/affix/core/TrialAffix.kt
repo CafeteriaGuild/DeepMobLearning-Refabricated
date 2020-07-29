@@ -32,4 +32,8 @@ abstract class TrialAffix(val id: Identifier) {
     interface WaveSpawnedListener {
         fun onWaveSpawn(trial: Trial, waveEntities: List<LivingEntity>)
     }
+
+    interface TickableAffix {
+        fun tick(trial: Trial)
+    }
 }
