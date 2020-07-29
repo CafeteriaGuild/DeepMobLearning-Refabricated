@@ -44,11 +44,10 @@ class BlockTrialKeystone : Block(
                 val stackInHand = player.getStackInHand(hand)
                 if (stackInHand.item is ItemTrialKey) {
                     stackInHand.trialKeyData?.let { data ->
-                        TrialKeystoneRecipe.findOrNull(world, data)
-                    }.let { recipe ->
+                        val recipe = TrialKeystoneRecipe.findOrNull(world, data)
                         if (recipe != null) {
                             try {
-                                val trial = blockEntity.createTrial(recipe)
+                                val trial = blockEntity.createTrial(recipe, data.affixes)
                                 blockEntity.startTrial(
                                     trial,
                                     if (

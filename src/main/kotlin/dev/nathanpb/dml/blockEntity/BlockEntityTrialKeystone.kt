@@ -16,6 +16,7 @@ import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
+import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.utils.getEntitiesAroundCircle
 import dev.nathanpb.dml.utils.squared
 import dev.nathanpb.dml.utils.toVec3d
@@ -116,12 +117,12 @@ class BlockEntityTrialKeystone :
         }
     }
 
-    fun createTrial(recipe: TrialKeystoneRecipe): Trial {
+    fun createTrial(recipe: TrialKeystoneRecipe, affixes: List<TrialAffix>): Trial {
         val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, config.trial.arenaRadius.toDouble())
             ?.filterIsInstance<PlayerEntity>()
             .orEmpty()
         if (players.isNotEmpty()) {
-            return Trial(this, recipe, players)
+            return Trial(this, recipe, players, affixes)
         } else throw TrialKeystoneNoPlayersAround(this)
     }
 

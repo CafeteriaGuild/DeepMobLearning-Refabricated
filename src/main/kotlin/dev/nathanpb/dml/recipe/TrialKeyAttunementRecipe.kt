@@ -40,7 +40,7 @@ class TrialKeyAttuneRecipe (
 
     override fun craft(craftingInventory: CraftingInventory): ItemStack = getOutput().copy().apply {
         findDataModel(craftingInventory)?.let {
-            trialKeyData = TrialKeyData.fromDataModelData(it)
+            trialKeyData = TrialKeyData.fromDataModelData(it, true)
         }
     }
 

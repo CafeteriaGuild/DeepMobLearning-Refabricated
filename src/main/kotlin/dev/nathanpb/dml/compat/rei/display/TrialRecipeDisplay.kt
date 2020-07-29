@@ -25,7 +25,7 @@ class TrialRecipeDisplay (
     private val input = mutableListOf(
         mutableListOf(EntryStack.create(
             ItemStack(ITEM_TRIAL_KEY).apply {
-                trialKeyData = TrialKeyData(recipe.category, recipe.tier.dataAmount)
+                trialKeyData = TrialKeyData(recipe.category, recipe.tier.dataAmount, emptyList())
             }
         ))
     )

@@ -15,11 +15,14 @@ import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
+import dev.nathanpb.dml.event.TrialWaveSpawnCallback
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.utils.*
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
@@ -39,14 +42,21 @@ class Trial (
     val world: World,
     val pos: BlockPos,
     val recipe: TrialKeystoneRecipe,
-    val players: List<PlayerEntity>
+    val players: List<PlayerEntity>,
+    val affixes: List<TrialAffix>
 ) : Tickable {
 
-    constructor(keystone: BlockEntityTrialKeystone, recipe: TrialKeystoneRecipe, players: List<PlayerEntity>): this(
+    constructor(
+        keystone: BlockEntityTrialKeystone,
+        recipe: TrialKeystoneRecipe,
+        players: List<PlayerEntity>,
+        affixes: List<TrialAffix>
+    ): this(
         keystone.world!!, // TODO why is World nullable? Assert this
         keystone.pos,
         recipe,
-        players
+        players,
+        affixes
     )
 
     companion object {
@@ -177,13 +187,18 @@ class Trial (
     }
 
     private fun spawnWave() {
-        (0 until recipe.waveEntityCount).forEach { _ ->
+        (0 until recipe.waveEntityCount).map {
             recipe.category.tag.getRandom(java.util.Random()).spawn(
                 world,
                 null, null, null,
                 pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
                 SpawnReason.SPAWNER,
                 false, false
+            )
+        }.let {
+            TrialWaveSpawnCallback.EVENT.invoker().onWaveSpawned(
+                this,
+                it.filterIsInstance<LivingEntity>()
             )
         }
     }

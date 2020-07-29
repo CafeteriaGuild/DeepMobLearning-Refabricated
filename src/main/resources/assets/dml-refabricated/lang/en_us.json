@@ -33,6 +33,7 @@
   "tooltip.dml-refabricated.data_model.tier": "§9Tier:§r %s",
   "tooltip.dml-refabricated.data_model.cheat": "§7Sneak + Right Click to cycle tiers",
   "tooltip.dml-refabricated.trial_key.unbound.tip": "§9Combine this with a bounded Data Model in the crafting grid",
+  "tooltip.dml-refabricated.trial_key.affixes": "§9Affixes:",
   "mobcategory.dml-refabricated.nether_mobs": "From Hades",
   "mobcategory.dml-refabricated.slimy_mobs": "Slimy Mobs",
   "mobcategory.dml-refabricated.overworld_mobs": "Overworld Mobs",
@@ -63,6 +64,7 @@
   "text.autoconfig.dml-refabricated.category.data_model": "Data Model",
   "text.autoconfig.dml-refabricated.category.system_glitch": "System Glitch",
   "text.autoconfig.dml-refabricated.category.data_collection": "Data Collection",
+  "text.autoconfig.dml-refabricated.category.affix": "Trial Affixes",
   "text.autoconfig.dml-refabricated.option.trial.maxMobsInArena": "Maximum Mobs in Arena",
   "text.autoconfig.dml-refabricated.option.trial.postEndTimeout": "Post-end Bossbar Timeout",
   "text.autoconfig.dml-refabricated.option.trial.arenaRadius": "Arena Radius",
@@ -84,8 +86,14 @@
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportMinDistance": "Teleport Minimum Distance",
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportDelay": "Delay Between Teleports",
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportAroundPlayerRadius": "Radius of Blocks to Teleport Around Player",
-  "text.autoconfig.dml-refabricated.option.dataCollection.baseDataGainPerKill": "Base Data Gain per Kill",
+  "text.autoconfig.dml-refabricated.option.affix.maxAffixesInKey": "Max Affixes in Trial Key",
+  "text.autoconfig.dml-refabricated.option.affix.enableMobStrength": "Enable Mob Strength ",
+  "text.autoconfig.dml-refabricated.option.affix.enableMobSpeed": "Enable Mob Speed",
+  "text.autoconfig.dml-refabricated.option.affix.enableMobResistance": "Enable Road of Resistance",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
   "rei.dml-refabricated.category.trial": "Trial",
-  "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator"
+  "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator",
+  "affix.dml-refabricated.mob_strength.name": "Mob Strength",
+  "affix.dml-refabricated.mob_speed.name": "Mob Speed",
+  "affix.dml-refabricated.mob_resistance.name": "Road of Resistance"
 }

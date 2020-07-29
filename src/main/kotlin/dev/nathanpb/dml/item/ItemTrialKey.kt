@@ -13,6 +13,7 @@ import dev.nathanpb.dml.data.TrialKeyData
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.world.World
@@ -26,10 +27,17 @@ class ItemTrialKey : Item(settings().maxCount(1)) {
     ) {
         super.appendTooltip(stack, world, tooltip, context)
         if (stack != null && tooltip != null) {
-            TrialKeyData.fromStack(stack).let { data ->
+            TrialKeyData.fromStack(stack).also { data ->
                 if (data != null) {
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.bound_to", data.category.displayName))
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.tier", data.tier().text))
+
+                    if (data.affixes.isNotEmpty()) {
+                        tooltip.add(TranslatableText("tooltip.${MOD_ID}.trial_key.affixes"))
+                        data.affixes.forEach {
+                            tooltip.add(LiteralText(" - ").append(it.name))
+                        }
+                    }
                 } else {
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.unbound"))
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.trial_key.unbound.tip"))

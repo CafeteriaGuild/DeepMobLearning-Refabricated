@@ -20,6 +20,7 @@ import dev.nathanpb.dml.screen.handler.registerContainerTypes
 import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
+import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.util.Identifier
@@ -55,6 +56,7 @@ fun init() {
         WorldExplosionCallback.EVENT.register(this)
         EndermanTeleportCallback.EVENT.register(this)
     }
+    TrialAffixRegistry.registerDefaultAffixes()
     println("Deep Mob Learning: Refabricated is good to go")
 }
 

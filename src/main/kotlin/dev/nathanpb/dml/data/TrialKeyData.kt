@@ -10,31 +10,54 @@ package dev.nathanpb.dml.data
 
 import dev.nathanpb.dml.InvalidTrialKeyBase
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.config
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemTrialKey
+import dev.nathanpb.dml.trial.affix.core.TrialAffix
+import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.util.Identifier
+import kotlin.random.Random
 
-data class TrialKeyData (val category: EntityCategory, val dataAmount: Int = 0) {
+data class TrialKeyData (
+    val category: EntityCategory,
+    val dataAmount: Int = 0,
+    val affixes: List<TrialAffix>
+) {
 
     companion object {
         const val DATA_TAG_KEY = "${MOD_ID}.trialkey"
         const val CATEGORY_TAG_KEY = "category"
         const val DATA_AMOUNT_TAG_KEY = "dataAmount"
+        const val AFFIX_TAG_KEY = "affixes"
 
         fun fromStack(stack: ItemStack) = when (stack.item) {
             is ItemTrialKey -> stack.getSubTag(DATA_TAG_KEY)?.let {
+                val affixes = it.getList(AFFIX_TAG_KEY, 8).mapNotNull { affixId ->
+                    TrialAffixRegistry.INSTANCE.findById(Identifier(affixId.asString()))
+                }
                 TrialKeyData(
                     EntityCategory.valueOf(it.getString(CATEGORY_TAG_KEY) ?: throw InvalidTrialKeyBase()),
-                    it.getInt(DATA_AMOUNT_TAG_KEY)
+                    it.getInt(DATA_AMOUNT_TAG_KEY),
+                    affixes
                 )
             }
             is ItemDataModel -> fromDataModelData(stack.dataModel)
             else -> throw InvalidTrialKeyBase()
         }
 
-        fun fromDataModelData(data: DataModelData) = data.category?.let {
-            TrialKeyData(it, data.dataAmount)
+        fun fromDataModelData(data: DataModelData, createAffixes: Boolean = false) = data.category?.let {
+            val affixes = if (createAffixes) {
+                (0..Random.nextInt(config.affix.maxAffixesInKey.inc()))
+                .filter { it > 0 }
+                .mapNotNull {
+                    TrialAffixRegistry.INSTANCE.pickRandomEnabled()
+                }.distinctBy { it.id.toString() }
+            } else emptyList()
+            TrialKeyData(it, data.dataAmount, affixes)
         }
     }
 
@@ -42,6 +65,13 @@ data class TrialKeyData (val category: EntityCategory, val dataAmount: Int = 0) 
     fun toTag() = CompoundTag().apply {
         putString(CATEGORY_TAG_KEY, category.name)
         putInt(DATA_AMOUNT_TAG_KEY, dataAmount)
+        put(AFFIX_TAG_KEY,
+            ListTag().also { list ->
+                list.addAll(affixes.map {
+                    StringTag.of(it.id.toString())
+                })
+            }
+        )
     }
 }
 

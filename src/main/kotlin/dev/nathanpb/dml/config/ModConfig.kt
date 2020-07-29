@@ -47,10 +47,16 @@ class ModConfig : ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     var dataCollection = DataCollection()
 
+
+    @ConfigEntry.Category("affix")
+    @ConfigEntry.Gui.TransitiveObject
+    var affix = TrialAffix()
+
     override fun validatePostLoad() {
         trial.validatePostLoad()
         lootFabricator.validatePostLoad()
         dataModel.validatePostLoad()
+        affix.validatePostLoad()
     }
 
 }
@@ -83,6 +89,18 @@ class Trial : ConfigData {
         if (arenaRadius < 1) {
             arenaRadius = 1
         }
+    }
+}
+
+@Config(name = "affix")
+class TrialAffix : ConfigData {
+    var maxAffixesInKey = 3
+    var enableMobStrength = true
+    var enableMobSpeed = true
+    var enableMobResistance = true
+
+    override fun validatePostLoad() {
+        maxAffixesInKey = max(0, maxAffixesInKey)
     }
 }
 
