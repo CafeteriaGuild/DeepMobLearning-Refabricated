@@ -11,6 +11,7 @@ package dev.nathanpb.dml.trial.affix
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
+import dev.nathanpb.dml.trial.TrialState
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.utils.randomAround
 import net.minecraft.entity.EntityType
@@ -22,7 +23,7 @@ class ThunderstormAffix : TrialAffix(identifier("thunderstorm")), TrialAffix.Tic
     override fun isEnabled() = config.affix.enableThunderstorm
 
     override fun tick(trial: Trial) {
-        if (Random.nextFloat() < config.affix.thunderstormBoltChance) {
+        if (trial.state == TrialState.RUNNING && Random.nextFloat() < config.affix.thunderstormBoltChance) {
             val pos = trial.pos.randomAround(config.trial.arenaRadius, 0, config.trial.arenaRadius)
 
             // code copied from ServerWorld
