@@ -92,11 +92,13 @@
   "text.autoconfig.dml-refabricated.option.affix.enableMobResistance": "Enable Road of Resistance",
   "text.autoconfig.dml-refabricated.option.affix.enableThunderstorm": "Enable Thunderstorm",
   "text.autoconfig.dml-refabricated.option.affix.thunderstormBoltChance": "Thunderstorm Lightning Chance",
+  "text.autoconfig.dml-refabricated.option.affix.partyPoisonChance": "Party Poison Chance",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
   "rei.dml-refabricated.category.trial": "Trial",
   "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator",
   "affix.dml-refabricated.mob_strength.name": "Mob Strength",
   "affix.dml-refabricated.mob_speed.name": "Mob Speed",
   "affix.dml-refabricated.mob_resistance.name": "Road of Resistance",
-  "affix.dml-refabricated.thunderstorm.name": "Thunderstorm"
+  "affix.dml-refabricated.thunderstorm.name": "Thunderstorm",
+  "affix.dml-refabricated.party_poison.name": "Party Poison"
 }

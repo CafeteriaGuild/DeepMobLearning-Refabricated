@@ -9,10 +9,7 @@
 package dev.nathanpb.dml.trial.affix.core
 
 import dev.nathanpb.dml.event.TrialWaveSpawnCallback
-import dev.nathanpb.dml.trial.affix.MobResistanceTrialAffix
-import dev.nathanpb.dml.trial.affix.MobSpeedTrialAffix
-import dev.nathanpb.dml.trial.affix.MobStrengthTrialAffix
-import dev.nathanpb.dml.trial.affix.ThunderstormAffix
+import dev.nathanpb.dml.trial.affix.*
 import dev.nathanpb.dml.utils.randomOrNull
 import net.minecraft.util.Identifier
 import org.jetbrains.annotations.ApiStatus
@@ -28,6 +25,7 @@ class TrialAffixRegistry private constructor() {
             INSTANCE.register(MobSpeedTrialAffix())
             INSTANCE.register(MobResistanceTrialAffix())
             INSTANCE.register(ThunderstormAffix())
+            INSTANCE.register(PartyPoisonAffix())
         }
     }
 
