@@ -24,6 +24,9 @@ Currently, the mod is not released in any distribution websites (like Curseforge
 
 About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, fell free to make a port, it will be welcome.
 
+## Contact
+If you want to **report bugs**, give ideas, **feedbacks** or discuss the mod at all, feel free to open an Issue or join our [Discord Guild](https://discord.com/invite/G4PjhEf) and go to the Deep Mob Learning: Refabricated section. Please note that this guild is a shared place where me and some friends are making mods, take a look at their mods too!
+
 ## License
 
 Most of the textures and models are All Rights Reserved, owned by [IterationFunk](https://github.com/xt9/).
