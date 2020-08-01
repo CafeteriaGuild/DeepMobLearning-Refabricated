@@ -10,5 +10,6 @@ package dev.nathanpb.dml.trial
 
 enum class TrialEndReason {
     SUCCESS,
-    NO_ONE_IS_AROUND
+    NO_ONE_IS_AROUND,
+    TIMED_OUT
 }

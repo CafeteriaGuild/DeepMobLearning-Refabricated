@@ -71,6 +71,9 @@ class Trial (
         val BAR_TEXT_FAIL by lazy {
             TranslatableText("bar.${MOD_ID}.trial_fail")
         }
+        val BAR_TEXT_FAIL_TIMEOUT by lazy {
+            TranslatableText("bar.${MOD_ID}.trial_fail.timeout")
+        }
     }
 
     var systemGlitch: SystemGlitchEntity? = null
@@ -116,6 +119,11 @@ class Trial (
                     if (systemGlitch?.isAlive != true) {
                         end(TrialEndReason.SUCCESS)
                     }
+
+                    val maxTime = config.trial.maxTime
+                    if (maxTime in 1 until tickCount) {
+                        end(TrialEndReason.TIMED_OUT)
+                    }
                 }
                 TrialState.WAITING_POST_FINISHED -> {
                     if (tickCount >= endsAt) {
@@ -153,10 +161,12 @@ class Trial (
                 TrialEndReason.NO_ONE_IS_AROUND -> {
                     bar.color = BossBar.Color.RED
                     bar.name = BAR_TEXT_FAIL
-
-                    players.forEach {
-                        it.playSound(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1F, 1F)
-                    }
+                    playFailSounds()
+                }
+                TrialEndReason.TIMED_OUT -> {
+                    bar.color = BossBar.Color.RED
+                    bar.name = BAR_TEXT_FAIL_TIMEOUT
+                    playFailSounds()
                 }
             }
 
@@ -167,6 +177,12 @@ class Trial (
             systemGlitch?.remove()
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
+    }
+
+    private fun playFailSounds() {
+        players.forEach {
+            it.playSound(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1F, 1F)
+        }
     }
 
     private fun spawnSystemGlitch() {

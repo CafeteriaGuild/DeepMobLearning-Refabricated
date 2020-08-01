@@ -66,6 +66,7 @@ class Trial : ConfigData {
     var maxMobsInArena = 8
     var postEndTimeout = 60
     var arenaRadius = 12
+    var maxTime = 24000
 
     var allowStartInWrongTerrain = false
     var allowPlayersLeavingArena = false
@@ -78,6 +79,7 @@ class Trial : ConfigData {
     var trialKeyReturnIfSucceed = true
 
     override fun validatePostLoad() {
+        maxTime = max(0, maxTime)
         if (maxMobsInArena < 0) {
             maxMobsInArena = 0
         }
