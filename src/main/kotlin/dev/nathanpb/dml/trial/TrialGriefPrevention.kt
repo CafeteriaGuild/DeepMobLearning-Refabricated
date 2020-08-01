@@ -101,7 +101,9 @@ class TrialGriefPrevention :
             val isInProtectedArea = isBlockProtected(entity.world, entity.pos.toBlockPos())
             val toProtectedArea = isBlockProtected(entity.world, pos.toBlockPos())
 
-            if (isInProtectedArea && toProtectedArea) {
+            // The first real use of xor in my entire life
+            // 22/07/2020, 5:19 AM - Passo Fundo, Brazil
+            if (isInProtectedArea xor toProtectedArea) {
                 return ActionResult.FAIL
             }
         }
