@@ -49,15 +49,16 @@ data class TrialKeyData (
             else -> throw InvalidTrialKeyBase()
         }
 
-        fun fromDataModelData(data: DataModelData, createAffixes: Boolean = false) = data.category?.let {
-            val affixes = if (createAffixes) {
-                (0..Random.nextInt(config.affix.maxAffixesInKey.inc()))
+        fun fromDataModelData(data: DataModelData) = data.category?.let {
+            TrialKeyData(it, data.dataAmount, emptyList())
+        }
+
+        fun createRandomAffixes(): List<TrialAffix> {
+            return (0..Random.nextInt(config.affix.maxAffixesInKey.inc()))
                 .filter { it > 0 }
                 .mapNotNull {
                     TrialAffixRegistry.INSTANCE.pickRandomEnabled()
                 }.distinctBy { it.id.toString() }
-            } else emptyList()
-            TrialKeyData(it, data.dataAmount, affixes)
         }
     }
 
