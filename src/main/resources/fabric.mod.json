@@ -39,8 +39,8 @@
     "mixins.dml-refabricated.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.9",
-    "fabric": "*",
+    "fabricloader": ">=0.9.0",
+    "fabric": ">=0.16.2",
     "fabric-language-kotlin": "*",
     "minecraft": "1.16.1"
   },
