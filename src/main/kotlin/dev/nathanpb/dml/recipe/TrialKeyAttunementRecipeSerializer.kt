@@ -20,6 +20,7 @@ import net.minecraft.util.registry.Registry
 class TrialKeyAttunementRecipeSerializer : RecipeSerializer<TrialKeyAttuneRecipe> {
 
     override fun write(buf: PacketByteBuf, recipe: TrialKeyAttuneRecipe) {
+        buf.writeInt(recipe.previewInputs.size)
         recipe.previewInputs.forEach {
             it.write(buf)
         }
@@ -47,7 +48,7 @@ class TrialKeyAttunementRecipeSerializer : RecipeSerializer<TrialKeyAttuneRecipe
 
     override fun read(id: Identifier, buf: PacketByteBuf): TrialKeyAttuneRecipe {
         val input = DefaultedList.ofSize(3, Ingredient.EMPTY)
-        0.until(input.size).forEach { index ->
+        0.until(buf.readInt()).forEach { index ->
             input[index] = Ingredient.fromPacket(buf)
         }
 
