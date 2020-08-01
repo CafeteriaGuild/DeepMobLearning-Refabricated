@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "dml-refabricated",
-  "version": "0.1.1-beta1",
+  "version": "0.1.2-beta",
   "name": "Deep Mob Learning: Refabricated",
   "description": "Server friendly mob loot acquisition",
   "authors": [
