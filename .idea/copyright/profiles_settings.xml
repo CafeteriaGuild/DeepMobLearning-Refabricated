@@ -1,11 +1,11 @@
 <component name="CopyrightManager">
-  <settings default="GPL-v3">
+  <settings default="LGPL-v3">
     <module2copyright>
-      <element module="All" copyright="GPL-v3" />
+      <element module="All" copyright="LGPL-v3" />
     </module2copyright>
     <LanguageOptions name="JAVA">
       <option name="fileTypeOverride" value="3" />
-      <option name="fileLocation" value="3" />
+      <option name="fileLocation" value="2" />
     </LanguageOptions>
     <LanguageOptions name="Kotlin">
       <option name="fileTypeOverride" value="3" />
