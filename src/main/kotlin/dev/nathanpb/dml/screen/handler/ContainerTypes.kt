@@ -27,7 +27,7 @@ val CONTAINER_DEEP_LEARNER = identifier("deep_learner")
 
 fun registerContainerTypes() {
     ContainerProviderRegistry.INSTANCE.registerFactory(CONTAINER_DEEP_LEARNER) { i, _, player, buf ->
-        val hand = Hand.valueOf(buf.readString())
+        val hand = Hand.valueOf(buf.readString(32767))
         ContainerDeepLearner(i, player.inventory, hand)
     }
 }
