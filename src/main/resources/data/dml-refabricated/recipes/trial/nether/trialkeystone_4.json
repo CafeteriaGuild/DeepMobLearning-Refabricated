@@ -6,6 +6,10 @@
     {
       "item": "dml-refabricated:pristine_matter_nether",
       "count": 16
+    },
+    {
+      "item": "dml-refabricated:physically_condensed_matrix_fragment",
+      "count": 3
     }
   ]
 }

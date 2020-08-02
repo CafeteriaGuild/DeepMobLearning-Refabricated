@@ -26,6 +26,8 @@
   "item.dml-refabricated.pristine_matter_illager": "Illager Pristine Matter",
   "item.dml-refabricated.pristine_matter_ocean": "Poseidon Pristine Matter",
   "item.dml-refabricated.emeritus_hat": "Emeritus Hat",
+  "item.dml-refabricated.physically_condensed_matrix_fragment": "Physically-Condensed Matrix Fragment",
+  "item.dml-refabricated.glitch_ingot": "Glitch Ingot",
   "block.dml-refabricated.cafeteria": "Cafeteria",
   "tooltip.dml-refabricated.data_model.bound_to": "§9Bound To:§4 %s",
   "tooltip.dml-refabricated.data_model.data_amount": "§9Data Amount:§r %d (%d to next tier)",

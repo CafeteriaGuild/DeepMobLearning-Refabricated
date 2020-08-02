@@ -66,6 +66,9 @@ val ITEM_SOOT_MACHINE_CASE = Item(settings())
 
 val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 
+val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings())
+val ITEM_GLITCH_INGOT = Item(settings())
+
 
 fun registerItems() {
     mapOf(
@@ -94,7 +97,9 @@ fun registerItems() {
         ITEM_PRISTINE_MATTER_GHOST to "pristine_matter_ghost",
         ITEM_PRISTINE_MATTER_ILLAGER to "pristine_matter_illager",
         ITEM_PRISTINE_MATTER_OCEAN to "pristine_matter_ocean",
-        ITEM_EMERITUS_HAT to "emeritus_hat"
+        ITEM_EMERITUS_HAT to "emeritus_hat",
+        ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to "physically_condensed_matrix_fragment",
+        ITEM_GLITCH_INGOT to "glitch_ingot"
     ).forEach { (item, id) ->
         Registry.register(Registry.ITEM, identifier(id), item)
     }

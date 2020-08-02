@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FNF",
+    "FFF"
+  ],
+  "key": {
+    "F": {
+      "item": "dml-refabricated:physically_condensed_matrix_fragment"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:glitch_ingot",
+    "count": 1
+  }
+}
