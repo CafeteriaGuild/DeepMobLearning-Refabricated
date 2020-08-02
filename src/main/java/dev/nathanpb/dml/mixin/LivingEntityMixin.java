@@ -19,10 +19,12 @@ package dev.nathanpb.dml.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,8 +33,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin {
+public abstract class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
     @Shadow public abstract void heal(float amount);
+    boolean dmlRefIsInREIScreen = false;
 
     @Inject(at = @At("HEAD"), method = "onDeath")
     public void onDeath(DamageSource source, CallbackInfo ci) {
@@ -49,5 +52,22 @@ public abstract class LivingEntityMixin {
                 cir.cancel();
             }
         }
+    }
+
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"), method = "onEquipStack", cancellable = true)
+    public void onEquip(ItemStack stack, CallbackInfo ci) {
+        if (isDmlRefIsInReiScreen()) {
+            ci.cancel();
+        }
+    }
+
+    @Override
+    public boolean isDmlRefIsInReiScreen() {
+        return dmlRefIsInREIScreen;
+    }
+
+    @Override
+    public void setDmlRefInReiScreen(boolean flag) {
+        dmlRefIsInREIScreen = flag;
     }
 }

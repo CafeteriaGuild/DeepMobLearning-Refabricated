@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.compat.rei.widgets
 
+import dev.nathanpb.dml.utils.isInReiScreen
 import net.minecraft.client.gui.Drawable
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
@@ -43,6 +44,7 @@ class EntityDisplayWidget(
     override fun render(matrices: MatrixStack?, mX: Int, mY: Int, delta: Float) {
         tickCount++
         val entity = entities[(tickCount / 60) % entities.size]
+        entity.isInReiScreen = true
         val initialStackMainHand = stackInMainHand?.let {
             entity.getStackInHand(Hand.MAIN_HAND).also {
                 entity.setStackInHand(Hand.MAIN_HAND, stackInMainHand)
@@ -55,6 +57,7 @@ class EntityDisplayWidget(
         if (stackInMainHand != null) {
             entity.setStackInHand(Hand.MAIN_HAND, initialStackMainHand)
         }
+        entity.isInReiScreen = false
     }
 
 }
