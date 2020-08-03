@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "dml-refabricated:block/matter_condenser" },
+    "facing=east":  { "model": "dml-refabricated:block/matter_condenser", "y":  90},
+    "facing=south": { "model": "dml-refabricated:block/matter_condenser", "y": 180 },
+    "facing=west":  { "model": "dml-refabricated:block/matter_condenser", "y": 270 }
+  }
+}
