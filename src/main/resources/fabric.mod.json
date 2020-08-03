@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "dml-refabricated",
-  "version": "0.1.3-beta1",
+  "version": "0.1.3-beta2",
   "name": "Deep Mob Learning: Refabricated",
   "description": "Server friendly mob loot acquisition",
   "authors": [
@@ -12,7 +12,7 @@
     "sources": "https://github.com/NathanPB/DeepMobLearning-Refabricated.git",
     "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues/"
   },
-  "license": "GPL-v3",
+  "license": "LGPL-v3",
   "icon": "assets/dml-refabricated/icon.png",
   "environment": "*",
   "entrypoints": {
