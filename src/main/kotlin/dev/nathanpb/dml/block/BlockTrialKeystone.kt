@@ -88,11 +88,7 @@ class BlockTrialKeystone : Block(
         return super.onUse(state, world, pos, player, hand, hit)
     }
 
-    override fun getVisualShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
-        return getCollisionShape(state, world, pos, context)
-    }
-
-    override fun getCollisionShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
+    override fun getOutlineShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
         return VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
     }
 
