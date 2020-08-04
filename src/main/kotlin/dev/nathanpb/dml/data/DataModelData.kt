@@ -21,24 +21,20 @@ package dev.nathanpb.dml.data
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.NotDataModelException
+import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.ktdatatag.data.MutableCompoundData
+import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
 
-class DataModelData(val stack: ItemStack, val category: EntityCategory?) {
+class DataModelData(val stack: ItemStack, val category: EntityCategory?) : MutableCompoundData(stack.orCreateTag) {
 
     companion object {
         const val DATA_AMOUNT_TAG_KEY = "${MOD_ID}.datamodel.dataAmount"
     }
 
-    init {
-        if (stack.item !is ItemDataModel) {
-            throw NotDataModelException()
-        }
-    }
-
-    var dataAmount: Int
-        get() = stack.orCreateTag.getInt(DATA_AMOUNT_TAG_KEY)
-        set(value) = stack.orCreateTag.putInt(DATA_AMOUNT_TAG_KEY, value)
+    var dataAmount by persistent(0, Serializers.INT, DATA_AMOUNT_TAG_KEY)
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
 

@@ -23,6 +23,7 @@ import dev.nathanpb.dml.accessor.ICraftingResultSlotGetPlayer;
 import dev.nathanpb.dml.data.TrialKeyData;
 import dev.nathanpb.dml.data.TrialKeyDataKt;
 import dev.nathanpb.dml.item.ItemTrialKey;
+import dev.nathanpb.dml.trial.affix.UtilsKt;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.CraftingResultSlot;
@@ -42,14 +43,10 @@ public class SlotMixin {
         if (dis instanceof CraftingResultSlot && stack != null && stack.getItem() instanceof ItemTrialKey) {
             PlayerEntity player = ((ICraftingResultSlotGetPlayer)dis).dmlRefGetPlayer();
             if (!player.world.isClient) {
-                TrialKeyData oldData = TrialKeyData.Companion.fromStack(stack);
+                TrialKeyData oldData = TrialKeyDataKt.getTrialKeyData(stack);
                 if (oldData != null && oldData.getAffixes().isEmpty()) {
-                    TrialKeyData newData = new TrialKeyData(
-                            oldData.getCategory(),
-                            oldData.getDataAmount(),
-                            TrialKeyData.Companion.createRandomAffixes()
-                    );
-                    TrialKeyDataKt.setTrialKeyData(stack, newData);
+                    TrialKeyData newData = new TrialKeyData(stack);
+                    newData.setAffixes(UtilsKt.pickRandomAffixes());
                 }
             }
         }

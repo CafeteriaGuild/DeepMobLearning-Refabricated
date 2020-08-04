@@ -19,78 +19,45 @@
 
 package dev.nathanpb.dml.data
 
-import dev.nathanpb.dml.InvalidTrialKeyBase
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.item.ItemTrialKey
-import dev.nathanpb.dml.trial.affix.core.TrialAffix
-import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
+import dev.nathanpb.dml.data.serializers.TrialAffixListSerializer
+import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.ktdatatag.data.MutableCompoundData
+import dev.nathanpb.ktdatatag.serializer.EnumSerializer
+import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
-import net.minecraft.util.Identifier
-import kotlin.random.Random
 
-data class TrialKeyData (
-    val category: EntityCategory,
-    val dataAmount: Int = 0,
-    val affixes: List<TrialAffix>
-) {
+class TrialKeyData (tag: CompoundTag) : MutableCompoundData(tag) {
+
+    constructor(stack: ItemStack) : this(stack.getOrCreateSubTag(TAG_KEY))
 
     companion object {
-        const val DATA_TAG_KEY = "${MOD_ID}.trialkey"
-        const val CATEGORY_TAG_KEY = "category"
-        const val DATA_AMOUNT_TAG_KEY = "dataAmount"
-        const val AFFIX_TAG_KEY = "affixes"
-
-        fun fromStack(stack: ItemStack) = when (stack.item) {
-            is ItemTrialKey -> stack.getSubTag(DATA_TAG_KEY)?.let {
-                val affixes = it.getList(AFFIX_TAG_KEY, 8).mapNotNull { affixId ->
-                    TrialAffixRegistry.INSTANCE.findById(Identifier(affixId.asString()))
-                }
-                TrialKeyData(
-                    EntityCategory.valueOf(it.getString(CATEGORY_TAG_KEY) ?: throw InvalidTrialKeyBase()),
-                    it.getInt(DATA_AMOUNT_TAG_KEY),
-                    affixes
-                )
-            }
-            is ItemDataModel -> fromDataModelData(stack.dataModel)
-            else -> throw InvalidTrialKeyBase()
-        }
+        const val TAG_KEY = "${MOD_ID}.trialkey"
 
         fun fromDataModelData(data: DataModelData) = data.category?.let {
-            TrialKeyData(it, data.dataAmount, emptyList())
-        }
-
-        fun createRandomAffixes(): List<TrialAffix> {
-            return (0..Random.nextInt(config.affix.maxAffixesInKey.inc()))
-                .filter { it > 0 }
-                .mapNotNull {
-                    TrialAffixRegistry.INSTANCE.pickRandomEnabled()
-                }.distinctBy { it.id.toString() }
+            TrialKeyData(CompoundTag()).apply {
+                category = it
+                dataAmount = data.dataAmount
+             }
         }
     }
+
+    var category by persistent(EntityCategory.END, EnumSerializer(EntityCategory::class.java))
+    var dataAmount by persistent(0, Serializers.INT)
+    var affixes by persistent(emptyList(), TrialAffixListSerializer())
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
-    fun toTag() = CompoundTag().apply {
-        putString(CATEGORY_TAG_KEY, category.name)
-        putInt(DATA_AMOUNT_TAG_KEY, dataAmount)
-        put(AFFIX_TAG_KEY,
-            ListTag().also { list ->
-                list.addAll(affixes.map {
-                    StringTag.of(it.id.toString())
-                })
-            }
-        )
-    }
+
 }
 
 var ItemStack.trialKeyData : TrialKeyData?
-    get() = TrialKeyData.fromStack(this)
+    get() = if (orCreateTag.contains(TrialKeyData.TAG_KEY)) {
+        TrialKeyData(this)
+    } else null
     set(value) = if (value != null) {
-        this.putSubTag(TrialKeyData.DATA_TAG_KEY, value.toTag())
+        this.putSubTag(TrialKeyData.TAG_KEY, value.tag)
     } else {
-        this.removeSubTag(TrialKeyData.DATA_TAG_KEY)
+        this.removeSubTag(TrialKeyData.TAG_KEY)
     }

@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.trial.affix
 
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.DataModelTier
+import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.affix.core.TrialAffix

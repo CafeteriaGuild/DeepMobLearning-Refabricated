@@ -17,7 +17,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.data
+package dev.nathanpb.dml.enums
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config

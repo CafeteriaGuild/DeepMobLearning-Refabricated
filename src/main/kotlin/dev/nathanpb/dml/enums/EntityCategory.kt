@@ -17,9 +17,10 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.data
+package dev.nathanpb.dml.enums
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.*
 import net.minecraft.item.Item

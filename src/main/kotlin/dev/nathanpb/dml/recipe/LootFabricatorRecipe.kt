@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
-import dev.nathanpb.dml.data.EntityCategory
+import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf

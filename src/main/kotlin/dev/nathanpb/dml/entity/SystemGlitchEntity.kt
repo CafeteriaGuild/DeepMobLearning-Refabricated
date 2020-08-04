@@ -20,8 +20,8 @@
 package dev.nathanpb.dml.entity
 
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.DataModelTier
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
+import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomAround

@@ -20,9 +20,9 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.data.DataModelTier
-import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.dataModel
+import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.enums.EntityCategory
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity

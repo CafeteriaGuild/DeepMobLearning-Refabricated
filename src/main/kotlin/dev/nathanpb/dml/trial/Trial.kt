@@ -22,9 +22,9 @@ package dev.nathanpb.dml.trial
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
+import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.event.TrialWaveSpawnCallback
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT

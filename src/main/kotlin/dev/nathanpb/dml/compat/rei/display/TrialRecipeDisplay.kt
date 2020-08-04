@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.compat.rei.display
 
 import dev.nathanpb.dml.data.TrialKeyData
-import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import me.shedaniel.rei.api.EntryStack
@@ -35,8 +34,11 @@ class TrialRecipeDisplay (
 
     private val input = mutableListOf(
         mutableListOf(EntryStack.create(
-            ItemStack(ITEM_TRIAL_KEY).apply {
-                trialKeyData = TrialKeyData(recipe.category, recipe.tier.dataAmount, emptyList())
+            ItemStack(ITEM_TRIAL_KEY).also {
+                TrialKeyData(it).apply {
+                    category = recipe.category
+                    dataAmount = recipe.tier.dataAmount
+                }
             }
         ))
     )
