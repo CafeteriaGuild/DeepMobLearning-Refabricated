@@ -24,6 +24,7 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.TrialState
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
+import dev.nathanpb.dml.utils.getPlayersByUUID
 import dev.nathanpb.dml.utils.toVec3d
 import net.minecraft.entity.projectile.thrown.PotionEntity
 import net.minecraft.item.ItemStack
@@ -53,7 +54,7 @@ class PartyPoisonAffix : TrialAffix(identifier("party_poison")), TrialAffix.Tick
             }
 
             if (Random.nextFloat() < .01F) {
-                trial.players.forEach {
+                trial.world.getPlayersByUUID(trial.players).forEach {
                     it.sendMessage(LiteralText("Hide your eyes, we're gonna shine tonight"), false)
                 }
             }

@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.entity
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.enums.DataModelTier
@@ -36,6 +37,7 @@ import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.random.Random
@@ -60,6 +62,11 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     var tier: DataModelTier? = null
 
     /**
+     * This property is persisted in the Entity's tag. Its main use if to tell if the entity shall despawn on world reloads
+     */
+    var belongsToTrial = false
+
+    /**
      * Find's the trial that this entity belongs to
      *
      * PLEASE do not call this during the trial initialization, this will ruin this entity's instance
@@ -81,6 +88,13 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             return super.getAttributeValue(attribute) * tierMultiplier
         }
         return super.getAttributeValue(attribute)
+    }
+
+    override fun tick() {
+        super.tick()
+        if (tier == null && belongsToTrial) {
+            remove()
+        }
     }
 
     override fun initGoals() {
@@ -138,6 +152,18 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             it.item != ITEM_EMERITUS_HAT && Random.nextFloat() < .0666 // hope this works, i wil not test this
         }.forEach {
             dropStack(it)
+        }
+    }
+
+    override fun writeCustomDataToTag(tag: CompoundTag?) {
+        super.writeCustomDataToTag(tag)
+        tag?.putBoolean("${MOD_ID}.belongsToTrial", belongsToTrial)
+    }
+
+    override fun readCustomDataFromTag(tag: CompoundTag?) {
+        super.readCustomDataFromTag(tag)
+        if (tag != null) {
+            belongsToTrial = tag.getBoolean("${MOD_ID}.belongsToTrial")
         }
     }
 }

@@ -23,9 +23,11 @@ import dev.nathanpb.dml.accessor.ITrialWorldPersistenceAccessor
 import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.world.World
+import java.util.*
 
 fun World.getEntitiesAroundCircle(type: EntityType<*>?, pos: BlockPos, radius: Double) : List<Entity> {
     val squaredRadius = radius * radius
@@ -44,3 +46,7 @@ fun World.getEntitiesAroundCircle(type: EntityType<*>?, pos: BlockPos, radius: D
 
 val World.runningTrials: MutableList<Trial>
     get() = (this as ITrialWorldPersistenceAccessor).runningTrials
+
+fun World.getPlayersByUUID(uuids: HashSet<UUID>): List<PlayerEntity> {
+    return players.filter { it.uuid in uuids }
+}
