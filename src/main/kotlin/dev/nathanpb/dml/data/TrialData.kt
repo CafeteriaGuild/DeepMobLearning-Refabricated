@@ -39,10 +39,10 @@ class TrialData(tag: CompoundTag = CompoundTag()) : MutableCompoundData(tag) {
         endsAt = trial.timeLeft()
     }
 
-    var state by persistent(TrialState.NOT_STARTED, EnumSerializer(TrialState::class.java))
-    var glitchHealth by persistent(0F, Serializers.FLOAT)
-    var affixes by persistent(emptyList(), TrialAffixListSerializer())
-    var playersUuids by persistent(emptyList(), Serializers.UUID_LIST)
-    var recipeId by persistent(identifier(""), Serializers.IDENTIFIER)
-    var endsAt by persistent(0, Serializers.INT)
+    var state by persistentDefaulted(TrialState.NOT_STARTED, EnumSerializer(TrialState::class.java))
+    var glitchHealth by persistentDefaulted(0F, Serializers.FLOAT)
+    var affixes by persistentDefaulted(emptyList(), TrialAffixListSerializer())
+    var playersUuids by persistentDefaulted(emptyList(), Serializers.UUID_LIST)
+    var recipeId by persistentDefaulted(identifier(""), Serializers.IDENTIFIER)
+    var endsAt by persistentDefaulted(0, Serializers.INT)
 }

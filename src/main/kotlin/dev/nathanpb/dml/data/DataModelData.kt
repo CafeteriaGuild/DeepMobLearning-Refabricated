@@ -34,7 +34,7 @@ class DataModelData(val stack: ItemStack, val category: EntityCategory?) : Mutab
         const val DATA_AMOUNT_TAG_KEY = "${MOD_ID}.datamodel.dataAmount"
     }
 
-    var dataAmount by persistent(0, Serializers.INT, DATA_AMOUNT_TAG_KEY)
+    var dataAmount by persistentDefaulted(0, Serializers.INT, DATA_AMOUNT_TAG_KEY)
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
 

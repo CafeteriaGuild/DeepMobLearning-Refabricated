@@ -44,9 +44,9 @@ class TrialKeyData (tag: CompoundTag) : MutableCompoundData(tag) {
         }
     }
 
-    var category by persistent(EntityCategory.END, EnumSerializer(EntityCategory::class.java))
-    var dataAmount by persistent(0, Serializers.INT)
-    var affixes by persistent(emptyList(), TrialAffixListSerializer())
+    var category by persistentDefaulted(EntityCategory.END, EnumSerializer(EntityCategory::class.java))
+    var dataAmount by persistentDefaulted(0, Serializers.INT)
+    var affixes by persistentDefaulted(emptyList(), TrialAffixListSerializer())
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
 
