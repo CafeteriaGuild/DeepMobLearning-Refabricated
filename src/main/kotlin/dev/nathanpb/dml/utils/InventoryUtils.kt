@@ -34,6 +34,8 @@ fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
 fun Inventory.setStacks(stacks: DefaultedList<ItemStack>) {
     clear()
     stacks.forEachIndexed { index, stack ->
-        setStack(index, stack)
+        if (index < size()) {
+            setStack(index, stack)
+        }
     }
 }
