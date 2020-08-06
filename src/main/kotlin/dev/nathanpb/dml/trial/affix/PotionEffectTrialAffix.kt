@@ -43,7 +43,9 @@ abstract class PotionEffectTrialAffix(
         }.forEach { entity ->
             effects.map { effect ->
                 StatusEffectInstance(effect, 20 * 60 * 60) // todo change to the trial max timeout
-            }.forEach(entity::applyStatusEffect)
+            }.forEach {
+                entity.addStatusEffect(it)
+            }
         }
     }
 
