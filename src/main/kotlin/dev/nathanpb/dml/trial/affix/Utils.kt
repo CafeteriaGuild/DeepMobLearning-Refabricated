@@ -17,25 +17,17 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+package dev.nathanpb.dml.trial.affix
 
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
+import dev.nathanpb.dml.config
+import dev.nathanpb.dml.trial.affix.core.TrialAffix
+import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
+import kotlin.random.Random
 
-fun PlayerInventory.hotbar() = (0..8).map { this.getStack(it) }
-
-fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
-    ItemStack.EMPTY,
-    *(0 until size()).map { getStack(it) }.toTypedArray()
-)
-
-fun Inventory.setStacks(stacks: DefaultedList<ItemStack>) {
-    clear()
-    stacks.forEachIndexed { index, stack ->
-        if (index < size()) {
-            setStack(index, stack)
-        }
-    }
+fun pickRandomAffixes(): List<TrialAffix> {
+    return (0..Random.nextInt(config.affix.maxAffixesInKey.inc()))
+        .filter { it > 0 }
+        .mapNotNull {
+            TrialAffixRegistry.INSTANCE.pickRandomEnabled()
+        }.distinctBy { it.id.toString() }
 }

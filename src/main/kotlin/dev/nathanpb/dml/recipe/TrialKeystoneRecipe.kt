@@ -20,9 +20,9 @@
 package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
-import dev.nathanpb.dml.data.DataModelTier
-import dev.nathanpb.dml.data.EntityCategory
 import dev.nathanpb.dml.data.TrialKeyData
+import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.enums.EntityCategory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf

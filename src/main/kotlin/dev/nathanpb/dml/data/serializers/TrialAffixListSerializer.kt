@@ -17,25 +17,21 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+package dev.nathanpb.dml.data.serializers
 
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
+import dev.nathanpb.dml.trial.affix.core.TrialAffix
+import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
+import dev.nathanpb.ktdatatag.serializer.AbstractListTagSerializer
+import net.minecraft.nbt.StringTag
+import net.minecraft.util.Identifier
 
-fun PlayerInventory.hotbar() = (0..8).map { this.getStack(it) }
-
-fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
-    ItemStack.EMPTY,
-    *(0 until size()).map { getStack(it) }.toTypedArray()
+class TrialAffixListSerializer : AbstractListTagSerializer<TrialAffix, StringTag>(
+    StringTag.of("").type,
+    StringTag::class.java,
+    {
+        val id = Identifier(it.asString())
+        TrialAffixRegistry.INSTANCE.findById(id)
+            ?: TrialAffixRegistry.INSTANCE.all.first() // Trying to recover the error, may throw NPE anyway
+    },
+    { StringTag.of(it.id.toString()) }
 )
-
-fun Inventory.setStacks(stacks: DefaultedList<ItemStack>) {
-    clear()
-    stacks.forEachIndexed { index, stack ->
-        if (index < size()) {
-            setStack(index, stack)
-        }
-    }
-}

@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.data.TrialKeyData
+import dev.nathanpb.dml.data.trialKeyData
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -38,7 +38,7 @@ class ItemTrialKey : Item(settings().maxCount(1)) {
     ) {
         super.appendTooltip(stack, world, tooltip, context)
         if (stack != null && tooltip != null) {
-            TrialKeyData.fromStack(stack).also { data ->
+            stack.trialKeyData.also { data ->
                 if (data != null) {
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.bound_to", data.category.displayName))
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.tier", data.tier().text))

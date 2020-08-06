@@ -53,13 +53,15 @@ public class ExplosionPreventMixin {
             Explosion.DestructionType destructionType,
             CallbackInfoReturnable<Explosion> ci
     ) {
-        World world = (World)((Object)this);
-        BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
-        ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
-        if (result == ActionResult.FAIL) {
-            Explosion explosion = new Explosion(world, entity, x, y, z, 0, false, Explosion.DestructionType.NONE);
-            ci.setReturnValue(explosion);
-            ci.cancel();
+        if (power > 0F) {
+            World world = (World)((Object)this);
+            BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
+            ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
+            if (result == ActionResult.FAIL) {
+                Explosion explosion = new Explosion(world, entity, damageSource, behavior, x, y, z, power, createFire, Explosion.DestructionType.NONE);
+                ci.setReturnValue(explosion);
+                ci.cancel();
+            }
         }
     }
 }

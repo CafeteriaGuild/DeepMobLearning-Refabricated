@@ -22,9 +22,10 @@ package dev.nathanpb.dml.trial
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.EntityCategory
+import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
+import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.event.TrialWaveSpawnCallback
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
@@ -38,7 +39,6 @@ import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.mob.HostileEntity
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
@@ -47,28 +47,44 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import java.util.*
 import kotlin.random.Random
 
 class Trial (
     val world: World,
     val pos: BlockPos,
     val recipe: TrialKeystoneRecipe,
-    val players: List<PlayerEntity>,
+    val players: HashSet<UUID>,
     val affixes: List<TrialAffix>
 ) : Tickable {
 
     constructor(
         keystone: BlockEntityTrialKeystone,
         recipe: TrialKeystoneRecipe,
-        players: List<PlayerEntity>,
+        players: List<UUID>,
         affixes: List<TrialAffix>
     ): this(
         keystone.world!!, // TODO why is World nullable? Assert this
         keystone.pos,
         recipe,
-        players,
+        players.toHashSet(),
         affixes
     )
+
+    constructor(keystone: BlockEntityTrialKeystone, recipe: TrialKeystoneRecipe, data: TrialData): this(
+        keystone,
+        recipe,
+        data.playersUuids,
+        data.affixes
+    ) {
+        state = data.state
+        endsAt = data.endsAt
+        if (state == TrialState.RUNNING) {
+            start(true)
+        }
+        systemGlitch?.health = data.glitchHealth
+        systemGlitch?.tier = recipe.tier
+    }
 
     companion object {
         val BAR_TEXT by lazy {
@@ -100,9 +116,6 @@ class Trial (
     private var endsAt = 0
     private val bar = ServerBossBar(BAR_TEXT, BossBar.Color.BLUE, BossBar.Style.NOTCHED_10).also {
         it.isVisible = false
-        players
-            .filterIsInstance<ServerPlayerEntity>()
-            .forEach(it::addPlayer)
     }
 
     override fun tick() {
@@ -113,6 +126,14 @@ class Trial (
                         if (getMonstersInArena().size < config.trial.maxMobsInArena) {
                             spawnWave()
                         }
+                    }
+
+                    // Resyncs which players will have the bossbar every second
+                    if (tickCount % 20 == 0) {
+                        bar.clearPlayers()
+                        world.getPlayersByUUID(players)
+                            .filterIsInstance<ServerPlayerEntity>()
+                            .forEach(bar::addPlayer)
                     }
 
                     systemGlitch?.let { systemGlitch ->
@@ -151,8 +172,8 @@ class Trial (
         }
     }
 
-    fun start() {
-        if (state == TrialState.NOT_STARTED) {
+    fun start(forceStart: Boolean = false) {
+        if (forceStart || state == TrialState.NOT_STARTED) {
             state = TrialState.RUNNING
             spawnSystemGlitch()
             world.runningTrials += this
@@ -191,7 +212,7 @@ class Trial (
     }
 
     private fun playFailSounds() {
-        players.forEach {
+        world.getPlayersByUUID(players).forEach {
             it.playSound(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1F, 1F)
         }
     }
@@ -205,6 +226,7 @@ class Trial (
             if (recipe.category == EntityCategory.GHOST && recipe.tier.isMaxTier() && Random.nextFloat() < .0666 ) {
                 it.equipStack(EquipmentSlot.HEAD, ItemStack(ITEM_EMERITUS_HAT))
             }
+            it.belongsToTrial = true
         }
     }
 
@@ -238,5 +260,9 @@ class Trial (
     fun getMonstersInArena(): List<HostileEntity> {
         return world.getEntitiesAroundCircle(null, pos, config.trial.arenaRadius.squared().toDouble())
             .filterIsInstance<HostileEntity>()
+    }
+
+    fun timeLeft(): Int {
+        return endsAt - tickCount
     }
 }

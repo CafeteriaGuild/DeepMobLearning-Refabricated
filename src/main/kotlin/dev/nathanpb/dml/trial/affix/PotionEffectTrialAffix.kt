@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.trial.affix
 
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.DataModelTier
+import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
@@ -43,7 +43,9 @@ abstract class PotionEffectTrialAffix(
         }.forEach { entity ->
             effects.map { effect ->
                 StatusEffectInstance(effect, 20 * 60 * 60) // todo change to the trial max timeout
-            }.forEach(entity::applyStatusEffect)
+            }.forEach {
+                entity.addStatusEffect(it)
+            }
         }
     }
 

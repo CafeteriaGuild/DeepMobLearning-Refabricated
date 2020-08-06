@@ -17,25 +17,18 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+package dev.nathanpb.dml.data.serializers
 
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
+import dev.nathanpb.dml.data.TrialData
+import dev.nathanpb.ktdatatag.serializer.DataSerializer
+import net.minecraft.nbt.CompoundTag
 
-fun PlayerInventory.hotbar() = (0..8).map { this.getStack(it) }
+class TrialDataSerializer : DataSerializer<TrialData> {
+    override fun read(tag: CompoundTag, key: String): TrialData {
+        return TrialData(tag.getCompound(key))
+    }
 
-fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
-    ItemStack.EMPTY,
-    *(0 until size()).map { getStack(it) }.toTypedArray()
-)
-
-fun Inventory.setStacks(stacks: DefaultedList<ItemStack>) {
-    clear()
-    stacks.forEachIndexed { index, stack ->
-        if (index < size()) {
-            setStack(index, stack)
-        }
+    override fun write(tag: CompoundTag, key: String, data: TrialData) {
+        tag.put(key, data.tag)
     }
 }
