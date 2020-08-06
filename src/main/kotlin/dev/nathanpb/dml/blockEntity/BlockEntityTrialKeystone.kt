@@ -30,10 +30,7 @@ import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
-import dev.nathanpb.dml.utils.getEntitiesAroundCircle
-import dev.nathanpb.dml.utils.getPlayersByUUID
-import dev.nathanpb.dml.utils.squared
-import dev.nathanpb.dml.utils.toVec3d
+import dev.nathanpb.dml.utils.*
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
@@ -42,11 +39,13 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.util.Tickable
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
@@ -304,6 +303,7 @@ class BlockEntityTrialKeystone :
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         return super.toTag(tag)?.also {
             if (tag != null) {
+                Inventories.toTag(tag, internalInventory.items())
                 currentTrial?.also { trial ->
                     if (trial.state == TrialState.RUNNING) {
                         TrialDataSerializer().write(tag, "trial", TrialData(trial))
@@ -316,6 +316,9 @@ class BlockEntityTrialKeystone :
     override fun fromTag(state: BlockState?, tag: CompoundTag?) {
         super.fromTag(state, tag)
         if (tag != null && currentTrial == null) {
+            val stacks = DefaultedList.ofSize(internalInventory.size(), ItemStack.EMPTY)
+            Inventories.fromTag(tag, stacks)
+            internalInventory.setStacks(stacks)
             if (tag.contains("trial")) {
                 trialToLoad = TrialDataSerializer().read(tag, "trial")
             }
