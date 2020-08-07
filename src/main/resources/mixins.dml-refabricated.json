@@ -6,6 +6,7 @@
     "CraftingResultSlotMixin",
     "EndermanEntityMixin",
     "ExplosionPreventMixin",
+    "IArmorItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",

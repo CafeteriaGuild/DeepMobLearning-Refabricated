@@ -19,17 +19,22 @@
 
 package dev.nathanpb.dml.item
 
+import com.google.common.collect.ImmutableMultimap
+import com.google.common.collect.Multimap
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.armor.GlitchArmorMaterial
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.mixin.IArmorItemMixin
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
@@ -69,9 +74,29 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         super.appendTooltip(stack, world, tooltip, context)
     }
 
-    override fun postProcessTag(tag: CompoundTag?): Boolean {
-        tag?.putBoolean("Unbreakable", true)
-        return super.postProcessTag(tag)
+    fun getAttributeModifiers(stack: ItemStack, slot: EquipmentSlot?): Multimap<EntityAttribute, EntityAttributeModifier> {
+        return super.getAttributeModifiers(slot).let { multimap ->
+            val builder = ImmutableMultimap.builder<EntityAttribute, EntityAttributeModifier>()
+            builder.putAll(multimap)
+
+            if (slot != null && slot == this.slot) {
+                (material as? GlitchArmorMaterial)?.let { material ->
+
+                    val data = ModularArmorData(stack)
+                    val uuid = IArmorItemMixin.dmlRefGetModifierUUIDs()[slot.entitySlotId]
+
+                    val protection = material.getProtectionAmount(slot, data.tier()).toDouble()
+                    val toughness = material.getToughness(data.tier()).toDouble()
+                    val knockback = material.getKnockbackResistance(data.tier()).toDouble()
+
+                    builder.put(EntityAttributes.GENERIC_ARMOR, EntityAttributeModifier(uuid, "Armor modifier", protection, EntityAttributeModifier.Operation.ADDITION))
+                    builder.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, EntityAttributeModifier(uuid, "Armor toughness", toughness, EntityAttributeModifier.Operation.ADDITION))
+                    builder.put(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, EntityAttributeModifier(uuid, "Armor knockback resistance", knockback, EntityAttributeModifier.Operation.ADDITION))
+                }
+            }
+
+            builder.build()
+        }
     }
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {

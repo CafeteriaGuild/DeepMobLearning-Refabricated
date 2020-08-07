@@ -21,11 +21,13 @@ package dev.nathanpb.dml.armor
 
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
+import dev.nathanpb.dml.utils.lerp
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorMaterial
 import net.minecraft.recipe.Ingredient
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
+import kotlin.math.floor
 
 class GlitchArmorMaterial : ArmorMaterial {
 
@@ -50,15 +52,23 @@ class GlitchArmorMaterial : ArmorMaterial {
     override fun getToughness() = 0F
 
     fun getKnockbackResistance(tier: DataModelTier): Float {
-        return 0F
+        return lerp(tier.ordinal.inc() / DataModelTier.values().size.toDouble(), 1.0, 3.5).toFloat() / 10
     }
 
     fun getProtectionAmount(slot: EquipmentSlot, tier: DataModelTier): Int {
-        return 0
+        val multiplier = when (slot) {
+            EquipmentSlot.HEAD -> 0.9
+            EquipmentSlot.CHEST -> 1.8
+            EquipmentSlot.LEGS -> 1.4
+            EquipmentSlot.FEET -> 0.8
+            else -> 0.0
+        }
+        val result = lerp(tier.ordinal / DataModelTier.values().size.toDouble(), 5.0, 8.0)
+        return floor(result * multiplier).toInt()
     }
 
     fun getToughness(tier: DataModelTier): Float {
-        return 0F
+        return tier.ordinal + 2F
     }
 
 }

@@ -17,15 +17,24 @@ package dev.nathanpb.dml.mixin;/*
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.google.common.collect.Multimap;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
+
+    @Shadow @Final @Deprecated private Item item;
 
     @Inject(at = @At("HEAD"), method = "isDamageable", cancellable = true)
     void isDamageable(CallbackInfoReturnable<Boolean> cir) {
@@ -36,4 +45,12 @@ public class ItemStackMixin {
         }
     }
 
+    @Inject(at = @At("HEAD"), method = "getAttributeModifiers", cancellable = true)
+    void getAttributeModifiers(EquipmentSlot equipmentSlot, CallbackInfoReturnable<Multimap<EntityAttribute, EntityAttributeModifier>> cir) {
+        ItemStack dis = (ItemStack)(Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(((ItemModularGlitchArmor)dis.getItem()).getAttributeModifiers(dis, equipmentSlot));
+            cir.cancel();
+        }
+    }
 }
