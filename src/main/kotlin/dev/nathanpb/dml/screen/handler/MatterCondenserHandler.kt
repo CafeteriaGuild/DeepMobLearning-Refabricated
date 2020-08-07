@@ -64,13 +64,13 @@ class MatterCondenserHandler(
         slots.add(matterSlots[4], 4, 3)
         slots.add(matterSlots[5], 2, 4)
 
-        root.add(slots, 2, 0)
-        root.add(this.createPlayerInventoryPanel(), 0, 5)
+        root.add(slots, 2, 1)
+        root.add(this.createPlayerInventoryPanel(), 0, 6)
 
         val progressBar1 = WBar(null, null, 0, 1, WBar.Direction.UP)
         val progressBar2 = WBar(null, null, 0, 1, WBar.Direction.UP)
-        root.add(progressBar1, 0, 1, 1, 3)
-        root.add(progressBar2, 8, 1, 1, 3)
+        root.add(progressBar1, 0, 1, 1, 5)
+        root.add(progressBar2, 8, 1, 1, 5)
 
         root.validate(this)
 
