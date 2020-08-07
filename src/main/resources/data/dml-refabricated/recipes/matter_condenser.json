@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GMG",
+    "FCF",
+    "GSG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "M": {
+      "tag": "dml-refabricated:pristine_matter"
+    },
+    "C": {
+      "item": "dml-refabricated:machine_casing"
+    },
+    "F": {
+      "item": "dml-refabricated:physically_condensed_matrix_fragment"
+    },
+    "S": {
+      "item": "minecraft:netherite_scrap"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:matter_condenser",
+    "count": 1
+  }
+}
