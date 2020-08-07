@@ -19,15 +19,10 @@
 
 package dev.nathanpb.dml.screen
 
-import dev.nathanpb.dml.screen.handler.HANDLER_LOOT_FABRICATOR
-import dev.nathanpb.dml.screen.handler.HANDLER_MATTER_CONDENSER
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
+import dev.nathanpb.dml.screen.handler.MatterCondenserHandler
+import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.Text
 
-fun registerScreens() {
-    ScreenRegistry.register(HANDLER_LOOT_FABRICATOR) {
-        lootFabricatorHandler, playerInventory, text -> LootFabricatorScreen(lootFabricatorHandler, playerInventory.player, text)
-    }
-    ScreenRegistry.register(HANDLER_MATTER_CONDENSER) {
-        handler, playerInventory, text -> MatterCondenserScreen(handler, playerInventory.player, text)
-    }
-}
+class MatterCondenserScreen(gui: MatterCondenserHandler, player: PlayerEntity, title: Text) : CottonInventoryScreen<MatterCondenserHandler>(gui, player, title)
+

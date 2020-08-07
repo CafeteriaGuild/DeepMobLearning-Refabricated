@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
+import dev.nathanpb.dml.block.BLOCK_MATTER_CONDENSER
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
@@ -31,6 +32,7 @@ import kotlin.reflect.full.primaryConstructor
 
 lateinit var BLOCKENTITY_TRIAL_KEYSTONE: BlockEntityType<BlockEntityTrialKeystone>
 lateinit var BLOCKENTITY_LOOT_FABRICATOR: BlockEntityType<BlockEntityLootFabricator>
+lateinit var BLOCKENTITY_MATTER_CONDENSER: BlockEntityType<BlockEntityMatterCondenser>
 
 private fun <E: BlockEntity>mkSupplier(clazz: KClass<E>) = Supplier {
     clazz.primaryConstructor!!.call()
@@ -45,4 +47,5 @@ private fun <E: BlockEntity, B: Block>register(block: B, entityClass: KClass<E>)
 fun registerBlockEntityTypes() {
     BLOCKENTITY_TRIAL_KEYSTONE = register(BLOCK_TRIAL_KEYSTONE, BlockEntityTrialKeystone::class)
     BLOCKENTITY_LOOT_FABRICATOR = register(BLOCK_LOOT_FABRICATOR, BlockEntityLootFabricator::class)
+    BLOCKENTITY_MATTER_CONDENSER = register(BLOCK_MATTER_CONDENSER, BlockEntityMatterCondenser::class)
 }

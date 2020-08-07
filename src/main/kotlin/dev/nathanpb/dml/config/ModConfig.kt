@@ -63,11 +63,21 @@ class ModConfig : ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     var affix = TrialAffix()
 
+    @ConfigEntry.Category("matter_condenser")
+    @ConfigEntry.Gui.TransitiveObject
+    var matterCondenser = MatterCondenser()
+
+    @ConfigEntry.Category("glitch_armor")
+    @ConfigEntry.Gui.TransitiveObject
+    var glitchArmor = GlitchArmor()
+
     override fun validatePostLoad() {
         trial.validatePostLoad()
         lootFabricator.validatePostLoad()
         dataModel.validatePostLoad()
         affix.validatePostLoad()
+        matterCondenser.validatePostLoad()
+        glitchArmor.validatePostLoad()
     }
 
 }
@@ -181,4 +191,28 @@ class SystemGlitch : ConfigData {
 @Config(name = "data_collection")
 class DataCollection : ConfigData {
     var baseDataGainPerKill = 1
+}
+
+@Config(name = "matter_condenser")
+class MatterCondenser : ConfigData {
+    var processTime = 40
+
+    override fun validatePostLoad() {
+        processTime = max(1, processTime)
+    }
+}
+
+@Config(name = "glitch_armor")
+class GlitchArmor : ConfigData {
+    var dataAmountToBasic = 32
+    var dataAmountToAdvanced = 96
+    var dataAmountToSuperior = 192
+    var dataAmountToSelfAware = 384
+
+    override fun validatePostLoad() {
+        dataAmountToBasic = max(0, dataAmountToBasic)
+        dataAmountToAdvanced = max(dataAmountToBasic, dataAmountToAdvanced)
+        dataAmountToSuperior = max(dataAmountToAdvanced, dataAmountToSuperior)
+        dataAmountToSelfAware = max(dataAmountToSuperior, dataAmountToSelfAware)
+    }
 }

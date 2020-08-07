@@ -19,27 +19,29 @@
 
 package dev.nathanpb.dml.screen.handler
 
-import dev.nathanpb.dml.identifier
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
-import net.fabricmc.fabric.impl.screenhandler.ExtendedScreenHandlerType
+import dev.nathanpb.dml.block.BLOCK_MATTER_CONDENSER
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.util.Identifier
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.TranslatableText
+import net.minecraft.util.math.BlockPos
 
-val HANDLER_LOOT_FABRICATOR = register(identifier("loot_fabricator"), ::LootFabricatorHandler)
-val HANDLER_MATTER_CONDENSER = register(identifier("matter_condenser"), ::MatterCondenserHandler)
+class MatterCondenserScreenHandlerFactory (
+    private val pos: BlockPos,
+    private val handlerFactory: (Int, PlayerInventory, ScreenHandlerContext)-> ScreenHandler
+) : ExtendedScreenHandlerFactory {
 
-private fun <T: ScreenHandler>register(
-    id: Identifier,
-    f: (Int, PlayerInventory, ScreenHandlerContext) -> T
-): ExtendedScreenHandlerType<T> {
-    return ScreenHandlerRegistry.registerExtended(id) { syncId, inventory, buf ->
-        f(syncId, inventory, ScreenHandlerContext.create(inventory.player.world, buf.readBlockPos()))
-    } as ExtendedScreenHandlerType<T>
-}
+    override fun getDisplayName() = TranslatableText(BLOCK_MATTER_CONDENSER.translationKey)
 
-fun registerScreenHandlers() {
-    HANDLER_LOOT_FABRICATOR
-    HANDLER_MATTER_CONDENSER
+    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
+        return handlerFactory(syncId, inv, ScreenHandlerContext.create(inv.player.world, pos))
+    }
+
+    override fun writeScreenOpeningData(player: ServerPlayerEntity?, buf: PacketByteBuf?) {
+        buf?.writeBlockPos(pos)
+    }
 }
