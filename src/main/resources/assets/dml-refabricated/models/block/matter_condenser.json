@@ -1,0 +1,42 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "dml-refabricated:block/matter_condenser",
+		"particle": "dml-refabricated:block/matter_condenser"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [5.333, 5.333, 10.666, 10.666], "texture": "#0"},
+				"east": {"uv": [0, 5.333, 5.332, 10.666], "texture": "#0"},
+				"south": {"uv": [10.667, 10.667, 15.998, 16], "texture": "#0"},
+				"west": {"uv": [10.667, 5.333, 16, 10.666], "texture": "#0"},
+				"up": {"uv": [5.333, 0, 10.666, 5.333], "texture": "#0"},
+				"down": {"uv": [5.333, 10.667, 10.666, 15.999], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [21, -132, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

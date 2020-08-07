@@ -19,18 +19,22 @@
 
 package dev.nathanpb.dml.block
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityMatterCondenser
 import dev.nathanpb.dml.screen.handler.MatterCondenserHandler
 import dev.nathanpb.dml.screen.handler.MatterCondenserScreenHandlerFactory
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
+import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.ItemScatterer
@@ -58,6 +62,13 @@ class BlockMatterCondenser : HorizontalFacingBlock(
 
     override fun getPlacementState(ctx: ItemPlacementContext?): BlockState? {
         return defaultState.with(FACING, ctx?.playerFacing?.opposite)
+    }
+
+    override fun buildTooltip(stack: ItemStack?, world: BlockView?, tooltip: MutableList<Text>?, options: TooltipContext?) {
+        super.buildTooltip(stack, world, tooltip, options)
+        if (tooltip != null) {
+            tooltip += TranslatableText("text.${MOD_ID}.ineedatexture")
+        }
     }
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity?, hand: Hand, hit: BlockHitResult): ActionResult {

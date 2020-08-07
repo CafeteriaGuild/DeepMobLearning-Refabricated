@@ -51,25 +51,22 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         if (world?.isClient == true && stack != null && tooltip != null) {
             val data = ModularArmorData(stack)
             if (!data.tier().isMaxTier()) {
-                tooltip.add(
-                    TranslatableText(
-                        "tooltip.${MOD_ID}.data_model.data_amount",
-                        data.dataAmount,
-                        data.dataRemainingToNextTier()
-                    )
+                tooltip += TranslatableText(
+                    "tooltip.${MOD_ID}.data_model.data_amount",
+                    data.dataAmount,
+                    data.dataRemainingToNextTier()
                 )
             }
-            tooltip.add(
-                TranslatableText(
-                    "tooltip.${MOD_ID}.data_model.tier",
-                    data.tier().text
-                )
+            tooltip += TranslatableText(
+                "tooltip.${MOD_ID}.data_model.tier",
+                data.tier().text
             )
             MinecraftClient.getInstance().player?.let { player ->
                 if (player.isCreative) {
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.cheat"))
                 }
             }
+            tooltip += TranslatableText("text.${MOD_ID}.ineedatexture")
         }
         super.appendTooltip(stack, world, tooltip, context)
     }

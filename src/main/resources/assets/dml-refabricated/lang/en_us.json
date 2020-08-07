@@ -120,5 +120,6 @@
   "affix.dml-refabricated.mob_speed.name": "Mob Speed",
   "affix.dml-refabricated.mob_resistance.name": "Road of Resistance",
   "affix.dml-refabricated.thunderstorm.name": "Thunderstorm",
-  "affix.dml-refabricated.party_poison.name": "Party Poison"
+  "affix.dml-refabricated.party_poison.name": "Party Poison",
+  "text.dml-refabricated.ineedatexture": "§8I need a texture =P"
 }
