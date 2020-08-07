@@ -29,13 +29,19 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorItem(GlitchArmorMaterial.INSTANCE, slot, settings) {
+class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorItem(
+        GlitchArmorMaterial.INSTANCE,
+        slot,
+        settings.fireproof()
+) {
+
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
         if (world?.isClient == true && stack != null && tooltip != null) {
             val data = ModularArmorData(stack)
@@ -63,6 +69,11 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         super.appendTooltip(stack, world, tooltip, context)
     }
 
+    override fun postProcessTag(tag: CompoundTag?): Boolean {
+        tag?.putBoolean("Unbreakable", true)
+        return super.postProcessTag(tag)
+    }
+
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         if (user?.isCreative == true && user.isSneaking && hand != null) {
             val stack = user.getStackInHand(hand)
@@ -78,4 +89,6 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         }
         return super.use(world, user, hand)
     }
+
+    override fun isDamageable() = false
 }
