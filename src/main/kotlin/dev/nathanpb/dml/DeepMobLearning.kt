@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml
 
+import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.config.ModConfig
@@ -68,6 +69,7 @@ fun init() {
         EndermanTeleportCallback.EVENT.register(this)
     }
     TrialAffixRegistry.registerDefaultAffixes()
+    ModularEffectRegistry.registerDefaults()
     println("Deep Mob Learning: Refabricated is good to go")
 }
 
