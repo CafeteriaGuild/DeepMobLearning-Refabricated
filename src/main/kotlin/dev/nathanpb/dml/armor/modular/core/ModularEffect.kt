@@ -22,8 +22,11 @@ package dev.nathanpb.dml.armor.modular.core
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import net.minecraft.entity.attribute.ClampedEntityAttribute
+import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 import org.jetbrains.annotations.ApiStatus
 
 abstract class ModularEffect(
@@ -39,10 +42,24 @@ abstract class ModularEffect(
         TranslatableText("modulareffect.${MOD_ID}.${id.namespace}.${id.path}")
     }
 
+    lateinit var entityAttribute:  EntityAttribute
+
+    @ApiStatus.OverrideOnly
     @ApiStatus.Internal
     abstract fun registerEvents()
     protected abstract fun shouldConsumeData(context: ModularEffectContext): Boolean
-    protected abstract fun acceptTier(tier: DataModelTier): Boolean
+    abstract fun acceptTier(tier: DataModelTier): Boolean
+
+    @ApiStatus.OverrideOnly
+    protected fun createEntityAttribute(): EntityAttribute {
+        return ClampedEntityAttribute(name.key, 0.0, 0.0, DataModelTier.values().size.dec() * 4.0)
+            .setTracked(true)
+    }
+
+    @ApiStatus.Internal
+    fun registerEntityAttribute() {
+        entityAttribute = Registry.register(Registry.ATTRIBUTE, id, createEntityAttribute())
+    }
 
     private fun canApply(context: ModularEffectContext): Boolean {
         return isEnabled()

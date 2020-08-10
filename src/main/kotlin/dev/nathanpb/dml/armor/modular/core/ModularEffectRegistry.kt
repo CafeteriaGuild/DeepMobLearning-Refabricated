@@ -19,6 +19,8 @@
 
 package dev.nathanpb.dml.armor.modular.core
 
+import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.trial.affix.core.DuplicatedRegistryException
 import net.minecraft.util.Identifier
 
@@ -28,7 +30,7 @@ class ModularEffectRegistry {
 
         fun registerDefaults() {
             INSTANCE.apply {
-                // TODO register the effects here
+
             }
         }
     }
@@ -37,7 +39,10 @@ class ModularEffectRegistry {
 
     fun register(effect: ModularEffect) {
         if (entries.none { it.id == effect.id }) {
-            entries += effect.also(ModularEffect::registerEvents)
+            entries += effect.apply {
+                registerEntityAttribute()
+                registerEvents()
+            }
         } else throw DuplicatedRegistryException(effect.id)
     }
 
@@ -48,4 +53,8 @@ class ModularEffectRegistry {
 
     @Suppress("unchecked_cast")
     fun <T>fromId(id: Identifier) = fromId(id) as? T?
+
+    fun allMatching(category: EntityCategory, tier: DataModelTier) = entries.filter {
+        it.category == category && it.acceptTier(tier)
+    }
 }

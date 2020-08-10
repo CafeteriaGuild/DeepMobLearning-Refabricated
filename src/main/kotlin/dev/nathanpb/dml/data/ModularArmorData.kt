@@ -22,6 +22,7 @@ package dev.nathanpb.dml.data
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
@@ -40,6 +41,19 @@ class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreat
     }
 
     var dataAmount by persistentDefaulted(0, Serializers.INT, "${MOD_ID}.dataAmount")
+
+    private var dataModelStack by persistentDefaulted(ItemStack.EMPTY, Serializers.ITEM_STACK, "${MOD_ID}.dataModel")
+
+    var dataModel: DataModelData?
+        get() {
+            val stack = dataModelStack
+            return if (!stack.isEmpty && (stack.item as? ItemDataModel)?.category != null) {
+                stack.dataModel
+            } else null
+        }
+        set(value) {
+            dataModelStack = value?.stack ?: ItemStack.EMPTY
+        }
 
     fun tier() = DataModelTier.values().last {
         amountRequiredTo(it) <= max(dataAmount, 0)

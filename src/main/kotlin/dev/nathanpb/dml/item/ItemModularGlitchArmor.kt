@@ -23,6 +23,8 @@ import com.google.common.collect.ImmutableMultimap
 import com.google.common.collect.Multimap
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.armor.GlitchArmorMaterial
+import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
+import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.mixin.IArmorItemMixin
@@ -89,6 +91,12 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
                     builder.put(EntityAttributes.GENERIC_ARMOR, EntityAttributeModifier(uuid, "Armor modifier", protection, EntityAttributeModifier.Operation.ADDITION))
                     builder.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, EntityAttributeModifier(uuid, "Armor toughness", toughness, EntityAttributeModifier.Operation.ADDITION))
                     builder.put(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, EntityAttributeModifier(uuid, "Armor knockback resistance", knockback, EntityAttributeModifier.Operation.ADDITION))
+
+                    data.dataModel?.let { dataModel ->
+                        if (dataModel.category != null) {
+                            appendModularEffectModifiers(data, dataModel)
+                        }
+                    }
                 }
             }
 
@@ -113,4 +121,19 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
     }
 
     override fun isDamageable() = false
+
+    fun appendModularEffectModifiers(armor: ModularArmorData, dataModel: DataModelData): Multimap<EntityAttribute, EntityAttributeModifier> {
+        val multimap = ImmutableMultimap.builder<EntityAttribute, EntityAttributeModifier>()
+
+        if (dataModel.category != null) {
+            ModularEffectRegistry.INSTANCE.allMatching(dataModel.category, armor.tier())
+                .map {
+                    Pair(it, EntityAttributeModifier(it.id.toString(), armor.tier().ordinal.inc().toDouble(), EntityAttributeModifier.Operation.ADDITION))
+                }.forEach { (effect, attribute) ->
+                    multimap.put(effect.entityAttribute, attribute)
+                }
+        }
+
+        return multimap.build()
+    }
 }
