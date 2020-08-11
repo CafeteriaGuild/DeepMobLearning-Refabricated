@@ -38,7 +38,7 @@ abstract class ModularEffect(
     val applyCost: ()->Int
 ) {
 
-    val name = if (id.namespace == MOD_ID) {
+    open val name = if (id.namespace == MOD_ID) {
         TranslatableText("modulareffect.${MOD_ID}.${id.path}")
     } else {
         TranslatableText("modulareffect.${MOD_ID}.${id.namespace}.${id.path}")
