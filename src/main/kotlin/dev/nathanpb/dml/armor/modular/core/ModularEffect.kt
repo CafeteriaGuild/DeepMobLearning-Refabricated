@@ -30,13 +30,30 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import org.jetbrains.annotations.ApiStatus
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.random.Random
 
 abstract class ModularEffect(
     val id: Identifier,
     val category: EntityCategory,
     val isEnabled: ()->Boolean,
-    val applyCost: ()->Int
+    applyCost: ()->Float
 ) {
+
+    val maxApplyCost = {
+        ceil(applyCost()).toInt()
+    }
+
+    val getApplyCost = {
+        val cost = applyCost()
+        val integer = floor(cost).toInt()
+        val float = cost % integer
+
+        if (float == 0F) integer else {
+            integer + (if (Random.nextFloat() < float) 1 else 0)
+        }
+    }
 
     open val name = if (id.namespace == MOD_ID) {
         TranslatableText("modulareffect.${MOD_ID}.${id.path}")
@@ -70,12 +87,12 @@ abstract class ModularEffect(
     private fun canApply(context: ModularEffectContext): Boolean {
         return isEnabled()
             && acceptTier(context.tier)
-            && context.dataModel.dataAmount >= applyCost()
+            && context.dataModel.dataAmount >= maxApplyCost()
     }
 
     private fun attemptConsumeData(context: ModularEffectContext) {
         if (shouldConsumeData(context)) {
-            context.dataModel.dataAmount -= applyCost()
+            context.dataModel.dataAmount -= getApplyCost()
         }
     }
 
