@@ -121,5 +121,13 @@
   "affix.dml-refabricated.mob_resistance.name": "Road of Resistance",
   "affix.dml-refabricated.thunderstorm.name": "Thunderstorm",
   "affix.dml-refabricated.party_poison.name": "Party Poison",
-  "text.dml-refabricated.ineedatexture": "§8I need a texture =P"
+  "text.dml-refabricated.ineedatexture": "§8I need a texture =P",
+  "modulareffect.dml-refabricated.auto_extinguish": "Auto Extinguish",
+  "modulareffect.dml-refabricated.fall_immunity": "Fall Immunity",
+  "modulareffect.dml-refabricated.soul_sensitive": "Soul Sensitive",
+  "modulareffect.dml-refabricated.ghostly_skin": "Ghostly Skin",
+  "modulareffect.dml-refabricated.improved_ghostly_skin": "Improved Ghostly Skin",
+  "modulareffect.dml-refabricated.fly": "Fly",
+  "modulareffect.dml-refabricated.underwater_haste": "Underwater Haste",
+  "modulareffect.dml-refabricated.poseidon_bless": "Poseidon Bless"
 }

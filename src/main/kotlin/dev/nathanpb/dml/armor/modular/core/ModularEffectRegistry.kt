@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.armor.modular.core
 
+import dev.nathanpb.dml.armor.modular.*
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.trial.affix.core.DuplicatedRegistryException
@@ -30,6 +31,23 @@ class ModularEffectRegistry {
 
         fun registerDefaults() {
             INSTANCE.apply {
+                register(FireProtectionEffect())
+                register(AutoExtinguishEffect())
+                register(FireResistanceEffect())
+
+                register(FeatherFallingEffect())
+                register(JumpBoostEffect())
+                register(FallImmunityEffect())
+
+                register(SoulSensitiveEffect())
+                register(GhostlySkinEffect())
+                register(ImprovedGhostlySkinEffect())
+                register(FlyEffect())
+
+                register(UnderwaterHasteEffect())
+                register(DepthStriderEffect())
+                register(WaterBreathingEffect())
+                register(PoseidonBlessEffect())
 
             }
         }

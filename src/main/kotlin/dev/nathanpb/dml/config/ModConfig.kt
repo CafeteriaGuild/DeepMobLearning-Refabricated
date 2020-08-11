@@ -209,6 +209,48 @@ class GlitchArmor : ConfigData {
     var dataAmountToSuperior = 192
     var dataAmountToSelfAware = 384
 
+    var enableFireResistance = true
+    var fireResistanceCost = 1
+
+    var enableAutoExtinguish = true
+    var autoExtinguishCost = 4
+
+    var enableFeatherFalling = true
+    var featherFallingCost = 3
+
+    var enableFireImmunity = true
+    var fireImmunityCost = 1
+
+    var enableJumpBoost = true
+    var jumpBoostCost = 1
+
+    var enableFallImmunity = true
+    var fallImmunityCost = 1
+
+    var enableSoulSensitive = true
+    var soulSensitiveCost = 8
+
+    var enableGhostlySkin = true
+    var ghostlySkinCost = 16
+
+    var improvedGhostlySkin = true
+    var improvedGhostlySkinCost = 0
+
+    var enableFly = true
+    var flyCost = 1
+
+    var enableUnderwaterHaste = true
+    var underwaterHasteCost = 1
+
+    var enableDepthStrider = true
+    var depthStriderCost = 1
+
+    var enableWaterBreathing = true
+    var waterBreathingCost = 1
+
+    var enablePoseidonBless = true
+    var poseidonBlessCost = 2
+
     override fun validatePostLoad() {
         dataAmountToBasic = max(0, dataAmountToBasic)
         dataAmountToAdvanced = max(dataAmountToBasic, dataAmountToAdvanced)
