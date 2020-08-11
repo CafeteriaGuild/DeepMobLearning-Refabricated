@@ -25,12 +25,14 @@ import net.fabricmc.fabric.impl.screenhandler.ExtendedScreenHandlerType
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
-val HANDLER_LOOT_FABRICATOR = register(identifier("loot_fabricator"), ::LootFabricatorHandler)
-val HANDLER_MATTER_CONDENSER = register(identifier("matter_condenser"), ::MatterCondenserHandler)
+val HANDLER_LOOT_FABRICATOR = registerForBlockEntity(identifier("loot_fabricator"), ::LootFabricatorHandler)
+val HANDLER_MATTER_CONDENSER = registerForBlockEntity(identifier("matter_condenser"), ::MatterCondenserHandler)
+val HANDLER_MODULAR_ARMOR = registerForItemStack(identifier("modular_armor"), ::ModularArmorScreenHandler)
 
-private fun <T: ScreenHandler>register(
+private fun <T: ScreenHandler>registerForBlockEntity(
     id: Identifier,
     f: (Int, PlayerInventory, ScreenHandlerContext) -> T
 ): ExtendedScreenHandlerType<T> {
@@ -39,7 +41,17 @@ private fun <T: ScreenHandler>register(
     } as ExtendedScreenHandlerType<T>
 }
 
+private fun <T: ScreenHandler>registerForItemStack(
+    id: Identifier,
+    f: (Int, PlayerInventory, Hand) -> T
+): ExtendedScreenHandlerType<T> {
+    return ScreenHandlerRegistry.registerExtended(id) { syncId, inventory, buf ->
+        f(syncId, inventory, Hand.values()[buf.readInt()])
+    } as ExtendedScreenHandlerType<T>
+}
+
 fun registerScreenHandlers() {
     HANDLER_LOOT_FABRICATOR
     HANDLER_MATTER_CONDENSER
+    HANDLER_MODULAR_ARMOR
 }

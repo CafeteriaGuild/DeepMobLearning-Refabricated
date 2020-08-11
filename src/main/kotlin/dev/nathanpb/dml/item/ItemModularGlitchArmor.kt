@@ -28,6 +28,7 @@ import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.mixin.IArmorItemMixin
+import dev.nathanpb.dml.screen.handler.ModularArmorScreenHandlerFactory
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EquipmentSlot
@@ -104,19 +105,24 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         }
     }
 
-    override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
-        if (user?.isCreative == true && user.isSneaking && hand != null) {
+    override fun use(world: World?, user: PlayerEntity?, hand: Hand): TypedActionResult<ItemStack> {
+        if (world?.isClient == false && user != null) {
             val stack = user.getStackInHand(hand)
-            if (stack.item is ItemModularGlitchArmor) {
-                val data = ModularArmorData(stack)
-                val tier = data.tier()
+            if (user.isCreative && user.isSneaking) {
+                if (stack.item is ItemModularGlitchArmor) {
+                    val data = ModularArmorData(stack)
+                    val tier = data.tier()
 
-                data.dataAmount = ModularArmorData.amountRequiredTo(
-                    if (tier.isMaxTier()) DataModelTier.FAULTY else tier.nextTierOrCurrent()
-                )
-                return TypedActionResult.success(stack)
+                    data.dataAmount = ModularArmorData.amountRequiredTo(
+                        if (tier.isMaxTier()) DataModelTier.FAULTY else tier.nextTierOrCurrent()
+                    )
+                }
+            } else {
+                user.openHandledScreen(ModularArmorScreenHandlerFactory(hand, this))
             }
+            return TypedActionResult.consume(stack)
         }
+
         return super.use(world, user, hand)
     }
 
