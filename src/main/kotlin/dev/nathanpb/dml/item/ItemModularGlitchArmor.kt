@@ -95,7 +95,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
 
                     data.dataModel?.let { dataModel ->
                         if (dataModel.category != null) {
-                            appendModularEffectModifiers(data, dataModel)
+                            builder.putAll(appendModularEffectModifiers(data, dataModel))
                         }
                     }
                 }
@@ -133,10 +133,8 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
 
         if (dataModel.category != null) {
             ModularEffectRegistry.INSTANCE.allMatching(dataModel.category, armor.tier())
-                .map {
-                    Pair(it, EntityAttributeModifier(it.id.toString(), armor.tier().ordinal.inc().toDouble(), EntityAttributeModifier.Operation.ADDITION))
-                }.forEach { (effect, attribute) ->
-                    multimap.put(effect.entityAttribute, attribute)
+                .forEach {
+                    multimap.put(it.entityAttribute, it.createEntityAttributeModifier(armor))
                 }
         }
 

@@ -20,10 +20,12 @@
 package dev.nathanpb.dml.armor.modular.core
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import net.minecraft.entity.attribute.ClampedEntityAttribute
 import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -51,9 +53,13 @@ abstract class ModularEffect(
     abstract fun acceptTier(tier: DataModelTier): Boolean
 
     @ApiStatus.OverrideOnly
-    protected fun createEntityAttribute(): EntityAttribute {
+    protected open fun createEntityAttribute(): EntityAttribute {
         return ClampedEntityAttribute(name.key, 0.0, 0.0, DataModelTier.values().size.dec() * 4.0)
             .setTracked(true)
+    }
+
+    open fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), armor.tier().ordinal.inc().toDouble(), EntityAttributeModifier.Operation.ADDITION)
     }
 
     @ApiStatus.Internal
