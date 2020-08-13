@@ -90,7 +90,7 @@ class GuiDeeplearner (
     }
 
     var currentSlot = firstDataModelIndex()
-    var tickCount = 0
+    private var tickCount = 0
 
     private val currentRenderEntity: EntityType<*>?
         get() {

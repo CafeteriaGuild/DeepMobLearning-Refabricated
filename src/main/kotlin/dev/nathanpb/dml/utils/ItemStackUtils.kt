@@ -20,10 +20,7 @@
 package dev.nathanpb.dml.utils
 
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
 import kotlin.math.min
-
-fun ItemStack.toTag() = this.toTag(CompoundTag())
 
 fun combineStacksIfPossible(source: ItemStack, target: ItemStack, maxInventoryCountPerStack: Int): Boolean {
     fun canCombine(source: ItemStack, target: ItemStack) : Boolean {

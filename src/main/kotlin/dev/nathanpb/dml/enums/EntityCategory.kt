@@ -20,11 +20,9 @@
 package dev.nathanpb.dml.enums
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.*
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
 import net.minecraft.tag.EntityTypeTags
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
@@ -45,10 +43,4 @@ enum class EntityCategory (val id: Identifier, private val itemForRendering: ()-
         EntityTypeTags.getTagGroup().getTag(id)!!
     }
     val displayName = TranslatableText("mobcategory.${MOD_ID}.${id.path}")
-
-    fun stackForRendering(tier: DataModelTier): ItemStack {
-        return ItemStack(itemForRendering()).apply {
-            dataModel.dataAmount = tier.dataAmount
-        }
-    }
 }

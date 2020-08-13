@@ -25,10 +25,11 @@ import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.util.registry.Registry
 
-val ITEM_GROUP = FabricItemGroupBuilder.build(identifier("tab_${MOD_ID}")) {
+val ITEM_GROUP: ItemGroup = FabricItemGroupBuilder.build(identifier("tab_${MOD_ID}")) {
     ItemStack(ITEM_DML)
 }
 

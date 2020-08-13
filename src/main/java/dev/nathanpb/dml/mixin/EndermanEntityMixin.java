@@ -33,7 +33,7 @@ public class EndermanEntityMixin {
 
     @Inject(at = @At("HEAD"), method = "teleportTo(DDD)Z", cancellable = true)
     public void teleport(double x, double y, double z, CallbackInfoReturnable<Boolean> ci) {
-        EndermanEntity entity = (EndermanEntity) ((Object) this);
+        EndermanEntity entity = (EndermanEntity) (Object) this;
         Vec3d pos = new Vec3d(x, y, z);
         ActionResult result = EndermanTeleportCallback.EVENT.invoker().onEndermanTeleport(entity, pos);
         if (result == ActionResult.FAIL) {
