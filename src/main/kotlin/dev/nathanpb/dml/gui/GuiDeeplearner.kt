@@ -37,6 +37,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.text.LiteralText
 import net.minecraft.text.TranslatableText
 
+// TODO redo this with libgui
 class GuiDeeplearner (
     container: ContainerDeepLearner
 ) : HandledScreen<ContainerDeepLearner>(
