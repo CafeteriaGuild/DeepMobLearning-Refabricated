@@ -19,7 +19,6 @@ package dev.nathanpb.dml.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.accessor.ICraftingResultSlotGetPlayer;
 import dev.nathanpb.dml.data.TrialKeyData;
 import dev.nathanpb.dml.data.TrialKeyDataKt;
 import dev.nathanpb.dml.item.ItemTrialKey;
@@ -41,7 +40,7 @@ public class SlotMixin {
         ItemStack stack = ci.getReturnValue();
         Slot dis = (Slot) (Object) this;
         if (dis instanceof CraftingResultSlot && stack != null && stack.getItem() instanceof ItemTrialKey) {
-            PlayerEntity player = ((ICraftingResultSlotGetPlayer)dis).dmlRefGetPlayer();
+            PlayerEntity player = ((ICraftingResultSlotMixin)dis).dmlRefGetPlayer();
             if (!player.world.isClient) {
                 TrialKeyData oldData = TrialKeyDataKt.getTrialKeyData(stack);
                 if (oldData != null && oldData.getAffixes().isEmpty()) {
