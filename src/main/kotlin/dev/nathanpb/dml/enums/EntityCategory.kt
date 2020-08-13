@@ -42,7 +42,7 @@ enum class EntityCategory (val id: Identifier, private val itemForRendering: ()-
     OCEAN(identifier("ocean_mobs"), ::ITEM_DATA_MODEL_OCEAN);
 
     val tag by lazy {
-        EntityTypeTags.getContainer().get(id)!!
+        EntityTypeTags.getTagGroup().getTag(id)!!
     }
     val displayName = TranslatableText("mobcategory.${MOD_ID}.${id.path}")
 

@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+// TODO move to the proper accessor syntax like smart people do
 @Mixin(CraftingResultSlot.class)
 public class CraftingResultSlotMixin implements ICraftingResultSlotGetPlayer {
 

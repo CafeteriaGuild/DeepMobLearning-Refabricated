@@ -46,7 +46,7 @@ class BlockCafeteria : HorizontalFacingBlock(
             .with(Properties.HORIZONTAL_FACING, Direction.NORTH)
     }
 
-    override fun buildTooltip(
+    override fun appendTooltip(
         stack: ItemStack?,
         world: BlockView?,
         tooltip: MutableList<Text>,

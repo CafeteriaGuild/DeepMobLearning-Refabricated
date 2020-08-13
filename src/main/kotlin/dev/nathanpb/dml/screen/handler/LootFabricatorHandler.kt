@@ -28,6 +28,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.util.Identifier
 
 class LootFabricatorHandler(
     syncId: Int,
@@ -49,7 +50,7 @@ class LootFabricatorHandler(
         }
         root.add(inputSlot, 1, 2)
 
-        val progressBar = WBar(null, null, 0, 1, WBar.Direction.DOWN)
+        val progressBar = WBar(null as Identifier?, null, 0, 1, WBar.Direction.DOWN)
         progressBar.setSize(1, 128)
         root.add(progressBar, 3, 1, 1, 3)
 

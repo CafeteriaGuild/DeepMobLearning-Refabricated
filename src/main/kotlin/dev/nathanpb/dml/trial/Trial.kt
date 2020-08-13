@@ -41,6 +41,7 @@ import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.TranslatableText
@@ -218,15 +219,17 @@ class Trial (
     }
 
     private fun spawnSystemGlitch() {
-        systemGlitch = SYSTEM_GLITCH_ENTITY_TYPE.spawn(
-            world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
-        )?.also {
-            it.tier = recipe.tier
-            it.health = it.maxHealth
-            if (recipe.category == EntityCategory.GHOST && recipe.tier.isMaxTier() && Random.nextFloat() < .0666 ) {
-                it.equipStack(EquipmentSlot.HEAD, ItemStack(ITEM_EMERITUS_HAT))
+        (world as? ServerWorld)?.let { world ->
+            systemGlitch = SYSTEM_GLITCH_ENTITY_TYPE.spawn(
+                world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
+            )?.also {
+                it.tier = recipe.tier
+                it.health = it.maxHealth
+                if (recipe.category == EntityCategory.GHOST && recipe.tier.isMaxTier() && Random.nextFloat() < .0666 ) {
+                    it.equipStack(EquipmentSlot.HEAD, ItemStack(ITEM_EMERITUS_HAT))
+                }
+                it.belongsToTrial = true
             }
-            it.belongsToTrial = true
         }
     }
 
@@ -241,19 +244,21 @@ class Trial (
     }
 
     private fun spawnWave() {
-        (0 until recipe.waveEntityCount).map {
-            recipe.category.tag.getRandom(java.util.Random()).spawn(
-                world,
-                null, null, null,
-                pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
-                SpawnReason.SPAWNER,
-                false, false
-            )
-        }.let {
-            TrialWaveSpawnCallback.EVENT.invoker().onWaveSpawned(
-                this,
-                it.filterIsInstance<LivingEntity>()
-            )
+        (world as? ServerWorld)?.let { world ->
+            (0 until recipe.waveEntityCount).map {
+                recipe.category.tag.getRandom(java.util.Random()).spawn(
+                    world,
+                    null, null, null,
+                    pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
+                    SpawnReason.SPAWNER,
+                    false, false
+                )
+            }.let {
+                TrialWaveSpawnCallback.EVENT.invoker().onWaveSpawned(
+                    this,
+                    it.filterIsInstance<LivingEntity>()
+                )
+            }
         }
     }
 

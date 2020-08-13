@@ -39,15 +39,15 @@
     "mixins.dml-refabricated.json"
   ],
   "depends": {
-    "fabricloader": ">=0.9.0",
-    "fabric": ">=0.16.2",
+    "fabricloader": ">=0.9.1",
+    "fabric": ">=0.17.2",
     "fabric-language-kotlin": "*",
-    "minecraft": "1.16.1",
+    "minecraft": "1.16.2",
     "ktdatataglib": ">=1.3.3"
   },
   "suggests": {
     "flamingo": "*",
-    "modmenu": ">=1.14.5+build.30",
+    "modmenu": ">=1.14.6",
     "roughlyenoughitems": ">=4.10.2"
   }
 }
