@@ -32,7 +32,7 @@ import java.util.*
 fun World.getEntitiesAroundCircle(type: EntityType<*>?, pos: BlockPos, radius: Double) : List<Entity> {
     val squaredRadius = radius * radius
     val pos3d = pos.toVec3d()
-    return this.getEntities(type, Box(
+    return this.getEntitiesByType(type, Box(
         pos.x - radius,
         pos.y - 1.0,
         pos.z - radius,

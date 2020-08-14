@@ -43,7 +43,9 @@ dependencies {
     modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
     include "io.github.cottonmc:LibGui:${project.libgui_version}"
 
-    modCompile "io.github.prospector:modmenu:${project.modmenu_version}"
+    modCompile "io.github.prospector:modmenu:${project.modmenu_version}", {
+        exclude group: "net.fabricmc.fabric-api"
+    }
 
     modApi "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
     include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"

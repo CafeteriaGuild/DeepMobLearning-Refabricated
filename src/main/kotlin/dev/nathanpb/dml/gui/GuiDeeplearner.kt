@@ -35,9 +35,9 @@ import net.minecraft.client.util.math.Vector3f
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.text.LiteralText
-import net.minecraft.text.StringRenderable
 import net.minecraft.text.TranslatableText
 
+// TODO redo this with libgui
 class GuiDeeplearner (
     container: ContainerDeepLearner
 ) : HandledScreen<ContainerDeepLearner>(
@@ -91,7 +91,7 @@ class GuiDeeplearner (
     }
 
     var currentSlot = firstDataModelIndex()
-    var tickCount = 0
+    private var tickCount = 0
 
     private val currentRenderEntity: EntityType<*>?
         get() {
@@ -183,7 +183,7 @@ class GuiDeeplearner (
             matrixStack.multiply(quaternion)
             quaternion2.conjugate()
 
-            val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderManager
+            val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderDispatcher
             entityRenderDispatcher.rotation = quaternion2
             entityRenderDispatcher.setRenderShadows(false)
 
@@ -258,7 +258,7 @@ class GuiDeeplearner (
         override fun renderToolTip(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
             gui.renderTooltip(
                 matrices,
-                StringRenderable.plain(TranslatableText("gui.${MOD_ID}.next").formatted().string),
+                TranslatableText("gui.${MOD_ID}.next"),
                 mouseX, mouseY
             )
         }

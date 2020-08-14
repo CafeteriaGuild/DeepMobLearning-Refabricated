@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*
 
-class FakePlayerEntity(world: World) : PlayerEntity(world, BlockPos.ORIGIN, GameProfile(UUID, "${MOD_ID}_fake_player")) {
+class FakePlayerEntity(world: World) : PlayerEntity(world, BlockPos.ORIGIN, 0F, GameProfile(UUID, "${MOD_ID}_fake_player")) {
     companion object {
         val UUID: UUID = java.util.UUID.randomUUID()
     }

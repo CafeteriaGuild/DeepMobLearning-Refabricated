@@ -26,6 +26,7 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
+import io.github.cottonmc.cotton.gui.widget.data.Texture
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
@@ -67,8 +68,8 @@ class MatterCondenserHandler(
         root.add(slots, 2, 1)
         root.add(this.createPlayerInventoryPanel(), 0, 6)
 
-        val progressBar1 = WBar(null, null, 0, 1, WBar.Direction.UP)
-        val progressBar2 = WBar(null, null, 0, 1, WBar.Direction.UP)
+        val progressBar1 = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
+        val progressBar2 = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
         root.add(progressBar1, 0, 1, 1, 5)
         root.add(progressBar2, 8, 1, 1, 5)
 

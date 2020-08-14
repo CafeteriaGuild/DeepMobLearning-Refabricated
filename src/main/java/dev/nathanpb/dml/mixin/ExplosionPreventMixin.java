@@ -54,7 +54,7 @@ public class ExplosionPreventMixin {
             CallbackInfoReturnable<Explosion> ci
     ) {
         if (power > 0F) {
-            World world = (World)((Object)this);
+            World world = (World) (Object) this;
             BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
             ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
             if (result == ActionResult.FAIL) {

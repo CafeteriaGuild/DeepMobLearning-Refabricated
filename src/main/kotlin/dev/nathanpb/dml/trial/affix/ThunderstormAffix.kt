@@ -40,8 +40,8 @@ class ThunderstormAffix : TrialAffix(identifier("thunderstorm")), TrialAffix.Tic
             // code copied from ServerWorld
             EntityType.LIGHTNING_BOLT.create(trial.world)?.let { lightningEntity ->
                 val bl2 = trial.world.random.nextDouble() < trial.world.getLocalDifficulty(pos).localDifficulty * 0.01
-                lightningEntity.method_29495(Vec3d.ofBottomCenter(pos))
-                lightningEntity.method_29498(bl2)
+                lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(pos))
+                lightningEntity.setCosmetic(bl2)
                 trial.world.spawnEntity(lightningEntity)
             }
         }
