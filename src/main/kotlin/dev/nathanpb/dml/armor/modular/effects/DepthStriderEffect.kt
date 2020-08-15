@@ -17,7 +17,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
@@ -27,14 +27,14 @@ import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.text.TranslatableText
 
-class JumpBoostEffect : ModularEffect(
-    identifier("jump_boost"),
-    EntityCategory.SLIMY,
-    config.glitchArmor::enableJumpBoost,
-    config.glitchArmor::jumpBoostCost
+class DepthStriderEffect : ModularEffect(
+    identifier("depth_strider"),
+    EntityCategory.OCEAN,
+    config.glitchArmor::enableDepthStrider,
+    config.glitchArmor::depthStriderCost
 ) {
 
-    override val name = TranslatableText("effect.minecraft.jump_boost")
+    override val name = TranslatableText("enchantment.minecraft.depth_strider")
 
     override fun registerEvents() {
 
@@ -45,4 +45,5 @@ class JumpBoostEffect : ModularEffect(
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 2
     }
+
 }

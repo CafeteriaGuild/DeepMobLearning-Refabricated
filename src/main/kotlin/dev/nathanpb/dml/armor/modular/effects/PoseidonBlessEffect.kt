@@ -17,7 +17,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
@@ -27,26 +27,22 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
-import kotlin.random.Random
 
-class FlyEffect : ModularEffect(
-    identifier("fly"),
-    EntityCategory.GHOST,
-    config.glitchArmor::enableFly,
-    config.glitchArmor::flyCost
+class PoseidonBlessEffect : ModularEffect(
+    identifier("poseidon_bless"),
+    EntityCategory.OCEAN,
+    config.glitchArmor::enablePoseidonBless,
+    config.glitchArmor::poseidonBlessCost
 ) {
     override fun registerEvents() {
 
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
+        return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext): Boolean {
-        return Random.nextFloat() < .1
-    }
+    override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
-
 }

@@ -17,7 +17,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
@@ -25,19 +25,24 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import net.minecraft.text.TranslatableText
 
-class UnderwaterHasteEffect : ModularEffect(
-    identifier("underwater_haste"),
-    EntityCategory.OCEAN,
-    config.glitchArmor::enableUnderwaterHaste,
-    config.glitchArmor::underwaterHasteCost
+class JumpBoostEffect : ModularEffect(
+    identifier("jump_boost"),
+    EntityCategory.SLIMY,
+    config.glitchArmor::enableJumpBoost,
+    config.glitchArmor::jumpBoostCost
 ) {
+
+    override val name = TranslatableText("effect.minecraft.jump_boost")
+
     override fun registerEvents() {
 
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
-    override fun acceptTier(tier: DataModelTier) = true
-
+    override fun acceptTier(tier: DataModelTier): Boolean {
+        return tier.ordinal >= 2
+    }
 }

@@ -17,33 +17,38 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.text.TranslatableText
 
-class DepthStriderEffect : ModularEffect(
-    identifier("depth_strider"),
-    EntityCategory.OCEAN,
-    config.glitchArmor::enableDepthStrider,
-    config.glitchArmor::depthStriderCost
+class FireResistanceEffect : ModularEffect(
+    identifier("fire_immunity"),
+    EntityCategory.NETHER,
+    config.glitchArmor::enableFireImmunity,
+    config.glitchArmor::fireImmunityCost
 ) {
 
-    override val name = TranslatableText("enchantment.minecraft.depth_strider")
+    override val name = TranslatableText("effect.minecraft.fire_resistance")
 
     override fun registerEvents() {
 
     }
 
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+    }
+
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 2
+        return tier.isMaxTier()
     }
-
 }

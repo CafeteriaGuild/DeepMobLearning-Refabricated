@@ -17,30 +17,36 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
-import net.minecraft.text.TranslatableText
+import net.minecraft.entity.attribute.EntityAttributeModifier
+import kotlin.random.Random
 
-class FireProtectionEffect : ModularEffect(
-    identifier("fire_protection"),
-    EntityCategory.NETHER,
-    config.glitchArmor::enableFireResistance,
-    config.glitchArmor::fireResistanceCost
+class FlyEffect : ModularEffect(
+    identifier("fly"),
+    EntityCategory.GHOST,
+    config.glitchArmor::enableFly,
+    config.glitchArmor::flyCost
 ) {
-
-    override val name = TranslatableText("enchantment.minecraft.fire_protection")
-
     override fun registerEvents() {
 
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-    override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
+    }
+
+    override fun shouldConsumeData(context: ModularEffectContext): Boolean {
+        return Random.nextFloat() < .1
+    }
+
+    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
 
 }

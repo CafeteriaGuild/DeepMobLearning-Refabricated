@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.armor.modular.core
 
-import dev.nathanpb.dml.armor.modular.*
+import dev.nathanpb.dml.armor.modular.effects.*
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.trial.affix.core.DuplicatedRegistryException

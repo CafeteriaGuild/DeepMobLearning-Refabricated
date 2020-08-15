@@ -17,7 +17,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
@@ -26,18 +26,19 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 
-class GhostlySkinEffect : ModularEffect(
-    identifier("ghostly_skin"),
+class ImprovedGhostlySkinEffect : ModularEffect(
+    identifier("improved_ghostly_skin"),
     EntityCategory.GHOST,
-    config.glitchArmor::enableGhostlySkin,
-    config.glitchArmor::ghostlySkinCost
+    config.glitchArmor::improvedGhostlySkin,
+    config.glitchArmor::improvedGhostlySkinCost
 ) {
+
     override fun registerEvents() {
 
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
-    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 1
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 3
 
 }

@@ -17,32 +17,29 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular
+package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
-import net.minecraft.entity.attribute.EntityAttributeModifier
 
-class PoseidonBlessEffect : ModularEffect(
-    identifier("poseidon_bless"),
-    EntityCategory.OCEAN,
-    config.glitchArmor::enablePoseidonBless,
-    config.glitchArmor::poseidonBlessCost
+class AutoExtinguishEffect : ModularEffect(
+    identifier("auto_extinguish"),
+    EntityCategory.NETHER,
+    config.glitchArmor::enableAutoExtinguish,
+    config.glitchArmor::autoExtinguishCost
 ) {
     override fun registerEvents() {
 
     }
 
-    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
-    }
-
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
-    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun acceptTier(tier: DataModelTier): Boolean {
+        return tier.ordinal >= 2
+    }
+
 }
