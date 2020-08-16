@@ -19,15 +19,16 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.text.TranslatableText
 
-class FeatherFallingEffect : ModularEffect(
+class FeatherFallingEffect : ProtectionLikeEffect(
     identifier("feather_falling"),
     EntityCategory.SLIMY,
     config.glitchArmor::enableFeatherFalling,
@@ -36,9 +37,7 @@ class FeatherFallingEffect : ModularEffect(
 
     override val name = TranslatableText("enchantment.minecraft.feather_falling")
 
-    override fun registerEvents() {
-
-    }
+    override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
