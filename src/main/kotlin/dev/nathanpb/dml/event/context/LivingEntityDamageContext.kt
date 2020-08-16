@@ -17,29 +17,13 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml.event.context
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.identifier
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
-import net.minecraft.text.TranslatableText
 
-class FireProtectionEffect : ProtectionLikeEffect(
-    identifier("fire_protection"),
-    EntityCategory.NETHER,
-    config.glitchArmor::enableFireResistance,
-    config.glitchArmor::fireResistanceCost
-) {
-
-    override val name = TranslatableText("enchantment.minecraft.fire_protection")
-
-    override fun protectsAgainst(source: DamageSource) = source.isFire
-
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-    override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
-
-}
+data class LivingEntityDamageContext(
+    val entity: LivingEntity,
+    val source: DamageSource,
+    val damage: Float
+)

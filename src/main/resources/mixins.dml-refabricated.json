@@ -10,6 +10,7 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
+    "PlayerEntityMixin",
     "SlotMixin",
     "WorldMixin"
   ],

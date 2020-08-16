@@ -22,12 +22,15 @@ package dev.nathanpb.dml.mixin;
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
+import dev.nathanpb.dml.event.context.EventsKt;
+import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -57,6 +60,15 @@ public abstract class LivingEntityMixin implements ILivingEntityReiStateAccessor
         if (isDmlRefIsInReiScreen()) {
             ci.cancel();
         }
+    }
+
+    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyEnchantmentsToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
+    private float applyDamage(DamageSource source, float amount) {
+        LivingEntity dis = (LivingEntity) (Object) this;
+        return EventsKt.getLivingEntityDamageEvent()
+            .invoker()
+            .invoke(new LivingEntityDamageContext(dis, source, amount))
+            .getDamage();
     }
 
     @Override
