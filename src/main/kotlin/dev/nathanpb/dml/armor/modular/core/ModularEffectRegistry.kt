@@ -36,18 +36,18 @@ class ModularEffectRegistry {
                 register(FireResistanceEffect())
 
                 register(FeatherFallingEffect())
-                register(JumpBoostEffect())
+                // register(JumpBoostEffect())
                 register(FallImmunityEffect())
 
-                register(SoulSensitiveEffect())
-                register(GhostlySkinEffect())
-                register(ImprovedGhostlySkinEffect())
-                register(FlyEffect())
+                // register(SoulSensitiveEffect())
+                // register(GhostlySkinEffect())
+                // register(ImprovedGhostlySkinEffect())
+                // register(FlyEffect())
 
-                register(UnderwaterHasteEffect())
-                register(DepthStriderEffect())
-                register(WaterBreathingEffect())
-                register(PoseidonBlessEffect())
+                // register(UnderwaterHasteEffect())
+                // register(DepthStriderEffect())
+                // register(WaterBreathingEffect())
+                // register(PoseidonBlessEffect())
 
             }
         }
