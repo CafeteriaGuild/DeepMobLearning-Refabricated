@@ -106,7 +106,7 @@ abstract class ModularEffect(
         }
     }
 
-    open fun getProtectionAmount(stack: ItemStack): Int {
+    open fun sumLevelsOf(stack: ItemStack): Int {
         return (stack.item as? ItemModularGlitchArmor)?.let { item ->
             item.getAttributeModifiers(stack, item.slotType)
                 .get(entityAttribute)
@@ -115,7 +115,7 @@ abstract class ModularEffect(
         } ?: 0
     }
 
-    open fun getProtectionAmount(stacks: List<ItemStack>): Int {
-        return stacks.map(this::getProtectionAmount).sum()
+    open fun sumLevelsOf(stacks: List<ItemStack>): Int {
+        return stacks.map(this::sumLevelsOf).sum()
     }
 }

@@ -42,7 +42,7 @@ abstract class StatusEffectLikeEffect(
                         && it.amplifier < statusEffectInstance.amplifier
                 }
 
-                if (shouldRefill && getProtectionAmount(player.armorItems.toList()) > 0) {
+                if (shouldRefill && sumLevelsOf(player.armorItems.toList()) > 0) {
                     player.addStatusEffect(statusEffectInstance)
                 }
             }

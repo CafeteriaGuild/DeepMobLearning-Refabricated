@@ -43,7 +43,7 @@ class FireResistanceEffect : ProtectionLikeEffect(
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { context ->
             if (protectsAgainst(context.source)) {
-                val protection = getProtectionAmount(context.entity.armorItems.toList())
+                val protection = sumLevelsOf(context.entity.armorItems.toList())
                 if (protection > 0) {
                     return@register context.copy(damage = 0F)
                 }

@@ -38,7 +38,7 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { context ->
             if (protectsAgainst(context.source) && !context.entity.isInLava) {
-                val protection = getProtectionAmount(context.entity.armorItems.toList())
+                val protection = sumLevelsOf(context.entity.armorItems.toList())
                 if (protection > 0) {
                     context.entity.fireTicks = 0
                     context.entity.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F)

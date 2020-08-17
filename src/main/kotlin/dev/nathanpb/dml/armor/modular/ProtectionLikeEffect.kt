@@ -36,7 +36,7 @@ abstract class ProtectionLikeEffect(
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { context ->
             if (protectsAgainst(context.source)) {
-                val protection = getProtectionAmount(context.entity.armorItems.toList())
+                val protection = sumLevelsOf(context.entity.armorItems.toList())
                 context.copy(damage = DamageUtil.getInflictedDamage(context.damage, protection.toFloat()))
             } else null
         }
