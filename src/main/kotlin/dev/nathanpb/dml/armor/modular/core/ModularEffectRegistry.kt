@@ -36,7 +36,7 @@ class ModularEffectRegistry {
                 register(FireResistanceEffect())
 
                 register(FeatherFallingEffect())
-                // register(JumpBoostEffect())
+                register(JumpBoostEffect())
                 register(FallImmunityEffect())
 
                 // register(SoulSensitiveEffect())

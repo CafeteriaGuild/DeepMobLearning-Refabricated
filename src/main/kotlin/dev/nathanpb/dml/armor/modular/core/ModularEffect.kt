@@ -23,15 +23,18 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.item.ItemModularGlitchArmor
 import net.minecraft.entity.attribute.ClampedEntityAttribute
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import org.jetbrains.annotations.ApiStatus
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 abstract class ModularEffect(
@@ -101,5 +104,18 @@ abstract class ModularEffect(
             attemptConsumeData(context)
             body()
         }
+    }
+
+    open fun getProtectionAmount(stack: ItemStack): Int {
+        return (stack.item as? ItemModularGlitchArmor)?.let { item ->
+            item.getAttributeModifiers(stack, item.slotType)
+                .get(entityAttribute)
+                .sumByDouble(EntityAttributeModifier::getValue)
+                .roundToInt()
+        } ?: 0
+    }
+
+    open fun getProtectionAmount(stacks: List<ItemStack>): Int {
+        return stacks.map(this::getProtectionAmount).sum()
     }
 }

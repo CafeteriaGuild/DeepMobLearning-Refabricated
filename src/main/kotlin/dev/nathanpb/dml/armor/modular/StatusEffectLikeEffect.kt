@@ -21,12 +21,11 @@ package dev.nathanpb.dml.armor.modular
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
-import net.minecraft.entity.DamageUtil
-import net.minecraft.entity.damage.DamageSource
+import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.util.Identifier
 
-abstract class ProtectionLikeEffect(
+abstract class StatusEffectLikeEffect(
     id: Identifier,
     category: EntityCategory,
     isEnabled: ()->Boolean,
@@ -34,14 +33,22 @@ abstract class ProtectionLikeEffect(
 ) : ModularEffect(id, category, isEnabled, applyCost) {
 
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { context ->
-            if (protectsAgainst(context.source)) {
-                val protection = getProtectionAmount(context.entity.armorItems.toList())
-                context.copy(damage = DamageUtil.getInflictedDamage(context.damage, protection.toFloat()))
-            } else null
+        PlayerEntityTickEvent.register { player ->
+            if (player.world.time % 80 == 0L) {
+                val statusEffectInstance = createEffectInstance()
+                val shouldRefill = player.statusEffects.none {
+                    it.duration < 15 * 20
+                        && it.effectType == statusEffectInstance.effectType
+                        && it.amplifier < statusEffectInstance.amplifier
+                }
+
+                if (shouldRefill && getProtectionAmount(player.armorItems.toList()) > 0) {
+                    player.addStatusEffect(statusEffectInstance)
+                }
+            }
         }
     }
 
-    abstract fun protectsAgainst(source: DamageSource): Boolean
+    abstract fun createEffectInstance(): StatusEffectInstance
 
 }
