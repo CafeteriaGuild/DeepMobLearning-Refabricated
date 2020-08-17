@@ -19,32 +19,41 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.entity.effect.DEPTH_STRIDER_EFFECT
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.text.TranslatableText
 
-class DepthStriderEffect : ModularEffect<ModularEffectTriggerPayload>(
+class DepthStriderEffect : StatusEffectLikeEffect(
     identifier("depth_strider"),
     EntityCategory.OCEAN,
     config.glitchArmor::enableDepthStrider,
-    config.glitchArmor::depthStriderCost
+    config.glitchArmor::depthStriderCost,
+    EffectStackOption.PRIORITIZE_GREATER
 ) {
 
-    override val name = TranslatableText("enchantment.minecraft.depth_strider")
+    override val name = TranslatableText("effect.${MOD_ID}.depth_strider")
 
-    override fun registerEvents() {
-
+    override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
+        return StatusEffectInstance(DEPTH_STRIDER_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 2
+    }
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        return super.canApply(context, payload) && context.player.isTouchingWater
     }
 
 }

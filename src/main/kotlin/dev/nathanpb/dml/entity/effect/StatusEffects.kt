@@ -21,9 +21,14 @@ package dev.nathanpb.dml.entity.effect
 
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.effect.StatusEffect
+import net.minecraft.entity.effect.StatusEffectType
 import net.minecraft.util.registry.Registry
 
+class UnderwaterHasteEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0x46D99C)
+class DepthStriderEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0x02A7D9)
+
 val UNDERWATER_HASTE_EFFECT = register("underwater_haste", UnderwaterHasteEffect())
+val DEPTH_STRIDER_EFFECT = register("depth_strider", DepthStriderEffect())
 
 private fun register(idPath: String, entry: StatusEffect): StatusEffect {
     return Registry.register(Registry.STATUS_EFFECT, Registry.STATUS_EFFECT.toList().size, identifier(idPath).toString(), entry)
@@ -31,4 +36,5 @@ private fun register(idPath: String, entry: StatusEffect): StatusEffect {
 
 fun registerStatusEffects() {
     UNDERWATER_HASTE_EFFECT
+    DEPTH_STRIDER_EFFECT
 }

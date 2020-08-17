@@ -21,6 +21,7 @@ package dev.nathanpb.dml.mixin;
 
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
+import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -28,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -67,5 +69,14 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
     @Override
     public void setDmlRefInReiScreen(boolean flag) {
         dmlRefIsInREIScreen = flag;
+    }
+
+    @ModifyVariable(at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z", ordinal = 0), name = "h", method = "travel")
+    public float depthStriderEffectTravelPath(float value) {
+        LivingEntity dis = (LivingEntity) (Object) this;
+        if (dis.hasStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT())) {
+            return value + dis.getStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
+        }
+        return value;
     }
 }
