@@ -25,6 +25,7 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
 import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 
 abstract class StatusEffectLikeEffect(
@@ -37,10 +38,12 @@ abstract class StatusEffectLikeEffect(
     override fun registerEvents() {
         PlayerEntityTickEvent.register { player ->
             if (player.world.time % 80 == 0L) {
-                ModularEffectContext.from(player).forEach {
-                    attemptToApply(it, ModularEffectTriggerPayload.EMPTY) { _, _ ->
-                        player.addStatusEffect(createEffectInstance())
-                    }
+                ModularEffectContext.from(player)
+                    .shuffled()
+                    .firstOrNull {
+                        attemptToApply(it, ModularEffectTriggerPayload.EMPTY) { _, _ ->
+                            player.addStatusEffect(createEffectInstance())
+                        }.result == ActionResult.SUCCESS
                 }
             }
         }
