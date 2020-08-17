@@ -18,23 +18,20 @@ package dev.nathanpb.dml.mixin;/*
  */
 
 import com.google.common.collect.Multimap;
+import dev.nathanpb.dml.data.DataModelData;
+import dev.nathanpb.dml.data.ModularArmorData;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
-
-    @Shadow @Final @Deprecated private Item item;
 
     @Inject(at = @At("HEAD"), method = "isDamageable", cancellable = true)
     void isDamageable(CallbackInfoReturnable<Boolean> cir) {
@@ -50,6 +47,39 @@ public class ItemStackMixin {
         ItemStack dis = (ItemStack)(Object) this;
         if (dis.getItem() instanceof ItemModularGlitchArmor) {
             cir.setReturnValue(((ItemModularGlitchArmor)dis.getItem()).getAttributeModifiers(dis, equipmentSlot));
+            cir.cancel();
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "isDamaged", cancellable = true)
+    void isDamaged(CallbackInfoReturnable<Boolean> cir) {
+        ItemStack dis = (ItemStack)(Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(true);
+            cir.cancel();
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "getDamage", cancellable = true)
+    void patchModularArmorDamage(CallbackInfoReturnable<Integer> cir) {
+        ItemStack dis = (ItemStack) (Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            ModularArmorData armor = new ModularArmorData(dis);
+            DataModelData dataModel = armor.getDataModel();
+            if (dataModel != null) {
+                cir.setReturnValue(armor.tier().getDataAmount() - dataModel.getDataAmount());
+            } else {
+                cir.setReturnValue(armor.tier().getDataAmount());
+            }
+            cir.cancel();
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "getMaxDamage", cancellable = true)
+    void patchModularArmorMaxDamage(CallbackInfoReturnable<Integer> cir) {
+        ItemStack dis = (ItemStack) (Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(new ModularArmorData(dis).tier().getDataAmount());
             cir.cancel();
         }
     }
