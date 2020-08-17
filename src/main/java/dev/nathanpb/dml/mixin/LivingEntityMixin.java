@@ -30,6 +30,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -71,7 +72,15 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         dmlRefIsInREIScreen = flag;
     }
 
-    @ModifyVariable(at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z", ordinal = 0), name = "h", method = "travel")
+    @ModifyVariable(
+            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z"),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F", ordinal = 0),
+                    to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z", ordinal = 0)
+            ),
+            method = "travel",
+            ordinal = 2
+    )
     public float depthStriderEffectTravelPath(float value) {
         LivingEntity dis = (LivingEntity) (Object) this;
         if (dis.hasStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT())) {
