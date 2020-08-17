@@ -47,7 +47,7 @@ class ModularEffectRegistry {
                 register(UnderwaterHasteEffect())
                 // register(DepthStriderEffect())
                 register(WaterBreathingEffect())
-                // register(PoseidonBlessEffect())
+                register(PoseidonBlessEffect())
             }
         }
     }

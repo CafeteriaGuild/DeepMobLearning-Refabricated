@@ -19,7 +19,8 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
@@ -28,15 +29,20 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.tag.FluidTags
 
-class PoseidonBlessEffect : ModularEffect<ModularEffectTriggerPayload>(
+class PoseidonBlessEffect : StatusEffectLikeEffect(
     identifier("poseidon_bless"),
     EntityCategory.OCEAN,
     config.glitchArmor::enablePoseidonBless,
-    config.glitchArmor::poseidonBlessCost
+    config.glitchArmor::poseidonBlessCost,
+    EffectStackOption.RANDOMIZE
 ) {
-    override fun registerEvents() {
 
+    override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
+        return StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 16 * 20, 0, true, false)
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
@@ -46,4 +52,8 @@ class PoseidonBlessEffect : ModularEffect<ModularEffectTriggerPayload>(
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        return super.canApply(context, payload) && context.player.isSubmergedIn(FluidTags.WATER)
+    }
 }
