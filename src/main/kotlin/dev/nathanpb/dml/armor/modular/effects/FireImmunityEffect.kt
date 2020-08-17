@@ -27,16 +27,13 @@ import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
-import net.minecraft.text.TranslatableText
 
-class FireResistanceEffect : DamageImmunityLikeEffect(
+class FireImmunityEffect : DamageImmunityLikeEffect(
     identifier("fire_immunity"),
     EntityCategory.NETHER,
     config.glitchArmor::enableFireImmunity,
     config.glitchArmor::fireImmunityCost
 ) {
-
-    override val name = TranslatableText("effect.minecraft.fire_resistance")
 
     override fun protectsAgainst(source: DamageSource) = source.isFire
 

@@ -209,8 +209,8 @@ class GlitchArmor : ConfigData {
     var dataAmountToSuperior = 192
     var dataAmountToSelfAware = 384
 
-    var enableFireResistance = true
-    var fireResistanceCost = 1F
+    var enableFireProtection = true
+    var fireProtectionCost = 1F
 
     var enableAutoExtinguish = true
     var autoExtinguishCost = 4F

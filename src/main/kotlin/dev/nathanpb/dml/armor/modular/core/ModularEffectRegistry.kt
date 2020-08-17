@@ -33,7 +33,7 @@ class ModularEffectRegistry {
             INSTANCE.apply {
                 register(FireProtectionEffect())
                 register(AutoExtinguishEffect())
-                register(FireResistanceEffect())
+                register(FireImmunityEffect())
 
                 register(FeatherFallingEffect())
                 register(JumpBoostEffect())
