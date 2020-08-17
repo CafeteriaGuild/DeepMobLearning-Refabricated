@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
+public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
     boolean dmlRefIsInREIScreen = false;
 
     @Inject(at = @At("HEAD"), method = "onDeath")
