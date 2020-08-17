@@ -52,7 +52,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     val getApplyCost = {
         val cost = applyCost()
         val integer = floor(cost).toInt()
-        val float = cost % integer
+        val float = cost % 1
 
         if (float == 0F) integer else {
             integer + (if (Random.nextFloat() < float) 1 else 0)
