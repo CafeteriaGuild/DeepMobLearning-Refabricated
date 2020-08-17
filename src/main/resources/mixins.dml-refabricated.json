@@ -12,6 +12,7 @@
     "MobEntityMixin",
     "PlayerEntityMixin",
     "SlotMixin",
+    "StatusEffectUtilMixin",
     "WorldMixin"
   ],
   "client": [],

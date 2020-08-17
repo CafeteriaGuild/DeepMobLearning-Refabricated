@@ -19,17 +19,19 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
 import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.entity.effect.UNDERWATER_HASTE_EFFECT
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.tag.FluidTags
+import net.minecraft.text.TranslatableText
 
 class UnderwaterHasteEffect : StatusEffectLikeEffect(
     identifier("underwater_haste"),
@@ -39,8 +41,10 @@ class UnderwaterHasteEffect : StatusEffectLikeEffect(
     EffectStackOption.PRIORITIZE_GREATER
 ) {
 
+    override val name = TranslatableText("effect.${MOD_ID}.underwater_haste")
+
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
-        return StatusEffectInstance(StatusEffects.HASTE, 16 * 20, context.tier.ordinal / 2, true, false)
+        return StatusEffectInstance(UNDERWATER_HASTE_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true

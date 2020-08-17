@@ -24,6 +24,7 @@ import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.config.ModConfig
 import dev.nathanpb.dml.config.registerConfigs
+import dev.nathanpb.dml.entity.effect.registerStatusEffects
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportCallback
@@ -60,6 +61,7 @@ fun init() {
     registerClientSidePackets()
     registerScreenHandlers()
     registerEntityTypes()
+    registerStatusEffects()
     LivingEntityDieCallback.EVENT.register(DataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
