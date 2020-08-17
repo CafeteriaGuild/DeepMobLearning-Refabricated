@@ -19,8 +19,18 @@
 
 package dev.nathanpb.dml.armor.modular.core
 
+import kotlin.random.Random
+
 enum class EffectStackOption(val apply: List<ModularEffectContext>.()->List<ModularEffectContext>) {
-    PRIORITIZE_GREATER({ sortedByDescending { it.tier.ordinal } }),
-    PRIORITIZE_WORST({ sortedBy { it.tier.ordinal } }),
+    PRIORITIZE_GREATER({
+        sortedWith(
+            compareByDescending<ModularEffectContext> {
+                it.tier.ordinal
+            }.thenBy { Random.nextInt() }
+        )
+    }),
+    PRIORITIZE_WORST({
+        sortedWith(compareBy({ it.tier.ordinal }, { Random.nextInt() }))
+    }),
     RANDOMIZE(List<ModularEffectContext>::shuffled),
 }
