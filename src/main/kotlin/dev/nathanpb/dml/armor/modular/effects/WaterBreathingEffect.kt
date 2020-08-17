@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
@@ -28,9 +28,12 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.tag.FluidTags
 import net.minecraft.text.TranslatableText
 
-class WaterBreathingEffect : ModularEffect<ModularEffectTriggerPayload>(
+class WaterBreathingEffect : StatusEffectLikeEffect(
     identifier("water_breathing"),
     EntityCategory.OCEAN,
     config.glitchArmor::enableWaterBreathing,
@@ -39,8 +42,8 @@ class WaterBreathingEffect : ModularEffect<ModularEffectTriggerPayload>(
 
     override val name = TranslatableText("effect.minecraft.water_breathing")
 
-    override fun registerEvents() {
-
+    override fun createEffectInstance(): StatusEffectInstance {
+        return StatusEffectInstance(StatusEffects.WATER_BREATHING, 16 * 20, 0, true, false)
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
@@ -51,6 +54,10 @@ class WaterBreathingEffect : ModularEffect<ModularEffectTriggerPayload>(
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 3
+    }
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        return super.canApply(context, payload) && context.player.isSubmergedIn(FluidTags.WATER)
     }
 
 }
