@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
@@ -38,8 +37,6 @@ class FeatherFallingEffect : ProtectionLikeEffect(
     override val name = TranslatableText("enchantment.minecraft.feather_falling")
 
     override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
-
-    override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal in 0..1

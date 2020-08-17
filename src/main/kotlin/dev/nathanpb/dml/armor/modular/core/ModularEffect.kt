@@ -70,7 +70,6 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     @ApiStatus.OverrideOnly
     @ApiStatus.Internal
     abstract fun registerEvents()
-    protected abstract fun shouldConsumeData(context: ModularEffectContext): Boolean
     abstract fun acceptTier(tier: DataModelTier): Boolean
 
     @ApiStatus.OverrideOnly
@@ -95,9 +94,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     }
 
     private fun attemptConsumeData(context: ModularEffectContext) {
-        if (shouldConsumeData(context)) {
-            context.dataModel.dataAmount -= getApplyCost()
-        }
+        context.dataModel.dataAmount -= getApplyCost()
     }
 
     fun <R>attemptToApply(context: ModularEffectContext, payload: T, body: (ModularEffectContext, T) -> R): TypedActionResult<R> {

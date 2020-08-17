@@ -47,8 +47,6 @@ class UnderwaterHasteEffect : StatusEffectLikeEffect(
         return StatusEffectInstance(UNDERWATER_HASTE_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
     override fun acceptTier(tier: DataModelTier) = true
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {

@@ -44,8 +44,6 @@ class JumpBoostEffect : StatusEffectLikeEffect(
         return StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 17, context.tier.ordinal / 2, false, false)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 2
     }

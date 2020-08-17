@@ -46,8 +46,6 @@ class DepthStriderEffect : StatusEffectLikeEffect(
         return StatusEffectInstance(DEPTH_STRIDER_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 2
     }

@@ -55,8 +55,6 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
 
     override fun protectsAgainst(source: DamageSource) = source.isFire
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 2
     }

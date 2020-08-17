@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
@@ -39,7 +38,6 @@ class FireProtectionEffect : ProtectionLikeEffect(
 
     override fun protectsAgainst(source: DamageSource) = source.isFire
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
     override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
 
 }

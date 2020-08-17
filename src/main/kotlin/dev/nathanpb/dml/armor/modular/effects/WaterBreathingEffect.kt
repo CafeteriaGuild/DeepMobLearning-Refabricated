@@ -52,8 +52,6 @@ class WaterBreathingEffect : StatusEffectLikeEffect(
         return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 3
     }

@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.DamageImmunityLikeEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
@@ -44,8 +43,6 @@ class FireResistanceEffect : DamageImmunityLikeEffect(
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
-
-    override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.isMaxTier()

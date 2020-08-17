@@ -64,8 +64,6 @@ class FlyEffect : AbilityBasedEffect(
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
 
 }

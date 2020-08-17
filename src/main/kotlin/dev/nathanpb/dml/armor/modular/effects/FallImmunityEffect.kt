@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.DamageImmunityLikeEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
@@ -41,8 +40,6 @@ class FallImmunityEffect : DamageImmunityLikeEffect(
     }
 
     override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
-
-    override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.isMaxTier()
