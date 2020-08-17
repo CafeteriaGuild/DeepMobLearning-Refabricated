@@ -106,7 +106,7 @@ abstract class ModularEffect(
         }
     }
 
-    open fun sumLevelsOf(stack: ItemStack): Int {
+    fun sumLevelsOf(stack: ItemStack): Int {
         return (stack.item as? ItemModularGlitchArmor)?.let { item ->
             item.getAttributeModifiers(stack, item.slotType)
                 .get(entityAttribute)
@@ -115,7 +115,7 @@ abstract class ModularEffect(
         } ?: 0
     }
 
-    open fun sumLevelsOf(stacks: List<ItemStack>): Int {
+    fun sumLevelsOf(stacks: List<ItemStack>): Int {
         return stacks.map(this::sumLevelsOf).sum()
     }
 }
