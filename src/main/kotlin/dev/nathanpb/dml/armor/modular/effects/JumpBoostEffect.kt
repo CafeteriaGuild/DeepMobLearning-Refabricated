@@ -39,7 +39,7 @@ class JumpBoostEffect : StatusEffectLikeEffect(
     override val name = TranslatableText("effect.minecraft.jump_boost")
 
     override fun createEffectInstance(): StatusEffectInstance {
-        return StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 17, 0)
+        return StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 17, 0, true, false)
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
