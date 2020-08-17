@@ -106,10 +106,10 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
     }
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand): TypedActionResult<ItemStack> {
-        if (world?.isClient == false && user != null) {
+        if (user != null) {
             val stack = user.getStackInHand(hand)
-            if (user.isCreative && user.isSneaking) {
-                if (stack.item is ItemModularGlitchArmor) {
+            if (user.isSneaking && user.isCreative) {
+                if (world?.isClient == false) {
                     val data = ModularArmorData(stack)
                     val tier = data.tier()
 
@@ -117,12 +117,14 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
                         if (tier.isMaxTier()) DataModelTier.FAULTY else tier.nextTierOrCurrent()
                     )
                 }
-            } else {
+                return TypedActionResult.success(stack)
+            }
+
+            if (world?.isClient == false) {
                 user.openHandledScreen(ModularArmorScreenHandlerFactory(hand, this))
             }
-            return TypedActionResult.consume(stack)
+            return TypedActionResult.success(stack)
         }
-
         return super.use(world, user, hand)
     }
 
