@@ -21,6 +21,7 @@ package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
@@ -28,7 +29,7 @@ import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 
-class PoseidonBlessEffect : ModularEffect(
+class PoseidonBlessEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("poseidon_bless"),
     EntityCategory.OCEAN,
     config.glitchArmor::enablePoseidonBless,

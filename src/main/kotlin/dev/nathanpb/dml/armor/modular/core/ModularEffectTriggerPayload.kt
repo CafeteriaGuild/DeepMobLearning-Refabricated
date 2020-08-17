@@ -17,28 +17,16 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml.armor.modular.core
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.identifier
+interface ModularEffectTriggerPayload {
+    companion object {
+        val EMPTY = wrap(Unit)
 
-class SoulSensitiveEffect : ModularEffect<ModularEffectTriggerPayload>(
-    identifier("soul_sensitive"),
-    EntityCategory.GHOST,
-    config.glitchArmor::enableSoulSensitive,
-    config.glitchArmor::soulSensitiveCost
-) {
-    override fun registerEvents() {
-
+        fun <T>wrap(value: T) = WrappedEffectTriggerPayload(value)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
-    override fun acceptTier(tier: DataModelTier) = true
-
+    fun isEmpty() = this == EMPTY
 }
+
+data class WrappedEffectTriggerPayload<T> internal constructor(val value: T) : ModularEffectTriggerPayload

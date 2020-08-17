@@ -20,6 +20,8 @@
 package dev.nathanpb.dml.armor.modular
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
 import net.minecraft.entity.effect.StatusEffectInstance
@@ -30,25 +32,35 @@ abstract class StatusEffectLikeEffect(
     category: EntityCategory,
     isEnabled: ()->Boolean,
     applyCost: ()->Float
-) : ModularEffect(id, category, isEnabled, applyCost) {
+) : ModularEffect<ModularEffectTriggerPayload>(id, category, isEnabled, applyCost) {
 
     override fun registerEvents() {
         PlayerEntityTickEvent.register { player ->
             if (player.world.time % 80 == 0L) {
-                val statusEffectInstance = createEffectInstance()
-                val shouldRefill = player.statusEffects.none {
-                    it.duration < 15 * 20
-                        && it.effectType == statusEffectInstance.effectType
-                        && it.amplifier < statusEffectInstance.amplifier
-                }
-
-                if (shouldRefill && sumLevelsOf(player.armorItems.toList()) > 0) {
-                    player.addStatusEffect(statusEffectInstance)
+                ModularEffectContext.from(player).forEach {
+                    attemptToApply(it, ModularEffectTriggerPayload.EMPTY) { _, _ ->
+                        player.addStatusEffect(createEffectInstance())
+                    }
                 }
             }
         }
     }
 
     abstract fun createEffectInstance(): StatusEffectInstance
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        val doesNotHasEffect by lazy {
+            val statusEffectInstance = createEffectInstance()
+            context.player.statusEffects.none {
+                it.duration < 15 * 20
+                    && it.effectType == statusEffectInstance.effectType
+                    && it.amplifier < statusEffectInstance.amplifier
+            }
+        }
+
+        return super.canApply(context, payload)
+            && doesNotHasEffect
+            && sumLevelsOf(context.armor.stack) > 0
+    }
 
 }

@@ -21,13 +21,14 @@ package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.text.TranslatableText
 
-class DepthStriderEffect : ModularEffect(
+class DepthStriderEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("depth_strider"),
     EntityCategory.OCEAN,
     config.glitchArmor::enableDepthStrider,

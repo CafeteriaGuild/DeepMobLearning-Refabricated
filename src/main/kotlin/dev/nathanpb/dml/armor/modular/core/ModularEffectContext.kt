@@ -23,13 +23,39 @@ import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ItemModularGlitchArmor
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 
 data class ModularEffectContext (
-    val effect: ModularEffect,
     val player: PlayerEntity,
-    val dataModel: DataModelData,
     val armor: ModularArmorData,
-    val tier: DataModelTier,
-    val item: ItemModularGlitchArmor = armor.stack.item as ItemModularGlitchArmor
-)
+    val tier: DataModelTier = armor.tier(),
+    val dataModel: DataModelData = armor.dataModel!! // This should only be called when there IS a data model
+) {
+    companion object {
+
+        fun from(player: PlayerEntity): List<ModularEffectContext> {
+            return from(player, player.armorItems.toList())
+        }
+
+        fun from(player: PlayerEntity, stacks: List<ItemStack>): List<ModularEffectContext> {
+            return stacks.mapNotNull { from(player, it) }
+        }
+
+        fun from(player: PlayerEntity, slot: EquipmentSlot): ModularEffectContext? {
+            return from(player, player.getEquippedStack(slot))
+        }
+
+        fun from(player: PlayerEntity, stack: ItemStack): ModularEffectContext? {
+            if (stack.item is ItemModularGlitchArmor) {
+                val data = ModularArmorData(stack)
+                if (data.dataModel != null) {
+                    return ModularEffectContext(player, data)
+                }
+            }
+
+            return null
+        }
+    }
+}

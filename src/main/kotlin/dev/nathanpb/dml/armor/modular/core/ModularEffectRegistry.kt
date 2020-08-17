@@ -53,9 +53,9 @@ class ModularEffectRegistry {
         }
     }
 
-    private val entries = mutableListOf<ModularEffect>()
+    private val entries = mutableListOf<ModularEffect<*>>()
 
-    fun register(effect: ModularEffect) {
+    fun register(effect: ModularEffect<*>) {
         if (entries.none { it.id == effect.id }) {
             entries += effect.apply {
                 registerEntityAttribute()

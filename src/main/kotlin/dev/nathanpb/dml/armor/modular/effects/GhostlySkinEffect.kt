@@ -21,12 +21,13 @@ package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 
-class GhostlySkinEffect : ModularEffect(
+class GhostlySkinEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("ghostly_skin"),
     EntityCategory.GHOST,
     config.glitchArmor::enableGhostlySkin,

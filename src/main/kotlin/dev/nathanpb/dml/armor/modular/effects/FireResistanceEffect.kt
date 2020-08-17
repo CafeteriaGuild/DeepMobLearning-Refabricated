@@ -19,19 +19,18 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
+import dev.nathanpb.dml.armor.modular.DamageImmunityLikeEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.text.TranslatableText
 
-class FireResistanceEffect : ProtectionLikeEffect(
+class FireResistanceEffect : DamageImmunityLikeEffect(
     identifier("fire_immunity"),
     EntityCategory.NETHER,
     config.glitchArmor::enableFireImmunity,
@@ -39,18 +38,6 @@ class FireResistanceEffect : ProtectionLikeEffect(
 ) {
 
     override val name = TranslatableText("effect.minecraft.fire_resistance")
-
-    override fun registerEvents() {
-        PlayerEntityDamageEvent.register { context ->
-            if (protectsAgainst(context.source)) {
-                val protection = sumLevelsOf(context.entity.armorItems.toList())
-                if (protection > 0) {
-                    return@register context.copy(damage = 0F)
-                }
-            }
-            null
-        }
-    }
 
     override fun protectsAgainst(source: DamageSource) = source.isFire
 

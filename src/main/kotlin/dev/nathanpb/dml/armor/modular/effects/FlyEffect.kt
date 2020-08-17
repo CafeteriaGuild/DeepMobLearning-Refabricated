@@ -21,6 +21,7 @@ package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
@@ -29,7 +30,7 @@ import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import kotlin.random.Random
 
-class FlyEffect : ModularEffect(
+class FlyEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("fly"),
     EntityCategory.GHOST,
     config.glitchArmor::enableFly,

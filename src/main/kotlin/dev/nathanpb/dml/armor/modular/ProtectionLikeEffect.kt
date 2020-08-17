@@ -20,10 +20,15 @@
 package dev.nathanpb.dml.armor.modular
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
+import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
 import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import net.minecraft.entity.DamageUtil
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 
 abstract class ProtectionLikeEffect(
@@ -31,17 +36,32 @@ abstract class ProtectionLikeEffect(
     category: EntityCategory,
     isEnabled: ()->Boolean,
     applyCost: ()->Float
-) : ModularEffect(id, category, isEnabled, applyCost) {
+) : ModularEffect<WrappedEffectTriggerPayload<PlayerEntityDamageContext>>(id, category, isEnabled, applyCost) {
 
     override fun registerEvents() {
-        PlayerEntityDamageEvent.register { context ->
-            if (protectsAgainst(context.source)) {
-                val protection = sumLevelsOf(context.entity.armorItems.toList())
-                context.copy(damage = DamageUtil.getInflictedDamage(context.damage, protection.toFloat()))
-            } else null
+        PlayerEntityDamageEvent.register { eventContext ->
+            if (!eventContext.entity.world.isClient) {
+                val armorValues = ModularEffectContext.from(eventContext.entity).fold(0) { acc, effectContext ->
+                    val result = attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
+                        sumLevelsOf(effectContext.armor.stack)
+                    }
+
+                    if (result.result == ActionResult.SUCCESS) {
+                        acc + result.value
+                    } else acc
+                }
+                return@register eventContext.copy(
+                    damage = DamageUtil.getInflictedDamage(eventContext.damage, armorValues.toFloat())
+                )
+            }
+            return@register null
         }
     }
 
     abstract fun protectsAgainst(source: DamageSource): Boolean
+
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<PlayerEntityDamageContext>): Boolean {
+        return super.canApply(context, payload) && protectsAgainst(payload.value.source)
+    }
 
 }

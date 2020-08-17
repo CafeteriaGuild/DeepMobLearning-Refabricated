@@ -19,18 +19,17 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
+import dev.nathanpb.dml.armor.modular.DamageImmunityLikeEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 
-class FallImmunityEffect : ProtectionLikeEffect(
+class FallImmunityEffect : DamageImmunityLikeEffect(
     identifier("fall_immunity"),
     EntityCategory.SLIMY,
     config.glitchArmor::enableFallImmunity,
@@ -39,18 +38,6 @@ class FallImmunityEffect : ProtectionLikeEffect(
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
-    }
-
-    override fun registerEvents() {
-        PlayerEntityDamageEvent.register { context ->
-            if (protectsAgainst(context.source)) {
-                val protection = sumLevelsOf(context.entity.armorItems.toList())
-                if (protection > 0) {
-                    return@register context.copy(damage = 0F)
-                }
-            }
-            null
-        }
     }
 
     override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL

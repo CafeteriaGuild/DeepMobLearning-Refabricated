@@ -30,6 +30,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
+import net.minecraft.util.TypedActionResult
 import net.minecraft.util.registry.Registry
 import org.jetbrains.annotations.ApiStatus
 import kotlin.math.ceil
@@ -37,7 +38,7 @@ import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-abstract class ModularEffect(
+abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     val id: Identifier,
     val category: EntityCategory,
     val isEnabled: ()->Boolean,
@@ -87,7 +88,7 @@ abstract class ModularEffect(
         entityAttribute = Registry.register(Registry.ATTRIBUTE, id, createEntityAttribute())
     }
 
-    private fun canApply(context: ModularEffectContext): Boolean {
+    protected open fun canApply(context: ModularEffectContext, payload: T): Boolean {
         return isEnabled()
             && acceptTier(context.tier)
             && context.dataModel.dataAmount >= maxApplyCost()
@@ -99,11 +100,12 @@ abstract class ModularEffect(
         }
     }
 
-    fun attemptToApply(context: ModularEffectContext, body: () -> Unit) {
-        if (canApply(context)) {
+    fun <R>attemptToApply(context: ModularEffectContext, payload: T, body: (ModularEffectContext, T) -> R): TypedActionResult<R> {
+        if (canApply(context, payload)) {
             attemptConsumeData(context)
-            body()
+            return TypedActionResult.success(body(context, payload))
         }
+        return TypedActionResult.fail(null)
     }
 
     fun sumLevelsOf(stack: ItemStack): Int {

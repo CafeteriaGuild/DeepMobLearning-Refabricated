@@ -17,53 +17,40 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml.armor.modular
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
 import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
-import dev.nathanpb.dml.identifier
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
+import net.minecraft.util.Identifier
+import net.minecraft.util.TypedActionResult
 
-class AutoExtinguishEffect : ProtectionLikeEffect(
-    identifier("auto_extinguish"),
-    EntityCategory.NETHER,
-    config.glitchArmor::enableAutoExtinguish,
-    config.glitchArmor::autoExtinguishCost
-) {
+abstract class DamageImmunityLikeEffect(
+    id: Identifier,
+    category: EntityCategory,
+    isEnabled: ()->Boolean,
+    applyCost: ()->Float
+) : ProtectionLikeEffect(id, category, isEnabled, applyCost) {
+
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { eventContext ->
             ModularEffectContext.from(eventContext.entity)
                 .shuffled()
                 .firstOrNull { effectContext ->
                     attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
-                        eventContext.entity.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F)
-                        eventContext.entity.fireTicks = 0
+                        TypedActionResult.success(effectContext)
                     }.result == ActionResult.SUCCESS
+                }?.let {
+                    eventContext.copy(damage = 0F)
                 }
-            null
         }
     }
 
-    override fun protectsAgainst(source: DamageSource) = source.isFire
-
-    override fun shouldConsumeData(context: ModularEffectContext) = true
-
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 2
-    }
-
-    // todo check if the player is standing in fire too
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<PlayerEntityDamageContext>): Boolean {
-        return super.canApply(context, payload) && !context.player.isInLava
+        return super.canApply(context, payload) && sumLevelsOf(context.armor.stack) > 0
     }
-
 }
