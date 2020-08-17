@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.armor.modular
 
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
@@ -32,28 +33,29 @@ abstract class StatusEffectLikeEffect(
     id: Identifier,
     category: EntityCategory,
     isEnabled: ()->Boolean,
-    applyCost: ()->Float
+    applyCost: ()->Float,
+    val stackingOption: EffectStackOption
 ) : ModularEffect<ModularEffectTriggerPayload>(id, category, isEnabled, applyCost) {
 
     override fun registerEvents() {
         PlayerEntityTickEvent.register { player ->
             if (player.world.time % 80 == 0L) {
                 ModularEffectContext.from(player)
-                    .shuffled()
+                    .run(stackingOption.apply)
                     .firstOrNull {
-                        attemptToApply(it, ModularEffectTriggerPayload.EMPTY) { _, _ ->
-                            player.addStatusEffect(createEffectInstance())
+                        attemptToApply(it, ModularEffectTriggerPayload.EMPTY) { context, _ ->
+                            player.addStatusEffect(createEffectInstance(context))
                         }.result == ActionResult.SUCCESS
-                }
+                    }
             }
         }
     }
 
-    abstract fun createEffectInstance(): StatusEffectInstance
+    abstract fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
         val doesNotHasEffect by lazy {
-            val statusEffectInstance = createEffectInstance()
+            val statusEffectInstance = createEffectInstance(context)
             context.player.statusEffects.none {
                 it.duration < 15 * 20
                     && it.effectType == statusEffectInstance.effectType

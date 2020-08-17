@@ -19,26 +19,36 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.tag.FluidTags
 
-class UnderwaterHasteEffect : ModularEffect<ModularEffectTriggerPayload>(
+class UnderwaterHasteEffect : StatusEffectLikeEffect(
     identifier("underwater_haste"),
     EntityCategory.OCEAN,
     config.glitchArmor::enableUnderwaterHaste,
-    config.glitchArmor::underwaterHasteCost
+    config.glitchArmor::underwaterHasteCost,
+    EffectStackOption.PRIORITIZE_GREATER
 ) {
-    override fun registerEvents() {
 
+    override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
+        return StatusEffectInstance(StatusEffects.HASTE, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier) = true
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        return super.canApply(context, payload) && context.player.isSubmergedIn(FluidTags.WATER)
+    }
 
 }

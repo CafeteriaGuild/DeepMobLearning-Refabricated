@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
@@ -33,13 +34,14 @@ class JumpBoostEffect : StatusEffectLikeEffect(
     identifier("jump_boost"),
     EntityCategory.SLIMY,
     config.glitchArmor::enableJumpBoost,
-    config.glitchArmor::jumpBoostCost
+    config.glitchArmor::jumpBoostCost,
+    EffectStackOption.PRIORITIZE_GREATER
 ) {
 
     override val name = TranslatableText("effect.minecraft.jump_boost")
 
-    override fun createEffectInstance(): StatusEffectInstance {
-        return StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 17, 0, true, false)
+    override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
+        return StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 17, context.tier.ordinal / 2, false, false)
     }
 
     override fun shouldConsumeData(context: ModularEffectContext) = true

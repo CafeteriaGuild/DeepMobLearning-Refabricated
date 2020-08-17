@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.armor.modular.effects
 
 import dev.nathanpb.dml.armor.modular.StatusEffectLikeEffect
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
@@ -37,12 +38,13 @@ class WaterBreathingEffect : StatusEffectLikeEffect(
     identifier("water_breathing"),
     EntityCategory.OCEAN,
     config.glitchArmor::enableWaterBreathing,
-    config.glitchArmor::waterBreathingCost
+    config.glitchArmor::waterBreathingCost,
+    EffectStackOption.RANDOMIZE
 ) {
 
     override val name = TranslatableText("effect.minecraft.water_breathing")
 
-    override fun createEffectInstance(): StatusEffectInstance {
+    override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(StatusEffects.WATER_BREATHING, 16 * 20, 0, true, false)
     }
 
