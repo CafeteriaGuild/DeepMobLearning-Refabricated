@@ -22,6 +22,10 @@ repositories {
         name = "CottonMC"
         url = "https://server.bbkr.space/artifactory/libs-release"
     }
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://dl.bintray.com/ladysnake/libs'
+    }
 }
 
 dependencies {
@@ -55,6 +59,9 @@ dependencies {
 
     modApi "com.github.NathanPB:KtDataTagLib:${project.ktdatataglib_version}"
     include "com.github.NathanPB:KtDataTagLib:${project.ktdatataglib_version}"
+
+    modImplementation "io.github.ladysnake:PlayerAbilityLib:${project.pal_version}"
+    include "io.github.ladysnake:PlayerAbilityLib:${project.pal_version}"
 }
 
 processResources {

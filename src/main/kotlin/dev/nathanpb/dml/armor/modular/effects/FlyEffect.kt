@@ -19,34 +19,52 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.AbilityBasedEffect
+import dev.nathanpb.dml.armor.modular.core.EffectStackOption
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
 import dev.nathanpb.dml.identifier
+import io.github.ladysnake.pal.VanillaAbilities
 import net.minecraft.entity.attribute.EntityAttributeModifier
-import kotlin.random.Random
+import net.minecraft.util.ActionResult
 
-class FlyEffect : ModularEffect<ModularEffectTriggerPayload>(
+class FlyEffect : AbilityBasedEffect(
     identifier("fly"),
     EntityCategory.GHOST,
     config.glitchArmor::enableFly,
-    config.glitchArmor::flyCost
+    config.glitchArmor::flyCost,
+    VanillaAbilities.ALLOW_FLYING
 ) {
     override fun registerEvents() {
-
+        super.registerEvents()
+        PlayerEntityTickEvent.register { player ->
+            // Check if the data should be consumed
+            if (
+                !player.world.isClient
+                && player.world.time % 20 == 0L
+                && abilitySource.grants(player, ability)
+                && player.world.getBlockState(player.blockPos.down()).isAir
+            ) {
+                ModularEffectContext.from(player)
+                    .run(EffectStackOption.PRIORITIZE_GREATER.apply)
+                    .firstOrNull { context ->
+                        attemptToApply(context, ModularEffectTriggerPayload.EMPTY) { _, _ -> }
+                            .result == ActionResult.SUCCESS
+                    }
+            }
+        }
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
     }
 
-    override fun shouldConsumeData(context: ModularEffectContext): Boolean {
-        return Random.nextFloat() < .1
-    }
+    override fun shouldConsumeData(context: ModularEffectContext) = true
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
 

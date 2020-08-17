@@ -237,7 +237,7 @@ class GlitchArmor : ConfigData {
     var improvedGhostlySkinCost = 0F
 
     var enableFly = true
-    var flyCost = 1F
+    var flyCost = 0.05F
 
     var enableUnderwaterHaste = true
     var underwaterHasteCost = 1F

@@ -42,7 +42,7 @@ class ModularEffectRegistry {
                 // register(SoulSensitiveEffect())
                 // register(GhostlySkinEffect())
                 // register(ImprovedGhostlySkinEffect())
-                // register(FlyEffect())
+                register(FlyEffect())
 
                 register(UnderwaterHasteEffect())
                 register(DepthStriderEffect())
