@@ -233,7 +233,7 @@ class GlitchArmor : ConfigData {
     var enableGhostlySkin = true
     var ghostlySkinCost = 16F
 
-    var improvedGhostlySkin = true
+    var enableImprovedGhostlySkin = true
     var improvedGhostlySkinCost = 0F
 
     var enableFly = true
