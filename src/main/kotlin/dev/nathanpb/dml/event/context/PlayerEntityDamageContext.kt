@@ -19,11 +19,11 @@
 
 package dev.nathanpb.dml.event.context
 
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.player.PlayerEntity
 
-data class LivingEntityDamageContext(
-    val entity: LivingEntity,
+data class PlayerEntityDamageContext(
+    val entity: PlayerEntity,
     val source: DamageSource,
     val damage: Float
 )

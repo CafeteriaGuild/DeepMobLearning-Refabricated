@@ -21,7 +21,7 @@ package dev.nathanpb.dml.armor.modular
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import net.minecraft.entity.DamageUtil
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.util.Identifier
@@ -34,7 +34,7 @@ abstract class ProtectionLikeEffect(
 ) : ModularEffect(id, category, isEnabled, applyCost) {
 
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { context ->
+        PlayerEntityDamageEvent.register { context ->
             if (protectsAgainst(context.source)) {
                 val protection = getProtectionAmount(context.entity.armorItems.toList())
                 context.copy(damage = DamageUtil.getInflictedDamage(context.damage, protection.toFloat()))

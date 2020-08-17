@@ -24,7 +24,7 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.sound.SoundEvents
@@ -36,7 +36,7 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     config.glitchArmor::autoExtinguishCost
 ) {
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { context ->
+        PlayerEntityDamageEvent.register { context ->
             if (protectsAgainst(context.source) && !context.entity.isInLava) {
                 val protection = getProtectionAmount(context.entity.armorItems.toList())
                 if (protection > 0) {

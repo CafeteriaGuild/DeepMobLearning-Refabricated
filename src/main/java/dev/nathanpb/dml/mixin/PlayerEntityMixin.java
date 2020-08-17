@@ -18,8 +18,7 @@ package dev.nathanpb.dml.mixin;/*
  */
 
 import dev.nathanpb.dml.event.context.EventsKt;
-import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
-import net.minecraft.entity.LivingEntity;
+import dev.nathanpb.dml.event.context.PlayerEntityDamageContext;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,10 +32,10 @@ public class PlayerEntityMixin {
 
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentsToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
     private float applyDamage(DamageSource source, float amount) {
-        LivingEntity dis = (LivingEntity) (Object) this;
-        return EventsKt.getLivingEntityDamageEvent()
+        PlayerEntity dis = (PlayerEntity) (Object) this;
+        return EventsKt.getPlayerEntityDamageEvent()
             .invoker()
-            .invoke(new LivingEntityDamageContext(dis, source, amount))
+            .invoke(new PlayerEntityDamageContext(dis, source, amount))
             .getDamage();
     }
 

@@ -25,7 +25,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
@@ -42,7 +42,7 @@ class FallImmunityEffect : ProtectionLikeEffect(
     }
 
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { context ->
+        PlayerEntityDamageEvent.register { context ->
             if (protectsAgainst(context.source)) {
                 val protection = getProtectionAmount(context.entity.armorItems.toList())
                 if (protection > 0) {

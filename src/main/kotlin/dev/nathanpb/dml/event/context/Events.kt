@@ -22,8 +22,8 @@ package dev.nathanpb.dml.event.context
 import dev.nathanpb.dml.utils.event
 import net.minecraft.entity.player.PlayerEntity
 
-val LivingEntityDamageEvent = event<(LivingEntityDamageContext)->LivingEntityDamageContext?> { listeners ->
-    { context: LivingEntityDamageContext ->
+val PlayerEntityDamageEvent = event<(PlayerEntityDamageContext)->PlayerEntityDamageContext?> { listeners ->
+    { context: PlayerEntityDamageContext ->
         listeners.fold(context) { acc, listener ->
             listener(acc) ?: acc
         }
