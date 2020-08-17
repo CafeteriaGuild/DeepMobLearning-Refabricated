@@ -227,6 +227,9 @@ class GlitchArmor : ConfigData {
     var enableFallImmunity = true
     var fallImmunityCost = 1F
 
+    var enableEndermenProofVision = true
+    var endermenProofVisionCost = 1F
+
     var enableSoulSensitive = true
     var soulSensitiveCost = 8F
 

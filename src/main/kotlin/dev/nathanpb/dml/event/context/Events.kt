@@ -21,6 +21,7 @@ package dev.nathanpb.dml.event.context
 
 import dev.nathanpb.dml.utils.event
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.ActionResult
 
 val PlayerEntityDamageEvent = event<(PlayerEntityDamageContext)->PlayerEntityDamageContext?> { listeners ->
     { context: PlayerEntityDamageContext ->
@@ -36,5 +37,15 @@ val PlayerEntityTickEvent = event<(PlayerEntity)->Unit> { listeners ->
         listeners.forEach {
             it(entity)
         }
+    }
+}
+
+val PlayerStareEndermanEvent = event<(PlayerEntity)->ActionResult> { listeners ->
+    { entity ->
+        val succeeded = listeners.none {
+            it(entity) == ActionResult.FAIL
+        }
+
+        if (succeeded) ActionResult.SUCCESS else ActionResult.FAIL
     }
 }

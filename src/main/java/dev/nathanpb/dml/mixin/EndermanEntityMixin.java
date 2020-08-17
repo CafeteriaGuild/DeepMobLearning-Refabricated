@@ -20,7 +20,9 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.event.EndermanTeleportCallback;
+import dev.nathanpb.dml.event.context.EventsKt;
 import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,6 +41,20 @@ public class EndermanEntityMixin {
         if (result == ActionResult.FAIL) {
             ci.setReturnValue(false);
             ci.cancel();
+        }
+    }
+
+    @Inject(at = @At("RETURN"), method = "isPlayerStaring", cancellable = true)
+    public void isPlayerStaring(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) {
+            ActionResult result = EventsKt.getPlayerStareEndermanEvent()
+                .invoker()
+                .invoke(player);
+
+            if (result == ActionResult.FAIL) {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
         }
     }
 }
