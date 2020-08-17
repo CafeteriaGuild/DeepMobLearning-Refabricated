@@ -19,22 +19,37 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.damage.DamageSource
+import net.minecraft.sound.SoundEvents
 
-class AutoExtinguishEffect : ModularEffect(
+class AutoExtinguishEffect : ProtectionLikeEffect(
     identifier("auto_extinguish"),
     EntityCategory.NETHER,
     config.glitchArmor::enableAutoExtinguish,
     config.glitchArmor::autoExtinguishCost
 ) {
     override fun registerEvents() {
-
+        LivingEntityDamageEvent.register { context ->
+            if (protectsAgainst(context.source) && !context.entity.isInLava) {
+                val protection = getProtectionAmount(context.entity.armorItems.toList())
+                if (protection > 0) {
+                    context.entity.fireTicks = 0
+                    context.entity.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F)
+                    return@register context.copy(damage = 0F)
+                }
+            }
+            null
+        }
     }
+
+    override fun protectsAgainst(source: DamageSource) = source.isFire
 
     override fun shouldConsumeData(context: ModularEffectContext) = true
 
