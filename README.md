@@ -22,10 +22,14 @@ Absolutely! You can download the mod on [Curseforge](https://www.curseforge.com/
 ## Will there ever be a Forge version?
 **Well yes but actually no.** If you want a Forge version of this mod you should check out the [xt9's version](#xt9s-version)
 
-About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, fell free to make a port, it will be welcome.
+About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [the original author of the mod](#xt9s-version) and you should be fine.
 
 ## Contact
 If you want to **report bugs**, give ideas, **feedbacks** or discuss the mod at all, feel free to open an Issue or join our [Discord Guild](https://discord.com/invite/G4PjhEf) and go to the Deep Mob Learning: Refabricated section. Please note that this guild is a shared place where me and some friends are making mods, take a look at their mods too!
+
+<a href="https://discord.com/invite/G4PjhEf" target="_blank">
+  <img src="https://discordapp.com/api/guilds/707435077679841350/embed.png?style=banner2&v=2" />
+</a>
 
 ## License
 
