@@ -35,7 +35,6 @@ import net.minecraft.util.registry.Registry
 import org.jetbrains.annotations.ApiStatus
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 abstract class ModularEffect<T: ModularEffectTriggerPayload>(
@@ -105,16 +104,15 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
         return TypedActionResult.fail(null)
     }
 
-    fun sumLevelsOf(stack: ItemStack): Int {
+    fun sumLevelsOf(stack: ItemStack): Double {
         return (stack.item as? ItemModularGlitchArmor)?.let { item ->
             item.getAttributeModifiers(stack, item.slotType)
                 .get(entityAttribute)
                 .sumByDouble(EntityAttributeModifier::getValue)
-                .roundToInt()
-        } ?: 0
+        } ?: 0.0
     }
 
-    fun sumLevelsOf(stacks: List<ItemStack>): Int {
+    fun sumLevelsOf(stacks: List<ItemStack>): Double {
         return stacks.map(this::sumLevelsOf).sum()
     }
 }

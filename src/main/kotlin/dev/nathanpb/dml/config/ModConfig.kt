@@ -254,6 +254,9 @@ class GlitchArmor : ConfigData {
     var enablePoseidonBless = true
     var poseidonBlessCost = 2F
 
+    var enableResistance = true
+    var resistanceCost = .3F
+
     override fun validatePostLoad() {
         dataAmountToBasic = max(0, dataAmountToBasic)
         dataAmountToAdvanced = max(dataAmountToBasic, dataAmountToAdvanced)

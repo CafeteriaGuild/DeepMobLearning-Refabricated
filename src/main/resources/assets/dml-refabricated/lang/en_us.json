@@ -141,6 +141,8 @@
   "text.autoconfig.dml-refabricated.option.glitchArmor.waterBreathingCost": "Water Breathing Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.enablePoseidonBless": "Enable Poseidon Bless",
   "text.autoconfig.dml-refabricated.option.glitchArmor.poseidonBlessCost": "Poseidon Bless Cost",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.enableResistance": "Enable Resistance",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.resistanceCost": "Resistance Cost",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
   "rei.dml-refabricated.category.trial": "Trial",
   "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator",
@@ -158,6 +160,7 @@
   "modulareffect.dml-refabricated.fly": "Fly",
   "modulareffect.dml-refabricated.poseidon_bless": "Poseidon Bless",
   "modulareffect.dml-refabricated.fire_immunity": "Fire Immunity",
+  "modulareffect.dml-refabricated.resistance": "Resistance",
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider"
 }
