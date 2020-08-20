@@ -67,6 +67,8 @@
   "block.dml-refabricated.loot_fabricator": "Loot Fabricator",
   "block.dml-refabricated.cafeteria": "Cafeteria",
   "block.dml-refabricated.matter_condenser": "Matter Condenser",
+  "category.dml-refabricated.modular_armor": "Deep Mob Learning: Refabricated - Glitch Armor",
+  "key.dml-refabricated.teleport": "Teleport",
   "entity_type.dml-refabricated.system_glitch": "System Glitch",
   "text.autoconfig.dml-refabricated.title": "Deep Mob Learning: Refabricated",
   "text.autoconfig.dml-refabricated.category.trial": "Trial",
