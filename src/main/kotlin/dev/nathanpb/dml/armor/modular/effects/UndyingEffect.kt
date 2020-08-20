@@ -24,11 +24,13 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.FindTotemOfUndyingCallback
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.firstOrNullMapping
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.ActionResult
@@ -50,6 +52,10 @@ class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
                     } else null
                 }
         }
+    }
+
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
     }
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
