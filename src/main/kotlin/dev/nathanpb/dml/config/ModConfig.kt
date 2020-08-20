@@ -257,6 +257,9 @@ class GlitchArmor : ConfigData {
     var enableResistance = true
     var resistanceCost = .3F
 
+    var enableUndying = true
+    var undyingCost = 8F
+
     override fun validatePostLoad() {
         dataAmountToBasic = max(0, dataAmountToBasic)
         dataAmountToAdvanced = max(dataAmountToBasic, dataAmountToAdvanced)

@@ -20,7 +20,9 @@
 package dev.nathanpb.dml.event.context
 
 import dev.nathanpb.dml.utils.event
+import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 
 val PlayerEntityDamageEvent = event<(PlayerEntityDamageContext)->PlayerEntityDamageContext?> { listeners ->
@@ -47,5 +49,13 @@ val PlayerStareEndermanEvent = event<(PlayerEntity)->ActionResult> { listeners -
         }
 
         if (succeeded) ActionResult.SUCCESS else ActionResult.FAIL
+    }
+}
+
+val FindTotemOfUndyingCallback = event<(PlayerEntity)->ItemStack?> { listeners ->
+    { entity ->
+        listeners.toList().firstOrNullMapping {
+            it(entity)
+        }
     }
 }

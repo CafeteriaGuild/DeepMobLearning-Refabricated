@@ -23,9 +23,17 @@ import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
+import dev.nathanpb.dml.event.context.EventsKt;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -87,5 +95,35 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
             return value + dis.getStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
         }
         return value;
+    }
+
+    // TODO use ModifyVar as smart guys do
+    @Inject(at = @At("RETURN"), method = "tryUseTotem", cancellable = true)
+    public void undyingEffect(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue()) {
+            LivingEntity dis = (LivingEntity) (Object) this;
+            if (dis instanceof PlayerEntity) {
+                ItemStack totemStack = EventsKt.getFindTotemOfUndyingCallback()
+                        .invoker()
+                        .invoke((PlayerEntity) dis);
+
+                if (totemStack != null) {
+                    dis.setHealth(1.0F);
+                    dis.clearStatusEffects();
+                    dis.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
+                    dis.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
+                    dis.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
+                    dis.world.sendEntityStatus(dis, (byte)35);
+
+                    if (dis instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)dis;
+                        serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(Items.TOTEM_OF_UNDYING));
+                        Criteria.USED_TOTEM.trigger(serverPlayerEntity, totemStack);
+                    }
+                    totemStack.decrement(1);
+                    cir.setReturnValue(true);
+                }
+            }
+        }
     }
 }

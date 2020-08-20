@@ -47,6 +47,7 @@ class ModularEffectRegistry {
                 register(FlyEffect())
 
                 register(ResistanceEffect())
+                register(UndyingEffect())
 
                 register(UnderwaterHasteEffect())
                 register(DepthStriderEffect())
