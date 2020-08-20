@@ -29,6 +29,7 @@ import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.registry.Registry
@@ -102,6 +103,10 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
             return TypedActionResult.success(body(context, payload))
         }
         return TypedActionResult.fail(null)
+    }
+
+    fun attemptToApply(context: ModularEffectContext, payload: T): ActionResult {
+        return attemptToApply(context, payload) { _, _ -> }.result
     }
 
     fun sumLevelsOf(stack: ItemStack): Double {

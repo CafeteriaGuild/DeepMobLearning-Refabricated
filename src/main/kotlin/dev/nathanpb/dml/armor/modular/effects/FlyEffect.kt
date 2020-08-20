@@ -53,8 +53,7 @@ class FlyEffect : AbilityBasedEffect(
                 ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)
                     .firstOrNull { context ->
-                        attemptToApply(context, ModularEffectTriggerPayload.EMPTY) { _, _ -> }
-                            .result == ActionResult.SUCCESS
+                        attemptToApply(context, ModularEffectTriggerPayload.EMPTY) == ActionResult.SUCCESS
                     }
             }
         }

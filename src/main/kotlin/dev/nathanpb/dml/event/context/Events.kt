@@ -20,7 +20,11 @@
 package dev.nathanpb.dml.event.context
 
 import dev.nathanpb.dml.utils.event
+import dev.nathanpb.dml.utils.firstNonNullMapping
 import dev.nathanpb.dml.utils.firstOrNullMapping
+import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.ai.goal.Goal
+import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
@@ -55,7 +59,7 @@ val PlayerStareEndermanEvent = event<(PlayerEntity)->ActionResult> { listeners -
 
 val FindTotemOfUndyingCallback = event<(PlayerEntity)->ItemStack?> { listeners ->
     { entity ->
-        listeners.toList().firstOrNullMapping {
+        listeners.toList().firstNonNullMapping {
             it(entity)
         }
     }
@@ -66,5 +70,13 @@ val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> 
         listeners.any {
             it(player, pos, rotation)
         }
+    }
+}
+
+val GoalTargetsEntityEvent = event<(MobEntity, Goal, LivingEntity)->ActionResult> { listeners ->
+    { mob, goal, target ->
+        listeners.toList().firstOrNullMapping({ it(mob, goal, target) }) {
+            it == ActionResult.FAIL
+        } ?: ActionResult.PASS
     }
 }

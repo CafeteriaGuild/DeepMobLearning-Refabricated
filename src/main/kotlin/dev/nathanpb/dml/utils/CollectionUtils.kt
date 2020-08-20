@@ -11,9 +11,19 @@ package dev.nathanpb.dml.utils
 // kotlin what the fuck
 fun <T> Collection<T>.randomOrNull() = if (isEmpty()) null else random()
 
-fun <T, R> Iterable<T>.firstOrNullMapping(map: (T) -> R?): R? {
+fun <T, R> Iterable<T>.firstNonNullMapping(map: (T) -> R?): R? {
     for (element in this) {
         return map(element) ?: continue
+    }
+    return null
+}
+
+fun <T, R> Iterable<T>.firstOrNullMapping(map: (T) -> R, accept: (R)->Boolean): R? {
+    for (element in this) {
+        val transformed = map(element)
+        if (accept(transformed)) {
+            return transformed
+        }
     }
     return null
 }
