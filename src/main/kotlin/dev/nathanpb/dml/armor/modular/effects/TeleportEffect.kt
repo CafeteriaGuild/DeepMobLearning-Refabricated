@@ -24,6 +24,7 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.payload.TeleportEffectPayload
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.TeleportEffectRequestedEvent
@@ -37,6 +38,7 @@ import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.ActionResult
 import net.minecraft.util.hit.HitResult
@@ -111,6 +113,10 @@ class TeleportEffect : ModularEffect<TeleportEffectPayload>(
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier >= DataModelTier.SUPERIOR
+    }
+
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
     }
 
 }

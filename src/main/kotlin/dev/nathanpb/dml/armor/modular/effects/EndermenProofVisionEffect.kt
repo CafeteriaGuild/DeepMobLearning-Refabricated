@@ -24,10 +24,12 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.PlayerStareEndermanEvent
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.util.ActionResult
 
 class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
@@ -61,5 +63,9 @@ class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+    }
 
 }
