@@ -17,29 +17,25 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.net
+package dev.nathanpb.dml.net.consumers
 
-import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.net.consumers.TeleportEffectRequestedPacketConsumer
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
+import dev.nathanpb.dml.event.context.TeleportEffectRequestedEvent
+import dev.nathanpb.dml.utils.readVec3d
 import net.fabricmc.fabric.api.network.PacketConsumer
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
-import net.minecraft.util.Identifier
+import net.fabricmc.fabric.api.network.PacketContext
+import net.minecraft.network.PacketByteBuf
 
-val C2S_TELEPORT_EFFECT_REQUESTED = identifier("teleport_effect_requested")
-
-fun registerClientSidePackets() {
-    hashMapOf<Identifier, PacketConsumer>(
-        // I'll be keeping this here to use when I need packets again
-    ).forEach { (id, consumer) ->
-        ClientSidePacketRegistry.INSTANCE.register(id, consumer)
-    }
-}
-
-fun registerServerSidePackets() {
-    hashMapOf<Identifier, PacketConsumer>(
-        C2S_TELEPORT_EFFECT_REQUESTED to TeleportEffectRequestedPacketConsumer()
-    ).forEach { (id, consumer) ->
-        ServerSidePacketRegistry.INSTANCE.register(id, consumer)
+class TeleportEffectRequestedPacketConsumer : PacketConsumer {
+    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+        val pos = buf.readVec3d()
+        val rotation = buf.readVec3d()
+        context.taskQueue.execute {
+            if (
+                pos.squaredDistanceTo(context.player.pos) <= 4*4
+                && arrayOf(rotation.x, rotation.y, rotation.z).all { it in -128F..128F }
+            ) {
+                TeleportEffectRequestedEvent.invoker().invoke(context.player, pos, rotation)
+            }
+        }
     }
 }

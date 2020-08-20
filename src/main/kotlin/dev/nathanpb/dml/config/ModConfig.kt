@@ -230,6 +230,9 @@ class GlitchArmor : ConfigData {
     var enableEndermenProofVision = true
     var endermenProofVisionCost = 1F
 
+    var enableTeleports = true
+    var teleportsCost = 1.5F
+
     var enableSoulSensitive = true
     var soulSensitiveCost = 8F
 

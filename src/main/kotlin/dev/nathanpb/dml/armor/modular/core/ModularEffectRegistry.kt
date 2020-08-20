@@ -40,6 +40,7 @@ class ModularEffectRegistry {
                 register(FallImmunityEffect())
 
                 register(EndermenProofVisionEffect())
+                register(TeleportEffect())
 
                 // register(SoulSensitiveEffect())
                 // register(GhostlySkinEffect())
