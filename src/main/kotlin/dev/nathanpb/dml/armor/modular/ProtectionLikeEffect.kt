@@ -41,7 +41,7 @@ abstract class ProtectionLikeEffect(
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { eventContext ->
             if (!eventContext.entity.world.isClient) {
-                val armorValues = ModularEffectContext.from(eventContext.entity).fold(0) { acc, effectContext ->
+                val armorValues = ModularEffectContext.from(eventContext.entity).fold(0.0) { acc, effectContext ->
                     val result = attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
                         sumLevelsOf(effectContext.armor.stack)
                     }
@@ -51,11 +51,15 @@ abstract class ProtectionLikeEffect(
                     } else acc
                 }
                 return@register eventContext.copy(
-                    damage = DamageUtil.getInflictedDamage(eventContext.damage, armorValues.toFloat())
+                    damage = inflictDamage(eventContext, armorValues)
                 )
             }
             return@register null
         }
+    }
+
+    open fun inflictDamage(event: PlayerEntityDamageContext, armorValues: Double): Float {
+        return DamageUtil.getInflictedDamage(event.damage, armorValues.toFloat())
     }
 
     abstract fun protectsAgainst(source: DamageSource): Boolean
