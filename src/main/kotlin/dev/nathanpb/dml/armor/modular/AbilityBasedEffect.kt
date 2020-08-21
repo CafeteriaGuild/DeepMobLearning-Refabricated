@@ -33,10 +33,9 @@ import net.minecraft.util.Identifier
 abstract class AbilityBasedEffect(
     id: Identifier,
     category: EntityCategory,
-    isEnabled: () -> Boolean,
     applyCost: () -> Float,
     val ability: PlayerAbility
-) : ModularEffect<ModularEffectTriggerPayload>(id, category, isEnabled, applyCost) {
+) : ModularEffect<ModularEffectTriggerPayload>(id, category, applyCost) {
 
     val abilitySource: AbilitySource = Pal.getAbilitySource(id)
 

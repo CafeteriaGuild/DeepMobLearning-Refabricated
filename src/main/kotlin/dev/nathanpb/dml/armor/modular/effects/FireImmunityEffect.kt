@@ -31,8 +31,7 @@ import net.minecraft.entity.damage.DamageSource
 class FireImmunityEffect : DamageImmunityLikeEffect(
     identifier("fire_immunity"),
     EntityCategory.NETHER,
-    config.glitchArmor::enableFireImmunity,
-    config.glitchArmor::fireImmunityCost
+    config.glitchArmor.costs::fireImmunity
 ) {
 
     override fun protectsAgainst(source: DamageSource) = source.isFire

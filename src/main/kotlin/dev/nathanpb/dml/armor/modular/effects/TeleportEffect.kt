@@ -48,8 +48,7 @@ import net.minecraft.world.RayTraceContext
 class TeleportEffect : ModularEffect<TeleportEffectPayload>(
     identifier("teleport"),
     EntityCategory.END,
-    config.glitchArmor::enableTeleports,
-    config.glitchArmor::teleportsCost
+    config.glitchArmor.costs::teleports
 ) {
 
     @Environment(EnvType.CLIENT)

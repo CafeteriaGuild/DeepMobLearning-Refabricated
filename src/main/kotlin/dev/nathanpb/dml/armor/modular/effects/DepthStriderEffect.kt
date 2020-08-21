@@ -35,8 +35,7 @@ import net.minecraft.text.TranslatableText
 class DepthStriderEffect : StatusEffectLikeEffect(
     identifier("depth_strider"),
     EntityCategory.OCEAN,
-    config.glitchArmor::enableDepthStrider,
-    config.glitchArmor::depthStriderCost,
+    config.glitchArmor.costs::depthStrider,
     EffectStackOption.PRIORITIZE_GREATER
 ) {
 

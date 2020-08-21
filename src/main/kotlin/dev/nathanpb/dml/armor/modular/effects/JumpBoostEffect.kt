@@ -33,8 +33,7 @@ import net.minecraft.text.TranslatableText
 class JumpBoostEffect : StatusEffectLikeEffect(
     identifier("jump_boost"),
     EntityCategory.SLIMY,
-    config.glitchArmor::enableJumpBoost,
-    config.glitchArmor::jumpBoostCost,
+    config.glitchArmor.costs::jumpBoost,
     EffectStackOption.PRIORITIZE_GREATER
 ) {
 

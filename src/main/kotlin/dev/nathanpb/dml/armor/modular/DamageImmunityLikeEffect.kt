@@ -31,9 +31,8 @@ import net.minecraft.util.Identifier
 abstract class DamageImmunityLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    isEnabled: ()->Boolean,
     applyCost: ()->Float
-) : ProtectionLikeEffect(id, category, isEnabled, applyCost) {
+) : ProtectionLikeEffect(id, category, applyCost) {
 
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { eventContext ->

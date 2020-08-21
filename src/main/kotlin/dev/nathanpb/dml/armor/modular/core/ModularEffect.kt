@@ -41,9 +41,12 @@ import kotlin.random.Random
 abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     val id: Identifier,
     val category: EntityCategory,
-    val isEnabled: ()->Boolean,
     applyCost: ()->Float
 ) {
+
+    val isEnabled = {
+        applyCost() > 0F
+    }
 
     val maxApplyCost = {
         ceil(applyCost()).toInt()

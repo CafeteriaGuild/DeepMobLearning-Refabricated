@@ -36,8 +36,7 @@ import net.minecraft.util.ActionResult
 class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("undying"),
     EntityCategory.ILLAGER,
-    config.glitchArmor::enableUndying,
-    config.glitchArmor::undyingCost
+    config.glitchArmor.costs::undying
 ) {
     override fun registerEvents() {
         FindTotemOfUndyingCallback.register { player ->

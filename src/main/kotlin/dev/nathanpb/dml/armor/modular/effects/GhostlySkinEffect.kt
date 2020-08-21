@@ -29,8 +29,7 @@ import dev.nathanpb.dml.identifier
 class GhostlySkinEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("ghostly_skin"),
     EntityCategory.GHOST,
-    config.glitchArmor::enableGhostlySkin,
-    config.glitchArmor::ghostlySkinCost
+    config.glitchArmor.costs::ghostlySkin
 ) {
     override fun registerEvents() {
 

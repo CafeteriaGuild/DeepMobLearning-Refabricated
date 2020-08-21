@@ -36,8 +36,7 @@ import net.minecraft.util.ActionResult
 class AutoExtinguishEffect : ProtectionLikeEffect(
     identifier("auto_extinguish"),
     EntityCategory.NETHER,
-    config.glitchArmor::enableAutoExtinguish,
-    config.glitchArmor::autoExtinguishCost
+    config.glitchArmor.costs::autoExtinguish
 ) {
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { eventContext ->

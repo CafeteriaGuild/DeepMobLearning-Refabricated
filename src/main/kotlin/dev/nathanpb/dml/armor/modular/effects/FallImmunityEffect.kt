@@ -31,8 +31,7 @@ import net.minecraft.entity.damage.DamageSource
 class FallImmunityEffect : DamageImmunityLikeEffect(
     identifier("fall_immunity"),
     EntityCategory.SLIMY,
-    config.glitchArmor::enableFallImmunity,
-    config.glitchArmor::fallImmunityCost
+    config.glitchArmor.costs::fallImmunity
 ) {
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {

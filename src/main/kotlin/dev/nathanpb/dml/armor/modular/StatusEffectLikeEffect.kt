@@ -32,10 +32,9 @@ import net.minecraft.util.Identifier
 abstract class StatusEffectLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    isEnabled: ()->Boolean,
     applyCost: ()->Float,
     val stackingOption: EffectStackOption
-) : ModularEffect<ModularEffectTriggerPayload>(id, category, isEnabled, applyCost) {
+) : ModularEffect<ModularEffectTriggerPayload>(id, category, applyCost) {
 
     override fun registerEvents() {
         PlayerEntityTickEvent.register { player ->

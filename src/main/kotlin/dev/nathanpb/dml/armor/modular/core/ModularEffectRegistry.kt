@@ -78,6 +78,6 @@ class ModularEffectRegistry {
     fun <T>fromId(id: Identifier) = fromId(id) as? T?
 
     fun allMatching(category: EntityCategory, tier: DataModelTier) = entries.filter {
-        it.category == category && it.acceptTier(tier)
+        it.isEnabled() && it.category == category && it.acceptTier(tier)
     }
 }

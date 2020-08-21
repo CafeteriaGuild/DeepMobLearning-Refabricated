@@ -30,8 +30,7 @@ import net.minecraft.text.TranslatableText
 class FireProtectionEffect : ProtectionLikeEffect(
     identifier("fire_protection"),
     EntityCategory.NETHER,
-    config.glitchArmor::enableFireProtection,
-    config.glitchArmor::fireProtectionCost
+    config.glitchArmor.costs::fireProtection
 ) {
 
     override val name = TranslatableText("enchantment.minecraft.fire_protection")

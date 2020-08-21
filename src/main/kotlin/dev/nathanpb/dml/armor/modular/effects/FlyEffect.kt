@@ -36,8 +36,7 @@ import net.minecraft.util.ActionResult
 class FlyEffect : AbilityBasedEffect(
     identifier("fly"),
     EntityCategory.GHOST,
-    config.glitchArmor::enableFly,
-    config.glitchArmor::flyCost,
+    config.glitchArmor.costs::fly,
     VanillaAbilities.ALLOW_FLYING
 ) {
     override fun registerEvents() {

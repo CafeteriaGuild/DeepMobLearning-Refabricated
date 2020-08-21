@@ -35,8 +35,7 @@ import net.minecraft.util.ActionResult
 class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("endermen_proof_vision"),
     EntityCategory.END,
-    config.glitchArmor::enableEndermenProofVision,
-    config.glitchArmor::endermenProofVisionCost
+    config.glitchArmor.costs::endermenProofVision
 ) {
     override fun registerEvents() {
         PlayerStareEndermanEvent.register { player ->
