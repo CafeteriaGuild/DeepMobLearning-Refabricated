@@ -97,7 +97,9 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     }
 
     private fun attemptConsumeData(context: ModularEffectContext) {
-        context.dataModel.dataAmount -= getApplyCost()
+        if (shouldConsumeData(context)) {
+            context.dataModel.dataAmount -= getApplyCost()
+        }
     }
 
     fun <R>attemptToApply(context: ModularEffectContext, payload: T, body: (ModularEffectContext, T) -> R): TypedActionResult<R> {
@@ -111,6 +113,8 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     fun attemptToApply(context: ModularEffectContext, payload: T): ActionResult {
         return attemptToApply(context, payload) { _, _ -> }.result
     }
+
+    open fun shouldConsumeData(context: ModularEffectContext) = true
 
     fun sumLevelsOf(stack: ItemStack): Double {
         return (stack.item as? ItemModularGlitchArmor)?.let { item ->

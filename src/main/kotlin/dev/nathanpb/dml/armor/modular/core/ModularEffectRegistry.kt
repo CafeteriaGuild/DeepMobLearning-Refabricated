@@ -39,8 +39,13 @@ class ModularEffectRegistry {
                 register(JumpBoostEffect())
                 register(FallImmunityEffect())
 
+                register(ZombieFriendlyEffect())
+
+                register(SkeletonFriendlyEffect())
+
                 register(EndermenProofVisionEffect())
                 register(TeleportEffect())
+                register(ShulkerFriendlyEffect())
 
                 // register(SoulSensitiveEffect())
                 // register(GhostlySkinEffect())

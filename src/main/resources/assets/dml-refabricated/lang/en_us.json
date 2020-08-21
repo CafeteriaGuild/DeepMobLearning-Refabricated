@@ -130,6 +130,9 @@
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.endermenProofVision": "Endermen Proof Vision Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.teleports": "Teleport Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.undying": "Undying Cost",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.costs.zombieFriendly": "Zombie Friendly Cost",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.costs.shulkerFriendly": "Skeleton Friendly Cost",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.costs.skeletonFriendly": "Skeleton Friendly Cost",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
   "rei.dml-refabricated.category.trial": "Trial",
   "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator",
@@ -150,6 +153,9 @@
   "modulareffect.dml-refabricated.resistance": "Resistance",
   "modulareffect.dml-refabricated.endermen_proof_vision": "Endermen Proof Vision",
   "modulareffect.dml-refabricated.teleport": "Teleport",
+  "modulareffect.dml-refabricated.zombie_friendly": "Zombie Friendly",
+  "modulareffect.dml-refabricated.skeleton_friendly": "Skeleton Friendly",
+  "modulareffect.dml-refabricated.shulker_friendly": "Shulker Friendly",
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider"
 }

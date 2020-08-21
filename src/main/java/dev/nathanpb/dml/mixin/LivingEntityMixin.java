@@ -29,11 +29,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -122,6 +124,23 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
                     }
                     totemStack.decrement(1);
                     cir.setReturnValue(true);
+                }
+            }
+        }
+    }
+
+    @Inject(at = @At("RETURN"), method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", cancellable = true)
+    public void canTarget(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity dis = (LivingEntity) (Object) this;
+        if (dis instanceof MobEntity) {
+            if (cir.getReturnValue()) {
+                ActionResult eventResult = EventsKt.getCanTargetEntityEvent()
+                    .invoker()
+                    .invoke((MobEntity) dis, target);
+
+                if (eventResult.equals(ActionResult.FAIL)) {
+                    cir.setReturnValue(false);
+                    cir.cancel();
                 }
             }
         }

@@ -227,8 +227,11 @@ class GlitchArmorDataConsume : ConfigData {
     var featherFalling = 3F
     var fireImmunity = 1F
     var jumpBoost = 1F
+    var zombieFriendly = .1F
+    var skeletonFriendly = .1F
     var fallImmunity = 1F
     var endermenProofVision = 1F
+    var shulkerFriendly = .2F
     var teleports = 1.5F
     var soulSensitive = 8F
     var ghostlySkin = 16F

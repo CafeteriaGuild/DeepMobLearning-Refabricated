@@ -23,7 +23,6 @@ import dev.nathanpb.dml.utils.event
 import dev.nathanpb.dml.utils.firstNonNullMapping
 import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.ai.goal.Goal
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -73,9 +72,9 @@ val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> 
     }
 }
 
-val GoalTargetsEntityEvent = event<(MobEntity, Goal, LivingEntity)->ActionResult> { listeners ->
-    { mob, goal, target ->
-        listeners.toList().firstOrNullMapping({ it(mob, goal, target) }) {
+val CanTargetEntityEvent = event<(MobEntity, LivingEntity)->ActionResult> { listeners ->
+    { mob, target ->
+        listeners.toList().firstOrNullMapping({ it(mob, target) }) {
             it == ActionResult.FAIL
         } ?: ActionResult.PASS
     }
