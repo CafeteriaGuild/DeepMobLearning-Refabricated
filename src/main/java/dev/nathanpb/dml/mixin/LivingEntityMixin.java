@@ -19,6 +19,7 @@ package dev.nathanpb.dml.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.mojang.datafixers.util.Pair;
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
@@ -43,6 +44,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
@@ -144,5 +147,15 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
                 }
             }
         }
+    }
+
+    @ModifyVariable(
+        at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;"),
+        method = "applyFoodEffects"
+    )
+    public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
+        return EventsKt.getFoodStatusEffectsCallback()
+            .invoker()
+            .invoke((LivingEntity) (Object) this, stack, effects);
     }
 }

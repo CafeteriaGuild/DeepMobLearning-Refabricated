@@ -228,6 +228,7 @@ class GlitchArmorDataConsume : ConfigData {
     var fireImmunity = 1F
     var jumpBoost = 1F
     var plenty = 1F
+    var rotResistance = .5F
     var zombieFriendly = .1F
     var skeletonFriendly = .1F
     var fallImmunity = 1F

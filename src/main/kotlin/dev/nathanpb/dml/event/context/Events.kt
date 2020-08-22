@@ -19,10 +19,12 @@
 
 package dev.nathanpb.dml.event.context
 
+import com.mojang.datafixers.util.Pair
 import dev.nathanpb.dml.utils.event
 import dev.nathanpb.dml.utils.firstNonNullMapping
 import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -86,6 +88,14 @@ val PlayerTakeHungerEvent = event<(PlayerEntity, Int)->Int> { listeners ->
             if (acc > 0) {
                 function(player, acc)
             } else acc
+        }
+    }
+}
+
+val FoodStatusEffectsCallback = event<(LivingEntity, ItemStack, List<Pair<StatusEffectInstance, Float>>)->List<Pair<StatusEffectInstance, Float>>> { listeners ->
+    { entity, stack, effects ->
+        listeners.toList().fold(effects) { acc, function ->
+            function(entity, stack, acc)
         }
     }
 }
