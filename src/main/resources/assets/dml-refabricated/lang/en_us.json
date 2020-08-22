@@ -133,6 +133,7 @@
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.skeletonFriendly": "Skeleton Friendly Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.plenty": "Plenty Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.rotResistance": "Rot Resistance Cost",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.costs.unrottenFlesh": "Unrotten Flesh Cost",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
   "rei.dml-refabricated.category.trial": "Trial",
   "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator",
@@ -156,6 +157,7 @@
   "modulareffect.dml-refabricated.shulker_friendly": "Shulker Friendly",
   "modulareffect.dml-refabricated.plenty": "Plenty",
   "modulareffect.dml-refabricated.rot_resistance": "Rot Resistance",
+  "modulareffect.dml-refabricated.unrotten_flesh": "Unrotten Flesh",
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider"
 }

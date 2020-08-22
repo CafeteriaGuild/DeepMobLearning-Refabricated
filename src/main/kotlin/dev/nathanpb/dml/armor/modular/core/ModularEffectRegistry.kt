@@ -45,6 +45,7 @@ class ModularEffectRegistry {
                 register(PlentyEffect())
 
                 // Zombie
+                register(UnrottenFleshEffect())
                 register(RotResistanceEffect())
                 register(ZombieFriendlyEffect())
 

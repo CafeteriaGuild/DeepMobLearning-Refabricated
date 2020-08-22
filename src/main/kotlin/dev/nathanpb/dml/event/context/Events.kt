@@ -99,3 +99,11 @@ val FoodStatusEffectsCallback = event<(LivingEntity, ItemStack, List<Pair<Status
         }
     }
 }
+
+val LivingEntityEatEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
+    { entity, stack ->
+        listeners.forEach {
+            it(entity, stack)
+        }
+    }
+}

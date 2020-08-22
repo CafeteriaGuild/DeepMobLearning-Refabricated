@@ -37,6 +37,7 @@ import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -157,5 +158,14 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         return EventsKt.getFoodStatusEffectsCallback()
             .invoker()
             .invoke((LivingEntity) (Object) this, stack, effects);
+    }
+
+    @Inject(at = @At("RETURN"), method = "eatFood")
+    public void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+        if (stack.isFood()) {
+            EventsKt.getLivingEntityEatEvent()
+                .invoker()
+                .invoke((LivingEntity) (Object) this, stack);
+        }
     }
 }
