@@ -133,6 +133,7 @@
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.zombieFriendly": "Zombie Friendly Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.shulkerFriendly": "Skeleton Friendly Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.skeletonFriendly": "Skeleton Friendly Cost",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.costs.plenty": "Plenty Cost",
   "rei.dml-refabricated.category.crushing": "Crushing Recipe",
   "rei.dml-refabricated.category.trial": "Trial",
   "rei.dml-refabricated.category.loot_fabricator": "Loot Fabricator",
@@ -156,6 +157,7 @@
   "modulareffect.dml-refabricated.zombie_friendly": "Zombie Friendly",
   "modulareffect.dml-refabricated.skeleton_friendly": "Skeleton Friendly",
   "modulareffect.dml-refabricated.shulker_friendly": "Shulker Friendly",
+  "modulareffect.dml-refabricated.plenty": "Plenty",
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider"
 }

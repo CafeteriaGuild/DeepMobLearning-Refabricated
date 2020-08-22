@@ -5,6 +5,7 @@
   "mixins": [
     "EndermanEntityMixin",
     "ExplosionPreventMixin",
+    "HungerManagerMixin",
     "IArmorItemMixin",
     "ICraftingResultSlotMixin",
     "ItemStackMixin",

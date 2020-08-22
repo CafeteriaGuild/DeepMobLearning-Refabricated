@@ -79,3 +79,13 @@ val CanTargetEntityEvent = event<(MobEntity, LivingEntity)->ActionResult> { list
         } ?: ActionResult.PASS
     }
 }
+
+val PlayerTakeHungerEvent = event<(PlayerEntity, Int)->Int> { listeners ->
+    { player, amount ->
+        listeners.toList().fold(amount) { acc, function ->
+            if (acc > 0) {
+                function(player, acc)
+            } else acc
+        }
+    }
+}

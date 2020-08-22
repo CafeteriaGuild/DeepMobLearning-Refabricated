@@ -31,30 +31,41 @@ class ModularEffectRegistry {
 
         fun registerDefaults() {
             INSTANCE.apply {
+                // Nether
                 register(FireProtectionEffect())
                 register(AutoExtinguishEffect())
                 register(FireImmunityEffect())
 
+                // Slimy
                 register(FeatherFallingEffect())
                 register(JumpBoostEffect())
                 register(FallImmunityEffect())
 
+                // Overworld
+                register(PlentyEffect())
+
+                // Zombie
                 register(ZombieFriendlyEffect())
 
+                // Skeleton
                 register(SkeletonFriendlyEffect())
 
+                // End
                 register(EndermenProofVisionEffect())
                 register(TeleportEffect())
                 register(ShulkerFriendlyEffect())
 
+                // Ghost
                 // register(SoulSensitiveEffect())
                 // register(GhostlySkinEffect())
                 // register(ImprovedGhostlySkinEffect())
                 register(FlyEffect())
 
+                // Illager
                 register(ResistanceEffect())
                 register(UndyingEffect())
 
+                // Ocean
                 register(UnderwaterHasteEffect())
                 register(DepthStriderEffect())
                 register(WaterBreathingEffect())
