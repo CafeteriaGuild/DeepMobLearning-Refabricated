@@ -26,9 +26,11 @@ import net.minecraft.util.registry.Registry
 
 class UnderwaterHasteEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0x46D99C)
 class DepthStriderEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0x02A7D9)
+class SoulVisionEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0xFFD900)
 
 val UNDERWATER_HASTE_EFFECT = register("underwater_haste", UnderwaterHasteEffect())
 val DEPTH_STRIDER_EFFECT = register("depth_strider", DepthStriderEffect())
+val SOUL_VISION_EFFECT = register("soul_vision", SoulVisionEffect())
 
 private fun register(idPath: String, entry: StatusEffect): StatusEffect {
     return Registry.register(Registry.STATUS_EFFECT, Registry.STATUS_EFFECT.toList().size, identifier(idPath).toString(), entry)
@@ -37,4 +39,5 @@ private fun register(idPath: String, entry: StatusEffect): StatusEffect {
 fun registerStatusEffects() {
     UNDERWATER_HASTE_EFFECT
     DEPTH_STRIDER_EFFECT
+    SOUL_VISION_EFFECT
 }

@@ -208,6 +208,7 @@ class GlitchArmor : ConfigData {
     var dataAmountToAdvanced = 96
     var dataAmountToSuperior = 192
     var dataAmountToSelfAware = 384
+    var soulVisionRange = 12
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
@@ -236,7 +237,7 @@ class GlitchArmorDataConsume : ConfigData {
     var endermenProofVision = 1F
     var shulkerFriendly = .2F
     var teleports = 1.5F
-    var soulSensitive = 8F
+    var soulVision = 8F
     var fly = 0.05F
     var underwaterHaste = 1F
     var depthStrider = 1F

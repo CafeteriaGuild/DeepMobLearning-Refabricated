@@ -58,7 +58,7 @@ class ModularEffectRegistry {
                 register(ShulkerFriendlyEffect())
 
                 // Ghost
-                // register(SoulSensitiveEffect())
+                register(SoulVisionEffect())
                 register(FlyEffect())
 
                 // Illager
