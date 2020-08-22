@@ -45,7 +45,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
 ) {
 
     val isEnabled = {
-        applyCost() > 0F
+        applyCost() >= 0F
     }
 
     val maxApplyCost = {
