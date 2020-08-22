@@ -29,8 +29,7 @@ import dev.nathanpb.dml.identifier
 class SoulSensitiveEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("soul_sensitive"),
     EntityCategory.GHOST,
-    config.glitchArmor::enableSoulSensitive,
-    config.glitchArmor::soulSensitiveCost
+    config.glitchArmor.costs::soulSensitive
 ) {
     override fun registerEvents() {
 

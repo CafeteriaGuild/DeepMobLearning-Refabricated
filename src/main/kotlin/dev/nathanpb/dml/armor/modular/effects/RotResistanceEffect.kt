@@ -19,49 +19,54 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.AbilityBasedEffect
 import dev.nathanpb.dml.armor.modular.core.EffectStackOption
+import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.context.FoodStatusEffectsCallback
 import dev.nathanpb.dml.identifier
-import io.github.ladysnake.pal.VanillaAbilities
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Items
 import net.minecraft.util.ActionResult
+import kotlin.random.Random
 
-class FlyEffect : AbilityBasedEffect(
-    identifier("fly"),
-    EntityCategory.GHOST,
-    config.glitchArmor.costs::fly,
-    VanillaAbilities.ALLOW_FLYING
+class RotResistanceEffect : ModularEffect<ModularEffectTriggerPayload>(
+    identifier("rot_resistance"),
+    EntityCategory.ZOMBIE,
+    config.glitchArmor.costs::rotResistance
 ) {
+
     override fun registerEvents() {
-        super.registerEvents()
-        PlayerEntityTickEvent.register { player ->
-            // Check if the data should be consumed
-            if (
-                !player.world.isClient
-                && player.world.time % 20 == 0L
-                && abilitySource.grants(player, ability)
-                && player.world.getBlockState(player.blockPos.down()).isAir
-            ) {
+        FoodStatusEffectsCallback.register { player, stack, effects ->
+            if (player is PlayerEntity && !player.world.isClient && stack.item == Items.ROTTEN_FLESH) {
                 ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)
                     .firstOrNull { context ->
                         attemptToApply(context, ModularEffectTriggerPayload.EMPTY) == ActionResult.SUCCESS
+                    }?.let { context ->
+                        if (Random.nextFloat() <= sumLevelsOf(context.armor.stack)) {
+                            return@register effects.filter { pair ->
+                                pair.first.effectType != StatusEffects.HUNGER
+                            }
+                        }
                     }
             }
+
+            return@register effects
         }
     }
 
-    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
-    }
+    override fun acceptTier(tier: DataModelTier) = true
 
-    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        val value = if (armor.tier() == DataModelTier.FAULTY) 0.5 else 1.0
+        return EntityAttributeModifier(id.toString(), value, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+    }
 
 }

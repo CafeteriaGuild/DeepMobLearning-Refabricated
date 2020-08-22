@@ -19,6 +19,7 @@ package dev.nathanpb.dml.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.mojang.datafixers.util.Pair;
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
@@ -29,11 +30,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -41,6 +45,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
@@ -124,6 +130,42 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
                     cir.setReturnValue(true);
                 }
             }
+        }
+    }
+
+    @Inject(at = @At("RETURN"), method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", cancellable = true)
+    public void canTarget(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity dis = (LivingEntity) (Object) this;
+        if (dis instanceof MobEntity) {
+            if (cir.getReturnValue()) {
+                ActionResult eventResult = EventsKt.getCanTargetEntityEvent()
+                    .invoker()
+                    .invoke((MobEntity) dis, target);
+
+                if (eventResult.equals(ActionResult.FAIL)) {
+                    cir.setReturnValue(false);
+                    cir.cancel();
+                }
+            }
+        }
+    }
+
+    @ModifyVariable(
+        at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;"),
+        method = "applyFoodEffects"
+    )
+    public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
+        return EventsKt.getFoodStatusEffectsCallback()
+            .invoker()
+            .invoke((LivingEntity) (Object) this, stack, effects);
+    }
+
+    @Inject(at = @At("RETURN"), method = "eatFood")
+    public void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+        if (stack.isFood()) {
+            EventsKt.getLivingEntityEatEvent()
+                .invoker()
+                .invoke((LivingEntity) (Object) this, stack);
         }
     }
 }

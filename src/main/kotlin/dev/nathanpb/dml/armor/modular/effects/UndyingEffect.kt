@@ -24,13 +24,11 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.FindTotemOfUndyingCallback
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.utils.firstOrNullMapping
-import net.minecraft.entity.attribute.EntityAttributeModifier
+import dev.nathanpb.dml.utils.firstNonNullMapping
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.ActionResult
@@ -38,24 +36,19 @@ import net.minecraft.util.ActionResult
 class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("undying"),
     EntityCategory.ILLAGER,
-    config.glitchArmor::enableUndying,
-    config.glitchArmor::undyingCost
+    config.glitchArmor.costs::undying
 ) {
     override fun registerEvents() {
         FindTotemOfUndyingCallback.register { player ->
             ModularEffectContext.from(player)
                 .run(EffectStackOption.RANDOMIZE.apply)
-                .firstOrNullMapping {
-                    val result = attemptToApply(it, ModularEffectTriggerPayload.EMPTY) { _, _ -> }
-                    if (result.result == ActionResult.SUCCESS) {
+                .firstNonNullMapping {
+                    val result = attemptToApply(it, ModularEffectTriggerPayload.EMPTY)
+                    if (result == ActionResult.SUCCESS) {
                         ItemStack(Items.TOTEM_OF_UNDYING)
                     } else null
                 }
         }
-    }
-
-    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
     }
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()

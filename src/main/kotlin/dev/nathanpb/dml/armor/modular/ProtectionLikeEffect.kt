@@ -34,9 +34,8 @@ import net.minecraft.util.Identifier
 abstract class ProtectionLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    isEnabled: ()->Boolean,
     applyCost: ()->Float
-) : ModularEffect<WrappedEffectTriggerPayload<PlayerEntityDamageContext>>(id, category, isEnabled, applyCost) {
+) : ModularEffect<WrappedEffectTriggerPayload<PlayerEntityDamageContext>>(id, category, applyCost) {
 
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { eventContext ->

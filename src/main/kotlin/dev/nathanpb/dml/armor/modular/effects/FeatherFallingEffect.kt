@@ -30,8 +30,7 @@ import net.minecraft.text.TranslatableText
 class FeatherFallingEffect : ProtectionLikeEffect(
     identifier("feather_falling"),
     EntityCategory.SLIMY,
-    config.glitchArmor::enableFeatherFalling,
-    config.glitchArmor::featherFallingCost
+    config.glitchArmor.costs::featherFalling
 ) {
 
     override val name = TranslatableText("enchantment.minecraft.feather_falling")

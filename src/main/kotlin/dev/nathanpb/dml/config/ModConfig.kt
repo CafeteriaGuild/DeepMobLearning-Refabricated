@@ -209,56 +209,9 @@ class GlitchArmor : ConfigData {
     var dataAmountToSuperior = 192
     var dataAmountToSelfAware = 384
 
-    var enableFireProtection = true
-    var fireProtectionCost = 1F
-
-    var enableAutoExtinguish = true
-    var autoExtinguishCost = 4F
-
-    var enableFeatherFalling = true
-    var featherFallingCost = 3F
-
-    var enableFireImmunity = true
-    var fireImmunityCost = 1F
-
-    var enableJumpBoost = true
-    var jumpBoostCost = 1F
-
-    var enableFallImmunity = true
-    var fallImmunityCost = 1F
-
-    var enableEndermenProofVision = true
-    var endermenProofVisionCost = 1F
-
-    var enableSoulSensitive = true
-    var soulSensitiveCost = 8F
-
-    var enableGhostlySkin = true
-    var ghostlySkinCost = 16F
-
-    var enableImprovedGhostlySkin = true
-    var improvedGhostlySkinCost = 0F
-
-    var enableFly = true
-    var flyCost = 0.05F
-
-    var enableUnderwaterHaste = true
-    var underwaterHasteCost = 1F
-
-    var enableDepthStrider = true
-    var depthStriderCost = 1F
-
-    var enableWaterBreathing = true
-    var waterBreathingCost = 1F
-
-    var enablePoseidonBless = true
-    var poseidonBlessCost = 2F
-
-    var enableResistance = true
-    var resistanceCost = .3F
-
-    var enableUndying = true
-    var undyingCost = 8F
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    val costs = GlitchArmorDataConsume()
 
     override fun validatePostLoad() {
         dataAmountToBasic = max(0, dataAmountToBasic)
@@ -266,4 +219,29 @@ class GlitchArmor : ConfigData {
         dataAmountToSuperior = max(dataAmountToAdvanced, dataAmountToSuperior)
         dataAmountToSelfAware = max(dataAmountToSuperior, dataAmountToSelfAware)
     }
+}
+
+class GlitchArmorDataConsume : ConfigData {
+    var fireProtection = 1F
+    var autoExtinguish = 4F
+    var featherFalling = 3F
+    var fireImmunity = 1F
+    var jumpBoost = 1F
+    var plenty = 1F
+    var unrottenFlesh = .5F
+    var rotResistance = .5F
+    var zombieFriendly = .1F
+    var skeletonFriendly = .1F
+    var fallImmunity = 1F
+    var endermenProofVision = 1F
+    var shulkerFriendly = .2F
+    var teleports = 1.5F
+    var soulSensitive = 8F
+    var fly = 0.05F
+    var underwaterHaste = 1F
+    var depthStrider = 1F
+    var waterBreathing = 1F
+    var poseidonBless = 2F
+    var resistance = .3F
+    var undying = 8F
 }

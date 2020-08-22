@@ -36,8 +36,7 @@ import net.minecraft.tag.FluidTags
 class PoseidonBlessEffect : StatusEffectLikeEffect(
     identifier("poseidon_bless"),
     EntityCategory.OCEAN,
-    config.glitchArmor::enablePoseidonBless,
-    config.glitchArmor::poseidonBlessCost,
+    config.glitchArmor.costs::poseidonBless,
     EffectStackOption.RANDOMIZE
 ) {
 

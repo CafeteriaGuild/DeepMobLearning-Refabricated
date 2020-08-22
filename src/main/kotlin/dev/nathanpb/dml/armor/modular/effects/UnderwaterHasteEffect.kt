@@ -36,8 +36,7 @@ import net.minecraft.text.TranslatableText
 class UnderwaterHasteEffect : StatusEffectLikeEffect(
     identifier("underwater_haste"),
     EntityCategory.OCEAN,
-    config.glitchArmor::enableUnderwaterHaste,
-    config.glitchArmor::underwaterHasteCost,
+    config.glitchArmor.costs::underwaterHaste,
     EffectStackOption.PRIORITIZE_GREATER
 ) {
 

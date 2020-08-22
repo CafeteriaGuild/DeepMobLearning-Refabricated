@@ -35,6 +35,7 @@ import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
 import dev.nathanpb.dml.net.registerClientSidePackets
+import dev.nathanpb.dml.net.registerServerSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
 import dev.nathanpb.dml.screen.handler.registerContainerTypes
@@ -59,6 +60,7 @@ fun init() {
     registerRecipeSerializers()
     registerRecipeTypes()
     registerClientSidePackets()
+    registerServerSidePackets()
     registerScreenHandlers()
     registerEntityTypes()
     registerStatusEffects()
@@ -80,6 +82,7 @@ fun initClient() {
     registerGuis()
     registerScreens()
     registerEntityRenderer()
+    registerKeybindings()
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)

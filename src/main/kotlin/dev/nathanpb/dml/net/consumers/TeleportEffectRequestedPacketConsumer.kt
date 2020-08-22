@@ -17,26 +17,25 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml.net.consumers
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.identifier
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.text.TranslatableText
+import dev.nathanpb.dml.event.context.TeleportEffectRequestedEvent
+import dev.nathanpb.dml.utils.readVec3d
+import net.fabricmc.fabric.api.network.PacketConsumer
+import net.fabricmc.fabric.api.network.PacketContext
+import net.minecraft.network.PacketByteBuf
 
-class FireProtectionEffect : ProtectionLikeEffect(
-    identifier("fire_protection"),
-    EntityCategory.NETHER,
-    config.glitchArmor.costs::fireProtection
-) {
-
-    override val name = TranslatableText("enchantment.minecraft.fire_protection")
-
-    override fun protectsAgainst(source: DamageSource) = source.isFire
-
-    override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
-
+class TeleportEffectRequestedPacketConsumer : PacketConsumer {
+    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+        val pos = buf.readVec3d()
+        val rotation = buf.readVec3d()
+        context.taskQueue.execute {
+            if (
+                pos.squaredDistanceTo(context.player.pos) <= 4*4
+                && arrayOf(rotation.x, rotation.y, rotation.z).all { it in -128F..128F }
+            ) {
+                TeleportEffectRequestedEvent.invoker().invoke(context.player, pos, rotation)
+            }
+        }
+    }
 }

@@ -17,25 +17,35 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.identifier
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.minecraft.client.options.KeyBinding
+import net.minecraft.client.util.InputUtil
+import net.minecraft.util.Identifier
+import org.lwjgl.glfw.GLFW
 
-class GhostlySkinEffect : ModularEffect<ModularEffectTriggerPayload>(
-    identifier("ghostly_skin"),
-    EntityCategory.GHOST,
-    config.glitchArmor::enableGhostlySkin,
-    config.glitchArmor::ghostlySkinCost
-) {
-    override fun registerEvents() {
+val CATEGORY_MODULAR_ARMOR = identifier("modular_armor")
 
-    }
+val TELEPORT_KEYBINDING = register(identifier("teleport"), GLFW.GLFW_KEY_V, CATEGORY_MODULAR_ARMOR)
 
-    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 1
-
+private fun register(
+    id: Identifier,
+    default: Int,
+    category: Identifier,
+    type: InputUtil.Type = InputUtil.Type.KEYSYM
+): KeyBinding {
+    return KeyBindingHelper.registerKeyBinding(
+        KeyBinding(
+            "key.${id.namespace}.${id.path}",
+            type,
+            default,
+            "category.${category.namespace}.${category.path}"
+        )
+    )
 }
+
+fun registerKeybindings() {
+    TELEPORT_KEYBINDING
+}
+

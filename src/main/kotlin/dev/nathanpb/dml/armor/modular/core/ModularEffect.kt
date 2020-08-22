@@ -29,6 +29,7 @@ import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.registry.Registry
@@ -40,9 +41,12 @@ import kotlin.random.Random
 abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     val id: Identifier,
     val category: EntityCategory,
-    val isEnabled: ()->Boolean,
     applyCost: ()->Float
 ) {
+
+    val isEnabled = {
+        applyCost() >= 0F
+    }
 
     val maxApplyCost = {
         ceil(applyCost()).toInt()
@@ -88,12 +92,15 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
 
     protected open fun canApply(context: ModularEffectContext, payload: T): Boolean {
         return isEnabled()
+            && context.dataModel.category == category
             && acceptTier(context.tier)
             && context.dataModel.dataAmount >= maxApplyCost()
     }
 
     private fun attemptConsumeData(context: ModularEffectContext) {
-        context.dataModel.dataAmount -= getApplyCost()
+        if (shouldConsumeData(context)) {
+            context.dataModel.dataAmount -= getApplyCost()
+        }
     }
 
     fun <R>attemptToApply(context: ModularEffectContext, payload: T, body: (ModularEffectContext, T) -> R): TypedActionResult<R> {
@@ -103,6 +110,12 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
         }
         return TypedActionResult.fail(null)
     }
+
+    fun attemptToApply(context: ModularEffectContext, payload: T): ActionResult {
+        return attemptToApply(context, payload) { _, _ -> }.result
+    }
+
+    open fun shouldConsumeData(context: ModularEffectContext) = true
 
     fun sumLevelsOf(stack: ItemStack): Double {
         return (stack.item as? ItemModularGlitchArmor)?.let { item ->

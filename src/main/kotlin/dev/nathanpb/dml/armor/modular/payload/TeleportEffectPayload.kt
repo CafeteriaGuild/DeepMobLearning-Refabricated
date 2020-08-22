@@ -17,26 +17,12 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml.armor.modular.payload
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.identifier
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.text.TranslatableText
+import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
+import net.minecraft.util.math.Vec3d
 
-class FireProtectionEffect : ProtectionLikeEffect(
-    identifier("fire_protection"),
-    EntityCategory.NETHER,
-    config.glitchArmor.costs::fireProtection
-) {
-
-    override val name = TranslatableText("enchantment.minecraft.fire_protection")
-
-    override fun protectsAgainst(source: DamageSource) = source.isFire
-
-    override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
-
-}
+data class TeleportEffectPayload(
+    val pos: Vec3d,
+    val rotation: Vec3d
+) : ModularEffectTriggerPayload

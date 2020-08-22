@@ -19,11 +19,17 @@
 
 package dev.nathanpb.dml.event.context
 
+import com.mojang.datafixers.util.Pair
 import dev.nathanpb.dml.utils.event
+import dev.nathanpb.dml.utils.firstNonNullMapping
 import dev.nathanpb.dml.utils.firstOrNullMapping
+import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
+import net.minecraft.util.math.Vec3d
 
 val PlayerEntityDamageEvent = event<(PlayerEntityDamageContext)->PlayerEntityDamageContext?> { listeners ->
     { context: PlayerEntityDamageContext ->
@@ -54,8 +60,50 @@ val PlayerStareEndermanEvent = event<(PlayerEntity)->ActionResult> { listeners -
 
 val FindTotemOfUndyingCallback = event<(PlayerEntity)->ItemStack?> { listeners ->
     { entity ->
-        listeners.toList().firstOrNullMapping {
+        listeners.toList().firstNonNullMapping {
             it(entity)
+        }
+    }
+}
+
+val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> { listeners ->
+    { player, pos, rotation ->
+        listeners.any {
+            it(player, pos, rotation)
+        }
+    }
+}
+
+val CanTargetEntityEvent = event<(MobEntity, LivingEntity)->ActionResult> { listeners ->
+    { mob, target ->
+        listeners.toList().firstOrNullMapping({ it(mob, target) }) {
+            it == ActionResult.FAIL
+        } ?: ActionResult.PASS
+    }
+}
+
+val PlayerTakeHungerEvent = event<(PlayerEntity, Int)->Int> { listeners ->
+    { player, amount ->
+        listeners.toList().fold(amount) { acc, function ->
+            if (acc > 0) {
+                function(player, acc)
+            } else acc
+        }
+    }
+}
+
+val FoodStatusEffectsCallback = event<(LivingEntity, ItemStack, List<Pair<StatusEffectInstance, Float>>)->List<Pair<StatusEffectInstance, Float>>> { listeners ->
+    { entity, stack, effects ->
+        listeners.toList().fold(effects) { acc, function ->
+            function(entity, stack, acc)
+        }
+    }
+}
+
+val LivingEntityEatEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
+    { entity, stack ->
+        listeners.forEach {
+            it(entity, stack)
         }
     }
 }

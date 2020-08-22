@@ -27,23 +27,19 @@ import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
 import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
-import net.minecraft.util.TypedActionResult
 
 abstract class DamageImmunityLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    isEnabled: ()->Boolean,
     applyCost: ()->Float
-) : ProtectionLikeEffect(id, category, isEnabled, applyCost) {
+) : ProtectionLikeEffect(id, category, applyCost) {
 
     override fun registerEvents() {
         PlayerEntityDamageEvent.register { eventContext ->
             ModularEffectContext.from(eventContext.entity)
                 .shuffled()
                 .firstOrNull { effectContext ->
-                    attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
-                        TypedActionResult.success(effectContext)
-                    }.result == ActionResult.SUCCESS
+                    attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) == ActionResult.SUCCESS
                 }?.let {
                     eventContext.copy(damage = 0F)
                 }

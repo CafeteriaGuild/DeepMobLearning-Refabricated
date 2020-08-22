@@ -37,8 +37,7 @@ import net.minecraft.text.TranslatableText
 class WaterBreathingEffect : StatusEffectLikeEffect(
     identifier("water_breathing"),
     EntityCategory.OCEAN,
-    config.glitchArmor::enableWaterBreathing,
-    config.glitchArmor::waterBreathingCost,
+    config.glitchArmor.costs::waterBreathing,
     EffectStackOption.RANDOMIZE
 ) {
 

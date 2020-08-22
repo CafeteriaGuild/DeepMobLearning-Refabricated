@@ -19,24 +19,25 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.ProtectionLikeEffect
+import dev.nathanpb.dml.armor.modular.TargetCancellationEffect
+import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.text.TranslatableText
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 
-class FireProtectionEffect : ProtectionLikeEffect(
-    identifier("fire_protection"),
-    EntityCategory.NETHER,
-    config.glitchArmor.costs::fireProtection
+class SkeletonFriendlyEffect : TargetCancellationEffect(
+    identifier("skeleton_friendly"),
+    EntityCategory.SKELETON,
+    config.glitchArmor.costs::skeletonFriendly
 ) {
 
-    override val name = TranslatableText("enchantment.minecraft.fire_protection")
+    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
 
-    override fun protectsAgainst(source: DamageSource) = source.isFire
-
-    override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
-
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntity>): Boolean {
+        return payload.value.type == EntityType.SKELETON && super.canApply(context, payload)
+    }
 }

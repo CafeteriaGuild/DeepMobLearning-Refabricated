@@ -31,24 +31,41 @@ class ModularEffectRegistry {
 
         fun registerDefaults() {
             INSTANCE.apply {
+                // Nether
                 register(FireProtectionEffect())
                 register(AutoExtinguishEffect())
                 register(FireImmunityEffect())
 
+                // Slimy
                 register(FeatherFallingEffect())
                 register(JumpBoostEffect())
                 register(FallImmunityEffect())
 
-                register(EndermenProofVisionEffect())
+                // Overworld
+                register(PlentyEffect())
 
+                // Zombie
+                register(UnrottenFleshEffect())
+                register(RotResistanceEffect())
+                register(ZombieFriendlyEffect())
+
+                // Skeleton
+                register(SkeletonFriendlyEffect())
+
+                // End
+                register(EndermenProofVisionEffect())
+                register(TeleportEffect())
+                register(ShulkerFriendlyEffect())
+
+                // Ghost
                 // register(SoulSensitiveEffect())
-                // register(GhostlySkinEffect())
-                // register(ImprovedGhostlySkinEffect())
                 register(FlyEffect())
 
+                // Illager
                 register(ResistanceEffect())
                 register(UndyingEffect())
 
+                // Ocean
                 register(UnderwaterHasteEffect())
                 register(DepthStriderEffect())
                 register(WaterBreathingEffect())
@@ -77,6 +94,6 @@ class ModularEffectRegistry {
     fun <T>fromId(id: Identifier) = fromId(id) as? T?
 
     fun allMatching(category: EntityCategory, tier: DataModelTier) = entries.filter {
-        it.category == category && it.acceptTier(tier)
+        it.isEnabled() && it.category == category && it.acceptTier(tier)
     }
 }

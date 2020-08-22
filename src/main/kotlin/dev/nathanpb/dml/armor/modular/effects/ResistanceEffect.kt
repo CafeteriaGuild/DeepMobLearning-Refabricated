@@ -33,8 +33,7 @@ import kotlin.math.min
 class ResistanceEffect : ProtectionLikeEffect(
     identifier("resistance"),
     EntityCategory.ILLAGER,
-    config.glitchArmor::enableResistance,
-    config.glitchArmor::resistanceCost
+    config.glitchArmor.costs::resistance
 ) {
 
     override fun protectsAgainst(source: DamageSource): Boolean {

@@ -19,24 +19,25 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
+import dev.nathanpb.dml.armor.modular.TargetCancellationEffect
+import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
+import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 
-class ImprovedGhostlySkinEffect : ModularEffect<ModularEffectTriggerPayload>(
-    identifier("improved_ghostly_skin"),
-    EntityCategory.GHOST,
-    config.glitchArmor::enableImprovedGhostlySkin,
-    config.glitchArmor::improvedGhostlySkinCost
+class ZombieFriendlyEffect : TargetCancellationEffect(
+    identifier("zombie_friendly"),
+    EntityCategory.ZOMBIE,
+    config.glitchArmor.costs::zombieFriendly
 ) {
 
-    override fun registerEvents() {
+    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
 
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntity>): Boolean {
+        return payload.value.type == EntityType.ZOMBIE && super.canApply(context, payload)
     }
-
-    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 3
-
 }

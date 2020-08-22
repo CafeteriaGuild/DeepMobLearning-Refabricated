@@ -67,9 +67,9 @@ public class ItemStackMixin {
             ModularArmorData armor = new ModularArmorData(dis);
             DataModelData dataModel = armor.getDataModel();
             if (dataModel != null) {
-                cir.setReturnValue(armor.tier().getDataAmount() - dataModel.getDataAmount());
+                cir.setReturnValue(armor.tier().nextTierOrCurrent().getDataAmount() - dataModel.getDataAmount());
             } else {
-                cir.setReturnValue(armor.tier().getDataAmount());
+                cir.setReturnValue(armor.tier().nextTierOrCurrent().getDataAmount()-1);
             }
             cir.cancel();
         }
@@ -79,7 +79,7 @@ public class ItemStackMixin {
     void patchModularArmorMaxDamage(CallbackInfoReturnable<Integer> cir) {
         ItemStack dis = (ItemStack) (Object) this;
         if (dis.getItem() instanceof ItemModularGlitchArmor) {
-            cir.setReturnValue(new ModularArmorData(dis).tier().getDataAmount());
+            cir.setReturnValue(new ModularArmorData(dis).tier().nextTierOrCurrent().getDataAmount()-1);
             cir.cancel();
         }
     }

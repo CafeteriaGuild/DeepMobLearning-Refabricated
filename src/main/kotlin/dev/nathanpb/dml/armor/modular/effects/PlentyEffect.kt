@@ -19,49 +19,46 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.AbilityBasedEffect
 import dev.nathanpb.dml.armor.modular.core.EffectStackOption
+import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.context.PlayerTakeHungerEvent
 import dev.nathanpb.dml.identifier
-import io.github.ladysnake.pal.VanillaAbilities
+import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.util.ActionResult
+import kotlin.random.Random
 
-class FlyEffect : AbilityBasedEffect(
-    identifier("fly"),
-    EntityCategory.GHOST,
-    config.glitchArmor.costs::fly,
-    VanillaAbilities.ALLOW_FLYING
+class PlentyEffect : ModularEffect<ModularEffectTriggerPayload>(
+    identifier("plenty"),
+    EntityCategory.OVERWORLD,
+    config.glitchArmor.costs::plenty
 ) {
     override fun registerEvents() {
-        super.registerEvents()
-        PlayerEntityTickEvent.register { player ->
-            // Check if the data should be consumed
-            if (
-                !player.world.isClient
-                && player.world.time % 20 == 0L
-                && abilitySource.grants(player, ability)
-                && player.world.getBlockState(player.blockPos.down()).isAir
-            ) {
-                ModularEffectContext.from(player)
+        PlayerTakeHungerEvent.register { player, amount ->
+            if (!player.world.isClient) {
+                return@register ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)
-                    .firstOrNull { context ->
-                        attemptToApply(context, ModularEffectTriggerPayload.EMPTY) == ActionResult.SUCCESS
-                    }
+                    .firstOrNullMapping({ context ->
+                        attemptToApply(context, ModularEffectTriggerPayload.EMPTY) { _, _ ->
+                            if (Random.nextFloat() <= sumLevelsOf(context.armor.stack)) {
+                                0
+                            } else amount
+                        }
+                    }, { it.result == ActionResult.SUCCESS })?.value ?: amount
             }
+            return@register amount
         }
     }
 
+    override fun acceptTier(tier: DataModelTier) = true
+
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
+        return EntityAttributeModifier(id.toString(), (armor.tier().ordinal.inc() / 100.0) * 15.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
-
-    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
-
 }
