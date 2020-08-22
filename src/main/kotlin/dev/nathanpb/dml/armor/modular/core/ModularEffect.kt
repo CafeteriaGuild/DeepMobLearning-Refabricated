@@ -92,6 +92,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
 
     protected open fun canApply(context: ModularEffectContext, payload: T): Boolean {
         return isEnabled()
+            && context.dataModel.category == category
             && acceptTier(context.tier)
             && context.dataModel.dataAmount >= maxApplyCost()
     }
