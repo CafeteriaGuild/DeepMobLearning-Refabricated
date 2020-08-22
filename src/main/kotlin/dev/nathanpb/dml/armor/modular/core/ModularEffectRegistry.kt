@@ -58,8 +58,6 @@ class ModularEffectRegistry {
 
                 // Ghost
                 // register(SoulSensitiveEffect())
-                // register(GhostlySkinEffect())
-                // register(ImprovedGhostlySkinEffect())
                 register(FlyEffect())
 
                 // Illager

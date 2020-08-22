@@ -236,8 +236,6 @@ class GlitchArmorDataConsume : ConfigData {
     var shulkerFriendly = .2F
     var teleports = 1.5F
     var soulSensitive = 8F
-    var ghostlySkin = 16F
-    var improvedGhostlySkin = 0F
     var fly = 0.05F
     var underwaterHaste = 1F
     var depthStrider = 1F
