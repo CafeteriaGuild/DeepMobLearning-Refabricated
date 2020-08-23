@@ -161,5 +161,6 @@
   "modulareffect.dml-refabricated.unrotten_flesh": "Unrotten Flesh",
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider",
-  "effect.dml-refabricated.soul_vision": "Soul Vision"
+  "effect.dml-refabricated.soul_vision": "Soul Vision",
+  "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty"
 }
