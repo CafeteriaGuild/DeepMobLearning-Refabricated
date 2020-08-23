@@ -41,7 +41,7 @@ fun combineStacksIfPossible(source: ItemStack, target: ItemStack, maxInventoryCo
     }
 
     return canCombine(source, target).also {
-        if (it) {
+        it.`if` {
             transfer(source, target)
         }
     }

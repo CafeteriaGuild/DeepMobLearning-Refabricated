@@ -20,10 +20,16 @@
 package dev.nathanpb.dml.utils
 
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor
+import dev.nathanpb.dml.accessor.ITrialWorldPersistenceAccessor
+import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.LivingEntity
+import net.minecraft.world.World
 
 var LivingEntity.isInReiScreen: Boolean
     get() = (this as ILivingEntityReiStateAccessor).isDmlRefIsInReiScreen
     set(flag) {
         (this as ILivingEntityReiStateAccessor).setDmlRefInReiScreen(flag)
     }
+
+val World.runningTrials: MutableList<Trial>
+    get() = (this as ITrialWorldPersistenceAccessor).runningTrials

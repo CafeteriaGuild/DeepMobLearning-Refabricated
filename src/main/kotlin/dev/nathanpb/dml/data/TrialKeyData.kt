@@ -23,6 +23,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.serializers.TrialAffixListSerializer
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.utils.takeOrNull
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.EnumSerializer
 import dev.nathanpb.ktdatatag.serializer.Serializers
@@ -53,9 +54,9 @@ class TrialKeyData (tag: CompoundTag) : MutableCompoundData(tag) {
 }
 
 var ItemStack.trialKeyData : TrialKeyData?
-    get() = if (orCreateTag.contains(TrialKeyData.TAG_KEY)) {
+    get() = takeOrNull(orCreateTag.contains(TrialKeyData.TAG_KEY)) {
         TrialKeyData(this)
-    } else null
+    }
     set(value) = if (value != null) {
         this.putSubTag(TrialKeyData.TAG_KEY, value.tag)
     } else {

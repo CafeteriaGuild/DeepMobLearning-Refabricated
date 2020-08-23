@@ -22,6 +22,7 @@ package dev.nathanpb.dml.screen.handler
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
@@ -63,7 +64,7 @@ class ModularArmorScreenHandler(
 
         (blockInventory as? SimpleInventory)?.addListener {
             val stack = blockInventory.getStack(0)
-            data.dataModel = if (stack.item is ItemDataModel) stack.dataModel else null
+            data.dataModel = takeOrNull(stack.item is ItemDataModel, stack::dataModel)
             sendContentUpdates()
         }
     }
