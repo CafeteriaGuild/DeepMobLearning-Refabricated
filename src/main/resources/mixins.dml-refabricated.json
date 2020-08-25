@@ -5,7 +5,6 @@
   "mixins": [
     "DamageSourceMixin",
     "EndermanEntityMixin",
-    "EntityMixin",
     "ExplosionPreventMixin",
     "HungerManagerMixin",
     "IArmorItemMixin",
@@ -18,7 +17,9 @@
     "StatusEffectUtilMixin",
     "WorldMixin"
   ],
-  "client": [],
+  "client": [
+    "ClientEntityMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

@@ -22,7 +22,6 @@ package dev.nathanpb.dml.armor.modular
 import dev.nathanpb.dml.armor.modular.core.*
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.CanTargetEntityEvent
 import dev.nathanpb.dml.utils.`if`
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.LivingEntity
