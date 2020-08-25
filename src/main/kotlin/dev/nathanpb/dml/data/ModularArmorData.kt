@@ -23,6 +23,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.utils.takeOrNull
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
@@ -47,9 +48,9 @@ class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreat
     var dataModel: DataModelData?
         get() {
             val stack = dataModelStack
-            return if (!stack.isEmpty && (stack.item as? ItemDataModel)?.category != null) {
+            return takeOrNull(!stack.isEmpty && (stack.item as? ItemDataModel)?.category != null) {
                 stack.dataModel
-            } else null
+            }
         }
         set(value) {
             dataModelStack = value?.stack ?: ItemStack.EMPTY

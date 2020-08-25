@@ -17,24 +17,17 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.armor.modular.effects
+package dev.nathanpb.dml.net.consumers
 
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.event.context.SoulVisionEffectRequestedEvent
+import net.fabricmc.fabric.api.network.PacketConsumer
+import net.fabricmc.fabric.api.network.PacketContext
+import net.minecraft.network.PacketByteBuf
 
-class SoulSensitiveEffect : ModularEffect<ModularEffectTriggerPayload>(
-    identifier("soul_sensitive"),
-    EntityCategory.GHOST,
-    config.glitchArmor.costs::soulSensitive
-) {
-    override fun registerEvents() {
-
+class SoulVisionRequestedPacketConsumer : PacketConsumer {
+    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+        context.taskQueue.execute {
+            SoulVisionEffectRequestedEvent.invoker().invoke(context.player)
+        }
     }
-
-    override fun acceptTier(tier: DataModelTier) = true
-
 }

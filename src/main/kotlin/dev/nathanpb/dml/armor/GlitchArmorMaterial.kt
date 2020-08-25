@@ -52,7 +52,7 @@ class GlitchArmorMaterial : ArmorMaterial {
     override fun getToughness() = 0F
 
     fun getKnockbackResistance(tier: DataModelTier): Float {
-        return lerp(tier.ordinal.inc() / DataModelTier.values().size.toDouble(), 1.0, 3.5).toFloat() / 10
+        return (tier.ordinal.inc() / DataModelTier.values().size.toDouble()).lerp(1.0, 3.5).toFloat() / 10
     }
 
     fun getProtectionAmount(slot: EquipmentSlot, tier: DataModelTier): Int {
@@ -63,7 +63,7 @@ class GlitchArmorMaterial : ArmorMaterial {
             EquipmentSlot.FEET -> 0.8
             else -> 0.0
         }
-        val result = lerp(tier.ordinal / DataModelTier.values().size.toDouble(), 5.0, 8.0)
+        val result = (tier.ordinal / DataModelTier.values().size.toDouble()).lerp(4.0, 5.5)
         return floor(result * multiplier).toInt()
     }
 

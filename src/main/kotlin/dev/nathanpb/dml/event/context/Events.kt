@@ -74,6 +74,14 @@ val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> 
     }
 }
 
+val SoulVisionEffectRequestedEvent = event<(PlayerEntity)->Unit> { listeners ->
+    { player ->
+        listeners.forEach {
+            it(player)
+        }
+    }
+}
+
 val CanTargetEntityEvent = event<(MobEntity, LivingEntity)->ActionResult> { listeners ->
     { mob, target ->
         listeners.toList().firstOrNullMapping({ it(mob, target) }) {

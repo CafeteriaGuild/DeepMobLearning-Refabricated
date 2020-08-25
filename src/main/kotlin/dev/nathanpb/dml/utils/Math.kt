@@ -19,4 +19,6 @@
 
 package dev.nathanpb.dml.utils
 
-fun lerp(value: Double, min: Double, max: Double) = (1 - value) * min + value * max
+fun Double.lerp(min: Double, max: Double) = (1 - this) * min + this * max
+
+fun Int.squared() = this * this

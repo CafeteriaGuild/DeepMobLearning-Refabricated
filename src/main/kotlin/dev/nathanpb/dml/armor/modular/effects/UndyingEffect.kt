@@ -29,6 +29,7 @@ import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.FindTotemOfUndyingCallback
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.firstNonNullMapping
+import dev.nathanpb.dml.utils.takeOrNull
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.ActionResult
@@ -44,9 +45,9 @@ class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
                 .run(EffectStackOption.RANDOMIZE.apply)
                 .firstNonNullMapping {
                     val result = attemptToApply(it, ModularEffectTriggerPayload.EMPTY)
-                    if (result == ActionResult.SUCCESS) {
+                    takeOrNull(result == ActionResult.SUCCESS) {
                         ItemStack(Items.TOTEM_OF_UNDYING)
-                    } else null
+                    }
                 }
         }
     }

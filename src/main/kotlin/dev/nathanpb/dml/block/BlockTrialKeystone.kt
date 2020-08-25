@@ -28,6 +28,7 @@ import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
 import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.trial.TrialState
+import dev.nathanpb.dml.utils.takeOrNull
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.entity.player.PlayerEntity
@@ -61,11 +62,11 @@ class BlockTrialKeystone : Block(
                                 val trial = blockEntity.createTrial(recipe, data.affixes)
                                 blockEntity.startTrial(
                                     trial,
-                                    if (
+                                    takeOrNull(
                                         !player.isCreative
                                         && config.trial.trialKeyConsume
                                         && config.trial.trialKeyReturnIfSucceed
-                                    ) stackInHand else null
+                                    ) { stackInHand }
                                 )
 
                                 if (!player.isCreative && config.trial.trialKeyConsume)

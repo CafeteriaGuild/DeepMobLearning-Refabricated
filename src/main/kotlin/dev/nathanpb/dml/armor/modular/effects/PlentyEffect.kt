@@ -32,6 +32,7 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.util.ActionResult
+import net.minecraft.world.World
 import kotlin.random.Random
 
 class PlentyEffect : ModularEffect<ModularEffectTriggerPayload>(
@@ -60,5 +61,15 @@ class PlentyEffect : ModularEffect<ModularEffectTriggerPayload>(
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), (armor.tier().ordinal.inc() / 100.0) * 15.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+    }
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        val hasSunlight by lazy {
+            context.player.world.isDay && context.player.world.isSkyVisible(context.player.blockPos.add(0, 1, 0))
+        }
+
+        return context.player.world.registryKey == World.OVERWORLD
+                && super.canApply(context, payload)
+                && (context.tier.isMaxTier() || hasSunlight)
     }
 }

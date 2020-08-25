@@ -3,7 +3,9 @@
   "package": "dev.nathanpb.dml.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DamageSourceMixin",
     "EndermanEntityMixin",
+    "EntityMixin",
     "ExplosionPreventMixin",
     "HungerManagerMixin",
     "IArmorItemMixin",

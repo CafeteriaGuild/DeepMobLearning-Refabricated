@@ -19,8 +19,6 @@
 
 package dev.nathanpb.dml.utils
 
-import dev.nathanpb.dml.accessor.ITrialWorldPersistenceAccessor
-import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
@@ -43,9 +41,6 @@ fun World.getEntitiesAroundCircle(type: EntityType<*>?, pos: BlockPos, radius: D
         it.squaredDistanceTo(pos3d) <= squaredRadius
     }.orEmpty()
 }
-
-val World.runningTrials: MutableList<Trial>
-    get() = (this as ITrialWorldPersistenceAccessor).runningTrials
 
 fun World.getPlayersByUUID(uuids: HashSet<UUID>): List<PlayerEntity> {
     return players.filter { it.uuid in uuids }

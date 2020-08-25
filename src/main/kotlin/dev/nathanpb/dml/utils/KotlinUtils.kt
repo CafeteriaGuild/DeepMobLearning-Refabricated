@@ -19,4 +19,7 @@
 
 package dev.nathanpb.dml.utils
 
-fun Int.squared() = this * this
+fun <R> Boolean.`if`(body: ()->R) = if (this) body() else null
+fun <R> Boolean.`else`(body: ()->R) = if (!this) body() else null
+
+fun <T> takeOrNull(accept: Boolean, value: ()->T) = if (accept) value() else null

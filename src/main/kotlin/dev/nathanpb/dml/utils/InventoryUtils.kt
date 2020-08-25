@@ -24,18 +24,14 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.util.collection.DefaultedList
 
-fun PlayerInventory.hotbar() = (0..8).map { this.getStack(it) }
+fun PlayerInventory.hotbar() = (0..8).map(::getStack)
 
 fun Inventory.items(): DefaultedList<ItemStack> = DefaultedList.copyOf(
     ItemStack.EMPTY,
-    *(0 until size()).map { getStack(it) }.toTypedArray()
+    *(0 until size()).map(::getStack).toTypedArray()
 )
 
 fun Inventory.setStacks(stacks: DefaultedList<ItemStack>) {
     clear()
-    stacks.forEachIndexed { index, stack ->
-        if (index < size()) {
-            setStack(index, stack)
-        }
-    }
+    stacks.take(size()).forEachIndexed(::setStack)
 }

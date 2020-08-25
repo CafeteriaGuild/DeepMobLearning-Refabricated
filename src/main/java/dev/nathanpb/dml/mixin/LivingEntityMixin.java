@@ -25,7 +25,9 @@ import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import dev.nathanpb.dml.event.context.EventsKt;
+import dev.nathanpb.dml.item.ItemModularGlitchArmor;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -39,14 +41,12 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
@@ -166,6 +166,19 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
             EventsKt.getLivingEntityEatEvent()
                 .invoker()
                 .invoke((LivingEntity) (Object) this, stack);
+        }
+    }
+
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
+    public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float _) {
+        boolean shouldUncap = StreamSupport.stream(((LivingEntity) (Object) this).getArmorItems().spliterator(), false)
+            .anyMatch(it -> it.getItem() instanceof ItemModularGlitchArmor);
+        if (shouldUncap) {
+            float f = 2.0F + armorToughness / 4.0F;
+            float g = Math.max(armor - damage / f, armor * 0.2F);
+            return damage * (1.0F - g / 25.0F);
+        } else {
+            return DamageUtil.getDamageLeft(damage, armor, armorToughness);
         }
     }
 }

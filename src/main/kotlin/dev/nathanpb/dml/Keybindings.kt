@@ -28,6 +28,7 @@ import org.lwjgl.glfw.GLFW
 val CATEGORY_MODULAR_ARMOR = identifier("modular_armor")
 
 val TELEPORT_KEYBINDING = register(identifier("teleport"), GLFW.GLFW_KEY_V, CATEGORY_MODULAR_ARMOR)
+val SOUL_VISION_KEYBINDING = register(identifier("soul_vision"), GLFW.GLFW_KEY_B, CATEGORY_MODULAR_ARMOR)
 
 private fun register(
     id: Identifier,
@@ -47,5 +48,6 @@ private fun register(
 
 fun registerKeybindings() {
     TELEPORT_KEYBINDING
+    SOUL_VISION_KEYBINDING
 }
 

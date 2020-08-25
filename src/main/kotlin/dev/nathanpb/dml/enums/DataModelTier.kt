@@ -21,6 +21,7 @@ package dev.nathanpb.dml.enums
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.utils.takeOrNull
 import net.minecraft.text.TranslatableText
 import kotlin.math.ceil
 import kotlin.math.max
@@ -42,9 +43,9 @@ enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->
         }
 
         fun fromIndex(index: Int): DataModelTier? {
-            return if (index in (0.until(values().size))) {
+            return takeOrNull(index in (0.until(values().size))) {
                 values()[index]
-            } else null
+            }
         }
     }
 

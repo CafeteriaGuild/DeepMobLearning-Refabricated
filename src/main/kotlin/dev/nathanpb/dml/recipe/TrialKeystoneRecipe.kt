@@ -23,6 +23,7 @@ import com.google.gson.JsonObject
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.utils.takeOrNull
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
@@ -87,13 +88,13 @@ class TrialKeystoneRecipe (
                 ShapedRecipe.getItemStack(it.asJsonObject)
             }
 
-            val waveEntityCount = if (json.has("waveEntityCount")) {
+            val waveEntityCount = takeOrNull(json.has("waveEntityCount")) {
                 json.getAsJsonPrimitive("waveEntityCount").asInt
-            } else null
+            }
 
-            val waveRespawnTimeout = if (json.has("waveRespawnTimeout")) {
+            val waveRespawnTimeout = takeOrNull(json.has("waveRespawnTimeout")) {
                 json.getAsJsonPrimitive("waveRespawnTimeout").asInt
-            } else null
+            }
 
             return TrialKeystoneRecipe(
                 id,
