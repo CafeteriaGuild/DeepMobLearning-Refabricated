@@ -63,7 +63,7 @@ class GlitchArmorMaterial : ArmorMaterial {
             EquipmentSlot.FEET -> 0.8
             else -> 0.0
         }
-        val result = (tier.ordinal / DataModelTier.values().size.toDouble()).lerp(5.0, 8.0)
+        val result = (tier.ordinal / DataModelTier.values().size.toDouble()).lerp(4.0, 5.5)
         return floor(result * multiplier).toInt()
     }
 
