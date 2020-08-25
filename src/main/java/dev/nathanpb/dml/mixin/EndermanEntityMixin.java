@@ -19,8 +19,8 @@ package dev.nathanpb.dml.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import dev.nathanpb.dml.armor.modular.effects.EndermenProofVisionEffect;
 import dev.nathanpb.dml.event.EndermanTeleportCallback;
-import dev.nathanpb.dml.event.context.EventsKt;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -47,9 +47,7 @@ public class EndermanEntityMixin {
     @Inject(at = @At("RETURN"), method = "isPlayerStaring", cancellable = true)
     public void isPlayerStaring(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            ActionResult result = EventsKt.getPlayerStareEndermanEvent()
-                .invoker()
-                .invoke(player);
+            ActionResult result = EndermenProofVisionEffect.Companion.trigger((PlayerEntity) (Object) this);
 
             if (result == ActionResult.FAIL) {
                 cir.setReturnValue(false);

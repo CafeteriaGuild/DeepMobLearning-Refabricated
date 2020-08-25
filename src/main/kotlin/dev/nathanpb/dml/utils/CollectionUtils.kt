@@ -27,3 +27,7 @@ fun <T, R> Iterable<T>.firstOrNullMapping(map: (T) -> R, accept: (R)->Boolean): 
     }
     return null
 }
+
+inline fun <reified T> Iterable<*>.firstInstanceOrNull(): T? {
+    return firstOrNull { it is T } as T?
+}

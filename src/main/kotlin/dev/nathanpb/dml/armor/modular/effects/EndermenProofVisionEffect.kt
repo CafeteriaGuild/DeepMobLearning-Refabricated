@@ -19,17 +19,15 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.EffectStackOption
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
+import dev.nathanpb.dml.armor.modular.core.*
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerStareEndermanEvent
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
 
 class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
@@ -37,8 +35,13 @@ class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     EntityCategory.END,
     config.glitchArmor.costs::endermenProofVision
 ) {
-    override fun registerEvents() {
-        PlayerStareEndermanEvent.register { player ->
+
+    companion object {
+        private val INSTANCE by lazy {
+            ModularEffectRegistry.INSTANCE.all.firstInstanceOrNull<EndermenProofVisionEffect>()
+        }
+
+        fun trigger(player: PlayerEntity): ActionResult = INSTANCE?.run {
             if (!player.world.isClient) {
                 val contexts = ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)
@@ -53,12 +56,17 @@ class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
                 contexts.any { context -> canApply(context, ModularEffectTriggerPayload.EMPTY) }
                     .let { canApply ->
                         if (canApply) {
-                            return@register ActionResult.FAIL
+                            return ActionResult.FAIL
                         }
                     }
             }
-            ActionResult.PASS
-        }
+            null
+        } ?: ActionResult.PASS
+
+    }
+
+    override fun registerEvents() {
+
     }
 
     override fun acceptTier(tier: DataModelTier) = true

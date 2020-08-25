@@ -21,23 +21,21 @@ package dev.nathanpb.dml.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
+import dev.nathanpb.dml.armor.modular.TargetCancellationEffect;
+import dev.nathanpb.dml.armor.modular.effects.RotResistanceEffect;
+import dev.nathanpb.dml.armor.modular.effects.UndyingEffect;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import dev.nathanpb.dml.event.context.EventsKt;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -109,26 +107,7 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         if (!cir.getReturnValue()) {
             LivingEntity dis = (LivingEntity) (Object) this;
             if (dis instanceof PlayerEntity) {
-                ItemStack totemStack = EventsKt.getFindTotemOfUndyingCallback()
-                        .invoker()
-                        .invoke((PlayerEntity) dis);
-
-                if (totemStack != null) {
-                    dis.setHealth(1.0F);
-                    dis.clearStatusEffects();
-                    dis.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
-                    dis.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
-                    dis.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
-                    dis.world.sendEntityStatus(dis, (byte)35);
-
-                    if (dis instanceof ServerPlayerEntity) {
-                        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)dis;
-                        serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(Items.TOTEM_OF_UNDYING));
-                        Criteria.USED_TOTEM.trigger(serverPlayerEntity, totemStack);
-                    }
-                    totemStack.decrement(1);
-                    cir.setReturnValue(true);
-                }
+                UndyingEffect.Companion.trigger((PlayerEntity) dis);
             }
         }
     }
@@ -138,11 +117,8 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         LivingEntity dis = (LivingEntity) (Object) this;
         if (dis instanceof MobEntity) {
             if (cir.getReturnValue()) {
-                ActionResult eventResult = EventsKt.getCanTargetEntityEvent()
-                    .invoker()
-                    .invoke((MobEntity) dis, target);
-
-                if (eventResult.equals(ActionResult.FAIL)) {
+                ActionResult result = TargetCancellationEffect.Companion.attemptToCancel((MobEntity) dis, target);
+                if (result.equals(ActionResult.FAIL)) {
                     cir.setReturnValue(false);
                     cir.cancel();
                 }
@@ -155,9 +131,7 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         method = "applyFoodEffects"
     )
     public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
-        return EventsKt.getFoodStatusEffectsCallback()
-            .invoker()
-            .invoke((LivingEntity) (Object) this, stack, effects);
+        return RotResistanceEffect.Companion.attemptToCancelHunger((LivingEntity) (Object) this, stack, effects);
     }
 
     @Inject(at = @At("RETURN"), method = "eatFood")

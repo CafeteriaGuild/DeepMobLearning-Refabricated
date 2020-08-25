@@ -19,19 +19,20 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.EffectStackOption
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
+import com.mojang.datafixers.util.Pair
+import dev.nathanpb.dml.armor.modular.core.*
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.FoodStatusEffectsCallback
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.utils.firstInstanceOrNull
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.ActionResult
 import kotlin.random.Random
@@ -42,24 +43,32 @@ class RotResistanceEffect : ModularEffect<ModularEffectTriggerPayload>(
     config.glitchArmor.costs::rotResistance
 ) {
 
-    override fun registerEvents() {
-        FoodStatusEffectsCallback.register { player, stack, effects ->
-            if (player is PlayerEntity && !player.world.isClient && stack.item == Items.ROTTEN_FLESH) {
-                ModularEffectContext.from(player)
-                    .run(EffectStackOption.PRIORITIZE_GREATER.apply)
-                    .firstOrNull { context ->
-                        attemptToApply(context, ModularEffectTriggerPayload.EMPTY) == ActionResult.SUCCESS
-                    }?.let { context ->
-                        if (Random.nextFloat() <= sumLevelsOf(context.armor.stack)) {
-                            return@register effects.filter { pair ->
-                                pair.first.effectType != StatusEffects.HUNGER
+    companion object {
+        private val INSTANCE = ModularEffectRegistry.INSTANCE.all.firstInstanceOrNull<RotResistanceEffect>()
+
+        fun attemptToCancelHunger(player: LivingEntity, stack: ItemStack, effects: List<Pair<StatusEffectInstance, Float>>): List<Pair<StatusEffectInstance, Float>> {
+            INSTANCE?.run {
+                if (player is PlayerEntity && !player.world.isClient && stack.item == Items.ROTTEN_FLESH) {
+                    ModularEffectContext.from(player)
+                        .run(EffectStackOption.PRIORITIZE_GREATER.apply)
+                        .firstOrNull { context ->
+                            attemptToApply(context, ModularEffectTriggerPayload.EMPTY) == ActionResult.SUCCESS
+                        }?.let { context ->
+                            if (Random.nextFloat() <= sumLevelsOf(context.armor.stack)) {
+                                return effects.filter { pair ->
+                                    pair.first.effectType != StatusEffects.HUNGER
+                                }
                             }
                         }
-                    }
+                }
             }
 
-            return@register effects
+
+            return effects
         }
+    }
+
+    override fun registerEvents() {
     }
 
     override fun acceptTier(tier: DataModelTier) = true

@@ -23,10 +23,12 @@ import dev.nathanpb.dml.armor.modular.core.*
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.CanTargetEntityEvent
-import dev.nathanpb.dml.utils.firstOrNullMapping
+import dev.nathanpb.dml.utils.`if`
+import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
@@ -37,21 +39,24 @@ abstract class TargetCancellationEffect(
     applyCost: () -> Float
 ) : ModularEffect<WrappedEffectTriggerPayload<LivingEntity>>(id, category, applyCost) {
 
-    override fun registerEvents() {
-        CanTargetEntityEvent.register { mob, target ->
-
-            if (target is PlayerEntity) {
-                ModularEffectContext.from(target)
-                    .run(EffectStackOption.RANDOMIZE.apply)
-                    .firstOrNullMapping ({ context ->
-                        attemptToApply(context, ModularEffectTriggerPayload.wrap(mob))
-                    }, ActionResult.SUCCESS::equals)?.let {
-                        return@register ActionResult.FAIL
-                    }
-            }
-
-            return@register ActionResult.PASS
+    companion object {
+        private val INSTANCE by lazy {
+            ModularEffectRegistry.INSTANCE.all.firstInstanceOrNull<TargetCancellationEffect>()
         }
+
+        fun attemptToCancel(mob: MobEntity, target: LivingEntity): ActionResult = INSTANCE?.run {
+            if (target is PlayerEntity && !target.world.isClient) {
+                return@run ModularEffectContext.from(target)
+                    .run(EffectStackOption.RANDOMIZE.apply)
+                    .any {
+                        attemptToApply(it, ModularEffectTriggerPayload.wrap(mob)) == ActionResult.SUCCESS
+                    }.`if` { ActionResult.FAIL }
+            }
+            null
+        } ?: ActionResult.PASS
+    }
+
+    override fun registerEvents() {
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
