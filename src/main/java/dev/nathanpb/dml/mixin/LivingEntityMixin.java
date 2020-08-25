@@ -170,7 +170,7 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
-    public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float _) {
+    public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float damage2) {
         boolean shouldUncap = StreamSupport.stream(((LivingEntity) (Object) this).getArmorItems().spliterator(), false)
             .anyMatch(it -> it.getItem() instanceof ItemModularGlitchArmor);
         if (shouldUncap) {
