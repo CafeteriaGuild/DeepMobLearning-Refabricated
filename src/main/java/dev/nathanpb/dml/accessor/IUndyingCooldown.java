@@ -1,4 +1,4 @@
-package dev.nathanpb.dml.mixin;/*
+package dev.nathanpb.dml.accessor;/*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
@@ -17,21 +17,11 @@ package dev.nathanpb.dml.mixin;/*
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.gui.hud.FlightBurnoutHud;
-import dev.nathanpb.dml.gui.hud.UndyingCooldownHud;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.jetbrains.annotations.Nullable;
 
-@Mixin(InGameHud.class)
-public class InGameHudMixin {
+public interface IUndyingCooldown {
+    @Nullable
+    Long getDmlRefUndyingLastUsage();
 
-    @Inject(at = @At("RETURN"), method = "renderStatusBars")
-    public void renderStatusBar(MatrixStack matrices, CallbackInfo ci){
-        FlightBurnoutHud.Companion.getINSTANCE().render(matrices);
-        UndyingCooldownHud.Companion.getINSTANCE().render(matrices);
-    }
+    void setDmlRefUndyingLastUsage(@Nullable Long time);
 }

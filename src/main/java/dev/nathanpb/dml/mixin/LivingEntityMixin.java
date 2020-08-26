@@ -107,7 +107,10 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         if (!cir.getReturnValue()) {
             LivingEntity dis = (LivingEntity) (Object) this;
             if (dis instanceof PlayerEntity) {
-                UndyingEffect.Companion.trigger((PlayerEntity) dis);
+                if (UndyingEffect.Companion.trigger((PlayerEntity) dis)) {
+                    cir.setReturnValue(true);
+                    cir.cancel();
+                }
             }
         }
     }

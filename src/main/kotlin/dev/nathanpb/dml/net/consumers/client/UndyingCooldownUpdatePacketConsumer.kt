@@ -1,4 +1,4 @@
-package dev.nathanpb.dml.mixin;/*
+/*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
@@ -17,21 +17,21 @@ package dev.nathanpb.dml.mixin;/*
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.gui.hud.FlightBurnoutHud;
-import dev.nathanpb.dml.gui.hud.UndyingCooldownHud;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+package dev.nathanpb.dml.net.consumers.client
 
-@Mixin(InGameHud.class)
-public class InGameHudMixin {
+import dev.nathanpb.dml.gui.hud.UndyingCooldownHud
+import net.fabricmc.fabric.api.network.PacketConsumer
+import net.fabricmc.fabric.api.network.PacketContext
+import net.minecraft.network.PacketByteBuf
 
-    @Inject(at = @At("RETURN"), method = "renderStatusBars")
-    public void renderStatusBar(MatrixStack matrices, CallbackInfo ci){
-        FlightBurnoutHud.Companion.getINSTANCE().render(matrices);
-        UndyingCooldownHud.Companion.getINSTANCE().render(matrices);
+class UndyingCooldownUpdatePacketConsumer : PacketConsumer {
+    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+        val cooldownTime = buf.readInt()
+        val maxCooldownTime = buf.readInt()
+        context.taskQueue.execute {
+            UndyingCooldownHud.INSTANCE.cooldownTime = cooldownTime
+            UndyingCooldownHud.INSTANCE.maxCooldownTime = maxCooldownTime
+        }
     }
+
 }

@@ -210,6 +210,7 @@ class GlitchArmor : ConfigData {
     var dataAmountToSelfAware = 384
     var soulVisionRange = 12
     var maxFlightTicksPerLevel = 30 * 20
+    var undyingCooldownTime = 36000
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)

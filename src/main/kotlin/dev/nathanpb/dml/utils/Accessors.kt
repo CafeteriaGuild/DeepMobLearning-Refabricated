@@ -22,6 +22,8 @@ package dev.nathanpb.dml.utils
 import dev.nathanpb.dml.accessor.IFlightBurnoutManagerAccessor
 import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor
 import dev.nathanpb.dml.accessor.ITrialWorldPersistenceAccessor
+import dev.nathanpb.dml.accessor.IUndyingCooldown
+import dev.nathanpb.dml.armor.modular.cooldown.FlightBurnoutManager
 import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -36,5 +38,11 @@ var LivingEntity.isInReiScreen: Boolean
 val World.runningTrials: MutableList<Trial>
     get() = (this as ITrialWorldPersistenceAccessor).runningTrials
 
-val PlayerEntity.flightBurnoutManager
+val PlayerEntity.flightBurnoutManager: FlightBurnoutManager
     get() = (this as IFlightBurnoutManagerAccessor).dmlFlightBurnoutManager
+
+var PlayerEntity.undyingLastUsage
+    get() = (this as IUndyingCooldown).dmlRefUndyingLastUsage
+    set(value) {
+        (this as IUndyingCooldown).dmlRefUndyingLastUsage = value
+    }
