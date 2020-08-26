@@ -27,6 +27,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.text.LiteralText
 import net.minecraft.world.World
+import kotlin.math.max
 
 class FlightBurnoutManager(private val player: net.minecraft.entity.player.PlayerEntity) {
 
@@ -80,7 +81,7 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
             }
             if (isTouchingFloor) {
                 if (burnoutTicks > 0) {
-                    burnoutTicks--
+                    burnoutTicks = max(0, burnoutTicks-2)
                 }
                 if (!canFly && burnoutTicks == 0) {
                     canFly = true
