@@ -23,3 +23,4 @@ import net.minecraft.util.Identifier
 
 
 class DuplicatedRegistryException(id: Identifier) : Exception("The Modular Effect of ID $id is already registered")
+class EffectNotFoundException() : Exception()

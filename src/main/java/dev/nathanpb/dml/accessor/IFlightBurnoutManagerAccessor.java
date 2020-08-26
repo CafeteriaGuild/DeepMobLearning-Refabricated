@@ -1,4 +1,4 @@
-/*
+package dev.nathanpb.dml.accessor;/*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
@@ -17,24 +17,8 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+import dev.nathanpb.dml.armor.modular.cooldown.FlightBurnoutManager;
 
-import dev.nathanpb.dml.accessor.IFlightBurnoutManagerAccessor
-import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor
-import dev.nathanpb.dml.accessor.ITrialWorldPersistenceAccessor
-import dev.nathanpb.dml.trial.Trial
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.world.World
-
-var LivingEntity.isInReiScreen: Boolean
-    get() = (this as ILivingEntityReiStateAccessor).isDmlRefIsInReiScreen
-    set(flag) {
-        (this as ILivingEntityReiStateAccessor).setDmlRefInReiScreen(flag)
-    }
-
-val World.runningTrials: MutableList<Trial>
-    get() = (this as ITrialWorldPersistenceAccessor).runningTrials
-
-val PlayerEntity.flightBurnoutManager
-    get() = (this as IFlightBurnoutManagerAccessor).dmlFlightBurnoutManager
+public interface IFlightBurnoutManagerAccessor {
+    FlightBurnoutManager getDmlFlightBurnoutManager();
+}

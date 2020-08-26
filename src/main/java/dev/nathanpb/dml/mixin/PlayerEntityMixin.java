@@ -17,6 +17,8 @@ package dev.nathanpb.dml.mixin;/*
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import dev.nathanpb.dml.accessor.IFlightBurnoutManagerAccessor;
+import dev.nathanpb.dml.armor.modular.cooldown.FlightBurnoutManager;
 import dev.nathanpb.dml.event.context.EventsKt;
 import dev.nathanpb.dml.event.context.PlayerEntityDamageContext;
 import net.minecraft.entity.damage.DamageSource;
@@ -28,7 +30,17 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin {
+public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor {
+
+    private FlightBurnoutManager dmlRefFlightManager;
+
+    @Override
+    public FlightBurnoutManager getDmlFlightBurnoutManager() {
+        if (dmlRefFlightManager == null) {
+            dmlRefFlightManager = new FlightBurnoutManager((PlayerEntity) (Object) this);
+        }
+        return dmlRefFlightManager;
+    }
 
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentsToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
     private float applyDamage(DamageSource source, float amount) {
@@ -41,6 +53,7 @@ public class PlayerEntityMixin {
 
     @Inject(at = @At("HEAD"), method = "tick")
     private void tick(CallbackInfo ci) {
+        getDmlFlightBurnoutManager().tick();
         EventsKt.getPlayerEntityTickEvent()
             .invoker()
             .invoke((PlayerEntity) (Object) this);

@@ -29,6 +29,7 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.utils.flightBurnoutManager
 import io.github.ladysnake.pal.VanillaAbilities
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.util.ActionResult
@@ -63,5 +64,9 @@ class FlyEffect : AbilityBasedEffect(
     }
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+
+    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
+        return super.canApply(context, payload) && context.player.flightBurnoutManager.canFly
+    }
 
 }
