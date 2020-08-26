@@ -25,7 +25,6 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.armor.modular.effects.FlyEffect
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.utils.firstInstanceOrNull
-import net.minecraft.text.LiteralText
 import net.minecraft.world.World
 import kotlin.math.max
 
@@ -65,9 +64,6 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
             }
 
             val isTouchingFloor = !world.getBlockState(player.blockPos.down()).isAir
-            if (world.time % 20 == 0L) {
-                player.sendMessage(LiteralText(burnoutTicks.toString()), false)
-            }
             if (effect.abilitySource.grants(player, effect.ability)) {
                 if (!isTouchingFloor) {
                     val maxFlightTicks = maxFlightTicks
