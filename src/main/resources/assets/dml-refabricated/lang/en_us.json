@@ -114,6 +114,7 @@
   "text.autoconfig.dml-refabricated.option.glitchArmor.dataAmountToSuperior": "Data Amount to: Superior",
   "text.autoconfig.dml-refabricated.option.glitchArmor.dataAmountToSelfAware": "Data Amount to: Self Aware",
   "text.autoconfig.dml-refabricated.option.glitchArmor.soulVisionRange": "Soul Vision Range",
+  "text.autoconfig.dml-refabricated.option.glitchArmor.maxFlightTicksPerLevel": "Max Flight Ticks per Level",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.fireProtection": "Fire Protection Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.autoExtinguish": "Auto Extinguish Cost",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.featherFalling": "Feather Falling Cost",
