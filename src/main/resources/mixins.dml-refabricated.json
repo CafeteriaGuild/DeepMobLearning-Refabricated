@@ -18,7 +18,8 @@
     "WorldMixin"
   ],
   "client": [
-    "ClientEntityMixin"
+    "ClientEntityMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

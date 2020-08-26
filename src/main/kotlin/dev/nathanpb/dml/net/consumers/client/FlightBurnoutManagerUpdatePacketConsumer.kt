@@ -17,9 +17,25 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+package dev.nathanpb.dml.net.consumers.client
 
-fun Double.lerp(min: Double, max: Double) = (1 - this) * min + this * max
-fun Int.lerp(min: Double, max: Double) = (1 - this) * min + this * max
+import dev.nathanpb.dml.gui.hud.FlightBurnoutHud
+import net.fabricmc.fabric.api.network.PacketConsumer
+import net.fabricmc.fabric.api.network.PacketContext
+import net.minecraft.network.PacketByteBuf
 
-fun Int.squared() = this * this
+class FlightBurnoutManagerUpdatePacketConsumer : PacketConsumer {
+    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+        val burnoutTicks = buf.readInt()
+        val maxBurnoutTicks = buf.readInt()
+        val canFly = buf.readBoolean()
+        context.taskQueue.execute {
+            FlightBurnoutHud.INSTANCE.apply {
+                this.burnoutTicks = burnoutTicks
+                this.maxBurnoutTicks = maxBurnoutTicks
+                this.canFly = canFly
+            }
+        }
+    }
+
+}

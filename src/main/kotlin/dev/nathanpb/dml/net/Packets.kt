@@ -22,6 +22,7 @@ package dev.nathanpb.dml.net
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.net.consumers.SoulVisionRequestedPacketConsumer
 import dev.nathanpb.dml.net.consumers.TeleportEffectRequestedPacketConsumer
+import dev.nathanpb.dml.net.consumers.client.FlightBurnoutManagerUpdatePacketConsumer
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketConsumer
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
@@ -30,9 +31,11 @@ import net.minecraft.util.Identifier
 val C2S_TELEPORT_EFFECT_REQUESTED = identifier("teleport_effect_requested")
 val C2S_SOUL_VISION_REQUESTED = identifier("soul_vision_requested")
 
+val S2C_FLIGHT_BURNOUT_MANAGER_UPDATE = identifier("flight_burnout_manager_update")
+
 fun registerClientSidePackets() {
     hashMapOf<Identifier, PacketConsumer>(
-        // I'll be keeping this here to use when I need packets again
+        S2C_FLIGHT_BURNOUT_MANAGER_UPDATE to FlightBurnoutManagerUpdatePacketConsumer()
     ).forEach { (id, consumer) ->
         ClientSidePacketRegistry.INSTANCE.register(id, consumer)
     }

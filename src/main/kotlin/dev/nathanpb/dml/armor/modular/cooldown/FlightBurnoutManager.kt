@@ -24,7 +24,12 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.armor.modular.effects.FlyEffect
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.net.S2C_FLIGHT_BURNOUT_MANAGER_UPDATE
 import dev.nathanpb.dml.utils.firstInstanceOrNull
+import io.netty.buffer.Unpooled
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.world.World
 import kotlin.math.max
 
@@ -56,11 +61,11 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
             && !(player.isCreative || player.isSpectator)
         ) {
 
-            // Updates the max flight ticks
             if (world.time % 20 == 0L) {
                 maxFlightTicks = config.glitchArmor.maxFlightTicksPerLevel * effect.sumLevelsOf(
                     ModularEffectContext.from(player).map { it.armor.stack }
                 ).toInt()
+                sync()
             }
 
             val isTouchingFloor = !world.getBlockState(player.blockPos.down()).isAir
@@ -84,6 +89,18 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
                 }
             }
         }
+    }
+
+    fun sync() {
+        if (player is ServerPlayerEntity) {
+            val packet = PacketByteBuf(Unpooled.buffer()).apply {
+                writeInt(burnoutTicks)
+                writeInt(maxFlightTicks)
+                writeBoolean(canFly)
+            }
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, S2C_FLIGHT_BURNOUT_MANAGER_UPDATE, packet)
+        }
+
     }
 
 }

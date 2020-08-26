@@ -1,4 +1,4 @@
-/*
+package dev.nathanpb.dml.mixin;/*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
@@ -17,9 +17,19 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+import dev.nathanpb.dml.gui.hud.FlightBurnoutHud;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.util.math.MatrixStack;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-fun Double.lerp(min: Double, max: Double) = (1 - this) * min + this * max
-fun Int.lerp(min: Double, max: Double) = (1 - this) * min + this * max
+@Mixin(InGameHud.class)
+public class InGameHudMixin {
 
-fun Int.squared() = this * this
+    @Inject(at = @At("RETURN"), method = "renderStatusBars")
+    public void renderStatusBar(MatrixStack matrices, CallbackInfo ci){
+        FlightBurnoutHud.Companion.getINSTANCE().render(matrices);
+    }
+}
