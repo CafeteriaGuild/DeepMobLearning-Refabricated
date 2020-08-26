@@ -43,11 +43,9 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
 
     // This value is automagically updated every 20 ticks
     // to keep synchronization and avoid heavy calculations every tick
-    var maxFlightTicks: Int = 0
-        private set
+    private var maxFlightTicks: Int = 0
 
-    var burnoutTicks = 0
-        private set
+    private var burnoutTicks = 0
 
     var canFly = true
         private set
@@ -93,7 +91,7 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
         }
     }
 
-    fun sync() {
+    private fun sync() {
         if (player is ServerPlayerEntity) {
             val packet = PacketByteBuf(Unpooled.buffer()).apply {
                 writeInt(burnoutTicks)
