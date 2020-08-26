@@ -65,6 +65,9 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
                 maxFlightTicks = config.glitchArmor.maxFlightTicksPerLevel * effect.sumLevelsOf(
                     ModularEffectContext.from(player).map { it.armor.stack }
                 ).toInt()
+            }
+
+            if (world.time % (if (!canFly || player.abilities.flying) 10 else 20) == 0L) {
                 sync()
             }
 
