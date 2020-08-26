@@ -47,7 +47,6 @@ class FlightBurnoutHud {
         }
 
         val centerX = client.window.scaledWidth / 2
-        val centerY = client.window.scaledHeight / 2
 
         val levelAmount = ((maxBurnoutTicks - burnoutTicks) / maxBurnoutTicks.toDouble()).lerp(0.0, 10.0).roundToInt()
         if (levelAmount > 0) {
@@ -57,7 +56,7 @@ class FlightBurnoutHud {
                 DrawableHelper.drawTexture(
                     matrices,
                     centerX + 8 + index * 8,
-                    centerY + 72,
+                    client.window.scaledHeight - 48,
                     0F, 0F,
                     8, 8,
                     8, 8
