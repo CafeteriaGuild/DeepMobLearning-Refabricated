@@ -71,9 +71,8 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
                 sync()
             }
 
-            val isTouchingFloor = !world.getBlockState(player.blockPos.down()).isAir
             if (effect.abilitySource.grants(player, effect.ability)) {
-                if (!isTouchingFloor) {
+                if (player.abilities.flying) {
                     val maxFlightTicks = maxFlightTicks
                     if (maxFlightTicks > 0) {
                         burnoutTicks++
@@ -83,7 +82,7 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
                     }
                 }
             }
-            if (isTouchingFloor) {
+            if (!player.abilities.flying) {
                 if (burnoutTicks > 0) {
                     burnoutTicks = max(0, burnoutTicks-2)
                 }
