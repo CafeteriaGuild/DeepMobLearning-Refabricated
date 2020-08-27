@@ -24,7 +24,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
+import dev.nathanpb.dml.event.context.LivingEntityDamageContext
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
@@ -46,7 +46,7 @@ class ResistanceEffect : ProtectionLikeEffect(
         return EntityAttributeModifier(id.toString(), armor.tier().ordinal.inc() / 20.0, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
     }
 
-    override fun inflictDamage(event: PlayerEntityDamageContext, armorValues: Double): Float {
+    override fun inflictDamage(event: LivingEntityDamageContext, armorValues: Double): Float {
         return event.damage * (1 - min(0.25, armorValues)).toFloat()
     }
 

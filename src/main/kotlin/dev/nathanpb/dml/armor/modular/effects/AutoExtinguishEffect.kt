@@ -26,10 +26,11 @@ import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
-import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
+import dev.nathanpb.dml.event.context.LivingEntityDamageContext
+import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
 
@@ -39,15 +40,17 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     config.glitchArmor.costs::autoExtinguish
 ) {
     override fun registerEvents() {
-        PlayerEntityDamageEvent.register { eventContext ->
-            ModularEffectContext.from(eventContext.entity)
-                .shuffled()
-                .firstOrNull { effectContext ->
-                    attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
-                        eventContext.entity.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F)
-                        eventContext.entity.fireTicks = 0
-                    }.result == ActionResult.SUCCESS
-                }
+        LivingEntityDamageEvent.register { eventContext ->
+            if (eventContext.entity is PlayerEntity) {
+                ModularEffectContext.from(eventContext.entity)
+                    .shuffled()
+                    .firstOrNull { effectContext ->
+                        attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
+                            eventContext.entity.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F)
+                            eventContext.entity.fireTicks = 0
+                        }.result == ActionResult.SUCCESS
+                    }
+            }
             null
         }
     }
@@ -59,7 +62,7 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     }
 
     // todo check if the player is standing in fire too
-    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<PlayerEntityDamageContext>): Boolean {
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntityDamageContext>): Boolean {
         return super.canApply(context, payload) && !context.player.isInLava
     }
 

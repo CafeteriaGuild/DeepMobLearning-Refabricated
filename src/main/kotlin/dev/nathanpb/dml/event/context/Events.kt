@@ -25,8 +25,8 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Vec3d
 
-val PlayerEntityDamageEvent = event<(PlayerEntityDamageContext)->PlayerEntityDamageContext?> { listeners ->
-    { context: PlayerEntityDamageContext ->
+val LivingEntityDamageEvent = event<(LivingEntityDamageContext)->LivingEntityDamageContext?> { listeners ->
+    { context: LivingEntityDamageContext ->
         listeners.fold(context) { acc, listener ->
             listener(acc) ?: acc
         }

@@ -28,6 +28,7 @@ import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
 import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import dev.nathanpb.dml.event.context.EventsKt;
+import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
@@ -157,5 +158,14 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         } else {
             return DamageUtil.getDamageLeft(damage, armor, armorToughness);
         }
+    }
+
+    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyArmorToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
+    private float applyDamage(DamageSource source, float amount) {
+        LivingEntity dis = (LivingEntity) (Object) this;
+        return EventsKt.getLivingEntityDamageEvent()
+            .invoker()
+            .invoke(new LivingEntityDamageContext(dis, source, amount))
+            .getDamage();
     }
 }
