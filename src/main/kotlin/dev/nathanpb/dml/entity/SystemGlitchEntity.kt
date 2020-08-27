@@ -23,7 +23,6 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomAround
@@ -51,13 +50,13 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 12.0)
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 1.0)
+    }
 
-        fun registerDamageLimiter() {
-            LivingEntityDamageEvent.register { context ->
-                if (context.entity is SystemGlitchEntity && config.systemGlitch.damageLimiter > 0) {
-                    context.copy(damage = min(context.damage, config.systemGlitch.damageLimiter))
-                } else context
-            }
+    override fun applyDamage(source: DamageSource?, amount: Float) {
+        if (source?.isOutOfWorld == false && config.systemGlitch.damageLimiter > 0) {
+            super.applyDamage(source, min(amount, config.systemGlitch.damageLimiter))
+        } else {
+            super.applyDamage(source, amount)
         }
     }
 
