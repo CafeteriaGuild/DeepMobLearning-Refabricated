@@ -82,7 +82,10 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     }
 
     open fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(id.toString(), armor.tier().ordinal.inc().toDouble(), EntityAttributeModifier.Operation.ADDITION)
+        val level = DataModelTier.values().count {
+            acceptTier(it) && it <= armor.tier()
+        }
+        return EntityAttributeModifier(id.toString(), level.toDouble(), EntityAttributeModifier.Operation.ADDITION)
     }
 
     @ApiStatus.Internal

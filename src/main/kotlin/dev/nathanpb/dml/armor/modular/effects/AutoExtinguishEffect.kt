@@ -24,11 +24,13 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
 import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
 import dev.nathanpb.dml.identifier
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
@@ -61,6 +63,10 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     // todo check if the player is standing in fire too
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<PlayerEntityDamageContext>): Boolean {
         return super.canApply(context, payload) && !context.player.isInLava
+    }
+
+    override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
+        return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
 }
