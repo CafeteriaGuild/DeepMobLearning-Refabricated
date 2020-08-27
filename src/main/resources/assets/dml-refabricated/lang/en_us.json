@@ -104,6 +104,8 @@
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportMinDistance": "Teleport Minimum Distance",
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportDelay": "Delay Between Teleports",
   "text.autoconfig.dml-refabricated.option.systemGlitch.teleportAroundPlayerRadius": "Radius of Blocks to Teleport Around Player",
+  "text.autoconfig.dml-refabricated.option.systemGlitch.damageLimiter": "Max damage allowed to take",
+  "text.autoconfig.dml-refabricated.option.systemGlitch.damageLimiter.@Tooltip": "Set to 0 to disable the damage limiter",
   "text.autoconfig.dml-refabricated.option.dataCollection.baseDataGainPerKill": "Minimum data gain per kill",
   "text.autoconfig.dml-refabricated.option.affix.maxAffixesInKey": "Max Affixes in Trial Key",
   "text.autoconfig.dml-refabricated.option.affix.thunderstormBoltChance": "Thunderstorm Lightning Chance",

@@ -180,11 +180,15 @@ class SystemGlitch : ConfigData {
     var teleportDelay = 100
     var teleportAroundPlayerRadius = 2
 
+    @ConfigEntry.Gui.Tooltip
+    var damageLimiter = 20F
+
     override fun validatePostLoad() {
         teleportChance = max(0F, min(1F, teleportChance))
         teleportMinDistance = max(0, teleportMinDistance)
         teleportDelay = max(0, teleportDelay)
         teleportAroundPlayerRadius = max(1, teleportAroundPlayerRadius)
+        damageLimiter = max(0F, damageLimiter)
     }
 }
 

@@ -24,6 +24,7 @@ import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.config.ModConfig
 import dev.nathanpb.dml.config.registerConfigs
+import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.entity.effect.registerStatusEffects
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
@@ -74,6 +75,7 @@ fun init() {
     }
     TrialAffixRegistry.registerDefaultAffixes()
     ModularEffectRegistry.registerDefaults()
+    SystemGlitchEntity.registerDamageLimiter()
     println("Deep Mob Learning: Refabricated is good to go")
 }
 
