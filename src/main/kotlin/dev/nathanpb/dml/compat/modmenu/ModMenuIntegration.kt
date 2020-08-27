@@ -17,8 +17,9 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.config
+package dev.nathanpb.dml.compat.modmenu
 
+import dev.nathanpb.dml.ModConfig
 import io.github.prospector.modmenu.api.ConfigScreenFactory
 import io.github.prospector.modmenu.api.ModMenuApi
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig

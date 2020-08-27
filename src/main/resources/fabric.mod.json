@@ -25,7 +25,7 @@
     "modmenu": [
       {
         "adapter": "kotlin",
-        "value": "dev.nathanpb.dml.config.ModMenuIntegration"
+        "value": "dev.nathanpb.dml.compat.modmenu.ModMenuIntegration"
       }
     ],
     "rei_plugins": [
