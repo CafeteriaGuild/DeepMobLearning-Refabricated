@@ -37,7 +37,5 @@ class FeatherFallingEffect : ProtectionLikeEffect(
 
     override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal in 0..1
-    }
+    override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
 }
