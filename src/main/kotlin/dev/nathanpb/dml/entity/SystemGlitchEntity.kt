@@ -52,14 +52,6 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 1.0)
     }
 
-    override fun applyDamage(source: DamageSource?, amount: Float) {
-        if (source?.isOutOfWorld == false && config.systemGlitch.damageLimiter > 0) {
-            super.applyDamage(source, min(amount, config.systemGlitch.damageLimiter))
-        } else {
-            super.applyDamage(source, amount)
-        }
-    }
-
     /**
      * This property is used to set the glitch's max health in the Trial's start time
      * Because at that time the entity isn't bound to the trial yet
@@ -173,6 +165,14 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         super.readCustomDataFromTag(tag)
         if (tag != null) {
             belongsToTrial = tag.getBoolean("${MOD_ID}.belongsToTrial")
+        }
+    }
+
+    override fun applyDamage(source: DamageSource?, amount: Float) {
+        if (source?.isOutOfWorld == false && config.systemGlitch.damageLimiter > 0) {
+            super.applyDamage(source, min(amount, config.systemGlitch.damageLimiter))
+        } else {
+            super.applyDamage(source, amount)
         }
     }
 }
