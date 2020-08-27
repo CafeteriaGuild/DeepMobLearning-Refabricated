@@ -40,6 +40,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import kotlin.math.min
 import kotlin.random.Random
 
 class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : HostileEntity(type, world) {
@@ -49,6 +50,14 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 12.0)
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 1.0)
+    }
+
+    override fun applyDamage(source: DamageSource?, amount: Float) {
+        if (source?.isOutOfWorld == false && config.systemGlitch.damageLimiter > 0) {
+            super.applyDamage(source, min(amount, config.systemGlitch.damageLimiter))
+        } else {
+            super.applyDamage(source, amount)
+        }
     }
 
     /**

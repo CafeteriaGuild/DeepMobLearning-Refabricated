@@ -23,8 +23,10 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityDamageContext
-import dev.nathanpb.dml.event.context.PlayerEntityDamageEvent
+import dev.nathanpb.dml.event.context.LivingEntityDamageContext
+import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
+import dev.nathanpb.dml.utils.takeOrNull
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 
@@ -35,18 +37,20 @@ abstract class DamageImmunityLikeEffect(
 ) : ProtectionLikeEffect(id, category, applyCost) {
 
     override fun registerEvents() {
-        PlayerEntityDamageEvent.register { eventContext ->
-            ModularEffectContext.from(eventContext.entity)
-                .shuffled()
-                .firstOrNull { effectContext ->
-                    attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) == ActionResult.SUCCESS
-                }?.let {
-                    eventContext.copy(damage = 0F)
-                }
+        LivingEntityDamageEvent.register { eventContext ->
+            takeOrNull(eventContext.entity is PlayerEntity) {
+                ModularEffectContext.from(eventContext.entity as PlayerEntity)
+                    .shuffled()
+                    .firstOrNull { effectContext ->
+                        attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) == ActionResult.SUCCESS
+                    }?.let {
+                        eventContext.copy(damage = 0F)
+                    }
+            }
         }
     }
 
-    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<PlayerEntityDamageContext>): Boolean {
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntityDamageContext>): Boolean {
         return super.canApply(context, payload) && sumLevelsOf(context.armor.stack) > 0
     }
 }

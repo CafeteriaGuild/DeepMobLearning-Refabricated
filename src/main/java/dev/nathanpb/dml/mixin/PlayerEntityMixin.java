@@ -22,7 +22,7 @@ import dev.nathanpb.dml.accessor.IFlightBurnoutManagerAccessor;
 import dev.nathanpb.dml.accessor.IUndyingCooldown;
 import dev.nathanpb.dml.armor.modular.cooldown.FlightBurnoutManager;
 import dev.nathanpb.dml.event.context.EventsKt;
-import dev.nathanpb.dml.event.context.PlayerEntityDamageContext;
+import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -50,9 +50,9 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentsToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
     private float applyDamage(DamageSource source, float amount) {
         PlayerEntity dis = (PlayerEntity) (Object) this;
-        return EventsKt.getPlayerEntityDamageEvent()
+        return EventsKt.getLivingEntityDamageEvent()
             .invoker()
-            .invoke(new PlayerEntityDamageContext(dis, source, amount))
+            .invoke(new LivingEntityDamageContext(dis, source, amount))
             .getDamage();
     }
 
