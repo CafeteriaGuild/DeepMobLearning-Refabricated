@@ -35,7 +35,7 @@ class ShulkerFriendlyEffect : TargetCancellationEffect(
     config.glitchArmor.costs::shulkerFriendly
 ) {
 
-    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 3
 
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntity>): Boolean {
         return payload.value.type == EntityType.SHULKER && super.canApply(context, payload)
