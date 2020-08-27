@@ -47,7 +47,7 @@ public class EndermanEntityMixin {
     @Inject(at = @At("RETURN"), method = "isPlayerStaring", cancellable = true)
     public void isPlayerStaring(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            ActionResult result = EndermenProofVisionEffect.Companion.trigger((PlayerEntity) (Object) this);
+            ActionResult result = EndermenProofVisionEffect.Companion.trigger(player);
 
             if (result == ActionResult.FAIL) {
                 cir.setReturnValue(false);
