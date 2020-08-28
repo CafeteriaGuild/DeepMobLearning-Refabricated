@@ -3,6 +3,8 @@
   "package": "dev.nathanpb.dml.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BowItemMixin",
+    "CrossbowItemMixin",
     "DamageSourceMixin",
     "EndermanEntityMixin",
     "ExplosionPreventMixin",

@@ -50,6 +50,7 @@ class ModularEffectRegistry {
                 register(ZombieFriendlyEffect())
 
                 // Skeleton
+                register(ArcheryEffect())
                 register(SkeletonFriendlyEffect())
 
                 // End

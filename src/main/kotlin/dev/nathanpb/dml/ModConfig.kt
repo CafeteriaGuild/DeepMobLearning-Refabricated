@@ -236,6 +236,7 @@ class GlitchArmorDataConsume : ConfigData {
     var unrottenFlesh = .5F
     var rotResistance = .5F
     var zombieFriendly = .1F
+    var archery = .5F
     var skeletonFriendly = .1F
     var fallImmunity = 1F
     var endermenProofVision = 1F

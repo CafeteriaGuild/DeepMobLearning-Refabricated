@@ -76,3 +76,19 @@ val LivingEntityEatEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
         }
     }
 }
+
+val BowShotEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
+    { entity, stack ->
+        listeners.forEach {
+            it(entity, stack)
+        }
+    }
+}
+
+val CrossbowReloadedEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
+    { entity, stack ->
+        listeners.forEach {
+            it(entity, stack)
+        }
+    }
+}
