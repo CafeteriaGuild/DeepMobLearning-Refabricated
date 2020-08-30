@@ -45,14 +45,22 @@ class ArcheryEffect : ModularEffect<ModularEffectTriggerPayload>(
             ModularEffectRegistry.INSTANCE.all.firstInstanceOrNull<ArcheryEffect>()
         }
 
-        fun crossbowFastpullReducedTicks(player: PlayerEntity): Int {
+        private fun levels(player: PlayerEntity): Int {
             return ModularEffectContext.from(player)
                 .run(EffectStackOption.PRIORITIZE_GREATER.apply)
                 .firstOrNull {
                     INSTANCE?.canApply(it, ModularEffectTriggerPayload.EMPTY) == true
                 }?.let {
-                    INSTANCE?.sumLevelsOf(it.armor.stack)?.roundToInt()?.coerceAtMost(5)?.times(2.5)?.roundToInt()
+                    INSTANCE?.sumLevelsOf(it.armor.stack)?.roundToInt()?.coerceAtMost(5)
                 } ?: 0
+        }
+
+        fun crossbowFastpullReducedTicks(player: PlayerEntity): Int {
+            return (levels(player) * 2.5).roundToInt()
+        }
+
+        fun bowFastpullLevels(player: PlayerEntity) : Float {
+            return levels(player) / 2.5F
         }
 
     }

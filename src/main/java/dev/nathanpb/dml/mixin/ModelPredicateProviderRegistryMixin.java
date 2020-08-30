@@ -62,5 +62,19 @@ public class ModelPredicateProviderRegistryMixin {
                 return 0.0F;
             }
         });
+        register(Items.BOW, new Identifier("pull"), (ItemStack stack, ClientWorld world, LivingEntity entity) -> {
+            if (entity != null && entity.getActiveItem() == stack) {
+                float maxUseTime = stack.getMaxUseTime();
+                float reducedTicks = 1;
+
+                if (entity instanceof PlayerEntity) {
+                    reducedTicks = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) entity) + 1;
+                    maxUseTime -= reducedTicks;
+                }
+
+                return (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / (20.0F / reducedTicks);
+            }
+            return 0F;
+        });
     }
 }
