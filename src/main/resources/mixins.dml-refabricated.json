@@ -21,7 +21,8 @@
   ],
   "client": [
     "ClientEntityMixin",
-    "InGameHudMixin"
+    "InGameHudMixin",
+    "ModelPredicateProviderRegistryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

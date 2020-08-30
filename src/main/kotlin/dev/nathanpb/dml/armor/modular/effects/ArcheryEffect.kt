@@ -19,26 +19,44 @@
 
 package dev.nathanpb.dml.armor.modular.effects
 
-import dev.nathanpb.dml.armor.modular.core.EffectStackOption
-import dev.nathanpb.dml.armor.modular.core.ModularEffect
-import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
-import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
+import dev.nathanpb.dml.armor.modular.core.*
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.context.BowShotEvent
 import dev.nathanpb.dml.event.context.CrossbowReloadedEvent
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
+import kotlin.math.roundToInt
 
 class ArcheryEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("archery"),
     EntityCategory.SKELETON,
     config.glitchArmor.costs::archery
 ) {
+
+    companion object {
+
+        private val INSTANCE by lazy {
+            ModularEffectRegistry.INSTANCE.all.firstInstanceOrNull<ArcheryEffect>()
+        }
+
+        fun crossbowFastpullReducedTicks(player: PlayerEntity): Int {
+            return ModularEffectContext.from(player)
+                .run(EffectStackOption.PRIORITIZE_GREATER.apply)
+                .firstOrNull {
+                    INSTANCE?.canApply(it, ModularEffectTriggerPayload.EMPTY) == true
+                }?.let {
+                    INSTANCE?.sumLevelsOf(it.armor.stack)?.roundToInt()?.coerceAtMost(5)?.times(2.5)?.roundToInt()
+                } ?: 0
+        }
+
+    }
+
     override fun registerEvents() {
         fun trigger(player: LivingEntity, stack: ItemStack) {
             if (player is PlayerEntity && !player.world.isClient) {
