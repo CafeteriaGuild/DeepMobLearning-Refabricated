@@ -243,6 +243,7 @@ class GlitchArmorDataConsume : ConfigData {
     var shulkerFriendly = .2F
     var teleports = 1.5F
     var soulVision = 8F
+    var nightVision = .005F
     var fly = 0.05F
     var underwaterHaste = 1F
     var depthStrider = 1F

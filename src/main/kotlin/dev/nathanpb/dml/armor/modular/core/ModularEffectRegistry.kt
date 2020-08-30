@@ -60,6 +60,7 @@ class ModularEffectRegistry {
 
                 // Ghost
                 register(SoulVisionEffect())
+                register(NightVisionEffect())
                 register(FlyEffect())
 
                 // Illager
