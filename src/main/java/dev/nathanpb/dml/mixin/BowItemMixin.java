@@ -25,13 +25,19 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BowItem.class)
-public class BowItemMixin {
+public abstract class BowItemMixin {
+
+    @Shadow
+    public static float getPullProgress(int useTicks) {
+        return 0;
+    }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"), method = "onStoppedUsing")
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
@@ -40,17 +46,18 @@ public class BowItemMixin {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BowItem;getPullProgress(I)F"), method = "onStoppedUsing")
     public float proxyPullProgress(int useTicks, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        float modifier = 1F;
         if (user instanceof PlayerEntity) {
-            modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
-        }
+            float modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
+            if (modifier > 1) {
+                float f = (float)useTicks / (20F / modifier);
+                f = (f * f + f * 2.0F) / 3.0F;
+                if (f > 1.0F) {
+                    f = 1.0F;
+                }
 
-        float f = (float)useTicks / (20F / modifier);
-        f = (f * f + f * 2.0F) / 3.0F;
-        if (f > 1.0F) {
-            f = 1.0F;
+                return f;
+            }
         }
-
-        return f;
+        return getPullProgress(useTicks);
     }
 }
