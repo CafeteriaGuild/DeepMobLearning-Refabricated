@@ -57,7 +57,6 @@ fun init() {
     registerContainerTypes()
     registerRecipeSerializers()
     registerRecipeTypes()
-    registerClientSidePackets()
     registerServerSidePackets()
     registerScreenHandlers()
     registerEntityTypes()
@@ -81,6 +80,7 @@ fun initClient() {
     registerScreens()
     registerEntityRenderer()
     registerKeybindings()
+    registerClientSidePackets()
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)
