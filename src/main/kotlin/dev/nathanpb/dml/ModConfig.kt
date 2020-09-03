@@ -245,10 +245,10 @@ class GlitchArmorDataConsume : ConfigData {
     var soulVision = 8F
     var nightVision = .005F
     var fly = 0.05F
-    var underwaterHaste = 1F
-    var depthStrider = 1F
-    var waterBreathing = 1F
-    var poseidonBless = 2F
+    var underwaterHaste = .01F
+    var depthStrider = .01F
+    var waterBreathing = .01F
+    var poseidonBless = .015F
     var resistance = .3F
     var undying = 8F
 }
