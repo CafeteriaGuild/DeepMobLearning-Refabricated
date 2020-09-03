@@ -135,6 +135,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
 
         if (dataModel.category != null) {
             ModularEffectRegistry.INSTANCE.allMatching(dataModel.category, armor.tier())
+                .filter { it.id !in armor.disabledEffects }
                 .forEach {
                     multimap.put(it.entityAttribute, it.createEntityAttributeModifier(armor))
                 }
