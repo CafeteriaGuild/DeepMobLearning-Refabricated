@@ -71,6 +71,7 @@
   "key.dml-refabricated.teleport": "Teleport",
   "key.dml-refabricated.soul_vision": "Soul Vision",
   "entity_type.dml-refabricated.system_glitch": "System Glitch",
+  "entity.dml-refabricated.system_glitch": "System Glitch",
   "text.autoconfig.dml-refabricated.title": "Deep Mob Learning: Refabricated",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs": "Data Costs | -1 to disable",
   "text.autoconfig.dml-refabricated.option.glitchArmor.costs.@Tooltip": "Set to -1 to disable an effect",
