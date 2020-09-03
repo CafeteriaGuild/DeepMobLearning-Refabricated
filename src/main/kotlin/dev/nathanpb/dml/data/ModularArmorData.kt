@@ -27,6 +27,7 @@ import dev.nathanpb.dml.utils.takeOrNull
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
+import net.minecraft.util.Identifier
 import kotlin.math.max
 
 class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreateTag) {
@@ -42,6 +43,8 @@ class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreat
     }
 
     var dataAmount by persistentDefaulted(0, Serializers.INT, "${MOD_ID}.dataAmount")
+
+    var disabledEffects by persistentDefaulted(emptyList(), Serializers.IDENTIFIER_LIST)
 
     private var dataModelStack by persistentDefaulted(ItemStack.EMPTY, Serializers.ITEM_STACK, "${MOD_ID}.dataModel")
 
