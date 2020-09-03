@@ -167,9 +167,9 @@
   "modulareffect.dml-refabricated.rot_resistance": "Rot Resistance",
   "modulareffect.dml-refabricated.unrotten_flesh": "Unrotten Flesh",
   "modulareffect.dml-refabricated.archery": "Archery",
+  "modulareffect.dml-refabricated.undying": "Undying",
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider",
   "effect.dml-refabricated.soul_vision": "Soul Vision",
-  "effect.dml-refabricated.undying": "Undying",
   "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty"
 }
