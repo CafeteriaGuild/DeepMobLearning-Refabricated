@@ -40,7 +40,7 @@ fun registerEntityTypes() {
         Registry.ENTITY_TYPE,
         identifier("system_glitch"),
         FabricEntityTypeBuilder
-            .create(SpawnGroup.CREATURE, ::SystemGlitchEntity)
+            .create(SpawnGroup.MISC, ::SystemGlitchEntity)
             .dimensions(EntityDimensions(1F, 2F, true))
             .build()
     )
