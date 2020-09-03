@@ -231,7 +231,7 @@ class GlitchArmorDataConsume : ConfigData {
     var autoExtinguish = 4F
     var featherFalling = 3F
     var fireImmunity = 1F
-    var jumpBoost = 1F
+    var jumpBoost = .0075F
     var plenty = 1F
     var unrottenFlesh = .5F
     var rotResistance = .5F
