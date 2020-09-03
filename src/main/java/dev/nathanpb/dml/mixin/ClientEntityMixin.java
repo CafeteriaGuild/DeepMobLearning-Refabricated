@@ -43,8 +43,8 @@ public class ClientEntityMixin {
             Entity dis = (Entity) (Object) this;
             if (dis instanceof LivingEntity) {
                 PlayerEntity player = MinecraftClient.getInstance().player;
-                if (player != null && player.hasStatusEffect(StatusEffectsKt.getSOUL_VISION_EFFECT())) {
-                    if (player.distanceTo((Entity) (Object) this) <= DeepMobLearningKt.getConfig().getGlitchArmor().getSoulVisionRange()) {
+                if (player != null && dis != player && player.hasStatusEffect(StatusEffectsKt.getSOUL_VISION_EFFECT())) {
+                    if (player.distanceTo(dis) <= DeepMobLearningKt.getConfig().getGlitchArmor().getSoulVisionRange()) {
                         cir.setReturnValue(true);
                         cir.cancel();
                     }
