@@ -46,7 +46,8 @@ public class StatusEffectUtilMixin {
             entity.hasStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT())
             && entity.isSubmergedIn(FluidTags.WATER)
         ) {
-            cir.setReturnValue(entity.getStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT()).getAmplifier());
+            int underwaterHaste = entity.getStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT()).getAmplifier();
+            cir.setReturnValue(StatusEffectUtil.getHasteAmplifier(entity) + underwaterHaste);
             cir.cancel();
         }
     }
