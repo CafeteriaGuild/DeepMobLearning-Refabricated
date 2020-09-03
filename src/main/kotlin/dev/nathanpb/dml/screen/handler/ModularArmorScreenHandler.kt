@@ -19,23 +19,32 @@
 
 package dev.nathanpb.dml.screen.handler
 
+import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.net.C2S_MODULAR_EFFECT_TOGGLE
+import dev.nathanpb.dml.screen.handler.widget.WModularEffectToggle
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
+import io.github.cottonmc.cotton.gui.widget.WListPanel
+import io.netty.buffer.Unpooled
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.util.Hand
+import net.minecraft.util.Identifier
 
 class ModularArmorScreenHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
-    hand: Hand
+    private val hand: Hand
 ): SyncedGuiDescription(
     HANDLER_MODULAR_ARMOR,
     syncId,
@@ -43,21 +52,47 @@ class ModularArmorScreenHandler(
     SimpleInventory(ModularArmorData(playerInventory.player.getStackInHand(hand)).dataModel?.stack ?: ItemStack.EMPTY),
     ArrayPropertyDelegate(1)
 ) {
-    val stack: ItemStack = playerInventory.player.getStackInHand(hand)
-    val data = ModularArmorData(stack)
+    val stack: ItemStack
+        get() = playerInventory.player.getStackInHand(hand)
+
+    val data
+        get() = ModularArmorData(stack)
 
     init {
         val root = WGridPanel()
         setRootPanel(root)
 
-        val dataModelSlot = WItemSlot.of(blockInventory, 0).setFilter {
-            it.isEmpty || (
-                (it.item as? ItemDataModel)?.category != null
-                && data.tier().ordinal >= it.dataModel.tier().ordinal
-            )
+        var lastEffectsList: WListPanel<ModularEffect<*>, WModularEffectToggle>? = null
+        fun updateEffectsList() {
+            val disabledEffects = data.disabledEffects
+            root.remove(lastEffectsList)
+            lastEffectsList = WListPanel(getPossibleEffects(), {
+                WModularEffectToggle().apply {
+                    setOnToggle { flag ->
+                        effect?.id?.let {
+                            sendToggleUpdate(it, flag)
+                        }
+                    }
+                }
+            }) { effect, widget ->
+                widget.effect = effect
+                widget.toggle = effect.id !in disabledEffects
+            }
+
+            root.add(lastEffectsList, 1, 0, 8, 5)
         }
 
-        root.add(dataModelSlot, 4, 2)
+        val dataModelSlot = WItemSlot.of(blockInventory, 0).apply {
+            setFilter {
+                it.isEmpty || (
+                        (it.item as? ItemDataModel)?.category != null
+                                && data.tier().ordinal >= it.dataModel.tier().ordinal
+                        )
+            }
+            addChangeListener { _, _, _, _ -> updateEffectsList()}
+        }
+
+        root.add(dataModelSlot, 0, 2)
 
         root.add(this.createPlayerInventoryPanel(), 0, 5)
         root.validate(this)
@@ -67,5 +102,22 @@ class ModularArmorScreenHandler(
             data.dataModel = takeOrNull(stack.item is ItemDataModel, stack::dataModel)
             sendContentUpdates()
         }
+    }
+
+    private fun getPossibleEffects() : List<ModularEffect<*>> {
+        val category = data.dataModel?.category ?: return emptyList()
+        return ModularEffectRegistry.INSTANCE.allMatching(category, data.tier())
+            .filter { it.isEnabled() }
+    }
+
+    private fun sendToggleUpdate(effectId: Identifier, flag: Boolean) {
+        ClientSidePacketRegistry.INSTANCE.sendToServer(
+            C2S_MODULAR_EFFECT_TOGGLE,
+            PacketByteBuf(Unpooled.buffer()).apply {
+                writeIdentifier(effectId)
+                writeBoolean(flag)
+                writeInt(hand.ordinal)
+            }
+        )
     }
 }

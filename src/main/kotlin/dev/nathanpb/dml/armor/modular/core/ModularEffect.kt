@@ -98,6 +98,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
             && context.dataModel.category == category
             && acceptTier(context.tier)
             && context.dataModel.dataAmount >= maxApplyCost()
+            && id !in context.armor.disabledEffects
     }
 
     private fun attemptConsumeData(context: ModularEffectContext) {
