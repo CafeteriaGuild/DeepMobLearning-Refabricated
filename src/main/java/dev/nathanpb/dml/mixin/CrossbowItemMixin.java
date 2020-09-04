@@ -42,11 +42,19 @@ public abstract class CrossbowItemMixin {
 
     @ModifyVariable(at = @At("INVOKE"), ordinal = 0, method = "usageTick")
     public int modifyRemainingTicks(int remainingTicks, World world, LivingEntity user, ItemStack stack, int ignored) {
-        return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+        if (user instanceof PlayerEntity) {
+            return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+        } else {
+            return remainingTicks;
+        }
     }
 
     @ModifyVariable(at = @At("INVOKE"), ordinal = 0, method = "onStoppedUsing")
     public int modifyRemainingTicks2(int remainingTicks, ItemStack stack, World world, LivingEntity user, int ignored) {
-        return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+        if (user instanceof PlayerEntity) {
+            return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+        } else {
+            return remainingTicks;
+        }
     }
 }
