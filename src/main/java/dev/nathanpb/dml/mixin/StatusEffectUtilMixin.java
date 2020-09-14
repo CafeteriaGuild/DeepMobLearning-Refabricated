@@ -24,6 +24,7 @@ import net.minecraft.tag.FluidTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(StatusEffectUtil.class)
@@ -40,16 +41,17 @@ public class StatusEffectUtilMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "getHasteAmplifier", cancellable = true)
-    private static void underwaterHasteAmplifierPatch(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
+    @Redirect(at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(II)I"), method = "getHasteAmplifier")
+    private static int underwaterHasteAmplifierPatch(int haste, int conduit, LivingEntity entity) {
+        int underwaterHaste = 0;
         if (
             entity.hasStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT())
             && entity.isSubmergedIn(FluidTags.WATER)
         ) {
-            int underwaterHaste = entity.getStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT()).getAmplifier();
-            cir.setReturnValue(StatusEffectUtil.getHasteAmplifier(entity) + underwaterHaste);
-            cir.cancel();
+            underwaterHaste = entity.getStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT()).getAmplifier();
         }
+
+        return Math.max(haste + underwaterHaste, conduit + underwaterHaste);
     }
 
 
