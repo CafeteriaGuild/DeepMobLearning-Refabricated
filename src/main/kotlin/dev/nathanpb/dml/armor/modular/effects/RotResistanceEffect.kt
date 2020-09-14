@@ -54,7 +54,7 @@ class RotResistanceEffect : ModularEffect<ModularEffectTriggerPayload>(
                         .firstOrNull { context ->
                             attemptToApply(context, ModularEffectTriggerPayload.EMPTY) == ActionResult.SUCCESS
                         }?.let { context ->
-                            if (Random.nextFloat() <= sumLevelsOf(context.armor.stack)) {
+                            if (context.tier.ordinal > 0 || Random.nextFloat() <= .5) {
                                 return effects.filter { pair ->
                                     pair.first.effectType != StatusEffects.HUNGER
                                 }
