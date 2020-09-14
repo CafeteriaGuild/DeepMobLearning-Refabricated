@@ -30,6 +30,7 @@ import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import dev.nathanpb.dml.event.context.EventsKt;
 import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -53,19 +54,21 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
 
     @Inject(at = @At("HEAD"), method = "onDeath")
     public void onDeath(DamageSource source, CallbackInfo ci) {
-        LivingEntityDieCallback.EVENT.invoker().onDeath((LivingEntity) (Object) this, source);
+        Safer.run(() -> LivingEntityDieCallback.EVENT.invoker().onDeath((LivingEntity) (Object) this, source));
     }
 
     @Inject(at = @At("HEAD"), method = "getMaxHealth", cancellable = true)
     public void getMaxHealth(CallbackInfoReturnable<Float> cir) {
-        if ((Object) this instanceof SystemGlitchEntity) {
-            SystemGlitchEntity dis = (SystemGlitchEntity) ((Object)this);
-            if (dis.getTier() != null) {
-                float health = dis.getTier().getSystemGlitchMaxHealth();
-                cir.setReturnValue(health);
-                cir.cancel();
+        Safer.run(() -> {
+            if ((Object) this instanceof SystemGlitchEntity) {
+                SystemGlitchEntity dis = (SystemGlitchEntity) ((Object)this);
+                if (dis.getTier() != null) {
+                    float health = dis.getTier().getSystemGlitchMaxHealth();
+                    cir.setReturnValue(health);
+                    cir.cancel();
+                }
             }
-        }
+        });
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"), method = "onEquipStack", cancellable = true)
@@ -95,39 +98,45 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
             ordinal = 2
     )
     public float depthStriderEffectTravelPath(float value) {
-        LivingEntity dis = (LivingEntity) (Object) this;
-        if (dis.hasStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT())) {
-            return value + dis.getStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
-        }
-        return value;
+        return Safer.run(value, () -> {
+            LivingEntity dis = (LivingEntity) (Object) this;
+            if (dis.hasStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT())) {
+                return value + dis.getStatusEffect(StatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
+            }
+            return value;
+        });
     }
 
     // TODO use ModifyVar as smart guys do
     @Inject(at = @At("RETURN"), method = "tryUseTotem", cancellable = true)
     public void undyingEffect(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue()) {
-            LivingEntity dis = (LivingEntity) (Object) this;
-            if (dis instanceof PlayerEntity) {
-                if (UndyingEffect.Companion.trigger((PlayerEntity) dis)) {
-                    cir.setReturnValue(true);
-                    cir.cancel();
-                }
-            }
-        }
+       Safer.run(() -> {
+           if (!cir.getReturnValue()) {
+               LivingEntity dis = (LivingEntity) (Object) this;
+               if (dis instanceof PlayerEntity) {
+                   if (UndyingEffect.Companion.trigger((PlayerEntity) dis)) {
+                       cir.setReturnValue(true);
+                       cir.cancel();
+                   }
+               }
+           }
+       });
     }
 
     @Inject(at = @At("RETURN"), method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", cancellable = true)
     public void canTarget(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity dis = (LivingEntity) (Object) this;
-        if (dis instanceof MobEntity) {
-            if (cir.getReturnValue()) {
-                ActionResult result = TargetCancellationEffect.Companion.attemptToCancel((MobEntity) dis, target);
-                if (result.equals(ActionResult.FAIL)) {
-                    cir.setReturnValue(false);
-                    cir.cancel();
+        Safer.run(() -> {
+            LivingEntity dis = (LivingEntity) (Object) this;
+            if (dis instanceof MobEntity) {
+                if (cir.getReturnValue()) {
+                    ActionResult result = TargetCancellationEffect.Companion.attemptToCancel((MobEntity) dis, target);
+                    if (result.equals(ActionResult.FAIL)) {
+                        cir.setReturnValue(false);
+                        cir.cancel();
+                    }
                 }
             }
-        }
+        });
     }
 
     @ModifyVariable(
@@ -135,37 +144,43 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
         method = "applyFoodEffects"
     )
     public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
-        return RotResistanceEffect.Companion.attemptToCancelHunger((LivingEntity) (Object) this, stack, effects);
+        return Safer.run(effects, () -> RotResistanceEffect.Companion.attemptToCancelHunger((LivingEntity) (Object) this, stack, effects));
     }
 
     @Inject(at = @At("RETURN"), method = "eatFood")
     public void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (stack.isFood()) {
-            EventsKt.getLivingEntityEatEvent()
-                .invoker()
-                .invoke((LivingEntity) (Object) this, stack);
-        }
+        Safer.run(() -> {
+            if (stack.isFood()) {
+                EventsKt.getLivingEntityEatEvent()
+                        .invoker()
+                        .invoke((LivingEntity) (Object) this, stack);
+            }
+        });
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
     public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float damage2) {
-        boolean shouldUncap = StreamSupport.stream(((LivingEntity) (Object) this).getArmorItems().spliterator(), false)
-            .anyMatch(it -> it.getItem() instanceof ItemModularGlitchArmor);
-        if (shouldUncap) {
-            float f = 2.0F + armorToughness / 4.0F;
-            float g = Math.max(armor - damage / f, armor * 0.2F);
-            return damage * (1.0F - g / 25.0F);
-        } else {
-            return DamageUtil.getDamageLeft(damage, armor, armorToughness);
-        }
+        return Safer.runLazy(() -> DamageUtil.getDamageLeft(damage, armor, armorToughness), () -> {
+            boolean shouldUncap = StreamSupport.stream(((LivingEntity) (Object) this).getArmorItems().spliterator(), false)
+                    .anyMatch(it -> it.getItem() instanceof ItemModularGlitchArmor);
+            if (shouldUncap) {
+                float f = 2.0F + armorToughness / 4.0F;
+                float g = Math.max(armor - damage / f, armor * 0.2F);
+                return damage * (1.0F - g / 25.0F);
+            } else {
+                return DamageUtil.getDamageLeft(damage, armor, armorToughness);
+            }
+        });
     }
 
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyArmorToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
     private float applyDamage(DamageSource source, float amount) {
-        LivingEntity dis = (LivingEntity) (Object) this;
-        return EventsKt.getLivingEntityDamageEvent()
-            .invoker()
-            .invoke(new LivingEntityDamageContext(dis, source, amount))
-            .getDamage();
+        return Safer.run(amount, () -> {
+            LivingEntity dis = (LivingEntity) (Object) this;
+            return EventsKt.getLivingEntityDamageEvent()
+                    .invoker()
+                    .invoke(new LivingEntityDamageContext(dis, source, amount))
+                    .getDamage();
+        });
     }
 }

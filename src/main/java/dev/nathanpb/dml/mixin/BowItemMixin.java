@@ -1,4 +1,5 @@
-package dev.nathanpb.dml.mixin;/*
+package dev.nathanpb.dml.mixin;
+/*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
@@ -19,6 +20,7 @@ package dev.nathanpb.dml.mixin;/*
 
 import dev.nathanpb.dml.armor.modular.effects.ArcheryEffect;
 import dev.nathanpb.dml.event.context.EventsKt;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
@@ -41,23 +43,25 @@ public abstract class BowItemMixin {
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"), method = "onStoppedUsing")
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
-        EventsKt.getBowShotEvent().invoker().invoke(user, stack);
+        Safer.run(() -> EventsKt.getBowShotEvent().invoker().invoke(user, stack));
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BowItem;getPullProgress(I)F"), method = "onStoppedUsing")
     public float proxyPullProgress(int useTicks, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (user instanceof PlayerEntity) {
-            float modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
-            if (modifier > 1) {
-                float f = (float)useTicks / (20F / modifier);
-                f = (f * f + f * 2.0F) / 3.0F;
-                if (f > 1.0F) {
-                    f = 1.0F;
-                }
+        return Safer.runLazy(() -> getPullProgress(useTicks), () -> {
+            if (user instanceof PlayerEntity) {
+                float modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
+                if (modifier > 1) {
+                    float f = (float)useTicks / (20F / modifier);
+                    f = (f * f + f * 2.0F) / 3.0F;
+                    if (f > 1.0F) {
+                        f = 1.0F;
+                    }
 
-                return f;
+                    return f;
+                }
             }
-        }
-        return getPullProgress(useTicks);
+            return getPullProgress(useTicks);
+        });
     }
 }

@@ -23,6 +23,7 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect;
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext;
 import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry;
 import dev.nathanpb.dml.armor.modular.effects.PlentyEffect;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,29 +41,29 @@ public class DamageSourceMixin {
 
     @Inject(at = @At("HEAD"), method = "getDeathMessage", cancellable = true)
     public void getDeathMessage(LivingEntity entity, CallbackInfoReturnable<Text> cir) {
-
-        if (entity instanceof PlayerEntity && this.equals(DamageSource.STARVE)) {
-            Optional<ModularEffect<?>> effectOpt = ModularEffectRegistry.Companion
-                    .getINSTANCE()
-                    .getAll()
-                    .stream()
-                    .filter((it) -> it instanceof PlentyEffect)
-                    .findFirst();
-
-            if (effectOpt.isPresent()) {
-                ModularEffect<?> effect = effectOpt.get();
-                boolean any = ModularEffectContext.Companion.from((PlayerEntity) entity)
+        Safer.run(() -> {
+            if (entity instanceof PlayerEntity && this.equals(DamageSource.STARVE)) {
+                Optional<ModularEffect<?>> effectOpt = ModularEffectRegistry.Companion
+                        .getINSTANCE()
+                        .getAll()
                         .stream()
-                        .anyMatch((context) -> effect.getCategory() == context.getDataModel().getCategory() && effect.acceptTier(context.getTier()));
-                if (any) {
-                    cir.setReturnValue(new TranslatableText(
-                            "death.dml-refabricated.starvedWithPlenty",
-                            entity.getDisplayName()
-                    ));
-                    cir.cancel();
+                        .filter((it) -> it instanceof PlentyEffect)
+                        .findFirst();
+
+                if (effectOpt.isPresent()) {
+                    ModularEffect<?> effect = effectOpt.get();
+                    boolean any = ModularEffectContext.Companion.from((PlayerEntity) entity)
+                            .stream()
+                            .anyMatch((context) -> effect.getCategory() == context.getDataModel().getCategory() && effect.acceptTier(context.getTier()));
+                    if (any) {
+                        cir.setReturnValue(new TranslatableText(
+                                "death.dml-refabricated.starvedWithPlenty",
+                                entity.getDisplayName()
+                        ));
+                        cir.cancel();
+                    }
                 }
             }
-
-        }
+        });
     }
 }

@@ -23,6 +23,7 @@ import dev.nathanpb.dml.accessor.IUndyingCooldown;
 import dev.nathanpb.dml.armor.modular.cooldown.FlightBurnoutManager;
 import dev.nathanpb.dml.event.context.EventsKt;
 import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -49,19 +50,23 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
 
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentsToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
     private float applyDamage(DamageSource source, float amount) {
-        PlayerEntity dis = (PlayerEntity) (Object) this;
-        return EventsKt.getLivingEntityDamageEvent()
-            .invoker()
-            .invoke(new LivingEntityDamageContext(dis, source, amount))
-            .getDamage();
+        return Safer.run(amount, () -> {
+            PlayerEntity dis = (PlayerEntity) (Object) this;
+            return EventsKt.getLivingEntityDamageEvent()
+                    .invoker()
+                    .invoke(new LivingEntityDamageContext(dis, source, amount))
+                    .getDamage();
+        });
     }
 
     @Inject(at = @At("HEAD"), method = "tick")
     private void tick(CallbackInfo ci) {
-        getDmlFlightBurnoutManager().tick();
-        EventsKt.getPlayerEntityTickEvent()
-            .invoker()
-            .invoke((PlayerEntity) (Object) this);
+        Safer.run(() -> {
+            getDmlFlightBurnoutManager().tick();
+            EventsKt.getPlayerEntityTickEvent()
+                    .invoker()
+                    .invoke((PlayerEntity) (Object) this);
+        });
     }
 
     @Override
@@ -77,19 +82,23 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
 
     @Inject(at = @At("RETURN"), method = "readCustomDataFromTag")
     public void readCustomDataFromTag(CompoundTag tag, CallbackInfo ci) {
-        if (tag.contains(DeepMobLearningKt.MOD_ID + ":undyingLastUsage")) {
-            setDmlRefUndyingLastUsage(tag.getLong(DeepMobLearningKt.MOD_ID + ":undyingLastUsage"));
-        } else {
-            setDmlRefUndyingLastUsage(null);
-        }
+        Safer.run(() -> {
+            if (tag.contains(DeepMobLearningKt.MOD_ID + ":undyingLastUsage")) {
+                setDmlRefUndyingLastUsage(tag.getLong(DeepMobLearningKt.MOD_ID + ":undyingLastUsage"));
+            } else {
+                setDmlRefUndyingLastUsage(null);
+            }
+        });
     }
 
     @Inject(at = @At("RETURN"), method = "writeCustomDataToTag")
     public void writeCustomDataToTag(CompoundTag tag, CallbackInfo ci) {
-        if (getDmlRefUndyingLastUsage() == null) {
-            tag.remove(DeepMobLearningKt.MOD_ID + ":undyingLastUsage");
-        } else {
-            tag.putLong(DeepMobLearningKt.MOD_ID + ":undyingLastUsage", getDmlRefUndyingLastUsage());
-        }
+        Safer.run(() -> {
+            if (getDmlRefUndyingLastUsage() == null) {
+                tag.remove(DeepMobLearningKt.MOD_ID + ":undyingLastUsage");
+            } else {
+                tag.putLong(DeepMobLearningKt.MOD_ID + ":undyingLastUsage", getDmlRefUndyingLastUsage());
+            }
+        });
     }
 }

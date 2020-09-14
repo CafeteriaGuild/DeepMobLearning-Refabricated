@@ -18,6 +18,7 @@ package dev.nathanpb.dml.mixin;/*
  */
 
 import dev.nathanpb.dml.event.context.EventsKt;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,9 +42,11 @@ public class HungerManagerMixin {
         )
     )
     private int redirect$max(int a, int b, PlayerEntity player) {
-        int eventResult = EventsKt.getPlayerTakeHungerEvent()
-            .invoker()
-            .invoke(player, foodLevel - a);
-        return Math.max(foodLevel - eventResult, b);
+        return Safer.run(Math.max(a, b), () -> {
+            int eventResult = EventsKt.getPlayerTakeHungerEvent()
+                    .invoker()
+                    .invoke(player, foodLevel - a);
+            return Math.max(foodLevel - eventResult, b);
+        });
     }
 }

@@ -19,6 +19,7 @@ package dev.nathanpb.dml.mixin;/*
 
 import dev.nathanpb.dml.armor.modular.effects.ArcheryEffect;
 import dev.nathanpb.dml.event.context.EventsKt;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.CrossbowItem;
@@ -35,26 +36,32 @@ public abstract class CrossbowItemMixin {
 
     @Inject(at = @At("RETURN"), method = "loadProjectile")
     private static void loadProjectiles(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) {
-            EventsKt.getCrossbowReloadedEvent().invoker().invoke(shooter, crossbow);
-        }
+        Safer.run(() -> {
+            if (cir.getReturnValue()) {
+                EventsKt.getCrossbowReloadedEvent().invoker().invoke(shooter, crossbow);
+            }
+        });
     }
 
     @ModifyVariable(at = @At("INVOKE"), ordinal = 0, method = "usageTick")
     public int modifyRemainingTicks(int remainingTicks, World world, LivingEntity user, ItemStack stack, int ignored) {
-        if (user instanceof PlayerEntity) {
-            return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
-        } else {
-            return remainingTicks;
-        }
+        return Safer.run(remainingTicks, () -> {
+            if (user instanceof PlayerEntity) {
+                return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+            } else {
+                return remainingTicks;
+            }
+        });
     }
 
     @ModifyVariable(at = @At("INVOKE"), ordinal = 0, method = "onStoppedUsing")
     public int modifyRemainingTicks2(int remainingTicks, ItemStack stack, World world, LivingEntity user, int ignored) {
-        if (user instanceof PlayerEntity) {
-            return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
-        } else {
-            return remainingTicks;
-        }
+        return Safer.run(remainingTicks, () -> {
+            if (user instanceof PlayerEntity) {
+                return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+            } else {
+                return remainingTicks;
+            }
+        });
     }
 }

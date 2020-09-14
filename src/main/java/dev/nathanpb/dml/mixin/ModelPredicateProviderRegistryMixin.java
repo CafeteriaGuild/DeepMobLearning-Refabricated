@@ -18,6 +18,7 @@ package dev.nathanpb.dml.mixin;/*
  */
 
 import dev.nathanpb.dml.armor.modular.effects.ArcheryEffect;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.client.item.ModelPredicateProvider;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.world.ClientWorld;
@@ -44,37 +45,41 @@ public class ModelPredicateProviderRegistryMixin {
     @Inject(at = @At("RETURN"), method = "<clinit>")
     private static void modifyCrossbowModel(CallbackInfo ci) {
         register(Items.CROSSBOW, new Identifier("pull"), (ItemStack stack, ClientWorld world, LivingEntity entity) -> {
-            if (entity == null) {
-                return 0.0F;
-            } else if(!CrossbowItem.isCharged(stack)) {
-                float maxUseTime = stack.getMaxUseTime();
-                float pullTime = CrossbowItem.getPullTime(stack);
-                float reducedTicks = 0;
+            return Safer.run(0.0F, () -> {
+                if (entity == null) {
+                    return 0.0F;
+                } else if(!CrossbowItem.isCharged(stack)) {
+                    float maxUseTime = stack.getMaxUseTime();
+                    float pullTime = CrossbowItem.getPullTime(stack);
+                    float reducedTicks = 0;
 
-                if (entity instanceof PlayerEntity) {
-                    reducedTicks = ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) entity);
-                    maxUseTime -= reducedTicks;
-                    pullTime -= reducedTicks;
+                    if (entity instanceof PlayerEntity) {
+                        reducedTicks = ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) entity);
+                        maxUseTime -= reducedTicks;
+                        pullTime -= reducedTicks;
+                    }
+
+                    return (Math.max(0, maxUseTime) - Math.max(0, entity.getItemUseTimeLeft() - reducedTicks)) / pullTime;
+                } else {
+                    return 0.0F;
                 }
-
-                return (Math.max(0, maxUseTime) - Math.max(0, entity.getItemUseTimeLeft() - reducedTicks)) / pullTime;
-            } else {
-                return 0.0F;
-            }
+            });
         });
         register(Items.BOW, new Identifier("pull"), (ItemStack stack, ClientWorld world, LivingEntity entity) -> {
-            if (entity != null && entity.getActiveItem() == stack) {
-                float maxUseTime = stack.getMaxUseTime();
-                float reducedTicks = 1;
+            return Safer.run(0.0F, () -> {
+                if (entity != null && entity.getActiveItem() == stack) {
+                    float maxUseTime = stack.getMaxUseTime();
+                    float reducedTicks = 1;
 
-                if (entity instanceof PlayerEntity) {
-                    reducedTicks = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) entity) + 1;
-                    maxUseTime -= reducedTicks;
+                    if (entity instanceof PlayerEntity) {
+                        reducedTicks = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) entity) + 1;
+                        maxUseTime -= reducedTicks;
+                    }
+
+                    return (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / (20.0F / reducedTicks);
                 }
-
-                return (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / (20.0F / reducedTicks);
-            }
-            return 0F;
+                return 0F;
+            });
         });
     }
 }

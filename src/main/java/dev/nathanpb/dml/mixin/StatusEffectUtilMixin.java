@@ -18,6 +18,7 @@ package dev.nathanpb.dml.mixin;/*
  */
 
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.tag.FluidTags;
@@ -32,26 +33,30 @@ public class StatusEffectUtilMixin {
 
     @Inject(at = @At("HEAD"), method = "hasHaste", cancellable = true)
     private static void underwaterHasteHasPatch(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (
-            entity.hasStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT())
-            && entity.isSubmergedIn(FluidTags.WATER)
-        ) {
-            cir.setReturnValue(true);
-            cir.cancel();
-        }
+        Safer.run(() -> {
+            if (
+                entity.hasStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT())
+                && entity.isSubmergedIn(FluidTags.WATER)
+            ) {
+                cir.setReturnValue(true);
+                cir.cancel();
+            }
+        });
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(II)I"), method = "getHasteAmplifier")
     private static int underwaterHasteAmplifierPatch(int haste, int conduit, LivingEntity entity) {
-        int underwaterHaste = 0;
-        if (
-            entity.hasStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT())
-            && entity.isSubmergedIn(FluidTags.WATER)
-        ) {
-            underwaterHaste = entity.getStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT()).getAmplifier();
-        }
+        return Safer.run(Math.max(haste, conduit), () -> {
+            int underwaterHaste = 0;
+            if (
+                entity.hasStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT())
+                && entity.isSubmergedIn(FluidTags.WATER)
+            ) {
+                underwaterHaste = entity.getStatusEffect(StatusEffectsKt.getUNDERWATER_HASTE_EFFECT()).getAmplifier();
+            }
 
-        return Math.max(haste + underwaterHaste, conduit + underwaterHaste);
+            return Math.max(haste + underwaterHaste, conduit + underwaterHaste);
+        });
     }
 
 

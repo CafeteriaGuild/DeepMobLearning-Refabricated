@@ -60,6 +60,9 @@ dependencies {
     modApi "com.github.NathanPB:KtDataTagLib:${project.ktdatataglib_version}"
     include "com.github.NathanPB:KtDataTagLib:${project.ktdatataglib_version}"
 
+    api "com.github.NathanPB:Safer:${project.safer_version}"
+    include "com.github.NathanPB:Safer:${project.safer_version}"
+
     modImplementation "io.github.ladysnake:PlayerAbilityLib:${project.pal_version}"
     include "io.github.ladysnake:PlayerAbilityLib:${project.pal_version}"
 }

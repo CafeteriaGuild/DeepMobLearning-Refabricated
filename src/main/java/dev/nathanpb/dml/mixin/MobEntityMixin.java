@@ -19,6 +19,7 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.item.ItemEmeritusHat;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
@@ -32,9 +33,11 @@ public class MobEntityMixin {
 
     @Inject(at = @At("HEAD"), method = "getPreferredEquipmentSlot", cancellable = true)
     private static void getPreferredEquipmentSlot(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
-        if (stack.getItem() instanceof ItemEmeritusHat) {
-            cir.setReturnValue(EquipmentSlot.HEAD);
-            cir.cancel();
-        }
+        Safer.run(() -> {
+            if (stack.getItem() instanceof ItemEmeritusHat) {
+                cir.setReturnValue(EquipmentSlot.HEAD);
+                cir.cancel();
+            }
+        });
     }
 }

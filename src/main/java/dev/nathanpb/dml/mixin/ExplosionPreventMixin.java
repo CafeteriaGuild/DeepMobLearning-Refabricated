@@ -20,6 +20,7 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.event.WorldExplosionCallback;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.world.ServerWorld;
@@ -53,15 +54,17 @@ public class ExplosionPreventMixin {
             Explosion.DestructionType destructionType,
             CallbackInfoReturnable<Explosion> ci
     ) {
-        if (power > 0F) {
-            World world = (World) (Object) this;
-            BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
-            ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
-            if (result == ActionResult.FAIL) {
-                Explosion explosion = new Explosion(world, entity, damageSource, behavior, x, y, z, power, createFire, Explosion.DestructionType.NONE);
-                ci.setReturnValue(explosion);
-                ci.cancel();
+        Safer.run(() -> {
+            if (power > 0F) {
+                World world = (World) (Object) this;
+                BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
+                ActionResult result = WorldExplosionCallback.EVENT.invoker().explode(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
+                if (result == ActionResult.FAIL) {
+                    Explosion explosion = new Explosion(world, entity, damageSource, behavior, x, y, z, power, createFire, Explosion.DestructionType.NONE);
+                    ci.setReturnValue(explosion);
+                    ci.cancel();
+                }
             }
-        }
+        });
     }
 }

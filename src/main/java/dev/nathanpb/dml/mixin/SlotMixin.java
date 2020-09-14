@@ -23,6 +23,7 @@ import dev.nathanpb.dml.data.TrialKeyData;
 import dev.nathanpb.dml.data.TrialKeyDataKt;
 import dev.nathanpb.dml.item.ItemTrialKey;
 import dev.nathanpb.dml.trial.affix.UtilsKt;
+import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.CraftingResultSlot;
@@ -37,17 +38,19 @@ public class SlotMixin {
 
     @Inject(at = @At("RETURN"), method = "takeStack")
     public void onTake(int amount, CallbackInfoReturnable<ItemStack> ci) {
-        ItemStack stack = ci.getReturnValue();
-        Slot dis = (Slot) (Object) this;
-        if (dis instanceof CraftingResultSlot && stack != null && stack.getItem() instanceof ItemTrialKey) {
-            PlayerEntity player = ((ICraftingResultSlotMixin)dis).dmlRefGetPlayer();
-            if (!player.world.isClient) {
-                TrialKeyData oldData = TrialKeyDataKt.getTrialKeyData(stack);
-                if (oldData != null && oldData.getAffixes().isEmpty()) {
-                    TrialKeyData newData = new TrialKeyData(stack);
-                    newData.setAffixes(UtilsKt.pickRandomAffixes());
+        Safer.run(() -> {
+            ItemStack stack = ci.getReturnValue();
+            Slot dis = (Slot) (Object) this;
+            if (dis instanceof CraftingResultSlot && stack != null && stack.getItem() instanceof ItemTrialKey) {
+                PlayerEntity player = ((ICraftingResultSlotMixin)dis).dmlRefGetPlayer();
+                if (!player.world.isClient) {
+                    TrialKeyData oldData = TrialKeyDataKt.getTrialKeyData(stack);
+                    if (oldData != null && oldData.getAffixes().isEmpty()) {
+                        TrialKeyData newData = new TrialKeyData(stack);
+                        newData.setAffixes(UtilsKt.pickRandomAffixes());
+                    }
                 }
             }
-        }
+        });
     }
 }
