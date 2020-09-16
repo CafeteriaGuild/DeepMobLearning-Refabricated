@@ -7,7 +7,6 @@
     "CrossbowItemMixin",
     "DamageSourceMixin",
     "EndermanEntityMixin",
-    "ExperienceOrbEntityMixin",
     "ExplosionPreventMixin",
     "HungerManagerMixin",
     "IArmorItemMixin",
