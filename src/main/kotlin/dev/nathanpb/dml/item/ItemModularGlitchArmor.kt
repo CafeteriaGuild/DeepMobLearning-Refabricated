@@ -31,6 +31,7 @@ import dev.nathanpb.dml.mixin.IArmorItemMixin
 import dev.nathanpb.dml.screen.handler.ModularArmorScreenHandlerFactory
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -38,6 +39,7 @@ import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
@@ -142,5 +144,14 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         }
 
         return multimap.build()
+    }
+
+    override fun inventoryTick(stack: ItemStack, world: World?, entity: Entity?, slot: Int, selected: Boolean) {
+        super.inventoryTick(stack, world, entity, slot, selected)
+        if (stack.hasEnchantments()) {
+            stack.enchantments.firstOrNull {
+                (it as? CompoundTag)?.getString("id") == "minecraft:mending"
+            }?.let(stack.enchantments::remove)
+        }
     }
 }
