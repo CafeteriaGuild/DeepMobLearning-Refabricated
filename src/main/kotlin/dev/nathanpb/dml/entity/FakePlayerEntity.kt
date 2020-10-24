@@ -21,12 +21,17 @@ package dev.nathanpb.dml.entity
 
 import com.mojang.authlib.GameProfile
 import dev.nathanpb.dml.MOD_ID
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayerInteractionManager
+import net.minecraft.server.world.ServerWorld
 import java.util.*
 
-class FakePlayerEntity(world: World) : PlayerEntity(world, BlockPos.ORIGIN, 0F, GameProfile(UUID, "${MOD_ID}_fake_player")) {
+class FakePlayerEntity(world: ServerWorld) : ServerPlayerEntity(
+    world.server,
+    world,
+    GameProfile(UUID, "${MOD_ID}_fake_player"),
+    ServerPlayerInteractionManager(world)
+) {
     companion object {
         val UUID: UUID = java.util.UUID.randomUUID()
     }
