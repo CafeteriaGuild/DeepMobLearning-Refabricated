@@ -27,12 +27,10 @@ import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
 import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
-import dev.nathanpb.dml.trial.TrialState
 import dev.nathanpb.dml.utils.takeOrNull
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -42,7 +40,6 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import java.util.*
 
 class BlockTrialKeystone : Block(
     FabricBlockSettings.of(Material.STONE)
@@ -91,15 +88,6 @@ class BlockTrialKeystone : Block(
 
     override fun getOutlineShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
         return VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
-    }
-
-    override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
-        (world.getBlockEntity(pos) as? BlockEntityTrialKeystone)?.let { entity ->
-            entity.currentTrial = null
-            entity.clientTrialState = TrialState.NOT_STARTED
-            entity.sync()
-        }
-        super.scheduledTick(state, world, pos, random)
     }
 
     override fun createBlockEntity(view: BlockView?) = BlockEntityTrialKeystone()
