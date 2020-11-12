@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
@@ -85,14 +84,16 @@ class BlockEntityTrialKeystone :
 
     override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
         if (currentTrial == trial && !trial.world.isClient) {
-            sync()
-            trial.world.blockTickScheduler.schedule(pos, BLOCK_TRIAL_KEYSTONE, config.trial.postEndTimeout + 1)
+            currentTrial = null
+            clientTrialState = TrialState.NOT_STARTED
 
             if (reason == TrialEndReason.SUCCESS) {
                 internalInventory.dropAll(trial.world, pos)
             } else {
                 internalInventory.clear()
             }
+
+            sync()
         }
     }
 
@@ -119,6 +120,7 @@ class BlockEntityTrialKeystone :
         }
 
         // lord forgive me for what i'm about to do
+        // update Nov 11, 2020: what the fuck
         if (world?.isClient == false && currentTrial == null) {
             trialToLoad?.let { trialToLoad ->
                 try {
@@ -177,7 +179,7 @@ class BlockEntityTrialKeystone :
 
     fun startTrial(trial: Trial, key: ItemStack?) {
         world?.let { world ->
-            if (currentTrial?.state in listOf(TrialState.RUNNING, TrialState.WAITING_POST_FINISHED)) {
+            if (currentTrial?.state in listOf(TrialState.WARMUP, TrialState.RUNNING)) {
                 throw TrialKeystoneIllegalStartException(trial)
             }
             internalInventory.dropAll(world, pos)
@@ -305,7 +307,7 @@ class BlockEntityTrialKeystone :
             if (tag != null) {
                 Inventories.toTag(tag, internalInventory.items())
                 currentTrial?.also { trial ->
-                    if (trial.state == TrialState.RUNNING) {
+                    if (trial.state in arrayOf(TrialState.WARMUP, TrialState.RUNNING)) {
                         TrialDataSerializer().write(tag, "trial", TrialData(trial))
                     }
                 }

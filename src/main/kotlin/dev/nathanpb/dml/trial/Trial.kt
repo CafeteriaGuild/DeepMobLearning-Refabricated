@@ -79,8 +79,8 @@ class Trial (
         data.affixes
     ) {
         state = data.state
-        endsAt = data.endsAt
-        if (state == TrialState.RUNNING) {
+        tickCount = data.tickCount
+        if (state in arrayOf(TrialState.WARMUP, TrialState.RUNNING)) {
             start(true)
         }
         systemGlitch?.health = data.glitchHealth
@@ -113,70 +113,86 @@ class Trial (
     private val tickableAffixes = affixes.filterIsInstance<TrialAffix.TickableAffix>()
 
 
-    private var tickCount = 0
-    private var endsAt = 0
+    var tickCount = 0; private set
     private val bar = ServerBossBar(BAR_TEXT, BossBar.Color.BLUE, BossBar.Style.NOTCHED_10).also {
         it.isVisible = false
     }
 
     override fun tick() {
         if (!world.isClient && state != TrialState.NOT_STARTED) {
-            when (state) {
-                TrialState.RUNNING -> {
-                    if (tickCount % recipe.waveRespawnTimeout == 0) {
-                        if (getMonstersInArena().size < config.trial.maxMobsInArena) {
-                            spawnWave()
-                        }
-                    }
+            if (state in arrayOf(TrialState.WARMUP, TrialState.RUNNING)) {
+                // Resyncs which players will have the bossbar every second
+                if (tickCount % 20 == 0) {
+                    bar.clearPlayers()
+                    world.getPlayersByUUID(players)
+                        .filterIsInstance<ServerPlayerEntity>()
+                        .forEach(bar::addPlayer)
+                }
 
-                    // Resyncs which players will have the bossbar every second
-                    if (tickCount % 20 == 0) {
-                        bar.clearPlayers()
-                        world.getPlayersByUUID(players)
-                            .filterIsInstance<ServerPlayerEntity>()
-                            .forEach(bar::addPlayer)
-                    }
-
-                    systemGlitch?.let { systemGlitch ->
-                        if (!config.trial.allowPlayersLeavingArena) {
-                            val glitchPos = systemGlitch.pos.toBlockPos()
-                            if (glitchPos.y < pos.y || !TrialGriefPrevention.isInArea(pos, glitchPos)) {
-                                pos.toVec3d().apply {
-                                    systemGlitch.teleport(x, y, z)
-                                }
+                when (state) {
+                    TrialState.RUNNING -> {
+                        if (tickCount % recipe.waveRespawnTimeout == 0) {
+                            if (getMonstersInArena().size < config.trial.maxMobsInArena) {
+                                spawnWave()
                             }
                         }
-                        bar.percent = systemGlitch.health / systemGlitch.maxHealth
+
+                        systemGlitch?.let { systemGlitch ->
+                            if (!config.trial.allowPlayersLeavingArena) {
+                                val glitchPos = systemGlitch.pos.toBlockPos()
+                                if (glitchPos.y < pos.y || !TrialGriefPrevention.isInArea(pos, glitchPos)) {
+                                    pos.toVec3d().apply {
+                                        systemGlitch.teleport(x, y, z)
+                                    }
+                                }
+                            }
+                            bar.percent = systemGlitch.health / systemGlitch.maxHealth
+                        }
+
+                        if (systemGlitch?.isAlive != true) {
+                            end(TrialEndReason.SUCCESS)
+                        }
+
+                        if (tickCount > config.trial.maxTime) {
+                            end(TrialEndReason.TIMED_OUT)
+                        }
+
+                        tickableAffixes.forEach {
+                            it.tick(this)
+                        }
                     }
 
-                    if (systemGlitch?.isAlive != true) {
-                        end(TrialEndReason.SUCCESS)
+                    TrialState.WARMUP -> {
+                        if (tickCount >= config.trial.warmupTime) {
+                            state = TrialState.RUNNING
+                            spawnSystemGlitch()
+                            world.getPlayersByUUID(players).forEach {
+                                it.playSound(
+                                    SoundEvents.BLOCK_NOTE_BLOCK_BASS,
+                                    SoundCategory.BLOCKS,
+                                    1F, 1F
+                                )
+                            }
+                        } else if (tickCount % 20 == 0) {
+                            world.getPlayersByUUID(players).forEach {
+                                it.playSound(
+                                    SoundEvents.BLOCK_NOTE_BLOCK_BASS,
+                                    SoundCategory.BLOCKS,
+                                    1.5F, .75F
+                                )
+                            }
+                        }
                     }
-
-                    val maxTime = config.trial.maxTime
-                    if (maxTime in 1 until tickCount) {
-                        end(TrialEndReason.TIMED_OUT)
-                    }
+                    else -> {} // Suppress non-exhaustive when
                 }
-                TrialState.WAITING_POST_FINISHED -> {
-                    if (tickCount >= endsAt) {
-                        state = TrialState.FINISHED
-                        bar.isVisible = false
-                    }
-                }
-                else -> {} // Suppress non-exhaustive when
             }
             tickCount++
-            tickableAffixes.forEach {
-                it.tick(this)
-            }
         }
     }
 
     fun start(forceStart: Boolean = false) {
         if (forceStart || state == TrialState.NOT_STARTED) {
-            state = TrialState.RUNNING
-            spawnSystemGlitch()
+            state = TrialState.WARMUP
             world.runningTrials += this
             bar.isVisible = true
         } else throw TrialKeystoneIllegalStartException(this)
@@ -186,27 +202,28 @@ class Trial (
         if (state == TrialState.RUNNING) {
             when (reason) {
                 TrialEndReason.SUCCESS -> {
-                    bar.color = BossBar.Color.GREEN
-                    bar.name = BAR_TEXT_SUCCESS
-
+                    world.getPlayersByUUID(players).forEach {
+                        it.sendMessage(BAR_TEXT_SUCCESS, false)
+                    }
                     dropRewards()
                 }
                 TrialEndReason.NO_ONE_IS_AROUND -> {
-                    bar.color = BossBar.Color.RED
-                    bar.name = BAR_TEXT_FAIL
+                    world.getPlayersByUUID(players).forEach {
+                        it.sendMessage(BAR_TEXT_FAIL, false)
+                    }
                     playFailSounds()
                 }
                 TrialEndReason.TIMED_OUT -> {
-                    bar.color = BossBar.Color.RED
-                    bar.name = BAR_TEXT_FAIL_TIMEOUT
+                    world.getPlayersByUUID(players).forEach {
+                        it.sendMessage(BAR_TEXT_FAIL_TIMEOUT, false)
+                    }
                     playFailSounds()
                 }
             }
 
-            endsAt = tickCount + config.trial.postEndTimeout
-            bar.percent = 1F
+            bar.isVisible = false
             world.runningTrials -= this
-            state = TrialState.WAITING_POST_FINISHED
+            state = TrialState.FINISHED
             systemGlitch?.remove()
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
@@ -265,9 +282,5 @@ class Trial (
     fun getMonstersInArena(): List<HostileEntity> {
         return world.getEntitiesAroundCircle(null, pos, config.trial.arenaRadius.squared().toDouble())
             .filterIsInstance<HostileEntity>()
-    }
-
-    fun timeLeft(): Int {
-        return endsAt - tickCount
     }
 }

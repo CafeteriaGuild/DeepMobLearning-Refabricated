@@ -36,7 +36,7 @@ class TrialData(tag: CompoundTag = CompoundTag()) : MutableCompoundData(tag) {
         affixes = trial.affixes
         playersUuids = trial.players.toList()
         recipeId = trial.recipe.id
-        endsAt = trial.timeLeft()
+        tickCount = trial.tickCount
     }
 
     var state by persistentDefaulted(TrialState.NOT_STARTED, EnumSerializer(TrialState::class.java))
@@ -45,4 +45,5 @@ class TrialData(tag: CompoundTag = CompoundTag()) : MutableCompoundData(tag) {
     var playersUuids by persistentDefaulted(emptyList(), Serializers.UUID_LIST)
     var recipeId by persistentDefaulted(identifier(""), Serializers.IDENTIFIER)
     var endsAt by persistentDefaulted(0, Serializers.INT)
+    var tickCount by persistentDefaulted(0, Serializers.INT)
 }

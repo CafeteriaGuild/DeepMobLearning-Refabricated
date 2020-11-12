@@ -86,6 +86,7 @@
   "text.autoconfig.dml-refabricated.option.trial.maxMobsInArena": "Maximum Mobs in Arena",
   "text.autoconfig.dml-refabricated.option.trial.postEndTimeout": "Post-end Bossbar Timeout",
   "text.autoconfig.dml-refabricated.option.trial.arenaRadius": "Arena Radius",
+  "text.autoconfig.dml-refabricated.option.trial.warmupTime": "Warmup Time",
   "text.autoconfig.dml-refabricated.option.trial.maxTime": "Max Time",
   "text.autoconfig.dml-refabricated.option.trial.allowStartInWrongTerrain": "Allow Start in Wrong Terrain",
   "text.autoconfig.dml-refabricated.option.trial.allowPlayersLeavingArena": "Allow Players Leaving Arena",

@@ -21,7 +21,7 @@ package dev.nathanpb.dml.trial
 
 enum class TrialState {
     NOT_STARTED,
+    WARMUP,
     RUNNING,
-    FINISHED,
-    WAITING_POST_FINISHED
+    FINISHED
 }
