@@ -34,7 +34,7 @@ class DataCollectListener : LivingEntityDieCallback {
     override fun onDeath(entity: LivingEntity, damageSource: DamageSource?) {
         if (entity.world?.isClient == false) {
             (damageSource?.attacker as? PlayerEntity)?.let { player ->
-                player.inventory.hotbar().filter {
+                (player.inventory.hotbar() + player.offHandStack).filter {
                     it.item is ItemDeepLearner
                 }.map {
                     it.deepLearnerInventory.filter { dlStack ->
