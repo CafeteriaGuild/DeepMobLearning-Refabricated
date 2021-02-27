@@ -85,6 +85,7 @@ class Trial : ConfigData {
     var maxMobsInArena = 8
     var postEndTimeout = 60
     var arenaRadius = 12
+    var warmupTime = 60
     var maxTime = 24000
 
     var allowStartInWrongTerrain = false
@@ -99,6 +100,7 @@ class Trial : ConfigData {
 
     override fun validatePostLoad() {
         maxTime = max(0, maxTime)
+        warmupTime = max(maxTime, warmupTime)
         if (maxMobsInArena < 0) {
             maxMobsInArena = 0
         }
