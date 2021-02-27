@@ -25,6 +25,7 @@ import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.event.TrialEndCallback
+import dev.nathanpb.dml.event.context.TrialStateChanged
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
@@ -80,6 +81,13 @@ class BlockEntityTrialKeystone :
 
     init {
         TrialEndCallback.EVENT.register(this)
+        TrialStateChanged.register {
+            // Keystones do not have finished state, instead this is handled in onTrialEnd
+            if (world?.isClient == false && it.state != TrialState.FINISHED) {
+                clientTrialState = it.state
+                sync()
+            }
+        }
     }
 
     override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
@@ -121,6 +129,7 @@ class BlockEntityTrialKeystone :
 
         // lord forgive me for what i'm about to do
         // update Nov 11, 2020: what the fuck
+        // update Feb 26, 2020: what the fuck
         if (world?.isClient == false && currentTrial == null) {
             trialToLoad?.let { trialToLoad ->
                 try {
@@ -187,7 +196,6 @@ class BlockEntityTrialKeystone :
                 if (wrongTerrain.isEmpty()) {
                     currentTrial = trial
                     trial.start()
-                    sync()
 
                     if (key != null) {
                         internalInventory.addStack(key)

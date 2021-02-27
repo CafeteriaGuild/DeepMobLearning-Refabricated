@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.event.context
 
+import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.utils.event
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -91,4 +92,8 @@ val CrossbowReloadedEvent = event<(LivingEntity, ItemStack)->Unit> { listeners -
             it(entity, stack)
         }
     }
+}
+
+val TrialStateChanged = event<(Trial)->Unit> { listeners ->
+    { trial -> listeners.forEach { it(trial) } }
 }

@@ -28,6 +28,7 @@ import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.TrialEndCallback
 import dev.nathanpb.dml.event.TrialWaveSpawnCallback
+import dev.nathanpb.dml.event.context.TrialStateChanged
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
@@ -165,6 +166,7 @@ class Trial (
                     TrialState.WARMUP -> {
                         if (tickCount >= config.trial.warmupTime) {
                             state = TrialState.RUNNING
+                            TrialStateChanged.invoker().invoke(this)
                             spawnSystemGlitch()
                             world.getPlayersByUUID(players).forEach {
                                 it.playSound(
@@ -193,6 +195,7 @@ class Trial (
     fun start(forceStart: Boolean = false) {
         if (forceStart || state == TrialState.NOT_STARTED) {
             state = TrialState.WARMUP
+            TrialStateChanged.invoker().invoke(this)
             world.runningTrials += this
             bar.isVisible = true
         } else throw TrialKeystoneIllegalStartException(this)
@@ -225,6 +228,7 @@ class Trial (
             world.runningTrials -= this
             state = TrialState.FINISHED
             systemGlitch?.remove()
+            TrialStateChanged.invoker().invoke(this)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
     }
