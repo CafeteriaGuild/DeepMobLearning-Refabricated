@@ -100,7 +100,7 @@ class Trial : ConfigData {
 
     override fun validatePostLoad() {
         maxTime = max(0, maxTime)
-        warmupTime = max(maxTime, warmupTime)
+        warmupTime = min(maxTime, warmupTime)
         if (maxMobsInArena < 0) {
             maxMobsInArena = 0
         }
