@@ -71,7 +71,6 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
                     tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.cheat"))
                 }
             }
-            tooltip += TranslatableText("text.${MOD_ID}.ineedatexture")
         }
         super.appendTooltip(stack, world, tooltip, context)
     }

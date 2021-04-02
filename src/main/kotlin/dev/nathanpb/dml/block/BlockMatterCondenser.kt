@@ -64,13 +64,6 @@ class BlockMatterCondenser : HorizontalFacingBlock(
         return defaultState.with(FACING, ctx?.playerFacing?.opposite)
     }
 
-    override fun appendTooltip(stack: ItemStack?, world: BlockView?, tooltip: MutableList<Text>?, options: TooltipContext?) {
-        super.appendTooltip(stack, world, tooltip, options)
-        if (tooltip != null) {
-            tooltip += TranslatableText("text.${MOD_ID}.ineedatexture")
-        }
-    }
-
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity?, hand: Hand, hit: BlockHitResult): ActionResult {
         if (!world.isClient) {
             player?.openHandledScreen(MatterCondenserScreenHandlerFactory(pos) {
