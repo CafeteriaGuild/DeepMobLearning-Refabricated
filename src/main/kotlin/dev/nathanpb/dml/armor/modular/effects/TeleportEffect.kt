@@ -36,14 +36,14 @@ import io.netty.buffer.Unpooled
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.ActionResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Direction
-import net.minecraft.world.RayTraceContext
+import net.minecraft.world.RaycastContext
 
 class TeleportEffect : ModularEffect<TeleportEffectPayload>(
     identifier("teleport"),
@@ -67,7 +67,7 @@ class TeleportEffect : ModularEffect<TeleportEffectPayload>(
                                 writeVec3d(player.pos.add(0.0, player.getEyeHeight(player.pose).toDouble(), 0.0))
                                 writeVec3d(player.rotationVecClient)
                             }.let { buf ->
-                                ClientSidePacketRegistry.INSTANCE.sendToServer(C2S_TELEPORT_EFFECT_REQUESTED, buf)
+                                ClientPlayNetworking.send(C2S_TELEPORT_EFFECT_REQUESTED, buf)
                             }
                         }
                     }
@@ -81,11 +81,11 @@ class TeleportEffect : ModularEffect<TeleportEffectPayload>(
                     .any {
                         attemptToApply(it, TeleportEffectPayload(pos, looking)) { _, _ ->
                             val lookingAt = looking.multiply(10.0).add(pos)
-                            val hitResult = player.world.rayTrace(RayTraceContext(
+                            val hitResult = player.world.raycast(RaycastContext(
                                 pos,
                                 lookingAt,
-                                RayTraceContext.ShapeType.OUTLINE,
-                                RayTraceContext.FluidHandling.NONE,
+                                RaycastContext.ShapeType.OUTLINE,
+                                RaycastContext.FluidHandling.NONE,
                                 player
                             ))
 
