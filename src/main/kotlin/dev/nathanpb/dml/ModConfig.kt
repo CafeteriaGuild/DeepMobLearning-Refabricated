@@ -19,11 +19,11 @@
 
 package dev.nathanpb.dml
 
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData
-import me.sargunvohra.mcmods.autoconfig1u.annotation.Config
-import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.autoconfig.AutoConfig
+import me.shedaniel.autoconfig.ConfigData
+import me.shedaniel.autoconfig.annotation.Config
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer
 import kotlin.math.max
 import kotlin.math.min
 
