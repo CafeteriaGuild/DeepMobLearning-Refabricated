@@ -60,12 +60,12 @@ dependencies {
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 
-    modRuntime("me.shedaniel:RoughlyEnoughItems:${project.rei_version}")
+    modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}")
 
     modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
     include "io.github.cottonmc:LibGui:${project.libgui_version}"
 
-    modRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") {
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude group: "net.fabricmc.fabric-api", module: "fabric-api"
     }
 
