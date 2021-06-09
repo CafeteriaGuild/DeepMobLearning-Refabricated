@@ -28,11 +28,12 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.registry.Registry
 
+// TODO check if the recipes are working
 class TrialKeyAttunementRecipeSerializer : RecipeSerializer<TrialKeyAttuneRecipe> {
 
     override fun write(buf: PacketByteBuf, recipe: TrialKeyAttuneRecipe) {
-        buf.writeInt(recipe.previewInputs.size)
-        recipe.previewInputs.forEach {
+        buf.writeInt(recipe.ingredients.size)
+        recipe.ingredients.forEach {
             it.write(buf)
         }
         buf.writeItemStack(recipe.output)

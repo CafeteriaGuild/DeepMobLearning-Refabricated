@@ -79,7 +79,7 @@ class CrushingRecipe (
                 id,
                 Ingredient.fromJson(json.getAsJsonObject("input")),
                 Registry.BLOCK[Identifier(json.getAsJsonPrimitive("block").asString)],
-                ShapedRecipe.getItemStack(json.getAsJsonObject("output"))
+                ShapedRecipe.outputFromJson(json.getAsJsonObject("output"))
             )
         }
     }
