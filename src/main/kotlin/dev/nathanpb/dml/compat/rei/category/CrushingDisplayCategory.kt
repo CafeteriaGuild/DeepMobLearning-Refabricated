@@ -22,24 +22,30 @@ package dev.nathanpb.dml.compat.rei.category
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.compat.rei.display.CrushingRecipeDisplay
 import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
+import dev.nathanpb.dml.utils.itemStack
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
-import me.shedaniel.rei.api.EntryStack
-import me.shedaniel.rei.api.RecipeCategory
-import me.shedaniel.rei.api.widgets.Widgets
-import me.shedaniel.rei.gui.widget.Widget
+import me.shedaniel.rei.api.client.gui.widgets.Widget
+import me.shedaniel.rei.api.client.gui.widgets.Widgets
+import me.shedaniel.rei.api.client.registry.display.DisplayCategory
+import me.shedaniel.rei.api.common.category.CategoryIdentifier
+import me.shedaniel.rei.api.common.entry.EntryStack
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.resource.language.I18n
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
-class CrushingRecipeCategory(private val identifier: Identifier, private val logo: EntryStack) : RecipeCategory<CrushingRecipeDisplay> {
+class CrushingDisplayCategory(private val identifier: Identifier, private val logo: EntryStack<*>) : DisplayCategory<CrushingRecipeDisplay> {
 
     override fun getIdentifier() = identifier
 
-    override fun getLogo() = logo
+    override fun getCategoryIdentifier(): CategoryIdentifier<out CrushingRecipeDisplay> {
+        return CategoryIdentifier.of(identifier)
+    }
 
-    override fun getCategoryName(): String = I18n.translate("rei.${MOD_ID}.category.crushing")
+    override fun getIcon() = logo
+
+    override fun getTitle() = TranslatableText("rei.${MOD_ID}.category.crushing")
 
     override fun setupDisplay(recipeDisplay: CrushingRecipeDisplay, bounds: Rectangle): MutableList<Widget> {
         val startPoint = Point(bounds.centerX - 41, bounds.centerY - 27)
@@ -57,7 +63,7 @@ class CrushingRecipeCategory(private val identifier: Identifier, private val log
             Widgets.createArrow(Point(startPoint.x + 35, startPoint.y + 38)),
             Widgets.createSlot(Point(startPoint.x - 20, startPoint.y + 38)).entries(input),
             blockSlot,
-            Widgets.createSlot(Point(startPoint.x + 80, startPoint.y + 38)).entries(output)
+            Widgets.createSlot(Point(startPoint.x + 80, startPoint.y + 38)).entries(output.flatten())
         ).also { widgets ->
             MinecraftClient.getInstance().player?.let { player ->
                 EntityDisplayWidget(
@@ -67,7 +73,7 @@ class CrushingRecipeCategory(private val identifier: Identifier, private val log
                     180F,
                     -120F,
                     16,
-                    recipeDisplay.inputEntries.first().random().itemStack
+                    recipeDisplay.inputEntries.flatten().random().itemStack()
                 ) { it.swingHand(Hand.MAIN_HAND) }.let {
                     widgets += Widgets.wrapVanillaWidget(it)
                 }

@@ -28,6 +28,7 @@ import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomAround
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.toVec3d
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.goal.*
@@ -37,7 +38,7 @@ import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.min
@@ -94,7 +95,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     override fun tick() {
         super.tick()
         if (tier == null && belongsToTrial) {
-            remove()
+            remove(Entity.RemovalReason.DISCARDED)
         }
     }
 
@@ -156,13 +157,13 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         }
     }
 
-    override fun writeCustomDataToTag(tag: CompoundTag?) {
-        super.writeCustomDataToTag(tag)
+    override fun writeCustomDataToNbt(tag: NbtCompound?) {
+        super.writeCustomDataToNbt(tag)
         tag?.putBoolean("${MOD_ID}.belongsToTrial", belongsToTrial)
     }
 
-    override fun readCustomDataFromTag(tag: CompoundTag?) {
-        super.readCustomDataFromTag(tag)
+    override fun readCustomDataFromNbt(tag: NbtCompound?) {
+        super.readCustomDataFromNbt(tag)
         if (tag != null) {
             belongsToTrial = tag.getBoolean("${MOD_ID}.belongsToTrial")
         }

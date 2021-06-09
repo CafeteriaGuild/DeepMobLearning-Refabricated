@@ -26,9 +26,9 @@ import dev.nathanpb.dml.trial.TrialState
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.EnumSerializer
 import dev.nathanpb.ktdatatag.serializer.Serializers
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 
-class TrialData(tag: CompoundTag = CompoundTag()) : MutableCompoundData(tag) {
+class TrialData(tag: NbtCompound = NbtCompound()) : MutableCompoundData(tag) {
 
     constructor(trial: Trial) : this() {
         state = trial.state

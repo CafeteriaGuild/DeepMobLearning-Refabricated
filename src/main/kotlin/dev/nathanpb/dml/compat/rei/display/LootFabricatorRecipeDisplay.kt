@@ -20,21 +20,24 @@
 package dev.nathanpb.dml.compat.rei.display
 
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
-import me.shedaniel.rei.api.EntryStack
-import me.shedaniel.rei.api.RecipeDisplay
+import me.shedaniel.rei.api.common.category.CategoryIdentifier
+import me.shedaniel.rei.api.common.display.Display
+import me.shedaniel.rei.api.common.entry.EntryIngredient
+import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.util.Identifier
 
 class LootFabricatorRecipeDisplay (
     private val categoryId: Identifier,
     val recipe: LootFabricatorRecipe
-) : RecipeDisplay {
+) : Display {
 
-    private val input = mutableListOf(recipe.input.matchingStacksClient.map(EntryStack::create).toMutableList())
+    override fun getCategoryIdentifier(): CategoryIdentifier<LootFabricatorRecipeDisplay> = CategoryIdentifier.of(categoryId)
 
-    override fun getRecipeCategory() = categoryId
+    override fun getInputEntries() = recipe.input.matchingStacksClient
+        .map(EntryStacks::of)
+        .map(EntryIngredient::of)
+        .toMutableList()
 
-    override fun getInputEntries() = input
-
-    override fun getOutputEntries() = mutableListOf<EntryStack>()
+    override fun getOutputEntries() = mutableListOf<EntryIngredient>()
 
 }

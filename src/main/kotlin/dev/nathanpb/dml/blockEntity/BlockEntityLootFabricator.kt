@@ -33,27 +33,26 @@ import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.recipe.RecipeFinder
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.recipe.RecipeInputProvider
+import net.minecraft.recipe.RecipeMatcher
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.Tickable
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
 
-class BlockEntityLootFabricator
-    : BlockEntity(BLOCKENTITY_LOOT_FABRICATOR),
+class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
+    BlockEntity(BLOCKENTITY_LOOT_FABRICATOR, pos, state),
     InventoryProvider,
     PropertyDelegateHolder,
-    RecipeInputProvider,
-    Tickable
+    RecipeInputProvider
 {
 
     private val _propertyDelegate = ArrayPropertyDelegate(2)
@@ -66,41 +65,50 @@ class BlockEntityLootFabricator
     }
 
     private var progress = 0
+    
+    companion object {
+        val ticker = BlockEntityTicker<BlockEntityLootFabricator> { world, _, _, blockEntity ->
+            // Is it really needed to be there?
+            blockEntity.propertyDelegate[1] = config.lootFabricator.processTime
 
-    override fun tick() {
-        // Is it really needed to be there?
-        propertyDelegate[1] = config.lootFabricator.processTime
+            (world as? ServerWorld)?.let { world ->
+                if (blockEntity.bufferedInternalInventory.isEmpty) {
+                    val stack = blockEntity.inventory.stackInInputSlot
+                        ?: return@BlockEntityTicker blockEntity.resetProgress()
 
-        (world as? ServerWorld)?.let { world ->
-            if (bufferedInternalInventory.isEmpty) {
-                val stack = inventory.stackInInputSlot ?: return resetProgress()
-                val recipe = world.recipeManager.getFirstMatch(RECIPE_LOOT_FABRICATOR, inventory, world).orElse(null) ?: return resetProgress()
+                    val recipe = world.recipeManager.getFirstMatch(RECIPE_LOOT_FABRICATOR, blockEntity.inventory, world).orElse(null)
+                        ?: return@BlockEntityTicker blockEntity.resetProgress()
 
-                if (progress >= config.lootFabricator.processTime) {
-                    val generatedLoot = generateLoot(world, recipe.category).also {
-                        // O(n²) goes brrrr
-                        it.forEach {  stackSource ->
-                            it.forEach { stackTarget ->
-                                combineStacksIfPossible(stackSource, stackTarget, bufferedInternalInventory.maxCountPerStack)
+                    if (blockEntity.progress >= config.lootFabricator.processTime) {
+                        val generatedLoot = blockEntity.generateLoot(world, recipe.category).also {
+                            // O(n²) goes brrrr
+                            it.forEach {  stackSource ->
+                                it.forEach { stackTarget ->
+                                    combineStacksIfPossible(
+                                        stackSource,
+                                        stackTarget,
+                                        blockEntity.bufferedInternalInventory.maxCountPerStack
+                                    )
+                                }
                             }
-                        }
-                    }.filterNot(ItemStack::isEmpty)
-                    bufferedInternalInventory.setStacks(
-                        DefaultedList.copyOf(ItemStack.EMPTY, *generatedLoot.toTypedArray())
-                    )
-                    stack.decrement(1)
-                    dumpInternalInventory()
-                } else {
-                    progress++
-                    propertyDelegate[0] = progress
-                    return
-                }
+                        }.filterNot(ItemStack::isEmpty)
+                        blockEntity.bufferedInternalInventory.setStacks(
+                            DefaultedList.copyOf(ItemStack.EMPTY, *generatedLoot.toTypedArray())
+                        )
+                        stack.decrement(1)
+                        blockEntity.dumpInternalInventory()
+                    } else {
+                        blockEntity.progress++
+                        blockEntity.propertyDelegate[0] = blockEntity.progress
+                        return@BlockEntityTicker
+                    }
 
-                resetProgress()
+                    blockEntity.resetProgress()
+                }
             }
         }
     }
-
+    
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
         return (0 until config.lootFabricator.pristineExchangeRate).map {
             category.tag
@@ -149,16 +157,16 @@ class BlockEntityLootFabricator
         return (world.getBlockEntity(pos) as BlockEntityLootFabricator).inventory
     }
 
-    override fun toTag(tag: CompoundTag?): CompoundTag {
-        return super.toTag(tag).also {
+    override fun writeNbt(tag: NbtCompound?): NbtCompound {
+        return super.writeNbt(tag).also {
             if (tag != null) {
-                CompoundTag().let { invTag ->
-                    Inventories.toTag(invTag, inventory.items())
+                NbtCompound().let { invTag ->
+                    Inventories.writeNbt(invTag, inventory.items())
                     tag.put("${MOD_ID}:inventory", invTag)
                 }
 
-                CompoundTag().let { invTag ->
-                    Inventories.toTag(invTag, bufferedInternalInventory.items())
+                NbtCompound().let { invTag ->
+                    Inventories.writeNbt(invTag, bufferedInternalInventory.items())
                     tag.put("${MOD_ID}:bufferedInventory", invTag)
                 }
 
@@ -167,15 +175,15 @@ class BlockEntityLootFabricator
         }
     }
 
-    override fun fromTag(state: BlockState?, tag: CompoundTag?) {
-        super.fromTag(state, tag).also {
+    override fun readNbt(tag: NbtCompound?) {
+        super.readNbt(tag).also {
             if (tag != null) {
                 val stacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
-                Inventories.fromTag(tag.getCompound("${MOD_ID}:inventory"), stacks)
+                Inventories.readNbt(tag.getCompound("${MOD_ID}:inventory"), stacks)
                 inventory.setStacks(stacks)
 
                 val stacksBufferedInventory = DefaultedList.ofSize(bufferedInternalInventory.size(), ItemStack.EMPTY)
-                Inventories.fromTag(tag.getCompound("${MOD_ID}:bufferedInventory"), stacksBufferedInventory)
+                Inventories.readNbt(tag.getCompound("${MOD_ID}:bufferedInventory"), stacksBufferedInventory)
                 bufferedInternalInventory.setStacks(stacksBufferedInventory)
 
                 progress = tag.getInt("${MOD_ID}:progress")
@@ -185,7 +193,7 @@ class BlockEntityLootFabricator
 
     override fun getPropertyDelegate() = _propertyDelegate
 
-    override fun provideRecipeInputs(finder: RecipeFinder) {
-        finder.addItem(inventory.stackInInputSlot)
+    override fun provideRecipeInputs(finder: RecipeMatcher) {
+        finder.addInput(inventory.stackInInputSlot)
     }
 }

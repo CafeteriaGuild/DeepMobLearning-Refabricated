@@ -23,7 +23,6 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.getPlayersByUUID
-import dev.nathanpb.dml.utils.randomOrNull
 import dev.nathanpb.dml.utils.squared
 import net.minecraft.entity.ai.TargetPredicate
 import net.minecraft.entity.ai.goal.FollowTargetGoal

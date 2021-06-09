@@ -21,14 +21,14 @@ package dev.nathanpb.dml.data.serializers
 
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.ktdatatag.serializer.DataSerializer
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 
 class TrialDataSerializer : DataSerializer<TrialData> {
-    override fun read(tag: CompoundTag, key: String): TrialData {
+    override fun read(tag: NbtCompound, key: String): TrialData {
         return TrialData(tag.getCompound(key))
     }
 
-    override fun write(tag: CompoundTag, key: String, data: TrialData) {
+    override fun write(tag: NbtCompound, key: String, data: TrialData) {
         tag.put(key, data.tag)
     }
 }

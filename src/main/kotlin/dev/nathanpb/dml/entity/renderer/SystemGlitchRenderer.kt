@@ -22,14 +22,20 @@ package dev.nathanpb.dml.entity.renderer
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.entity.model.SystemGlitchModel
 import dev.nathanpb.dml.identifier
-import net.minecraft.client.render.entity.EntityRenderDispatcher
+import net.minecraft.client.render.entity.EntityRendererFactory
 import net.minecraft.client.render.entity.MobEntityRenderer
 import net.minecraft.client.render.entity.feature.HeadFeatureRenderer
+import net.minecraft.client.render.entity.model.EntityModelLayer
 
-class SystemGlitchRenderer(dispatcher: EntityRenderDispatcher) : MobEntityRenderer<SystemGlitchEntity, SystemGlitchModel>(dispatcher, SystemGlitchModel(), 0.5F) {
+class SystemGlitchRenderer(context: EntityRendererFactory.Context, layer: EntityModelLayer) :
+    MobEntityRenderer<SystemGlitchEntity, SystemGlitchModel>(
+        context, SystemGlitchModel(context.getPart(layer)), 0.5F
+    )
+{
+
     override fun getTexture(entity: SystemGlitchEntity) = identifier("textures/entity/system_glitch.png")
 
     init {
-        addFeature(HeadFeatureRenderer(this, 1.15F, 1.05F, 1.15F))
+        addFeature(HeadFeatureRenderer(this, context.modelLoader, 1.15F, 1.05F, 1.15F))
     }
 }

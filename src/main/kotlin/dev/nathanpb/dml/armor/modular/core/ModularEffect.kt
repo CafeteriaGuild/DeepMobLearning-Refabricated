@@ -125,11 +125,11 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
         return (stack.item as? ItemModularGlitchArmor)?.let { item ->
             item.getAttributeModifiers(stack, item.slotType)
                 .get(entityAttribute)
-                .sumByDouble(EntityAttributeModifier::getValue)
+                .sumOf(EntityAttributeModifier::getValue)
         } ?: 0.0
     }
 
     fun sumLevelsOf(stacks: List<ItemStack>): Double {
-        return stacks.map(this::sumLevelsOf).sum()
+        return stacks.sumOf(this::sumLevelsOf)
     }
 }

@@ -30,6 +30,9 @@ import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.utils.takeOrNull
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityTicker
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
@@ -90,5 +93,9 @@ class BlockTrialKeystone : Block(
         return VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
     }
 
-    override fun createBlockEntity(view: BlockView?) = BlockEntityTrialKeystone()
+    override fun <T : BlockEntity?> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T> {
+        return BlockEntityTrialKeystone.ticker as BlockEntityTicker<T>
+    }
+
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = BlockEntityTrialKeystone(pos, state)
 }

@@ -28,9 +28,9 @@ import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.EnumSerializer
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 
-class TrialKeyData (tag: CompoundTag) : MutableCompoundData(tag) {
+class TrialKeyData (tag: NbtCompound) : MutableCompoundData(tag) {
 
     constructor(stack: ItemStack) : this(stack.getOrCreateSubTag(TAG_KEY))
 
@@ -38,7 +38,7 @@ class TrialKeyData (tag: CompoundTag) : MutableCompoundData(tag) {
         const val TAG_KEY = "${MOD_ID}.trialkey"
 
         fun fromDataModelData(data: DataModelData) = data.category?.let {
-            TrialKeyData(CompoundTag()).apply {
+            TrialKeyData(NbtCompound()).apply {
                 category = it
                 dataAmount = data.dataAmount
              }

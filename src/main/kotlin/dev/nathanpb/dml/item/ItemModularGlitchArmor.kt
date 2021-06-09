@@ -39,7 +39,7 @@ import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
@@ -149,7 +149,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         super.inventoryTick(stack, world, entity, slot, selected)
         if (stack.hasEnchantments()) {
             stack.enchantments.firstOrNull {
-                (it as? CompoundTag)?.getString("id") == "minecraft:mending"
+                (it as? NbtCompound)?.getString("id") == "minecraft:mending"
             }?.let(stack.enchantments::remove)
         }
     }

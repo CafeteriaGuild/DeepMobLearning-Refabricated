@@ -47,7 +47,7 @@ class CrushingRecipeListener : AttackBlockCallback {
                         .firstOrNull {
                             state.block == it.block && it.matches(inv, world)
                         }?.apply {
-                            player.inventory.offerOrDrop(world, craft(inv))
+                            player.inventory.offerOrDrop(craft(inv))
                             return ActionResult.CONSUME
                         }
                 }

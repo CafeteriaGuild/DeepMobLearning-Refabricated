@@ -37,7 +37,7 @@ class ResistanceEffect : ProtectionLikeEffect(
 ) {
 
     override fun protectsAgainst(source: DamageSource): Boolean {
-        return !source.isUnblockable && !source.magic
+        return !source.isUnblockable && !source.isMagic
     }
 
     override fun acceptTier(tier: DataModelTier) = true

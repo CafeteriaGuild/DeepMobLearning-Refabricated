@@ -8,9 +8,6 @@
 
 package dev.nathanpb.dml.utils
 
-// kotlin what the fuck
-fun <T> Collection<T>.randomOrNull() = if (isEmpty()) null else random()
-
 fun <T, R> Iterable<T>.firstNonNullMapping(map: (T) -> R?): R? {
     for (element in this) {
         return map(element) ?: continue

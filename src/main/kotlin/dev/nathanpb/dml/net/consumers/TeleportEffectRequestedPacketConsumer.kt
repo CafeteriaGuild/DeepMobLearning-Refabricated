@@ -21,20 +21,30 @@ package dev.nathanpb.dml.net.consumers
 
 import dev.nathanpb.dml.event.context.TeleportEffectRequestedEvent
 import dev.nathanpb.dml.utils.readVec3d
-import net.fabricmc.fabric.api.network.PacketConsumer
-import net.fabricmc.fabric.api.network.PacketContext
+import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.network.ServerPlayNetworkHandler
+import net.minecraft.server.network.ServerPlayerEntity
 
-class TeleportEffectRequestedPacketConsumer : PacketConsumer {
-    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+class TeleportEffectRequestedPacketConsumer : ServerPlayNetworking.PlayChannelHandler {
+
+    override fun receive(
+        server: MinecraftServer,
+        player: ServerPlayerEntity,
+        handler: ServerPlayNetworkHandler,
+        buf: PacketByteBuf,
+        responseSender: PacketSender
+    ) {
         val pos = buf.readVec3d()
         val rotation = buf.readVec3d()
-        context.taskQueue.execute {
+        server.execute {
             if (
-                pos.squaredDistanceTo(context.player.pos) <= 4*4
+                pos.squaredDistanceTo(player.pos) <= 4*4
                 && arrayOf(rotation.x, rotation.y, rotation.z).all { it in -128F..128F }
             ) {
-                TeleportEffectRequestedEvent.invoker().invoke(context.player, pos, rotation)
+                TeleportEffectRequestedEvent.invoker().invoke(player, pos, rotation)
             }
         }
     }

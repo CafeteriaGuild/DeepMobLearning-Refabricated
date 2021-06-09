@@ -85,7 +85,7 @@ class TrialKeystoneRecipe (
             val tier = DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY
             val category = EntityCategory.valueOf(json.getAsJsonPrimitive("category").asString)
             val rewards = json.getAsJsonArray("rewards").map {
-                ShapedRecipe.getItemStack(it.asJsonObject)
+                ShapedRecipe.outputFromJson(it.asJsonObject)
             }
 
             val waveEntityCount = takeOrNull(json.has("waveEntityCount")) {

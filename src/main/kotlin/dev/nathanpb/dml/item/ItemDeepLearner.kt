@@ -61,7 +61,7 @@ var ItemStack.deepLearnerInventory: DefaultedList<ItemStack>
         if (this.item is ItemDeepLearner) {
             return getOrCreateSubTag(ItemDeepLearner.INVENTORY_TAG).let { invTag ->
                DefaultedList.ofSize(ItemDeepLearner.INVENTORY_SIZE, ItemStack.EMPTY).also {
-                   Inventories.fromTag(invTag, it)
+                   Inventories.readNbt(invTag, it)
                }
             }
         } else throw NotDeepLearnerException()
@@ -69,7 +69,7 @@ var ItemStack.deepLearnerInventory: DefaultedList<ItemStack>
     set(inventory) {
         if (this.item is ItemDeepLearner) {
             getOrCreateSubTag(ItemDeepLearner.INVENTORY_TAG).let { invTag ->
-                Inventories.toTag(invTag, inventory)
+                Inventories.writeNbt(invTag, inventory)
             }
         } else throw NotDeepLearnerException()
     }

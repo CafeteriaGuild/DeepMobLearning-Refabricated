@@ -20,18 +20,25 @@
 package dev.nathanpb.dml.net.consumers.client
 
 import dev.nathanpb.dml.gui.hud.UndyingCooldownHud
-import net.fabricmc.fabric.api.network.PacketConsumer
-import net.fabricmc.fabric.api.network.PacketContext
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
 
-class UndyingCooldownUpdatePacketConsumer : PacketConsumer {
-    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+class UndyingCooldownUpdatePacketConsumer : ClientPlayNetworking.PlayChannelHandler {
+
+    override fun receive(
+        client: MinecraftClient,
+        handler: ClientPlayNetworkHandler,
+        buf: PacketByteBuf,
+        responseSender: PacketSender
+    ) {
         val cooldownTime = buf.readInt()
         val maxCooldownTime = buf.readInt()
-        context.taskQueue.execute {
+        client.execute {
             UndyingCooldownHud.INSTANCE.cooldownTime = cooldownTime
             UndyingCooldownHud.INSTANCE.maxCooldownTime = maxCooldownTime
         }
     }
-
 }

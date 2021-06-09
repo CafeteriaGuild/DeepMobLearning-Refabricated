@@ -26,7 +26,7 @@ import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -81,7 +81,7 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
 
 
     @Inject(at = @At("RETURN"), method = "readCustomDataFromTag")
-    public void readCustomDataFromTag(CompoundTag tag, CallbackInfo ci) {
+    public void readCustomDataFromTag(NbtCompound tag, CallbackInfo ci) {
         Safer.run(() -> {
             if (tag.contains(DeepMobLearningKt.MOD_ID + ":undyingLastUsage")) {
                 setDmlRefUndyingLastUsage(tag.getLong(DeepMobLearningKt.MOD_ID + ":undyingLastUsage"));
@@ -92,7 +92,7 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
     }
 
     @Inject(at = @At("RETURN"), method = "writeCustomDataToTag")
-    public void writeCustomDataToTag(CompoundTag tag, CallbackInfo ci) {
+    public void writeCustomDataToTag(NbtCompound tag, CallbackInfo ci) {
         Safer.run(() -> {
             if (getDmlRefUndyingLastUsage() == null) {
                 tag.remove(DeepMobLearningKt.MOD_ID + ":undyingLastUsage");

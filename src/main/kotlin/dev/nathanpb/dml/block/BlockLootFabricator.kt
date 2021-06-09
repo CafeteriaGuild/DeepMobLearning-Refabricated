@@ -25,6 +25,8 @@ import dev.nathanpb.dml.screen.handler.LootFabricatorScreenHandlerFactory
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityTicker
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemPlacementContext
@@ -38,7 +40,6 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.world.BlockView
 import net.minecraft.world.ServerWorldAccess
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
@@ -52,6 +53,10 @@ class BlockLootFabricator : HorizontalFacingBlock (
     init {
         defaultState = stateManager.defaultState
             .with(Properties.HORIZONTAL_FACING, Direction.NORTH)
+    }
+
+    override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T> {
+        return BlockEntityLootFabricator.ticker as BlockEntityTicker<T>
     }
 
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos, player: PlayerEntity?, hand: Hand?, hit: BlockHitResult?): ActionResult {
@@ -80,7 +85,7 @@ class BlockLootFabricator : HorizontalFacingBlock (
         return defaultState.with(FACING, ctx?.playerFacing?.opposite)
     }
 
-    override fun createBlockEntity(world: BlockView?) = BlockEntityLootFabricator()
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = BlockEntityLootFabricator(pos, state)
 
     override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
         return (world.getBlockEntity(pos) as BlockEntityLootFabricator).inventory

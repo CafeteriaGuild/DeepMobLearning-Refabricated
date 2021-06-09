@@ -21,17 +21,17 @@ package dev.nathanpb.dml.data.serializers
 
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
-import dev.nathanpb.ktdatatag.serializer.AbstractListTagSerializer
-import net.minecraft.nbt.StringTag
+import dev.nathanpb.ktdatatag.serializer.AbstractNbtListSerializer
+import net.minecraft.nbt.NbtString
 import net.minecraft.util.Identifier
 
-class TrialAffixListSerializer : AbstractListTagSerializer<TrialAffix, StringTag>(
-    StringTag.of("").type,
-    StringTag::class.java,
+class TrialAffixListSerializer : AbstractNbtListSerializer<TrialAffix, NbtString>(
+    NbtString.of("").type,
+    NbtString::class.java,
     {
         val id = Identifier(it.asString())
         TrialAffixRegistry.INSTANCE.findById(id)
             ?: TrialAffixRegistry.INSTANCE.all.first() // Trying to recover the error, may throw NPE anyway
     },
-    { StringTag.of(it.id.toString()) }
+    { NbtString.of(it.id.toString()) }
 )

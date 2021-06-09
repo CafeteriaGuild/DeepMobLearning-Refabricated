@@ -24,6 +24,7 @@ import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
+import net.minecraft.client.render.entity.model.EntityModelLayers
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
@@ -48,8 +49,9 @@ fun registerEntityTypes() {
     registerAttributes()
 }
 
+// TODO fix this shit
 fun registerEntityRenderer() {
-    EntityRendererRegistry.INSTANCE.register(SYSTEM_GLITCH_ENTITY_TYPE) { dispatcher, _ ->
-        SystemGlitchRenderer(dispatcher)
+    EntityRendererRegistry.INSTANCE.register(SYSTEM_GLITCH_ENTITY_TYPE) { dispatcher ->
+        SystemGlitchRenderer(dispatcher, EntityModelLayers.ZOMBIFIED_PIGLIN_INNER_ARMOR)
     }
 }

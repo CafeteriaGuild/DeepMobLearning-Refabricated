@@ -22,18 +22,28 @@ package dev.nathanpb.dml.net.consumers
 import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.item.ItemModularGlitchArmor
-import net.fabricmc.fabric.api.network.PacketConsumer
-import net.fabricmc.fabric.api.network.PacketContext
+import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.network.ServerPlayNetworkHandler
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Hand
 
-class ModularEffectTogglePacketConsumer : PacketConsumer {
-    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+class ModularEffectTogglePacketConsumer : ServerPlayNetworking.PlayChannelHandler {
+
+    override fun receive(
+        server: MinecraftServer,
+        player: ServerPlayerEntity,
+        handler: ServerPlayNetworkHandler,
+        buf: PacketByteBuf,
+        responseSender: PacketSender?
+    ) {
         val id = buf.readIdentifier()
         val flag = buf.readBoolean()
         val hand = Hand.values()[buf.readInt().coerceAtLeast(0).coerceAtMost(1)]
-        context.taskQueue.run {
-            val stack = context.player.getStackInHand(hand)
+        server.execute {
+            val stack = player.getStackInHand(hand)
             if (stack.item is ItemModularGlitchArmor) {
                 if (ModularEffectRegistry.INSTANCE.fromId(id) != null) {
                     val data = ModularArmorData(stack)

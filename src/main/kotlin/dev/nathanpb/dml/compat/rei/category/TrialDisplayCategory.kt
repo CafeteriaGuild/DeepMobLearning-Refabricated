@@ -27,23 +27,29 @@ import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
-import me.shedaniel.rei.api.EntryStack
-import me.shedaniel.rei.api.RecipeCategory
-import me.shedaniel.rei.api.widgets.Widgets
-import me.shedaniel.rei.gui.widget.Widget
+import me.shedaniel.rei.api.client.gui.widgets.Widget
+import me.shedaniel.rei.api.client.gui.widgets.Widgets
+import me.shedaniel.rei.api.client.registry.display.DisplayCategory
+import me.shedaniel.rei.api.common.category.CategoryIdentifier
+import me.shedaniel.rei.api.common.entry.EntryStack
+import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.resource.language.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 
-class TrialRecipeCategory(private val identifier: Identifier, private val logo: EntryStack) : RecipeCategory<TrialRecipeDisplay> {
+class TrialDisplayCategory(private val identifier: Identifier, private val logo: EntryStack<*>) : DisplayCategory<TrialRecipeDisplay> {
 
     override fun getIdentifier() = identifier
 
-    override fun getLogo() = logo
+    override fun getIcon() = logo
 
-    override fun getCategoryName(): String = I18n.translate("rei.$MOD_ID.category.trial")
+    override fun getCategoryIdentifier(): CategoryIdentifier<TrialRecipeDisplay> {
+        return CategoryIdentifier.of(identifier)
+    }
+
+    override fun getTitle() = TranslatableText("rei.$MOD_ID.category.trial")
 
     override fun setupDisplay(recipeDisplay: TrialRecipeDisplay, bounds: Rectangle): MutableList<Widget> {
         val centerX = bounds.centerX - 5
@@ -58,14 +64,15 @@ class TrialRecipeCategory(private val identifier: Identifier, private val logo: 
         val keySlot = Widgets.createSlot(Point(centerX, centerY - 24)).entries(input)
 
         val keystoneSlot = Widgets.createSlot(Point(centerX, centerY - 8))
-            .entries(mutableListOf(EntryStack.create(BLOCK_TRIAL_KEYSTONE.asItem())))
+            .entries(mutableListOf(EntryStacks.of(BLOCK_TRIAL_KEYSTONE.asItem())))
             .apply {
                 isBackgroundEnabled = false
             }
 
         val outputSlots = output.mapIndexed { index, stacks ->
             val x = (centerX + (index * 18)) - (output.size.dec() * 9)
-            Widgets.createSlot(Point(x, centerY + 12)).entries(stacks)
+            Widgets.createSlot(Point(x, centerY + 12))
+                .entries(stacks.flatten())
         }
 
         return mutableListOf<Widget>(

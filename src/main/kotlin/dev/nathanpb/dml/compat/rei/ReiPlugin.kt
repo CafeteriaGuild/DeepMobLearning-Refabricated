@@ -20,9 +20,9 @@
 package dev.nathanpb.dml.compat.rei
 
 import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
-import dev.nathanpb.dml.compat.rei.category.CrushingRecipeCategory
-import dev.nathanpb.dml.compat.rei.category.LootFabricatorRecipeCategory
-import dev.nathanpb.dml.compat.rei.category.TrialRecipeCategory
+import dev.nathanpb.dml.compat.rei.category.CrushingDisplayCategory
+import dev.nathanpb.dml.compat.rei.category.LootFabricatorDisplayCategory
+import dev.nathanpb.dml.compat.rei.category.TrialDisplayCategory
 import dev.nathanpb.dml.compat.rei.display.CrushingRecipeDisplay
 import dev.nathanpb.dml.compat.rei.display.LootFabricatorRecipeDisplay
 import dev.nathanpb.dml.compat.rei.display.TrialRecipeDisplay
@@ -34,42 +34,43 @@ import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import me.shedaniel.rei.api.EntryRegistry
-import me.shedaniel.rei.api.EntryStack
-import me.shedaniel.rei.api.RecipeHelper
-import me.shedaniel.rei.api.plugins.REIPluginV0
+import dev.nathanpb.dml.utils.itemStack
+import me.shedaniel.rei.api.client.plugins.REIClientPlugin
+import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
+import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
+import me.shedaniel.rei.api.client.registry.entry.EntryRegistry
+import me.shedaniel.rei.api.common.util.EntryStacks
+
 
 @Suppress("unused")
-class ReiPlugin : REIPluginV0 {
+class ReiPlugin :  REIClientPlugin {
 
     companion object {
         val CRUSHING_ID = identifier("crushing")
         val TRIAL_ID = identifier("trial")
         val LOOT_FABRICATOR_ID = identifier("loot_fabricator")
 
-        val CRUSHING_LOGO: EntryStack = EntryStack.create(ITEM_SOOT_REDSTONE)
-        val TRIAL_LOGO: EntryStack = EntryStack.create(ITEM_TRIAL_KEY)
-        val LOOT_FABRICATOR_LOGO: EntryStack = EntryStack.create(BLOCK_LOOT_FABRICATOR.asItem())
     }
 
-    override fun getPluginIdentifier() = identifier("rei_compat")
-
-    override fun registerPluginCategories(recipeHelper: RecipeHelper?) {
-        recipeHelper?.registerCategory(CrushingRecipeCategory(CRUSHING_ID, CRUSHING_LOGO))
-        recipeHelper?.registerCategory(TrialRecipeCategory(TRIAL_ID, TRIAL_LOGO))
-        recipeHelper?.registerCategory(LootFabricatorRecipeCategory(LOOT_FABRICATOR_ID, LOOT_FABRICATOR_LOGO))
+    override fun registerCategories(registry: CategoryRegistry) {
+        registry.add(
+            CrushingDisplayCategory(CRUSHING_ID, EntryStacks.of(ITEM_SOOT_REDSTONE)),
+            TrialDisplayCategory(TRIAL_ID, EntryStacks.of(ITEM_TRIAL_KEY)),
+            LootFabricatorDisplayCategory(LOOT_FABRICATOR_ID, EntryStacks.of(BLOCK_LOOT_FABRICATOR.asItem()))
+        )
     }
 
-    override fun registerRecipeDisplays(recipeHelper: RecipeHelper?) {
-        recipeHelper?.registerRecipes(CRUSHING_ID, CrushingRecipe::class.java) {
+    override fun registerDisplays(registry: DisplayRegistry){
+        registry.registerFiller(CrushingRecipe::class.java) {
             CrushingRecipeDisplay(it, CRUSHING_ID)
         }
 
-        recipeHelper?.registerRecipes(TRIAL_ID, TrialKeystoneRecipe::class.java){
+        registry.registerFiller(TrialKeystoneRecipe::class.java){
             TrialRecipeDisplay(TRIAL_ID, it)
         }
 
-        recipeHelper?.registerRecipes(LOOT_FABRICATOR_ID, LootFabricatorRecipe::class.java) {
+
+        registry.registerFiller(LootFabricatorRecipe::class.java) {
             LootFabricatorRecipeDisplay(LOOT_FABRICATOR_ID, it)
         }
     }
@@ -77,11 +78,11 @@ class ReiPlugin : REIPluginV0 {
     override fun postRegister() {
         val hiddenItems = listOf(ITEM_EMERITUS_HAT, ITEM_DML)
         EntryRegistry.getInstance().removeEntryIf {
-            it.item in hiddenItems
+            it.itemStack().item in hiddenItems
         }
     }
 
-
+    /*
     override fun registerOthers(recipeHelper: RecipeHelper?) {
         recipeHelper?.removeAutoCraftButton(CRUSHING_ID)
         recipeHelper?.removeAutoCraftButton(TRIAL_ID)
@@ -90,4 +91,5 @@ class ReiPlugin : REIPluginV0 {
         recipeHelper?.registerWorkingStations(TRIAL_ID, TRIAL_LOGO)
         recipeHelper?.registerWorkingStations(LOOT_FABRICATOR_ID, LOOT_FABRICATOR_LOGO)
     }
+    */
 }

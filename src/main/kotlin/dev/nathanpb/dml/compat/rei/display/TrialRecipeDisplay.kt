@@ -22,33 +22,34 @@ package dev.nathanpb.dml.compat.rei.display
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
-import me.shedaniel.rei.api.EntryStack
-import me.shedaniel.rei.api.RecipeDisplay
+import me.shedaniel.rei.api.common.category.CategoryIdentifier
+import me.shedaniel.rei.api.common.display.Display
+import me.shedaniel.rei.api.common.entry.EntryIngredient
+import me.shedaniel.rei.api.common.util.EntryIngredients
+import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 
 class TrialRecipeDisplay (
     private val categoryId: Identifier,
-    recipe: TrialKeystoneRecipe
-) : RecipeDisplay {
+    private val recipe: TrialKeystoneRecipe
+) : Display {
 
-    private val input = mutableListOf(
-        mutableListOf(EntryStack.create(
+    override fun getCategoryIdentifier(): CategoryIdentifier<TrialRecipeDisplay> = CategoryIdentifier.of(categoryId)
+
+    override fun getInputEntries() = mutableListOf(
+        EntryIngredients.of(
             ItemStack(ITEM_TRIAL_KEY).also {
                 TrialKeyData(it).apply {
                     category = recipe.category
                     dataAmount = recipe.tier.dataAmount
                 }
             }
-        ))
+        )
     )
 
-    private val output = recipe.copyRewards().map(EntryStack::create)
-
-    override fun getRecipeCategory() = categoryId
-
-    override fun getInputEntries() = input
-
-    override fun getOutputEntries() = output
+    override fun getOutputEntries() = recipe.copyRewards()
+        .map(EntryStacks::of)
+        .map(EntryIngredient::of)
 
 }

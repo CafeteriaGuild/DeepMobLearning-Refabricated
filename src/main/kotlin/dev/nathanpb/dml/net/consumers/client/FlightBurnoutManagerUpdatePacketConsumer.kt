@@ -20,16 +20,24 @@
 package dev.nathanpb.dml.net.consumers.client
 
 import dev.nathanpb.dml.gui.hud.FlightBurnoutHud
-import net.fabricmc.fabric.api.network.PacketConsumer
-import net.fabricmc.fabric.api.network.PacketContext
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
 
-class FlightBurnoutManagerUpdatePacketConsumer : PacketConsumer {
-    override fun accept(context: PacketContext, buf: PacketByteBuf) {
+class FlightBurnoutManagerUpdatePacketConsumer : ClientPlayNetworking.PlayChannelHandler {
+
+    override fun receive(
+        client: MinecraftClient,
+        handler: ClientPlayNetworkHandler,
+        buf: PacketByteBuf,
+        responseSender: PacketSender
+    ) {
         val burnoutTicks = buf.readInt()
         val maxBurnoutTicks = buf.readInt()
         val canFly = buf.readBoolean()
-        context.taskQueue.execute {
+        client.execute {
             FlightBurnoutHud.INSTANCE.apply {
                 this.burnoutTicks = burnoutTicks
                 this.maxBurnoutTicks = maxBurnoutTicks

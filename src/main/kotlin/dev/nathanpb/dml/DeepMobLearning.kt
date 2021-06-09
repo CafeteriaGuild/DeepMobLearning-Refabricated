@@ -19,6 +19,8 @@
 
 package dev.nathanpb.dml
 
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
@@ -43,14 +45,49 @@ import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
+import org.apache.logging.log4j.LogManager
+import java.io.File
+import java.io.PrintWriter
+import java.nio.file.Files
 
 lateinit var config: ModConfig
 const val MOD_ID = "dml-refabricated"
+val LOGGER = LogManager.getLogger("Deep Mob Learning: Refabricated")
+
+val CONFIG: ModConfig by lazy {
+    val parser = JsonParser()
+    val gson = GsonBuilder().setPrettyPrinting().create()
+    val configFile = File("${FabricLoader.getInstance().configDir}${File.separator}$MOD_ID.json")
+    var finalConfig: ModConfig
+    LOGGER.info("Trying to read config file...")
+    try {
+        if (configFile.createNewFile()) {
+            LOGGER.info("No config file found, creating a new one...")
+            val json: String = gson.toJson(parser.parse(gson.toJson(ModConfig())))
+            PrintWriter(configFile).use { out -> out.println(json) }
+            finalConfig = ModConfig()
+            LOGGER.info("Successfully created default config file.")
+        } else {
+            LOGGER.info("A config file was found, loading it..")
+            finalConfig = gson.fromJson(String(Files.readAllBytes(configFile.toPath())), ModConfig::class.java)
+            if (finalConfig == null) {
+                throw NullPointerException("The config file was empty.")
+            } else {
+                LOGGER.info("Successfully loaded config file.")
+            }
+        }
+    } catch (exception: Exception) {
+        LOGGER.error("There was an error creating/loading the config file!", exception)
+        finalConfig = ModConfig()
+        LOGGER.warn("Defaulting to original config.")
+    }
+    finalConfig
+}
 
 @Suppress("unused")
 fun init() {
-    registerConfigs()
     registerItems()
     registerBlocks()
     registerBlockEntityTypes()

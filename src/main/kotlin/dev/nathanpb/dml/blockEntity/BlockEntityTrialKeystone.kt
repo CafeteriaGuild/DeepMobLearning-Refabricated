@@ -35,6 +35,7 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -42,35 +43,100 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.particle.ParticleTypes
-import net.minecraft.util.Tickable
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import java.util.logging.Logger
-import kotlin.math.cos
 import kotlin.math.min
-import kotlin.math.sin
 import kotlin.random.Random
 
 
-class BlockEntityTrialKeystone :
-    BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE),
+class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
+    BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE, pos, state),
     TrialEndCallback,
     BlockEntityClientSerializable,
-    InventoryProvider,
-    Tickable
+    InventoryProvider
 {
 
     companion object {
         val BORDERS_RANGE
             get() = (config.trial.arenaRadius.squared() - 9).toDouble() .. (config.trial.arenaRadius.squared() + 9).toDouble()
+
+        val ticker = BlockEntityTicker<BlockEntityTrialKeystone> { world, pos, _, blockEntity ->
+            if (world?.isClient == true) {
+                when (blockEntity.clientTrialState) {
+                    TrialState.NOT_STARTED -> {
+                        if (!config.trial.allowStartInWrongTerrain) {
+                            MinecraftClient.getInstance().player?.let { clientPlayer ->
+                                if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= config.trial.arenaRadius.squared()) {
+                                    blockEntity.spawnParticlesInWrongTerrain()
+                                }
+                            }
+                        }
+                    }
+
+                    TrialState.RUNNING -> {
+                        if (!config.trial.allowPlayersLeavingArena) {
+                            blockEntity.pullMobsInBorders(listOf(MinecraftClient.getInstance().player as LivingEntity))
+                        }
+                    }
+                    else -> {}
+                }
+                return@BlockEntityTicker
+            }
+
+            // lord forgive me for what i'm about to do
+            // update Nov 11, 2020: what the fuck
+            // update Feb 26, 2021: what the fuck
+            // update Jun 09, 2021: what the fuck
+            if (world?.isClient == false && blockEntity.currentTrial == null) {
+                blockEntity.trialToLoad?.let { trialToLoad ->
+                    try {
+                        val recipe = world.recipeManager?.get(trialToLoad.recipeId)?.orElse(null) as? TrialKeystoneRecipe
+                        if (recipe != null) {
+                            blockEntity.currentTrial = Trial(blockEntity, recipe, trialToLoad)
+                        }
+                    } catch (e: Exception) {
+                        dev.nathanpb.dml.LOGGER.error("Failed to load trial at $pos: ${e.message}")
+                    }
+                    blockEntity.trialToLoad = null
+                    blockEntity.sync()
+                }
+            }
+
+            blockEntity.currentTrial?.let { trial ->
+                val state = blockEntity.currentTrial?.state ?: TrialState.NOT_STARTED
+                if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
+                    if (state == TrialState.RUNNING) {
+                        if (!config.trial.allowMobsLeavingArena) {
+                            blockEntity.pullMobsInBorders(trial.getMonstersInArena())
+                        }
+                        if (!config.trial.allowPlayersLeavingArena) {
+
+                            // Attempt to get the PlayerEntities of all the Players UUIDs participating the trial.
+                            // If the entity list is empty but the list of Players UUIDs participating is not empty
+                            // so it means that everyone is logged off, the trial should just keep "idling"
+
+                            // If at least one PlayerEntity is found, so it checks the distance of the list of found PlayerEntities
+                            // and finalizes the trial if this one player is not near
+
+                            // If the list of Player UUIDs participating the Trial is empty
+                            // it means that some kind of failure occurred and the trial is finalized too
+
+                            val playerEntities = trial.world.getPlayersByUUID(trial.players)
+                            if (trial.players.isEmpty() || (playerEntities.isNotEmpty() && !blockEntity.arePlayersAround(playerEntities))) {
+                                trial.end(TrialEndReason.NO_ONE_IS_AROUND)
+                            }
+                        }
+                    }
+                    trial.tick()
+                }
+            }
+        }
     }
 
-    private var circleBounds: List<BlockPos>? = null
     var currentTrial: Trial? = null
 
     var clientTrialState = TrialState.NOT_STARTED
@@ -102,78 +168,6 @@ class BlockEntityTrialKeystone :
             }
 
             sync()
-        }
-    }
-
-    override fun tick() {
-        if (world?.isClient == true) {
-            when (clientTrialState) {
-                TrialState.NOT_STARTED -> {
-                    if (!config.trial.allowStartInWrongTerrain) {
-                        MinecraftClient.getInstance().player?.let { clientPlayer ->
-                            if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= config.trial.arenaRadius.squared()) {
-                                spawnParticlesInWrongTerrain()
-                            }
-                        }
-                    }
-                }
-                TrialState.RUNNING -> {
-                    if (!config.trial.allowPlayersLeavingArena) {
-                        pullMobsInBorders(listOf(MinecraftClient.getInstance().player as LivingEntity))
-                    }
-                }
-                else -> {}
-            }
-            return
-        }
-
-        // lord forgive me for what i'm about to do
-        // update Nov 11, 2020: what the fuck
-        // update Feb 26, 2020: what the fuck
-        if (world?.isClient == false && currentTrial == null) {
-            trialToLoad?.let { trialToLoad ->
-                try {
-                    val recipe = world?.recipeManager?.get(trialToLoad.recipeId)?.orElse(null) as? TrialKeystoneRecipe
-                    if (recipe != null) {
-                        currentTrial = Trial(this, recipe, trialToLoad)
-                    }
-                } catch (e: Exception) {
-                    Logger.getLogger(this.javaClass.name).apply {
-                        error("Failed to load trial at $pos: ${e.message}")
-                    }
-                }
-                this.trialToLoad = null
-                sync()
-            }
-        }
-
-        currentTrial?.let { trial ->
-            val state = currentTrial?.state ?: TrialState.NOT_STARTED
-            if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
-                if (state == TrialState.RUNNING) {
-                    if (!config.trial.allowMobsLeavingArena) {
-                        pullMobsInBorders(trial.getMonstersInArena())
-                    }
-                    if (!config.trial.allowPlayersLeavingArena) {
-
-                        // Attempt to get the PlayerEntities of all the Players UUIDs participating the trial.
-                        // If the entity list is empty but the list of Players UUIDs participating is not empty
-                        // so it means that everyone is logged off, the trial should just keep "idling"
-
-                        // If at least one PlayerEntity is found, so it checks the distance of the list of found PlayerEntities
-                        // and finalizes the trial if this one player is not near
-
-                        // If the list of Player UUIDs participating the Trial is empty
-                        // it means that some kind of failure occurred and the trial is finalized too
-
-                        val playerEntities = trial.world.getPlayersByUUID(trial.players)
-                        if (trial.players.isEmpty() || (playerEntities.isNotEmpty() && !arePlayersAround(playerEntities))) {
-                            trial.end(TrialEndReason.NO_ONE_IS_AROUND)
-                        }
-                    }
-                }
-                trial.tick()
-            }
         }
     }
 
@@ -246,11 +240,6 @@ class BlockEntityTrialKeystone :
             }
     }
 
-    override fun setLocation(world: World, pos: BlockPos) {
-        super.setLocation(world, pos)
-        circleBounds = getCircleBoundBlocks()
-    }
-
     private fun arePlayersAround(players: List<PlayerEntity>) = pos.toVec3d().let { posVec ->
         players.any {
             it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= config.trial.arenaRadius.squared()
@@ -296,24 +285,10 @@ class BlockEntityTrialKeystone :
         } else emptyList()
     }
 
-    private fun getCircleBoundBlocks() = mutableListOf<BlockPos>().also { list ->
-        (1..360).forEach { angle ->
-            BlockPos(
-                pos.x + (config.trial.arenaRadius * cos(angle * Math.PI / 180)),
-                pos.y.toDouble(),
-                pos.z + (config.trial.arenaRadius * sin(angle * Math.PI / 180))
-            ).let {
-                if (it !in list) {
-                    list += it
-                }
-            }
-        }
-    }.toList()
-
-    override fun toTag(tag: CompoundTag?): CompoundTag? {
-        return super.toTag(tag)?.also {
+    override fun writeNbt(tag: NbtCompound?): NbtCompound? {
+        return super.writeNbt(tag)?.also {
             if (tag != null) {
-                Inventories.toTag(tag, internalInventory.items())
+                Inventories.writeNbt(tag, internalInventory.items())
                 currentTrial?.also { trial ->
                     if (trial.state in arrayOf(TrialState.WARMUP, TrialState.RUNNING)) {
                         TrialDataSerializer().write(tag, "trial", TrialData(trial))
@@ -323,11 +298,11 @@ class BlockEntityTrialKeystone :
         }
     }
 
-    override fun fromTag(state: BlockState?, tag: CompoundTag?) {
-        super.fromTag(state, tag)
+    override fun readNbt(tag: NbtCompound?) {
+        super.readNbt(tag)
         if (tag != null && currentTrial == null) {
             val stacks = DefaultedList.ofSize(internalInventory.size(), ItemStack.EMPTY)
-            Inventories.fromTag(tag, stacks)
+            Inventories.readNbt(tag, stacks)
             internalInventory.setStacks(stacks)
             if (tag.contains("trial")) {
                 trialToLoad = TrialDataSerializer().read(tag, "trial")
@@ -335,11 +310,11 @@ class BlockEntityTrialKeystone :
         }
     }
 
-    override fun toClientTag(tag: CompoundTag) = tag.also {
+    override fun toClientTag(tag: NbtCompound) = tag.also {
         it.putString("${MOD_ID}:state", (currentTrial?.state ?: TrialState.NOT_STARTED).name)
     }
 
-    override fun fromClientTag(tag: CompoundTag) {
+    override fun fromClientTag(tag: NbtCompound) {
         clientTrialState = tag.getString("${MOD_ID}:state").let { name ->
             if (name.isNotEmpty()) TrialState.valueOf(name) else TrialState.NOT_STARTED
         }

@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.entity.model
 
 import dev.nathanpb.dml.entity.SystemGlitchEntity
+import net.minecraft.client.model.ModelPart
 import net.minecraft.client.render.entity.model.BipedEntityModel
 
-class SystemGlitchModel(scale: Float = 1F) : BipedEntityModel<SystemGlitchEntity>(scale, 0F, 64, 64)
+class SystemGlitchModel(part: ModelPart) : BipedEntityModel<SystemGlitchEntity>(part)

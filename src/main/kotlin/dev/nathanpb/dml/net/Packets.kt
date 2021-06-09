@@ -25,8 +25,8 @@ import dev.nathanpb.dml.net.consumers.SoulVisionRequestedPacketConsumer
 import dev.nathanpb.dml.net.consumers.TeleportEffectRequestedPacketConsumer
 import dev.nathanpb.dml.net.consumers.client.FlightBurnoutManagerUpdatePacketConsumer
 import dev.nathanpb.dml.net.consumers.client.UndyingCooldownUpdatePacketConsumer
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 
 val C2S_TELEPORT_EFFECT_REQUESTED = identifier("teleport_effect_requested")
 val C2S_SOUL_VISION_REQUESTED = identifier("soul_vision_requested")
@@ -40,7 +40,7 @@ fun registerClientSidePackets() {
         S2C_FLIGHT_BURNOUT_MANAGER_UPDATE to FlightBurnoutManagerUpdatePacketConsumer(),
         S2C_UNDYING_COOLDOWN_UPDATE to UndyingCooldownUpdatePacketConsumer()
     ).forEach { (id, consumer) ->
-        ClientSidePacketRegistry.INSTANCE.register(id, consumer)
+        ClientPlayNetworking.registerGlobalReceiver(id, consumer)
     }
 }
 
@@ -50,6 +50,6 @@ fun registerServerSidePackets() {
         C2S_SOUL_VISION_REQUESTED to SoulVisionRequestedPacketConsumer(),
         C2S_MODULAR_EFFECT_TOGGLE to ModularEffectTogglePacketConsumer()
     ).forEach { (id, consumer) ->
-        ServerSidePacketRegistry.INSTANCE.register(id, consumer)
+        ServerPlayNetworking.registerGlobalReceiver(id, consumer)
     }
 }

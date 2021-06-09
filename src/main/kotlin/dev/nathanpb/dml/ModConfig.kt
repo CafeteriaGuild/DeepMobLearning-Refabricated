@@ -19,19 +19,12 @@
 
 package dev.nathanpb.dml
 
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.AutoConfig
 import me.shedaniel.autoconfig.ConfigData
 import me.shedaniel.autoconfig.annotation.Config
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer
+import me.shedaniel.autoconfig.annotation.ConfigEntry
 import kotlin.math.max
 import kotlin.math.min
 
-
-fun registerConfigs() {
-    AutoConfig.register(ModConfig::class.java, ::GsonConfigSerializer)
-    config = AutoConfig.getConfigHolder(ModConfig::class.java).config
-}
 
 @Config(name = MOD_ID)
 class ModConfig : ConfigData {

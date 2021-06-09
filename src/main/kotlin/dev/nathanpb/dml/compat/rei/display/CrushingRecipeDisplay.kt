@@ -20,26 +20,27 @@
 package dev.nathanpb.dml.compat.rei.display
 
 import dev.nathanpb.dml.recipe.CrushingRecipe
-import me.shedaniel.rei.api.EntryStack
-import me.shedaniel.rei.api.RecipeDisplay
+import me.shedaniel.rei.api.common.category.CategoryIdentifier
+import me.shedaniel.rei.api.common.display.Display
+import me.shedaniel.rei.api.common.entry.EntryIngredient
+import me.shedaniel.rei.api.common.util.EntryIngredients
 import net.minecraft.util.Identifier
 
 class CrushingRecipeDisplay(
-    recipe: CrushingRecipe,
+    private val recipe: CrushingRecipe,
     private val category: Identifier
-) : RecipeDisplay {
+) : Display {
 
-    private val output = mutableListOf(EntryStack.create(recipe.output)).toMutableList()
 
-    private val input = mutableListOf(
-        recipe.input.matchingStacksClient.map(EntryStack::create).toMutableList(),
-        mutableListOf(EntryStack.create(recipe.block.asItem()))
-    )
+    override fun getCategoryIdentifier(): CategoryIdentifier<CrushingRecipeDisplay> = CategoryIdentifier.of(category)
 
-    override fun getRecipeCategory() = category
+    override fun getInputEntries(): MutableList<EntryIngredient> {
+        return (
+            recipe.input.matchingStacksClient.map(EntryIngredients::of)
+                + arrayOf(EntryIngredients.of(recipe.block))
+        ).toMutableList()
+    }
 
-    override fun getInputEntries() = input
-
-    override fun getOutputEntries() = output
+    override fun getOutputEntries() = mutableListOf(EntryIngredients.of(recipe.output))
 
 }
