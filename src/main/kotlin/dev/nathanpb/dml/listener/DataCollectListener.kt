@@ -21,33 +21,35 @@ package dev.nathanpb.dml.listener
 
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.dataModel
-import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemDeepLearner
 import dev.nathanpb.dml.item.deepLearnerInventory
+import dev.nathanpb.dml.utils.firstOrNullMapping
 import dev.nathanpb.dml.utils.hotbar
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
+import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 
-class DataCollectListener : LivingEntityDieCallback {
-    override fun onDeath(entity: LivingEntity, damageSource: DamageSource?) {
-        if (entity.world?.isClient == false) {
-            (damageSource?.attacker as? PlayerEntity)?.let { player ->
-                (player.inventory.hotbar() + player.offHandStack).filter {
-                    it.item is ItemDeepLearner
-                }.map {
-                    it.deepLearnerInventory.filter { dlStack ->
-                        dlStack.item is ItemDataModel
-                    }.map { dlStack ->
-                        dlStack.dataModel
-                    }
-                }.flatten().firstOrNull {
-                    it.category?.tag?.contains(entity.type) ?: false && !it.tier().isMaxTier()
-                }?.let {
-                    it.dataAmount += config.dataCollection.baseDataGainPerKill
-                }
-            }
+class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity {
+
+    // TODO untested code, check if this even work
+    override fun afterKilledOtherEntity(world: ServerWorld, player: Entity, entity: LivingEntity) {
+        if (player !is ServerPlayerEntity) {
+            return
         }
+
+        (player.inventory.hotbar() + player.offHandStack)
+            .filter { it.item is ItemDeepLearner }
+            .map { it.deepLearnerInventory }
+            .flatten()
+            .filter { it.item is ItemDataModel }
+            .firstOrNullMapping(
+                map = { it.dataModel },
+                accept = { it.category?.tag?.contains(entity.type) ?: false && !it.tier().isMaxTier() }
+            )?.let {
+                it.dataAmount += config.dataCollection.baseDataGainPerKill
+            }
     }
 }

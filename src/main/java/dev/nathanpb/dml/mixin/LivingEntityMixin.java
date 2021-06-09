@@ -26,7 +26,6 @@ import dev.nathanpb.dml.armor.modular.effects.RotResistanceEffect;
 import dev.nathanpb.dml.armor.modular.effects.UndyingEffect;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
-import dev.nathanpb.dml.event.LivingEntityDieCallback;
 import dev.nathanpb.dml.event.context.EventsKt;
 import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
@@ -51,11 +50,6 @@ import java.util.stream.StreamSupport;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
     boolean dmlRefIsInREIScreen = false;
-
-    @Inject(at = @At("HEAD"), method = "onDeath")
-    public void onDeath(DamageSource source, CallbackInfo ci) {
-        Safer.run(() -> LivingEntityDieCallback.EVENT.invoker().onDeath((LivingEntity) (Object) this, source));
-    }
 
     @Inject(at = @At("HEAD"), method = "getMaxHealth", cancellable = true)
     public void getMaxHealth(CallbackInfoReturnable<Float> cir) {

@@ -28,7 +28,6 @@ import dev.nathanpb.dml.entity.effect.registerStatusEffects
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportCallback
-import dev.nathanpb.dml.event.LivingEntityDieCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
 import dev.nathanpb.dml.gui.registerGuis
 import dev.nathanpb.dml.item.registerItems
@@ -43,6 +42,7 @@ import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.loader.api.FabricLoader
@@ -98,7 +98,7 @@ fun init() {
     registerScreenHandlers()
     registerEntityTypes()
     registerStatusEffects()
-    LivingEntityDieCallback.EVENT.register(DataCollectListener())
+    ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(DataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
         AttackBlockCallback.EVENT.register(this)
