@@ -27,8 +27,8 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.gui.screen.handler.ModularArmorScreenHandlerFactory
 import dev.nathanpb.dml.mixin.IArmorItemMixin
-import dev.nathanpb.dml.screen.handler.ModularArmorScreenHandlerFactory
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity

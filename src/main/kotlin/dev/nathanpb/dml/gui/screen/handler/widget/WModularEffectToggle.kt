@@ -17,32 +17,15 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen.handler.slot
+package dev.nathanpb.dml.gui.screen.handler.widget
 
-import dev.nathanpb.dml.data.DataModelData
-import dev.nathanpb.dml.data.dataModel
-import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.utils.InputRestrictedSlot
-import net.minecraft.inventory.Inventory
+import dev.nathanpb.dml.armor.modular.core.ModularEffect
+import io.github.cottonmc.cotton.gui.widget.WToggleButton
+import net.minecraft.text.LiteralText
+import kotlin.properties.Delegates
 
-enum class DataModelSlotPolicy {
-    ALL,
-    BOUND,
-    UNBOUND;
-
-    fun assert(data: DataModelData) = when(this) {
-        BOUND -> data.category != null
-        UNBOUND -> data.category == null
-        else -> true
+class WModularEffectToggle : WToggleButton() {
+    var effect by Delegates.observable<ModularEffect<*>?>(null) { _, _, value ->
+        setLabel(value?.name ?: LiteralText(""))
     }
 }
-
-class DataModelSlot (
-    inventory: Inventory,
-    slot: Int,
-    x: Int,
-    y: Int,
-    policy: DataModelSlotPolicy = DataModelSlotPolicy.ALL
-) : InputRestrictedSlot(inventory, slot, x, y, {
-    it?.item is ItemDataModel && policy.assert(it.dataModel)
-})

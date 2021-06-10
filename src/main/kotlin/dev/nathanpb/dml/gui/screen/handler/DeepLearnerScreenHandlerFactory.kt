@@ -17,31 +17,30 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen.handler
+package dev.nathanpb.dml.gui.screen.handler
 
-import dev.nathanpb.dml.block.BLOCK_MATTER_CONDENSER
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.item.Item
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.TranslatableText
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.Hand
 
-class MatterCondenserScreenHandlerFactory (
-    private val pos: BlockPos,
-    private val handlerFactory: (Int, PlayerInventory, ScreenHandlerContext)-> ScreenHandler
+class DeepLearnerScreenHandlerFactory (
+    private val hand: Hand,
+    private val item: Item
 ) : ExtendedScreenHandlerFactory {
 
-    override fun getDisplayName() = TranslatableText(BLOCK_MATTER_CONDENSER.translationKey)
+    override fun getDisplayName() = TranslatableText(item.translationKey)
 
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
-        return handlerFactory(syncId, inv, ScreenHandlerContext.create(inv.player.world, pos))
+        return DeepLearnerScreenHandler(syncId, inv, hand)
     }
 
     override fun writeScreenOpeningData(player: ServerPlayerEntity?, buf: PacketByteBuf?) {
-        buf?.writeBlockPos(pos)
+        buf?.writeInt(hand.ordinal)
     }
 }

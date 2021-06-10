@@ -17,25 +17,30 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.item
+package dev.nathanpb.dml.gui.screen.handler
 
-import dev.nathanpb.dml.gui.screen.handler.DeepLearnerScreenHandlerFactory
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.world.World
 
-class ItemDeepLearner : Item(settings().maxCount(1)) {
+class ModularArmorScreenHandlerFactory (
+    private val hand: Hand,
+    private val item: Item
+) : ExtendedScreenHandlerFactory {
 
-    override fun use(world: World?, player: PlayerEntity?, hand: Hand): TypedActionResult<ItemStack> {
-        (player as? ServerPlayerEntity)?.let {
-            player.openHandledScreen(
-                DeepLearnerScreenHandlerFactory(hand, this)
-            )
-        }
-        return super.use(world, player, hand)
+    override fun getDisplayName() = TranslatableText(item.translationKey)
+
+    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
+        return ModularArmorScreenHandler(syncId, inv, hand)
+    }
+
+    override fun writeScreenOpeningData(player: ServerPlayerEntity?, buf: PacketByteBuf?) {
+        buf?.writeInt(hand.ordinal)
     }
 }

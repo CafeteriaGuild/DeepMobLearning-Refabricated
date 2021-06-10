@@ -20,8 +20,8 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityLootFabricator
-import dev.nathanpb.dml.screen.handler.LootFabricatorHandler
-import dev.nathanpb.dml.screen.handler.LootFabricatorScreenHandlerFactory
+import dev.nathanpb.dml.gui.screen.handler.LootFabricatorHandler
+import dev.nathanpb.dml.gui.screen.handler.LootFabricatorScreenHandlerFactory
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity

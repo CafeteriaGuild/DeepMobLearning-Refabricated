@@ -8,6 +8,11 @@
 
 package dev.nathanpb.dml.utils
 
+import kotlin.math.abs
+
+// https://stackoverflow.com/a/62614583/9893963
+fun Iterable<Int>.closestValue(value: Int, default: Int = 0) = minByOrNull { abs(value - it) } ?: default
+
 fun <T, R> Iterable<T>.firstNonNullMapping(map: (T) -> R?): R? {
     for (element in this) {
         return map(element) ?: continue

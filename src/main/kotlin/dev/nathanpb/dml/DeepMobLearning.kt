@@ -29,7 +29,8 @@ import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportCallback
 import dev.nathanpb.dml.event.WorldExplosionCallback
-import dev.nathanpb.dml.gui.registerGuis
+import dev.nathanpb.dml.gui.screen.handler.registerScreenHandlers
+import dev.nathanpb.dml.gui.screen.registerScreens
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
@@ -37,9 +38,6 @@ import dev.nathanpb.dml.net.registerClientSidePackets
 import dev.nathanpb.dml.net.registerServerSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
-import dev.nathanpb.dml.screen.handler.registerContainerTypes
-import dev.nathanpb.dml.screen.handler.registerScreenHandlers
-import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
@@ -52,11 +50,10 @@ import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files
 
-lateinit var config: ModConfig
 const val MOD_ID = "dml-refabricated"
 val LOGGER = LogManager.getLogger("Deep Mob Learning: Refabricated")
 
-val CONFIG: ModConfig by lazy {
+val config: ModConfig by lazy {
     val parser = JsonParser()
     val gson = GsonBuilder().setPrettyPrinting().create()
     val configFile = File("${FabricLoader.getInstance().configDir}${File.separator}$MOD_ID.json")
@@ -91,7 +88,6 @@ fun init() {
     registerItems()
     registerBlocks()
     registerBlockEntityTypes()
-    registerContainerTypes()
     registerRecipeSerializers()
     registerRecipeTypes()
     registerServerSidePackets()
@@ -113,7 +109,6 @@ fun init() {
 
 @Suppress("unused")
 fun initClient() {
-    registerGuis()
     registerScreens()
     registerEntityRenderer()
     registerKeybindings()

@@ -20,8 +20,8 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityMatterCondenser
-import dev.nathanpb.dml.screen.handler.MatterCondenserHandler
-import dev.nathanpb.dml.screen.handler.MatterCondenserScreenHandlerFactory
+import dev.nathanpb.dml.gui.screen.handler.MatterCondenserHandler
+import dev.nathanpb.dml.gui.screen.handler.MatterCondenserScreenHandlerFactory
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity

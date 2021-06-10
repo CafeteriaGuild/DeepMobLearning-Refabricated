@@ -17,15 +17,15 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen.handler
+package dev.nathanpb.dml.gui.screen.handler
 
 import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.data.dataModel
+import dev.nathanpb.dml.gui.screen.handler.widget.WModularEffectToggle
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.net.C2S_MODULAR_EFFECT_TOGGLE
-import dev.nathanpb.dml.screen.handler.widget.WModularEffectToggle
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel

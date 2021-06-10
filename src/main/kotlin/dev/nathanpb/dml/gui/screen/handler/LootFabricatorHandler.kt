@@ -17,26 +17,25 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen.handler
+package dev.nathanpb.dml.gui.screen.handler
 
-import dev.nathanpb.dml.data.ModularArmorData
-import dev.nathanpb.dml.item.ItemModularGlitchArmor
-import dev.nathanpb.dml.item.ItemPristineMatter
+import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.data.Texture
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
 
-class MatterCondenserHandler(
+class LootFabricatorHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
     ctx: ScreenHandlerContext
 ) : SyncedGuiDescription(
-    HANDLER_MATTER_CONDENSER,
+    HANDLER_LOOT_FABRICATOR,
     syncId, playerInventory,
     getBlockInventory(ctx),
     getBlockPropertyDelegate(ctx)
@@ -45,33 +44,25 @@ class MatterCondenserHandler(
         val root = WGridPanel()
         setRootPanel(root)
 
-        val slots = WGridPanel()
-        val armorSlot = WItemSlot.of(blockInventory, 0).setFilter {
-            it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
+        val inputSlot = WItemSlot.of(blockInventory, 0).setFilter { stack ->
+            world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
+                .any { it.input.test(stack) }
+        }
+        root.add(inputSlot, 1, 2)
+
+        val progressBar = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
+        progressBar.setSize(1, 128)
+        root.add(progressBar, 3, 1, 1, 3)
+
+
+        (0 until 9).forEach {
+            val x = (it % 3)
+            val y = (it / 3)
+            val slot = WItemSlot.of(blockInventory, it + 1).setFilter { false }
+            root.add(slot, x  + 5, y + 1)
         }
 
-        slots.add(armorSlot, 2, 2)
-
-        val matterSlots = (1..6).map {
-            WItemSlot.of(blockInventory, it).setFilter { stack ->
-                stack.item is ItemPristineMatter
-            }
-        }
-
-        slots.add(matterSlots[0], 2, 0)
-        slots.add(matterSlots[1], 0, 1)
-        slots.add(matterSlots[2], 4, 1)
-        slots.add(matterSlots[3], 0, 3)
-        slots.add(matterSlots[4], 4, 3)
-        slots.add(matterSlots[5], 2, 4)
-
-        root.add(slots, 2, 1)
-        root.add(this.createPlayerInventoryPanel(), 0, 6)
-
-        val progressBar1 = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
-        val progressBar2 = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
-        root.add(progressBar1, 0, 1, 1, 5)
-        root.add(progressBar2, 8, 1, 1, 5)
+        root.add(this.createPlayerInventoryPanel(), 0, 5)
 
         root.validate(this)
 
@@ -79,4 +70,6 @@ class MatterCondenserHandler(
             sendContentUpdates()
         }
     }
+
+    override fun canUse(entity: PlayerEntity?) = true
 }

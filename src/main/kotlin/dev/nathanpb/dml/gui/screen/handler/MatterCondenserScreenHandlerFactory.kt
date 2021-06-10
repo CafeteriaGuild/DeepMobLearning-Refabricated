@@ -17,9 +17,9 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen.handler
+package dev.nathanpb.dml.gui.screen.handler
 
-import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
+import dev.nathanpb.dml.block.BLOCK_MATTER_CONDENSER
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -30,19 +30,18 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.math.BlockPos
 
-class LootFabricatorScreenHandlerFactory(
-   private val pos: BlockPos,
-   private val handlerFactory: (Int, PlayerInventory, ScreenHandlerContext)->ScreenHandler
-   ) : ExtendedScreenHandlerFactory {
+class MatterCondenserScreenHandlerFactory (
+    private val pos: BlockPos,
+    private val handlerFactory: (Int, PlayerInventory, ScreenHandlerContext)-> ScreenHandler
+) : ExtendedScreenHandlerFactory {
 
-    override fun getDisplayName() = TranslatableText(BLOCK_LOOT_FABRICATOR.translationKey)//TranslatableText("block.dml-refabricated.loot_fabricator")
+    override fun getDisplayName() = TranslatableText(BLOCK_MATTER_CONDENSER.translationKey)
 
-    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
+    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
         return handlerFactory(syncId, inv, ScreenHandlerContext.create(inv.player.world, pos))
     }
 
     override fun writeScreenOpeningData(player: ServerPlayerEntity?, buf: PacketByteBuf?) {
         buf?.writeBlockPos(pos)
     }
-
 }

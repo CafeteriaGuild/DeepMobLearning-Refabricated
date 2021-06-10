@@ -17,7 +17,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen.handler
+package dev.nathanpb.dml.gui.screen.handler
 
 import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
@@ -31,6 +31,7 @@ import net.minecraft.util.Identifier
 val HANDLER_LOOT_FABRICATOR = registerForBlockEntity(identifier("loot_fabricator"), ::LootFabricatorHandler)
 val HANDLER_MATTER_CONDENSER = registerForBlockEntity(identifier("matter_condenser"), ::MatterCondenserHandler)
 val HANDLER_MODULAR_ARMOR = registerForItemStack(identifier("modular_armor"), ::ModularArmorScreenHandler)
+val HANDLER_DEEP_LEARNER = registerForItemStack(identifier("deep_learner"), ::DeepLearnerScreenHandler)
 
 private fun <T: ScreenHandler>registerForBlockEntity(
     id: Identifier,
@@ -54,4 +55,5 @@ fun registerScreenHandlers() {
     HANDLER_LOOT_FABRICATOR
     HANDLER_MATTER_CONDENSER
     HANDLER_MODULAR_ARMOR
+    HANDLER_DEEP_LEARNER
 }

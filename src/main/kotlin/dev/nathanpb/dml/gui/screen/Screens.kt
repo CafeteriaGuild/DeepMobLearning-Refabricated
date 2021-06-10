@@ -17,23 +17,29 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.screen
+package dev.nathanpb.dml.gui.screen
 
-import dev.nathanpb.dml.screen.handler.HANDLER_LOOT_FABRICATOR
-import dev.nathanpb.dml.screen.handler.HANDLER_MATTER_CONDENSER
-import dev.nathanpb.dml.screen.handler.HANDLER_MODULAR_ARMOR
-import dev.nathanpb.dml.screen.handler.ModularArmorScreenHandler
+import dev.nathanpb.dml.gui.screen.handler.HANDLER_DEEP_LEARNER
+import dev.nathanpb.dml.gui.screen.handler.HANDLER_LOOT_FABRICATOR
+import dev.nathanpb.dml.gui.screen.handler.HANDLER_MATTER_CONDENSER
+import dev.nathanpb.dml.gui.screen.handler.HANDLER_MODULAR_ARMOR
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 
 fun registerScreens() {
-    ScreenRegistry.register(HANDLER_LOOT_FABRICATOR) {
-        lootFabricatorHandler, playerInventory, text -> LootFabricatorScreen(lootFabricatorHandler, playerInventory.player, text)
+    ScreenRegistry.register(HANDLER_LOOT_FABRICATOR) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
     }
-    ScreenRegistry.register(HANDLER_MATTER_CONDENSER) {
-        handler, playerInventory, text -> MatterCondenserScreen(handler, playerInventory.player, text)
+
+    ScreenRegistry.register(HANDLER_MATTER_CONDENSER) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
     }
-    ScreenRegistry.register(HANDLER_MODULAR_ARMOR) {
-        handler, inventory, title -> CottonInventoryScreen<ModularArmorScreenHandler>(handler, inventory.player, title)
+
+    ScreenRegistry.register(HANDLER_MODULAR_ARMOR) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
+    }
+
+    ScreenRegistry.register(HANDLER_DEEP_LEARNER) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
     }
 }

@@ -20,10 +20,10 @@
 package dev.nathanpb.dml.listener
 
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemDeepLearner
-import dev.nathanpb.dml.item.deepLearnerInventory
 import dev.nathanpb.dml.utils.firstOrNullMapping
 import dev.nathanpb.dml.utils.hotbar
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
@@ -42,7 +42,7 @@ class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity {
 
         (player.inventory.hotbar() + player.offHandStack)
             .filter { it.item is ItemDeepLearner }
-            .map { it.deepLearnerInventory }
+            .map { DeepLearnerData(it).inventory }
             .flatten()
             .filter { it.item is ItemDataModel }
             .firstOrNullMapping(
