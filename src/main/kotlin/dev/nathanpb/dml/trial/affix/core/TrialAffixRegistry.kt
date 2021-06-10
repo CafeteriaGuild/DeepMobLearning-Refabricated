@@ -21,7 +21,6 @@ package dev.nathanpb.dml.trial.affix.core
 
 import dev.nathanpb.dml.event.TrialWaveSpawnCallback
 import dev.nathanpb.dml.trial.affix.*
-import dev.nathanpb.dml.utils.randomOrNull
 import net.minecraft.util.Identifier
 import org.jetbrains.annotations.ApiStatus
 

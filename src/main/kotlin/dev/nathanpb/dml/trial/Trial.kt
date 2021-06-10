@@ -33,10 +33,7 @@ import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.utils.*
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.SpawnReason
+import net.minecraft.entity.*
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.mob.HostileEntity
@@ -46,7 +43,6 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.TranslatableText
-import net.minecraft.util.Tickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*
@@ -58,7 +54,7 @@ class Trial (
     val recipe: TrialKeystoneRecipe,
     val players: HashSet<UUID>,
     val affixes: List<TrialAffix>
-) : Tickable {
+) {
 
     constructor(
         keystone: BlockEntityTrialKeystone,
@@ -119,7 +115,7 @@ class Trial (
         it.isVisible = false
     }
 
-    override fun tick() {
+    fun tick() {
         if (!world.isClient && state != TrialState.NOT_STARTED) {
             if (state in arrayOf(TrialState.WARMUP, TrialState.RUNNING)) {
                 // Resyncs which players will have the bossbar every second
@@ -227,7 +223,7 @@ class Trial (
             bar.isVisible = false
             world.runningTrials -= this
             state = TrialState.FINISHED
-            systemGlitch?.remove()
+            systemGlitch?.remove(Entity.RemovalReason.DISCARDED)
             TrialStateChanged.invoker().invoke(this)
             TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)

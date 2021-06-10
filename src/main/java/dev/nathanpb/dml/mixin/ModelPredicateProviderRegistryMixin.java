@@ -17,20 +17,11 @@ package dev.nathanpb.dml.mixin;/*
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.armor.modular.effects.ArcheryEffect;
-import dev.nathanpb.safer.Safer;
 import net.minecraft.client.item.ModelPredicateProvider;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,12 +29,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ModelPredicateProviderRegistry.class)
 public class ModelPredicateProviderRegistryMixin {
 
-    @Shadow
+    // @Shadow
     private static void register(Item item, Identifier id, ModelPredicateProvider provider) {}
 
     @SuppressWarnings("all")
     @Inject(at = @At("RETURN"), method = "<clinit>")
     private static void modifyCrossbowModel(CallbackInfo ci) {
+        /*
+        fuck this shit I'm out
+        // TODO redo this
         register(Items.CROSSBOW, new Identifier("pull"), (ItemStack stack, ClientWorld world, LivingEntity entity) -> {
             return Safer.run(0.0F, () -> {
                 if (entity == null) {
@@ -80,6 +74,6 @@ public class ModelPredicateProviderRegistryMixin {
                 }
                 return 0F;
             });
-        });
+        });*/
     }
 }
