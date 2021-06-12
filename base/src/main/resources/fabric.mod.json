@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "dml-refabricated-base",
   "version": "${version}",
-  "name": "Deep Mob Learning: Refabricated - Base",
+  "name": "DML: Refabricated - Base",
   "description": "Base of the Deep Mob Learning: Refabricated mod",
   "authors": ["NathanPB", "IterationFunk"],
   "contact": {
@@ -13,15 +13,16 @@
   "environment": "*",
   "entrypoints": {
     "main": ["dev.nathanpb.dml.DeepMobLearningKt::init"],
-    "client": ["dev.nathanpb.dml.DeepMobLearningKt::initClient"],
-    "rei_plugins": ["dev.nathanpb.dml.compat.rei.ReiPlugin"]
+    "client": ["dev.nathanpb.dml.DeepMobLearningKt::initClient"]
   },
-  "mixins": ["mixins.dml-refabricated-base.json"],
+  "mixins": [],
   "depends": {
-    "dml-refabricated": "${version}",
-    "ktdatataglib": "1.5.2"
+    "dml-refabricated": "${version}"
   },
-  "suggests": {
-    "roughlyenoughitems": ">=6.0.247-alpha"
+  "suggests": {},
+  "custom": {
+    "modmenu": {
+      "parent": "dml-refabricated"
+    }
   }
 }

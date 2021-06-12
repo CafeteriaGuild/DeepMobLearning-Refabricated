@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "dev.nathanpb.dml.compat.rei.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "LivingEntityMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

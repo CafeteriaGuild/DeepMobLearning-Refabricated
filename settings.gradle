@@ -16,4 +16,5 @@ pluginManagement {
 }
 
 include 'base'
+include 'rei-compat'
 

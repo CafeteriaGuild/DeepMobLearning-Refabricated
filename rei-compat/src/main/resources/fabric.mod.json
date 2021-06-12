@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "dml-refabricated-rei",
+  "version": "${version}",
+  "name": "DML: Refabricated - REI Integration",
+  "description": "REI integration plugin for the DML: Refabricated module",
+  "authors": ["NathanPB"],
+  "contact": {
+    "sources": "https://github.com/NathanPB/DeepMobLearning-Refabricated.git",
+    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues/"
+  },
+  "license": "LGPL-v3",
+  "environment": "*",
+  "entrypoints": {
+    "rei_plugins": ["dev.nathanpb.dml.compat.rei.ReiPlugin"]
+  },
+  "mixins": ["mixins.dml-refabricated-rei.json"],
+  "depends": {
+    "dml-refabricated": "${version}",
+    "ktdatataglib": "1.5.2"
+  },
+  "suggests": {
+    "roughlyenoughitems": ">=6.0.247-alpha"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "dml-refabricated"
+    }
+  }
+}

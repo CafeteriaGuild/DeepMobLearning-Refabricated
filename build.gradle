@@ -17,14 +17,15 @@ minecraft {
 
 
 repositories {
-    maven { url = "https://maven.fabricmc.net/" }
-    maven { url = "https://jitpack.io/" }
     maven { url = "https://maven.terraformersmc.com/releases/" }
 }
 
 dependencies {
     api project("base")
     include project("base")
+
+    api project("rei-compat")
+    include project("rei-compat")
 
     modRuntime "com.terraformersmc:modmenu:2.0.0-beta.7"
 }
@@ -36,6 +37,8 @@ allprojects {
     version = project.mod_version
 
     repositories {
+        maven { url = uri("https://jitpack.io/") }
+        maven { url = "https://maven.fabricmc.net/" }
     }
 
     dependencies {
@@ -44,6 +47,9 @@ allprojects {
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
+        modApi("com.github.NathanPB:KtDataTagLib:1.5.2")
+        include("com.github.NathanPB:KtDataTagLib:1.5.2")
     }
 
     jar {

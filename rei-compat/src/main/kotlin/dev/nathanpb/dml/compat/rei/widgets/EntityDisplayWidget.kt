@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.compat.rei.widgets
 
-import dev.nathanpb.dml.utils.isInReiScreen
+import dev.nathanpb.dml.compat.rei.isInReiScreen
 import net.minecraft.client.gui.Drawable
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.ingame.InventoryScreen

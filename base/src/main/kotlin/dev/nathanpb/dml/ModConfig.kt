@@ -19,62 +19,19 @@
 
 package dev.nathanpb.dml
 
-import me.shedaniel.autoconfig.ConfigData
-import me.shedaniel.autoconfig.annotation.Config
-import me.shedaniel.autoconfig.annotation.ConfigEntry
-import kotlin.math.max
-import kotlin.math.min
+class ModConfig {
 
-
-@Config(name = MOD_ID)
-class ModConfig : ConfigData {
-
-    @ConfigEntry.Category("trial")
-    @ConfigEntry.Gui.TransitiveObject
     var trial = Trial()
-
-    @ConfigEntry.Category("loot_fabricator")
-    @ConfigEntry.Gui.TransitiveObject
     var lootFabricator = LootFabricator()
-
-    @ConfigEntry.Category("data_model")
-    @ConfigEntry.Gui.TransitiveObject
     var dataModel = DataModel()
-
-    @ConfigEntry.Category("system_glitch")
-    @ConfigEntry.Gui.TransitiveObject
     var systemGlitch = SystemGlitch()
-
-    @ConfigEntry.Category("data_collection")
-    @ConfigEntry.Gui.TransitiveObject
     var dataCollection = DataCollection()
-
-
-    @ConfigEntry.Category("affix")
-    @ConfigEntry.Gui.TransitiveObject
     var affix = TrialAffix()
-
-    @ConfigEntry.Category("matter_condenser")
-    @ConfigEntry.Gui.TransitiveObject
     var matterCondenser = MatterCondenser()
-
-    @ConfigEntry.Category("glitch_armor")
-    @ConfigEntry.Gui.TransitiveObject
     var glitchArmor = GlitchArmor()
-
-    override fun validatePostLoad() {
-        trial.validatePostLoad()
-        lootFabricator.validatePostLoad()
-        dataModel.validatePostLoad()
-        affix.validatePostLoad()
-        matterCondenser.validatePostLoad()
-        glitchArmor.validatePostLoad()
-    }
-
 }
 
-@Config(name = "trial")
-class Trial : ConfigData {
+class Trial {
     var maxMobsInArena = 8
     var postEndTimeout = 60
     var arenaRadius = 12
@@ -90,26 +47,9 @@ class Trial : ConfigData {
 
     var trialKeyConsume = true
     var trialKeyReturnIfSucceed = true
-
-    override fun validatePostLoad() {
-        maxTime = max(0, maxTime)
-        warmupTime = min(maxTime, warmupTime)
-        if (maxMobsInArena < 0) {
-            maxMobsInArena = 0
-        }
-
-        if (postEndTimeout < 0) {
-            postEndTimeout = 0
-        }
-
-        if (arenaRadius < 1) {
-            arenaRadius = 1
-        }
-    }
 }
 
-@Config(name = "affix")
-class TrialAffix : ConfigData {
+class TrialAffix {
     var maxAffixesInKey = 3
     var enableMobStrength = true
     var enableMobSpeed = true
@@ -119,88 +59,46 @@ class TrialAffix : ConfigData {
 
     var thunderstormBoltChance = .05F
     var partyPoisonChance = .005F
-
-    override fun validatePostLoad() {
-        maxAffixesInKey = max(0, maxAffixesInKey)
-    }
 }
 
-@Config(name = "loot_fabricator")
-class LootFabricator : ConfigData {
+
+class LootFabricator {
     var pristineExchangeRate = 16
     var processTime = 200
-
-    override fun validatePostLoad() {
-        if (pristineExchangeRate < 0) {
-            pristineExchangeRate = 0
-        }
-
-        if (processTime < 0) {
-            processTime = 0
-        }
-    }
 }
 
-@Config(name = "data_model")
-class DataModel : ConfigData {
+
+class DataModel {
 
     var basicDataRequired = 8
     var advancedDataRequired = 16
     var superiorDataRequired = 32
     var selfAwareDataRequired = 64
-
-    override fun validatePostLoad() {
-        if (basicDataRequired <= 0) {
-            basicDataRequired = 1
-        }
-        if (advancedDataRequired < basicDataRequired) {
-            advancedDataRequired = basicDataRequired
-        }
-        if (superiorDataRequired < advancedDataRequired) {
-            superiorDataRequired = basicDataRequired
-        }
-        if (selfAwareDataRequired < advancedDataRequired) {
-            selfAwareDataRequired = advancedDataRequired
-        }
-    }
 }
 
-@Config(name = "system_glitch")
-class SystemGlitch : ConfigData {
+
+class SystemGlitch {
 
     var teleportChance = 0.05F
     var teleportMinDistance = 5
     var teleportDelay = 100
     var teleportAroundPlayerRadius = 2
 
-    @ConfigEntry.Gui.Tooltip
     var damageLimiter = 20F
-
-    override fun validatePostLoad() {
-        teleportChance = max(0F, min(1F, teleportChance))
-        teleportMinDistance = max(0, teleportMinDistance)
-        teleportDelay = max(0, teleportDelay)
-        teleportAroundPlayerRadius = max(1, teleportAroundPlayerRadius)
-        damageLimiter = max(0F, damageLimiter)
-    }
 }
 
-@Config(name = "data_collection")
-class DataCollection : ConfigData {
+
+class DataCollection {
     var baseDataGainPerKill = 1
 }
 
-@Config(name = "matter_condenser")
-class MatterCondenser : ConfigData {
-    var processTime = 40
 
-    override fun validatePostLoad() {
-        processTime = max(1, processTime)
-    }
+class MatterCondenser {
+    var processTime = 40
 }
 
-@Config(name = "glitch_armor")
-class GlitchArmor : ConfigData {
+
+class GlitchArmor {
     var dataAmountToBasic = 32
     var dataAmountToAdvanced = 96
     var dataAmountToSuperior = 192
@@ -209,19 +107,10 @@ class GlitchArmor : ConfigData {
     var maxFlightTicksPerLevel = 30 * 20
     var undyingCooldownTime = 36000
 
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     val costs = GlitchArmorDataConsume()
-
-    override fun validatePostLoad() {
-        dataAmountToBasic = max(0, dataAmountToBasic)
-        dataAmountToAdvanced = max(dataAmountToBasic, dataAmountToAdvanced)
-        dataAmountToSuperior = max(dataAmountToAdvanced, dataAmountToSuperior)
-        dataAmountToSelfAware = max(dataAmountToSuperior, dataAmountToSelfAware)
-    }
 }
 
-class GlitchArmorDataConsume : ConfigData {
+class GlitchArmorDataConsume {
     var fireProtection = 1F
     var autoExtinguish = 4F
     var featherFalling = 3F

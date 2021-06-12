@@ -20,7 +20,6 @@ package dev.nathanpb.dml.mixin;
  */
 
 import com.mojang.datafixers.util.Pair;
-import dev.nathanpb.dml.accessor.ILivingEntityReiStateAccessor;
 import dev.nathanpb.dml.armor.modular.TargetCancellationEffect;
 import dev.nathanpb.dml.armor.modular.effects.RotResistanceEffect;
 import dev.nathanpb.dml.armor.modular.effects.UndyingEffect;
@@ -41,15 +40,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
-    boolean dmlRefIsInREIScreen = false;
+public class LivingEntityMixin {
 
     @Inject(at = @At("HEAD"), method = "getMaxHealth", cancellable = true)
     public void getMaxHealth(CallbackInfoReturnable<Float> cir) {
@@ -63,23 +60,6 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor  {
                 }
             }
         });
-    }
-
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"), method = "onEquipStack", cancellable = true)
-    public void onEquip(ItemStack stack, CallbackInfo ci) {
-        if (isDmlRefIsInReiScreen()) {
-            ci.cancel();
-        }
-    }
-
-    @Override
-    public boolean isDmlRefIsInReiScreen() {
-        return dmlRefIsInREIScreen;
-    }
-
-    @Override
-    public void setDmlRefInReiScreen(boolean flag) {
-        dmlRefIsInREIScreen = flag;
     }
 
     @ModifyVariable(
