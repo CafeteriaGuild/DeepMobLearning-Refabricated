@@ -20,17 +20,17 @@
 package dev.nathanpb.dml.utils
 
 import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.world.World
 import java.util.*
 
-fun World.getEntitiesAroundCircle(type: EntityType<*>?, pos: BlockPos, radius: Double) : List<Entity> {
+fun <T: Entity> World.getEntitiesAroundCircle(filter: TypeFilter<Entity, T>, pos: BlockPos, radius: Double) : List<T> {
     val squaredRadius = radius * radius
     val pos3d = pos.toVec3d()
-    return this.getEntitiesByType(type, Box(
+    return this.getEntitiesByType(filter, Box(
         pos.x - radius,
         pos.y - 1.0,
         pos.z - radius,

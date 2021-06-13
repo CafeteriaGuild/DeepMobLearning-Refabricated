@@ -43,6 +43,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*
@@ -280,7 +281,9 @@ class Trial (
     }
 
     fun getMonstersInArena(): List<HostileEntity> {
-        return world.getEntitiesAroundCircle(null, pos, config.trial.arenaRadius.squared().toDouble())
-            .filterIsInstance<HostileEntity>()
+        return world.getEntitiesAroundCircle(
+            TypeFilter.instanceOf(HostileEntity::class.java),
+            pos, config.trial.arenaRadius.squared().toDouble()
+        )
     }
 }

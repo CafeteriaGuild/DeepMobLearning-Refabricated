@@ -23,13 +23,14 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
+import dev.nathanpb.dml.item.ItemEmeritusHat
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.randomAround
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.toVec3d
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.goal.*
 import net.minecraft.entity.attribute.DefaultAttributeContainer
@@ -42,7 +43,6 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.min
-import kotlin.random.Random
 
 class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : HostileEntity(type, world) {
     companion object {
@@ -149,12 +149,11 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
 
     override fun cannotDespawn() = true
 
-    override fun dropEquipment(source: DamageSource?, lootingMultiplier: Int, allowDrops: Boolean) {
-        armorItems.filter {
-            it.item != ITEM_EMERITUS_HAT && Random.nextFloat() < .0666 // hope this works, i wil not test this
-        }.forEach {
-            dropStack(it)
-        }
+    override fun getDropChance(slot: EquipmentSlot?): Float {
+        return if (
+            slot == EquipmentSlot.HEAD
+            && getEquippedStack(EquipmentSlot.HEAD).item is ItemEmeritusHat
+        ) 1F else super.getDropChance(slot)
     }
 
     override fun writeCustomDataToNbt(tag: NbtCompound?) {
