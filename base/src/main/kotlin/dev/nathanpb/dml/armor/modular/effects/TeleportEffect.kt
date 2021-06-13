@@ -27,7 +27,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.TeleportEffectRequestedEvent
+import dev.nathanpb.dml.event.TeleportEffectRequestedEvent
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.net.C2S_TELEPORT_EFFECT_REQUESTED
 import dev.nathanpb.dml.utils.toVec3d

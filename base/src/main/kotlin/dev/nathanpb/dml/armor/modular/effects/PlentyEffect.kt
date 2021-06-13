@@ -27,7 +27,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerTakeHungerEvent
+import dev.nathanpb.dml.event.PlayerTakeHungerEvent
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.attribute.EntityAttributeModifier

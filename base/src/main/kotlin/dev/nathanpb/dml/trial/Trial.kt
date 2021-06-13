@@ -26,9 +26,9 @@ import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.TrialEndCallback
-import dev.nathanpb.dml.event.TrialWaveSpawnCallback
-import dev.nathanpb.dml.event.context.TrialStateChanged
+import dev.nathanpb.dml.event.TrialEndEvent
+import dev.nathanpb.dml.event.TrialStateChanged
+import dev.nathanpb.dml.event.TrialWaveSpawnEvent
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
@@ -225,7 +225,7 @@ class Trial (
             state = TrialState.FINISHED
             systemGlitch?.remove(Entity.RemovalReason.DISCARDED)
             TrialStateChanged.invoker().invoke(this)
-            TrialEndCallback.EVENT.invoker().onTrialEnd(this, reason)
+            TrialEndEvent.invoker().invoke(this, reason)
         } else throw TrialKeystoneIllegalEndException(this)
     }
 
@@ -271,7 +271,7 @@ class Trial (
                     false, false
                 )
             }.let {
-                TrialWaveSpawnCallback.EVENT.invoker().onWaveSpawned(
+                TrialWaveSpawnEvent.invoker().invoke(
                     this,
                     it.filterIsInstance<LivingEntity>()
                 )

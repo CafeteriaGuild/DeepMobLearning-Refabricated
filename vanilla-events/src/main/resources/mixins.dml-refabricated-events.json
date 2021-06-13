@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "dev.nathanpb.dml.event.vanilla.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BowItemMixin",
+    "CrossbowItemMixin",
+    "EndermanEntityMixin",
+    "HungerManagerMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "ServerWorldMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -27,7 +27,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.PlayerEntityTickEvent
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.flightBurnoutManager
 import io.github.ladysnake.pal.VanillaAbilities

@@ -29,7 +29,7 @@ import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.entity.effect.SOUL_VISION_EFFECT
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.SoulVisionEffectRequestedEvent
+import dev.nathanpb.dml.event.SoulVisionEffectRequestedEvent
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.net.C2S_SOUL_VISION_REQUESTED
 import io.netty.buffer.Unpooled

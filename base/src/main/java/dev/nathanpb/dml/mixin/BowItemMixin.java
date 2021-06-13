@@ -19,7 +19,6 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.armor.modular.effects.ArcheryEffect;
-import dev.nathanpb.dml.event.context.EventsKt;
 import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,9 +28,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
@@ -39,11 +36,6 @@ public abstract class BowItemMixin {
     @Shadow
     public static float getPullProgress(int useTicks) {
         return 0;
-    }
-
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"), method = "onStoppedUsing")
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
-        Safer.run(() -> EventsKt.getBowShotEvent().invoker().invoke(user, stack));
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BowItem;getPullProgress(I)F"), method = "onStoppedUsing")

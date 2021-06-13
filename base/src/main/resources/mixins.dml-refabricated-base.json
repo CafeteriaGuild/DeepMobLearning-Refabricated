@@ -7,8 +7,6 @@
     "CrossbowItemMixin",
     "DamageSourceMixin",
     "EndermanEntityMixin",
-    "ExplosionPreventMixin",
-    "HungerManagerMixin",
     "IArmorItemMixin",
     "ICraftingResultSlotMixin",
     "ItemStackMixin",

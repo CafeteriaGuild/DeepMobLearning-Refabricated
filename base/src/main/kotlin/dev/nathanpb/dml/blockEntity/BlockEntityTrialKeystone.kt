@@ -24,8 +24,8 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
 import dev.nathanpb.dml.entity.SystemGlitchEntity
-import dev.nathanpb.dml.event.TrialEndCallback
-import dev.nathanpb.dml.event.context.TrialStateChanged
+import dev.nathanpb.dml.event.TrialEndEvent
+import dev.nathanpb.dml.event.TrialStateChanged
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
@@ -55,7 +55,6 @@ import kotlin.random.Random
 
 class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE, pos, state),
-    TrialEndCallback,
     BlockEntityClientSerializable,
     InventoryProvider
 {
@@ -146,28 +145,27 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     private var trialToLoad: TrialData? = null
 
     init {
-        TrialEndCallback.EVENT.register(this)
+        TrialEndEvent.register { trial, reason ->
+            if (currentTrial == trial && !trial.world.isClient) {
+                currentTrial = null
+                clientTrialState = TrialState.NOT_STARTED
+
+                if (reason == TrialEndReason.SUCCESS) {
+                    internalInventory.dropAll(trial.world, pos)
+                } else {
+                    internalInventory.clear()
+                }
+
+                sync()
+            }
+        }
+
         TrialStateChanged.register {
             // Keystones do not have finished state, instead this is handled in onTrialEnd
             if (world?.isClient == false && it.state != TrialState.FINISHED) {
                 clientTrialState = it.state
                 sync()
             }
-        }
-    }
-
-    override fun onTrialEnd(trial: Trial, reason: TrialEndReason) {
-        if (currentTrial == trial && !trial.world.isClient) {
-            currentTrial = null
-            clientTrialState = TrialState.NOT_STARTED
-
-            if (reason == TrialEndReason.SUCCESS) {
-                internalInventory.dropAll(trial.world, pos)
-            } else {
-                internalInventory.clear()
-            }
-
-            sync()
         }
     }
 

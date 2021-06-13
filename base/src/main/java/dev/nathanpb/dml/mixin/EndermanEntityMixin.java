@@ -20,12 +20,10 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.armor.modular.effects.EndermenProofVisionEffect;
-import dev.nathanpb.dml.event.EndermanTeleportCallback;
 import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,19 +31,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EndermanEntity.class)
 public class EndermanEntityMixin {
-
-    @Inject(at = @At("HEAD"), method = "teleportTo(DDD)Z", cancellable = true)
-    public void teleport(double x, double y, double z, CallbackInfoReturnable<Boolean> ci) {
-        Safer.run(() -> {
-            EndermanEntity entity = (EndermanEntity) (Object) this;
-            Vec3d pos = new Vec3d(x, y, z);
-            ActionResult result = EndermanTeleportCallback.EVENT.invoker().onEndermanTeleport(entity, pos);
-            if (result == ActionResult.FAIL) {
-                ci.setReturnValue(false);
-                ci.cancel();
-            }
-        });
-    }
 
     @Inject(at = @At("RETURN"), method = "isPlayerStaring", cancellable = true)
     public void isPlayerStaring(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {

@@ -24,7 +24,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.ModularArmorData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.LivingEntityDamageContext
+import dev.nathanpb.dml.event.LivingEntityDamageContext
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource

@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.net.consumers
 
-import dev.nathanpb.dml.event.context.TeleportEffectRequestedEvent
+import dev.nathanpb.dml.event.TeleportEffectRequestedEvent
 import dev.nathanpb.dml.utils.readVec3d
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking

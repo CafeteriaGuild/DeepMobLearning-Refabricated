@@ -27,8 +27,8 @@ import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.entity.effect.registerStatusEffects
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
-import dev.nathanpb.dml.event.EndermanTeleportCallback
-import dev.nathanpb.dml.event.WorldExplosionCallback
+import dev.nathanpb.dml.event.EndermanTeleportEvent
+import dev.nathanpb.dml.event.WorldExplosionEvent
 import dev.nathanpb.dml.gui.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.gui.screen.registerScreens
 import dev.nathanpb.dml.item.registerItems
@@ -99,8 +99,8 @@ fun init() {
     TrialGriefPrevention().apply {
         AttackBlockCallback.EVENT.register(this)
         UseBlockCallback.EVENT.register(this)
-        WorldExplosionCallback.EVENT.register(this)
-        EndermanTeleportCallback.EVENT.register(this)
+        WorldExplosionEvent.register(this::explode)
+        EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
     ModularEffectRegistry.registerDefaults()

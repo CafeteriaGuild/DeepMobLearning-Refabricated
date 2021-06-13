@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.net.consumers
 
-import dev.nathanpb.dml.event.context.SoulVisionEffectRequestedEvent
+import dev.nathanpb.dml.event.SoulVisionEffectRequestedEvent
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf

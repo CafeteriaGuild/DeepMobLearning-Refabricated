@@ -23,8 +23,8 @@ import dev.nathanpb.dml.armor.modular.core.*
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.BowShotEvent
-import dev.nathanpb.dml.event.context.CrossbowReloadedEvent
+import dev.nathanpb.dml.event.BowShotEvent
+import dev.nathanpb.dml.event.CrossbowReloadedEvent
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.LivingEntity

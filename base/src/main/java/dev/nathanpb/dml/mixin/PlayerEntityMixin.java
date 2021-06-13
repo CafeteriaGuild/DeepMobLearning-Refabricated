@@ -21,17 +21,13 @@ import dev.nathanpb.dml.DeepMobLearningKt;
 import dev.nathanpb.dml.accessor.IFlightBurnoutManagerAccessor;
 import dev.nathanpb.dml.accessor.IUndyingCooldown;
 import dev.nathanpb.dml.armor.modular.cooldown.FlightBurnoutManager;
-import dev.nathanpb.dml.event.context.EventsKt;
-import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import dev.nathanpb.safer.Safer;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
@@ -48,25 +44,10 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
         return dmlRefFlightManager;
     }
 
-    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;applyEnchantmentsToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
-    private float applyDamage(DamageSource source, float amount) {
-        return Safer.run(amount, () -> {
-            PlayerEntity dis = (PlayerEntity) (Object) this;
-            return EventsKt.getLivingEntityDamageEvent()
-                    .invoker()
-                    .invoke(new LivingEntityDamageContext(dis, source, amount))
-                    .getDamage();
-        });
-    }
-
+    // TODO use the events module for this
     @Inject(at = @At("HEAD"), method = "tick")
     private void tick(CallbackInfo ci) {
-        Safer.run(() -> {
-            getDmlFlightBurnoutManager().tick();
-            EventsKt.getPlayerEntityTickEvent()
-                    .invoker()
-                    .invoke((PlayerEntity) (Object) this);
-        });
+        getDmlFlightBurnoutManager().tick();
     }
 
     @Override

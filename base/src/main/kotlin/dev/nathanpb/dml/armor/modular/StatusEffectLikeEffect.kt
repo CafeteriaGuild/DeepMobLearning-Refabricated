@@ -24,7 +24,7 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.PlayerEntityTickEvent
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier

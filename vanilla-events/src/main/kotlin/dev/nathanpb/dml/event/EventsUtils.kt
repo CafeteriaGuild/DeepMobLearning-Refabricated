@@ -1,3 +1,5 @@
+package dev.nathanpb.dml.event
+
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -16,8 +18,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-package dev.nathanpb.dml.utils
 
 import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.EventFactory

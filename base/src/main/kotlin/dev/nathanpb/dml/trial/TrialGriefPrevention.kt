@@ -20,8 +20,6 @@
 package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.event.EndermanTeleportCallback
-import dev.nathanpb.dml.event.WorldExplosionCallback
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.squared
 import dev.nathanpb.dml.utils.toBlockPos
@@ -42,12 +40,7 @@ import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
 import net.minecraft.world.explosion.ExplosionBehavior
 
-class TrialGriefPrevention :
-    AttackBlockCallback,
-    UseBlockCallback,
-    WorldExplosionCallback,
-    EndermanTeleportCallback
-{
+class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
 
     companion object {
         fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
@@ -85,7 +78,7 @@ class TrialGriefPrevention :
         return ActionResult.PASS
     }
 
-    override fun explode(
+    fun explode(
         world: World,
         entity: Entity?,
         damageSource: DamageSource?,
@@ -107,7 +100,7 @@ class TrialGriefPrevention :
         return ActionResult.PASS
     }
 
-    override fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
+    fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
         if (!config.trial.allowMobsLeavingArena) {
             val isInProtectedArea = isBlockProtected(entity.world, entity.pos.toBlockPos())
             val toProtectedArea = isBlockProtected(entity.world, pos.toBlockPos())

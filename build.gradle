@@ -27,6 +27,8 @@ dependencies {
     api project("rei-compat")
     include project("rei-compat")
 
+    include project("vanilla-events")
+
     modRuntime "com.terraformersmc:modmenu:2.0.0-beta.7"
 }
 

@@ -25,8 +25,6 @@ import dev.nathanpb.dml.armor.modular.effects.RotResistanceEffect;
 import dev.nathanpb.dml.armor.modular.effects.UndyingEffect;
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
 import dev.nathanpb.dml.entity.effect.StatusEffectsKt;
-import dev.nathanpb.dml.event.context.EventsKt;
-import dev.nathanpb.dml.event.context.LivingEntityDamageContext;
 import dev.nathanpb.dml.item.ItemModularGlitchArmor;
 import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.DamageUtil;
@@ -37,7 +35,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -121,17 +118,6 @@ public class LivingEntityMixin {
         return Safer.run(effects, () -> RotResistanceEffect.Companion.attemptToCancelHunger((LivingEntity) (Object) this, stack, effects));
     }
 
-    @Inject(at = @At("RETURN"), method = "eatFood")
-    public void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        Safer.run(() -> {
-            if (stack.isFood()) {
-                EventsKt.getLivingEntityEatEvent()
-                        .invoker()
-                        .invoke((LivingEntity) (Object) this, stack);
-            }
-        });
-    }
-
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
     public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float damage2) {
         return Safer.runLazy(() -> DamageUtil.getDamageLeft(damage, armor, armorToughness), () -> {
@@ -144,17 +130,6 @@ public class LivingEntityMixin {
             } else {
                 return DamageUtil.getDamageLeft(damage, armor, armorToughness);
             }
-        });
-    }
-
-    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyArmorToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
-    private float applyDamage(DamageSource source, float amount) {
-        return Safer.run(amount, () -> {
-            LivingEntity dis = (LivingEntity) (Object) this;
-            return EventsKt.getLivingEntityDamageEvent()
-                    .invoker()
-                    .invoke(new LivingEntityDamageContext(dis, source, amount))
-                    .getDamage();
         });
     }
 }

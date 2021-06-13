@@ -24,7 +24,7 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffect
 import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.PlayerEntityTickEvent
 import io.github.ladysnake.pal.AbilitySource
 import io.github.ladysnake.pal.Pal
 import io.github.ladysnake.pal.PlayerAbility

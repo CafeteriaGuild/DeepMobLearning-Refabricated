@@ -24,8 +24,8 @@ import dev.nathanpb.dml.armor.modular.core.ModularEffectContext
 import dev.nathanpb.dml.armor.modular.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.armor.modular.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.context.LivingEntityDamageContext
-import dev.nathanpb.dml.event.context.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.LivingEntityDamageContext
+import dev.nathanpb.dml.event.LivingEntityDamageEvent
 import dev.nathanpb.dml.utils.takeOrNull
 import net.minecraft.entity.DamageUtil
 import net.minecraft.entity.damage.DamageSource

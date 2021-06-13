@@ -17,31 +17,13 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.event.context
+package dev.nathanpb.dml.event
 
 import dev.nathanpb.dml.trial.Trial
-import dev.nathanpb.dml.utils.event
+import dev.nathanpb.dml.trial.TrialEndReason
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Vec3d
-
-val LivingEntityDamageEvent = event<(LivingEntityDamageContext)->LivingEntityDamageContext?> { listeners ->
-    { context: LivingEntityDamageContext ->
-        listeners.fold(context) { acc, listener ->
-            listener(acc) ?: acc
-        }
-    }
-}
-
-// Doing it just with PlayerEntity to prevent server overload
-val PlayerEntityTickEvent = event<(PlayerEntity)->Unit> { listeners ->
-    { entity ->
-        listeners.forEach {
-            it(entity)
-        }
-    }
-}
 
 val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> { listeners ->
     { player, pos, rotation ->
@@ -59,41 +41,22 @@ val SoulVisionEffectRequestedEvent = event<(PlayerEntity)->Unit> { listeners ->
     }
 }
 
-val PlayerTakeHungerEvent = event<(PlayerEntity, Int)->Int> { listeners ->
-    { player, amount ->
-        listeners.toList().fold(amount) { acc, function ->
-            if (acc > 0) {
-                function(player, acc)
-            } else acc
-        }
-    }
-}
-
-
-val LivingEntityEatEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
-    { entity, stack ->
-        listeners.forEach {
-            it(entity, stack)
-        }
-    }
-}
-
-val BowShotEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
-    { entity, stack ->
-        listeners.forEach {
-            it(entity, stack)
-        }
-    }
-}
-
-val CrossbowReloadedEvent = event<(LivingEntity, ItemStack)->Unit> { listeners ->
-    { entity, stack ->
-        listeners.forEach {
-            it(entity, stack)
-        }
-    }
-}
-
 val TrialStateChanged = event<(Trial)->Unit> { listeners ->
     { trial -> listeners.forEach { it(trial) } }
+}
+
+val TrialEndEvent = event<(Trial, reason: TrialEndReason)->Unit> { listeners ->
+    { trial, reason ->
+        listeners.forEach {
+            it(trial, reason)
+        }
+    }
+}
+
+val TrialWaveSpawnEvent = event<(Trial, entities: List<LivingEntity>)->Unit> { listeners ->
+    { trial, entities ->
+        listeners.forEach {
+            it(trial, entities)
+        }
+    }
 }
