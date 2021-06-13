@@ -42,7 +42,7 @@ abstract class PotionEffectTrialAffix(
             Random.nextFloat() <= chanceOfApplying
         }.forEach { entity ->
             effects.map { effect ->
-                StatusEffectInstance(effect, 20 * 60 * 60) // todo change to the trial max timeout
+                StatusEffectInstance(effect, (config.trial.maxTime - trial.tickCount).coerceAtLeast(0))
             }.forEach {
                 entity.addStatusEffect(it)
             }
