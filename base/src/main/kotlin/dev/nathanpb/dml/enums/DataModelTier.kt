@@ -26,7 +26,6 @@ import net.minecraft.text.TranslatableText
 import kotlin.math.ceil
 import kotlin.math.max
 
-// TODO remove the hardcoded dataAmount
 enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->Int) {
     FAULTY("tier.${MOD_ID}.faulty", { 0 }),
     BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired),
