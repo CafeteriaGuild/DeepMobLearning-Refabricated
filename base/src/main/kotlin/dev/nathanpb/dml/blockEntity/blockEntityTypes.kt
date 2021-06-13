@@ -20,7 +20,6 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
-import dev.nathanpb.dml.block.BLOCK_MATTER_CONDENSER
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -31,7 +30,6 @@ import net.minecraft.util.registry.Registry
 
 lateinit var BLOCKENTITY_TRIAL_KEYSTONE: BlockEntityType<BlockEntityTrialKeystone>
 lateinit var BLOCKENTITY_LOOT_FABRICATOR: BlockEntityType<BlockEntityLootFabricator>
-lateinit var BLOCKENTITY_MATTER_CONDENSER: BlockEntityType<BlockEntityMatterCondenser>
 
 private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, BlockState)->E) = Registry.register(
     Registry.BLOCK_ENTITY_TYPE,
@@ -42,5 +40,4 @@ private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, Blo
 fun registerBlockEntityTypes() {
     BLOCKENTITY_TRIAL_KEYSTONE = register(BLOCK_TRIAL_KEYSTONE, ::BlockEntityTrialKeystone)
     BLOCKENTITY_LOOT_FABRICATOR = register(BLOCK_LOOT_FABRICATOR, ::BlockEntityLootFabricator)
-    BLOCKENTITY_MATTER_CONDENSER = register(BLOCK_MATTER_CONDENSER, ::BlockEntityMatterCondenser)
 }

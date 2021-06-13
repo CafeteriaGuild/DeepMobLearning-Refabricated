@@ -22,24 +22,6 @@ package dev.nathanpb.dml.event
 import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.TrialEndReason
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.math.Vec3d
-
-val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> { listeners ->
-    { player, pos, rotation ->
-        listeners.any {
-            it(player, pos, rotation)
-        }
-    }
-}
-
-val SoulVisionEffectRequestedEvent = event<(PlayerEntity)->Unit> { listeners ->
-    { player ->
-        listeners.forEach {
-            it(player)
-        }
-    }
-}
 
 val TrialStateChanged = event<(Trial)->Unit> { listeners ->
     { trial -> listeners.forEach { it(trial) } }

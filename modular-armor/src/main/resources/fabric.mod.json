@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "dml-refabricated-modular-armor",
+  "version": "${version}",
+  "name": "DML: Refabricated - Glitch Armor",
+  "description": "DML: Refabricated's Glitch Armor'",
+  "icon": "assets/dml-refabricated/textures/item/glitch_chestplate.png",
+  "authors": ["NathanPB"],
+  "contact": {
+    "sources": "https://github.com/NathanPB/DeepMobLearning-Refabricated.git",
+    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues/"
+  },
+  "license": "LGPL-v3",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.nathanpb.dml.modular_armor.InitKt::init"],
+    "client": ["dev.nathanpb.dml.modular_armor.InitKt::initClient"]
+  },
+  "mixins": ["mixins.dml-refabricated-modular-armor.json"],
+  "depends": {
+    "dml-refabricated": "${version}",
+    "ktdatataglib": "1.5.2"
+  },
+  "suggests": {},
+  "custom": {
+    "modmenu": {
+      "parent": "dml-refabricated"
+    }
+  }
+}

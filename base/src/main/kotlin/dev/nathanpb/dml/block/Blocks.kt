@@ -27,14 +27,12 @@ import net.minecraft.util.registry.Registry
 val BLOCK_TRIAL_KEYSTONE = BlockTrialKeystone()
 val BLOCK_LOOT_FABRICATOR = BlockLootFabricator()
 val BLOCK_CAFETERIA = BlockCafeteria()
-val BLOCK_MATTER_CONDENSER = BlockMatterCondenser()
 
 fun registerBlocks() {
     hashMapOf(
         BLOCK_TRIAL_KEYSTONE to "trial_keystone",
         BLOCK_LOOT_FABRICATOR to "loot_fabricator",
-        BLOCK_CAFETERIA to "cafeteria",
-        BLOCK_MATTER_CONDENSER to "matter_condenser"
+        BLOCK_CAFETERIA to "cafeteria"
     ).forEach { (block, id) ->
         val identifier = identifier(id)
         Registry.register(Registry.BLOCK, identifier, block)

@@ -23,7 +23,6 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
-import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
@@ -71,11 +70,6 @@ val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings())
 val ITEM_GLITCH_INGOT = Item(settings())
 
-val ITEM_GLITCH_HELMET = ItemModularGlitchArmor(EquipmentSlot.HEAD, settings())
-val ITEM_GLITCH_CHESTPLATE = ItemModularGlitchArmor(EquipmentSlot.CHEST, settings())
-val ITEM_GLITCH_LEGGINGS = ItemModularGlitchArmor(EquipmentSlot.LEGS, settings())
-val ITEM_GLITCH_BOOTS = ItemModularGlitchArmor(EquipmentSlot.FEET, settings())
-
 
 fun registerItems() {
     mapOf(
@@ -106,11 +100,7 @@ fun registerItems() {
         ITEM_PRISTINE_MATTER_OCEAN to "pristine_matter_ocean",
         ITEM_EMERITUS_HAT to "emeritus_hat",
         ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to "physically_condensed_matrix_fragment",
-        ITEM_GLITCH_INGOT to "glitch_ingot",
-        ITEM_GLITCH_HELMET to "glitch_helmet",
-        ITEM_GLITCH_CHESTPLATE to "glitch_chestplate",
-        ITEM_GLITCH_LEGGINGS to "glitch_leggings",
-        ITEM_GLITCH_BOOTS to "glitch_boots"
+        ITEM_GLITCH_INGOT to "glitch_ingot"
     ).forEach { (item, id) ->
         Registry.register(Registry.ITEM, identifier(id), item)
     }

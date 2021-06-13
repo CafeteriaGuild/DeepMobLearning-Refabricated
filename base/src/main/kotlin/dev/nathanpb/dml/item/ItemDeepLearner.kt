@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.item
 
-import dev.nathanpb.dml.gui.screen.handler.DeepLearnerScreenHandlerFactory
+import dev.nathanpb.dml.screen.handler.DeepLearnerScreenHandlerFactory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack

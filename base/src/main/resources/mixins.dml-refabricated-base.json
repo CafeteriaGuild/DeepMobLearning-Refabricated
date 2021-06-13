@@ -3,25 +3,12 @@
   "package": "dev.nathanpb.dml.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BowItemMixin",
-    "CrossbowItemMixin",
-    "DamageSourceMixin",
-    "EndermanEntityMixin",
-    "IArmorItemMixin",
     "ICraftingResultSlotMixin",
-    "ItemStackMixin",
     "LivingEntityMixin",
-    "MobEntityMixin",
-    "PlayerEntityMixin",
     "SlotMixin",
-    "StatusEffectUtilMixin",
     "WorldMixin"
   ],
-  "client": [
-    "ClientEntityMixin",
-    "InGameHudMixin",
-    "ModelPredicateProviderRegistryMixin"
-  ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   }

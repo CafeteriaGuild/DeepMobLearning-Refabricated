@@ -21,23 +21,19 @@ package dev.nathanpb.dml
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import dev.nathanpb.dml.armor.modular.core.ModularEffectRegistry
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
-import dev.nathanpb.dml.entity.effect.registerStatusEffects
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.EndermanTeleportEvent
 import dev.nathanpb.dml.event.WorldExplosionEvent
-import dev.nathanpb.dml.gui.screen.handler.registerScreenHandlers
-import dev.nathanpb.dml.gui.screen.registerScreens
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
-import dev.nathanpb.dml.net.registerClientSidePackets
-import dev.nathanpb.dml.net.registerServerSidePackets
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
+import dev.nathanpb.dml.screen.handler.registerScreenHandlers
+import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
@@ -90,10 +86,8 @@ fun init() {
     registerBlockEntityTypes()
     registerRecipeSerializers()
     registerRecipeTypes()
-    registerServerSidePackets()
     registerScreenHandlers()
     registerEntityTypes()
-    registerStatusEffects()
     ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(DataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
@@ -103,7 +97,6 @@ fun init() {
         EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
-    ModularEffectRegistry.registerDefaults()
     println("Deep Mob Learning: Refabricated is good to go")
 }
 
@@ -111,8 +104,6 @@ fun init() {
 fun initClient() {
     registerScreens()
     registerEntityRenderer()
-    registerKeybindings()
-    registerClientSidePackets()
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)

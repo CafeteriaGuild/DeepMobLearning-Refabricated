@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "package": "dev.nathanpb.dml.modular_armor.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BowItemMixin",
+    "CrossbowItemMixin",
+    "DamageSourceMixin",
+    "EndermanEntityMixin",
+    "IArmorItemMixin",
+    "ItemStackMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "StatusEffectUtilMixin"
+  ],
+  "client": [
+    "ClientEntityMixin",
+    "InGameHudMixin",
+    "ModelPredicateProviderRegistryMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
