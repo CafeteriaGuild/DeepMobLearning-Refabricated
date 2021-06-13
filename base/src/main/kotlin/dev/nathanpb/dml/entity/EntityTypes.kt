@@ -49,9 +49,8 @@ fun registerEntityTypes() {
     registerAttributes()
 }
 
-// TODO fix this shit
 fun registerEntityRenderer() {
     EntityRendererRegistry.INSTANCE.register(SYSTEM_GLITCH_ENTITY_TYPE) { dispatcher ->
-        SystemGlitchRenderer(dispatcher, EntityModelLayers.ZOMBIFIED_PIGLIN_INNER_ARMOR)
+        SystemGlitchRenderer(dispatcher, EntityModelLayers.ZOMBIE)
     }
 }
