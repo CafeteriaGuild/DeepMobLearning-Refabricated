@@ -68,7 +68,7 @@ class TrialKeystoneRecipe (
     override fun getSerializer() = TRIAL_KEYSTONE_RECIPE_SERIALIZER
 
     override fun matches(inv: SimpleInventory?, world: World?): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     class Serializer : RecipeSerializer<TrialKeystoneRecipe> {
