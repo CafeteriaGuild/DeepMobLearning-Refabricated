@@ -64,12 +64,6 @@ public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyin
         return dmlRefFlightManager;
     }
 
-    // TODO use the events module for this
-    @Inject(at = @At("HEAD"), method = "tick")
-    private void tick(CallbackInfo ci) {
-        getDmlFlightBurnoutManager().tick();
-    }
-
     @Override
     public @Nullable Long getDmlRefUndyingLastUsage() {
         return dmlRefUndyingLastUsage;

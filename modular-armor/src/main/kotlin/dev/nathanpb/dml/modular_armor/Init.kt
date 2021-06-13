@@ -20,6 +20,7 @@
 
 package dev.nathanpb.dml.modular_armor
 
+import dev.nathanpb.dml.event.PlayerEntityTickEvent
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.net.registerClientSidePackets
 import dev.nathanpb.dml.modular_armor.net.registerServerSidePackets
@@ -39,6 +40,10 @@ fun init() {
 
     MatterCondenserScreenHandler.INSTANCE // force evaluate to register
     ModularArmorScreenHandler.INSTANCE // force evaluate to register
+
+    PlayerEntityTickEvent.register {
+        it.flightBurnoutManager.tick()
+    }
 }
 
 @Suppress("unused")
