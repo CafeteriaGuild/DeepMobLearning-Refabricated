@@ -170,9 +170,11 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     }
 
     fun createTrial(recipe: TrialKeystoneRecipe, affixes: List<TrialAffix>): Trial {
-        val players = world?.getEntitiesAroundCircle(EntityType.PLAYER, pos, config.trial.arenaRadius.toDouble())
-            ?.filterIsInstance<PlayerEntity>()
-            .orEmpty()
+        val players = world?.getEntitiesAroundCircle(
+            EntityType.PLAYER,
+            pos, config.trial.arenaRadius.toDouble()
+        ).orEmpty()
+
         if (players.isNotEmpty()) {
             return Trial(this, recipe, players.map(PlayerEntity::getUuid), affixes)
         } else throw TrialKeystoneNoPlayersAround(this)

@@ -81,8 +81,7 @@ class Trial (
         if (state in arrayOf(TrialState.WARMUP, TrialState.RUNNING)) {
             start(true)
         }
-        systemGlitch?.health = data.glitchHealth
-        systemGlitch?.tier = recipe.tier
+        loadedSystemGlitchHealth = data.glitchHealth
     }
 
     companion object {
@@ -106,6 +105,9 @@ class Trial (
         private set
 
     var state: TrialState = TrialState.NOT_STARTED
+        private set
+
+    var loadedSystemGlitchHealth: Float? = null
         private set
 
     private val tickableAffixes = affixes.filterIsInstance<TrialAffix.TickableAffix>()
@@ -242,7 +244,7 @@ class Trial (
                 world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
             )?.also {
                 it.tier = recipe.tier
-                it.health = it.maxHealth
+                it.health = loadedSystemGlitchHealth ?: it.maxHealth
                 if (recipe.category == EntityCategory.GHOST && recipe.tier.isMaxTier() && Random.nextFloat() < .0666 ) {
                     it.equipStack(EquipmentSlot.HEAD, ItemStack(ITEM_EMERITUS_HAT))
                 }

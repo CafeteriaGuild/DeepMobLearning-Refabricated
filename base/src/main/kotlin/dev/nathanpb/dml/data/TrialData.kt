@@ -44,6 +44,5 @@ class TrialData(tag: NbtCompound = NbtCompound()) : MutableCompoundData(tag) {
     var affixes by persistentDefaulted(emptyList(), TrialAffixListSerializer())
     var playersUuids by persistentDefaulted(emptyList(), Serializers.UUID_LIST)
     var recipeId by persistentDefaulted(identifier(""), Serializers.IDENTIFIER)
-    var endsAt by persistentDefaulted(0, Serializers.INT)
     var tickCount by persistentDefaulted(0, Serializers.INT)
 }

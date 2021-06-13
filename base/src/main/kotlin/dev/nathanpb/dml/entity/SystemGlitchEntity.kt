@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.entity
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.enums.DataModelTier
@@ -174,5 +175,8 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         } else {
             super.applyDamage(source, amount)
         }
+
+        (world.getBlockEntity(trial?.pos) as? BlockEntityTrialKeystone)
+            ?.markDirty()
     }
 }
