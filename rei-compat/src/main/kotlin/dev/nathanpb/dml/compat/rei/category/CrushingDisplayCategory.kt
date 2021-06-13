@@ -22,7 +22,7 @@ package dev.nathanpb.dml.compat.rei.category
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.compat.rei.display.CrushingRecipeDisplay
 import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
-import dev.nathanpb.dml.utils.itemStack
+import dev.nathanpb.dml.compat.rei.itemStack
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.widgets.Widget
