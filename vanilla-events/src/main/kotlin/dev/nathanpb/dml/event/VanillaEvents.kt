@@ -92,7 +92,7 @@ val EndermanTeleportEvent = event<(EndermanEntity, Vec3d)->ActionResult> { liste
     }
 }
 
-val WorldExplosionEvent = event<(World, Entity, DamageSource, behavior: ExplosionBehavior, pos: BlockPos, power: Float, createFire: Boolean, Explosion.DestructionType)->ActionResult> { listeners ->
+val WorldExplosionEvent = event<(World, Entity?, DamageSource?, behavior: ExplosionBehavior?, pos: BlockPos, power: Float, createFire: Boolean, Explosion.DestructionType)->ActionResult> { listeners ->
     { world, entity, damageSource, behavior, pos, power, createFire, destructionType ->
         val shouldFail = listeners.any {
             it.invoke(world, entity, damageSource, behavior, pos, power, createFire, destructionType) == ActionResult.FAIL
