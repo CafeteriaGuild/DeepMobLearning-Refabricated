@@ -1,45 +1,61 @@
 package dev.nathanpb.dml.screen.handler.widget
 
-/*
-class WEntityShowcase {
-    fun display() {
-        // I have no idea about what mostly of this code do, I just copy/pasted from IngGameHud
-        (entityType.create(MinecraftClient.getInstance().world) as? LivingEntity)?.let { entity ->
-            RenderSystem.pushMatrix()
-            RenderSystem.translatef(x.toFloat() + 24, y.toFloat() + 77, 1050.0F)
-            RenderSystem.scalef(1.0f, 1.0f, -1.0f)
+import dev.nathanpb.dml.utils.drawEntity
+import io.github.cottonmc.cotton.gui.client.BackgroundPainter
+import io.github.cottonmc.cotton.gui.widget.WWidget
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
-            val matrixStack = MatrixStack()
-            matrixStack.translate(0.0, 0.0, 1000.0)
-            matrixStack.scale(24F, 24F, 24F)
+class WEntityShowcase : WWidget() {
 
-            val quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180F)
-            val quaternion2 = Vector3f.POSITIVE_Y.getDegreesQuaternion((tickCount % 360F) * 2F + 150F)
+    var entityTypes: List<EntityType<*>> = emptyList()
 
-            quaternion.hamiltonProduct(quaternion2)
-            matrixStack.multiply(quaternion)
-            quaternion2.conjugate()
+    var tickCount = 0
 
-            val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderDispatcher
-            entityRenderDispatcher.rotation = quaternion2
-            entityRenderDispatcher.setRenderShadows(false)
 
-            val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
-            entityRenderDispatcher.render(
-                entity,
-                0.0,
-                0.0,
-                0.0,
-                0.0f,
-                0F,
-                matrixStack,
-                immediate,
-                15728880
-            )
-            immediate.draw()
-            entityRenderDispatcher.setRenderShadows(true)
-            RenderSystem.popMatrix()
+    private val entityType: EntityType<*>?
+        get() {
+            return entityTypes.takeIf { entityTypes.isNotEmpty() }?.let { values ->
+                values.toTypedArray()[(tickCount / 60) % values.size]
+            }
         }
+
+    override fun tick() {
+        super.tick()
+        tickCount++
+    }
+
+    override fun canResize() = true
+
+    override fun paint(matrices: MatrixStack, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        super.paint(matrices, x, y, mouseX, mouseY)
+        matrices.push()
+
+        BackgroundPainter.VANILLA.paintBackground(matrices, x, y, this)
+
+        val entityType = entityType ?: return
+        val world = MinecraftClient.getInstance().world ?: return
+        val entity = entityType.create(world) as? LivingEntity ?: return
+
+        val w = (this.width / 2)
+        val h = (height / 1.5).roundToInt()
+
+        val scaleFactor = min(w, h) * 1.5
+        val entityScaleFactor = max(entity.width, entity.height)
+
+        drawEntity(
+            entity,
+            x + w,
+            y + h,
+            (scaleFactor / entityScaleFactor).roundToInt(),
+            0, 180F,
+            (tickCount % 360F) * 2F + 150F
+        )
+        matrices.pop()
     }
 }
-*/

@@ -21,9 +21,11 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.utils.closestValue
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
@@ -40,15 +42,7 @@ import kotlin.properties.Delegates
 
 
 /*
- private val currentRenderEntity: EntityType<*>?
-        get() {
-            handler.inventory.getStack(currentSlot)?.item?.let { item ->
-                (item as? ItemDataModel)?.category?.tag?.values()?.let { values ->
-                    return values.toTypedArray()[(tickCount / 60)% values.size]
-                }
-            }
-            return null
-        }
+
  */
 
 // I hope no one will ever need to read this code again
@@ -131,6 +125,7 @@ class DeepLearnerScreenHandler (
         }
     }
 
+    private val showcase = WEntityShowcase()
     private val dataAmountText = WText(LiteralText(""))
     private val dataTierText = WText(LiteralText(""))
 
@@ -139,7 +134,7 @@ class DeepLearnerScreenHandler (
         prevButton.isEnabled = currentSlot > firstDataModelIndex()
         nextButton.isEnabled = currentSlot < lastDataModelIndex()
 
-        val currentDataModel = run {
+        val currentDataModel: DataModelData? = run {
             if (data.inventory.size > currentSlot) {
                 val stack = data.inventory[currentSlot]
                 if (!stack.isEmpty) {
@@ -149,6 +144,7 @@ class DeepLearnerScreenHandler (
             null
         }
 
+        showcase.entityTypes = currentDataModel?.category?.tag?.values().orEmpty()
         if (currentDataModel == null) {
             dataAmountText.text = LiteralText("")
             dataTierText.text = LiteralText("")
@@ -168,6 +164,7 @@ class DeepLearnerScreenHandler (
 
         val root = WGridPanel()
         setRootPanel(root)
+        root.add(showcase, 0, 1, 2, 4)
 
         root.add(
             WItemSlot.of(blockInventory, 0, 2, 2).apply {
