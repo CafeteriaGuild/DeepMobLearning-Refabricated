@@ -31,6 +31,7 @@ import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.*
+import io.github.cottonmc.cotton.gui.widget.data.Insets
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
@@ -163,6 +164,7 @@ class DeepLearnerScreenHandler (
         blockInventory.setStacks(data.inventory)
 
         val root = WGridPanel()
+        root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
         root.add(showcase, 0, 1, 2, 4)
 
@@ -185,8 +187,12 @@ class DeepLearnerScreenHandler (
         root.add(prevButton, 7, 4)
         root.add(nextButton, 8, 4)
 
-        root.add(dataAmountText, 2, 3, 4, 1)
-        root.add(dataTierText, 2, 4, 4, 1)
+        WGridPanel().apply {
+            insets = Insets(4)
+            add(dataAmountText, 0, 0, 4, 1)
+            add(dataTierText, 0, 1, 4, 1)
+            root.add(this, 2, 3, 4, 2)
+        }
 
         (blockInventory as? SimpleInventory)?.addListener {
             data.inventory = blockInventory.items()

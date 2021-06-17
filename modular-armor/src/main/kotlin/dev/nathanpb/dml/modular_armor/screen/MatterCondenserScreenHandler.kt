@@ -29,6 +29,7 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
+import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.data.Texture
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
@@ -54,6 +55,7 @@ class MatterCondenserScreenHandler(
 
     init {
         val root = WGridPanel()
+        root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
         val slots = WGridPanel()

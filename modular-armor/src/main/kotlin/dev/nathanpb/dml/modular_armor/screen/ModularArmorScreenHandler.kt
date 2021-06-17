@@ -33,6 +33,7 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WListPanel
+import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.minecraft.entity.player.PlayerInventory
@@ -70,6 +71,7 @@ class ModularArmorScreenHandler(
 
     init {
         val root = WGridPanel()
+        root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
         var lastEffectsList: WListPanel<ModularEffect<*>, WModularEffectToggle>? = null
