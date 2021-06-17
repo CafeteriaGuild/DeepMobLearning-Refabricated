@@ -39,5 +39,4 @@ jobs:
           rm -f ~/.gradle/caches/modules-2/gc.properties
       - uses: actions/upload-artifact@v2
         with:
-          name: Package
-          path: build/libs
+          path: build/libs/*
