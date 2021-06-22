@@ -20,25 +20,22 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.event.PlayerEntityTickEvent
-import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
-import dev.nathanpb.dml.modular_armor.net.registerServerSidePackets
+import dev.nathanpb.dml.modular_armor.net.registerClientSidePackets
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
+import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 
 @Suppress("unused")
-fun init() {
-    ItemModularGlitchArmor.register()
-    BlockMatterCondenser.register()
-    BlockEntityMatterCondenser.BLOCK_ENTITY_TYPE // force evaluate to register
-    ModularEffectRegistry.registerDefaults()
-    registerServerSidePackets()
-    registerStatusEffects()
+fun initClient() {
+    registerKeybindings()
+    registerClientSidePackets()
 
-    MatterCondenserScreenHandler.INSTANCE // force evaluate to register
-    ModularArmorScreenHandler.INSTANCE // force evaluate to register
+    ScreenRegistry.register(MatterCondenserScreenHandler.INSTANCE) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
+    }
 
-    PlayerEntityTickEvent.register {
-        it.flightBurnoutManager.tick()
+    ScreenRegistry.register(ModularArmorScreenHandler.INSTANCE) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
     }
 }
