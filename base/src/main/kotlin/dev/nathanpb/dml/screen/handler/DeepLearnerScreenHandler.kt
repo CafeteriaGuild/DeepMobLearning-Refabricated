@@ -32,6 +32,8 @@ import dev.nathanpb.dml.utils.setStacks
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.*
 import io.github.cottonmc.cotton.gui.widget.data.Insets
+import net.fabricmc.api.EnvType
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
@@ -111,7 +113,9 @@ class DeepLearnerScreenHandler (
     }
 
     private val prevButton: WButton = WButton(LiteralText("<")).apply {
-        addTooltip(TooltipBuilder().add(TranslatableText("gui.$MOD_ID.previous")))
+        if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
+            addTooltip(TooltipBuilder().add(TranslatableText("gui.$MOD_ID.previous")))
+        }
 
         setOnClick {
             currentSlot = nextReverseDataModelIndex()
@@ -119,7 +123,9 @@ class DeepLearnerScreenHandler (
     }
 
     private val nextButton: WButton = WButton(LiteralText(">")).apply {
-        addTooltip(TooltipBuilder().add(TranslatableText("gui.${MOD_ID}.next")))
+        if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
+            addTooltip(TooltipBuilder().add(TranslatableText("gui.${MOD_ID}.next")))
+        }
 
         setOnClick {
             currentSlot = nextForwardDataModelIndex()
