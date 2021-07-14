@@ -20,7 +20,6 @@ package dev.nathanpb.dml.modular_armor.mixin;
  */
 
 import dev.nathanpb.dml.modular_armor.effects.ArcheryEffect;
-import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
@@ -35,20 +34,18 @@ public abstract class BowItemMixin {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BowItem;getPullProgress(I)F"), method = "onStoppedUsing")
     public float proxyPullProgress(int useTicks, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        return Safer.runLazy(() -> BowItem.getPullProgress(useTicks), () -> {
-            if (user instanceof PlayerEntity) {
-                float modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
-                if (modifier > 1) {
-                    float f = (float)useTicks / (20F / modifier);
-                    f = (f * f + f * 2.0F) / 3.0F;
-                    if (f > 1.0F) {
-                        f = 1.0F;
-                    }
-
-                    return f;
+        if (user instanceof PlayerEntity) {
+            float modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
+            if (modifier > 1) {
+                float f = (float)useTicks / (20F / modifier);
+                f = (f * f + f * 2.0F) / 3.0F;
+                if (f > 1.0F) {
+                    f = 1.0F;
                 }
+
+                return f;
             }
-            return BowItem.getPullProgress(useTicks);
-        });
+        }
+        return BowItem.getPullProgress(useTicks);
     }
 }

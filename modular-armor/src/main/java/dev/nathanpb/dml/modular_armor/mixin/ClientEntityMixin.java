@@ -22,7 +22,6 @@ package dev.nathanpb.dml.modular_armor.mixin;
 
 import dev.nathanpb.dml.DeepMobLearningKt;
 import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
-import dev.nathanpb.safer.Safer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -41,19 +40,16 @@ public class ClientEntityMixin {
 
     @Inject(at = @At("RETURN"), method = "isGlowing", cancellable = true)
     public void isGlowing(CallbackInfoReturnable<Boolean> cir) {
-        Safer.run(() -> {
-            if (this.world.isClient && !cir.getReturnValue()) {
-                Entity dis = (Entity) (Object) this;
-                if (dis instanceof LivingEntity) {
-                    PlayerEntity player = MinecraftClient.getInstance().player;
-                    if (player != null && dis != player && player.hasStatusEffect(EntityStatusEffectsKt.getSOUL_VISION_EFFECT())) {
-                        if (player.distanceTo(dis) <= DeepMobLearningKt.getConfig().getGlitchArmor().getSoulVisionRange()) {
-                            cir.setReturnValue(true);
-                            cir.cancel();
-                        }
+        if (this.world.isClient && !cir.getReturnValue()) {
+            if ((Object) this instanceof LivingEntity dis) {
+                PlayerEntity player = MinecraftClient.getInstance().player;
+                if (player != null && dis != player && player.hasStatusEffect(EntityStatusEffectsKt.getSOUL_VISION_EFFECT())) {
+                    if (player.distanceTo(dis) <= DeepMobLearningKt.getConfig().getGlitchArmor().getSoulVisionRange()) {
+                        cir.setReturnValue(true);
+                        cir.cancel();
                     }
                 }
             }
-        });
+        }
     }
 }

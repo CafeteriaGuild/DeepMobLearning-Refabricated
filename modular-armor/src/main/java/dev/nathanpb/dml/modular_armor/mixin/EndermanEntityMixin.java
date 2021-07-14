@@ -21,7 +21,6 @@ package dev.nathanpb.dml.modular_armor.mixin;
  */
 
 import dev.nathanpb.dml.modular_armor.effects.EndermenProofVisionEffect;
-import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -35,15 +34,13 @@ public class EndermanEntityMixin {
 
     @Inject(at = @At("RETURN"), method = "isPlayerStaring", cancellable = true)
     public void isPlayerStaring(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
-        Safer.run(() -> {
-            if (cir.getReturnValue()) {
-                ActionResult result = EndermenProofVisionEffect.Companion.trigger(player);
+        if (cir.getReturnValue()) {
+            ActionResult result = EndermenProofVisionEffect.Companion.trigger(player);
 
-                if (result == ActionResult.FAIL) {
-                    cir.setReturnValue(false);
-                    cir.cancel();
-                }
+            if (result == ActionResult.FAIL) {
+                cir.setReturnValue(false);
+                cir.cancel();
             }
-        });
+        }
     }
 }

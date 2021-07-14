@@ -41,7 +41,6 @@ import com.google.common.collect.Multimap;
 import dev.nathanpb.dml.data.DataModelData;
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor;
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData;
-import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -56,62 +55,52 @@ public class ItemStackMixin {
 
     @Inject(at = @At("HEAD"), method = "isDamageable", cancellable = true)
     void isDamageable(CallbackInfoReturnable<Boolean> cir) {
-        Safer.run(() -> {
-            ItemStack dis = (ItemStack) (Object) this;
-            if (dis.getItem() instanceof ItemModularGlitchArmor) {
-                cir.setReturnValue(false);
-                cir.cancel();
-            }
-        });
+        ItemStack dis = (ItemStack) (Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "getAttributeModifiers", cancellable = true)
     void getAttributeModifiers(EquipmentSlot equipmentSlot, CallbackInfoReturnable<Multimap<EntityAttribute, EntityAttributeModifier>> cir) {
-        Safer.run(() -> {
-            ItemStack dis = (ItemStack)(Object) this;
-            if (dis.getItem() instanceof ItemModularGlitchArmor) {
-                cir.setReturnValue(((ItemModularGlitchArmor)dis.getItem()).getAttributeModifiers(dis, equipmentSlot));
-                cir.cancel();
-            }
-        });
+        ItemStack dis = (ItemStack)(Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(((ItemModularGlitchArmor)dis.getItem()).getAttributeModifiers(dis, equipmentSlot));
+            cir.cancel();
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "isDamaged", cancellable = true)
     void isDamaged(CallbackInfoReturnable<Boolean> cir) {
-        Safer.run(() -> {
-            ItemStack dis = (ItemStack)(Object) this;
-            if (dis.getItem() instanceof ItemModularGlitchArmor) {
-                cir.setReturnValue(true);
-                cir.cancel();
-            }
-        });
+        ItemStack dis = (ItemStack)(Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(true);
+            cir.cancel();
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "getDamage", cancellable = true)
     void patchModularArmorDamage(CallbackInfoReturnable<Integer> cir) {
-        Safer.run(() -> {
-            ItemStack dis = (ItemStack) (Object) this;
-            if (dis.getItem() instanceof ItemModularGlitchArmor) {
-                ModularArmorData armor = new ModularArmorData(dis);
-                DataModelData dataModel = armor.getDataModel();
-                if (dataModel != null) {
-                    cir.setReturnValue(armor.tier().nextTierOrCurrent().getDataAmount() - dataModel.getDataAmount());
-                } else {
-                    cir.setReturnValue(armor.tier().nextTierOrCurrent().getDataAmount()-1);
-                }
-                cir.cancel();
+        ItemStack dis = (ItemStack) (Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            ModularArmorData armor = new ModularArmorData(dis);
+            DataModelData dataModel = armor.getDataModel();
+            if (dataModel != null) {
+                cir.setReturnValue(armor.tier().nextTierOrCurrent().getDataAmount() - dataModel.getDataAmount());
+            } else {
+                cir.setReturnValue(armor.tier().nextTierOrCurrent().getDataAmount()-1);
             }
-        });
+            cir.cancel();
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "getMaxDamage", cancellable = true)
     void patchModularArmorMaxDamage(CallbackInfoReturnable<Integer> cir) {
-        Safer.run(() -> {
-            ItemStack dis = (ItemStack) (Object) this;
-            if (dis.getItem() instanceof ItemModularGlitchArmor) {
-                cir.setReturnValue(new ModularArmorData(dis).tier().nextTierOrCurrent().getDataAmount()-1);
-                cir.cancel();
-            }
-        });
+        ItemStack dis = (ItemStack) (Object) this;
+        if (dis.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(new ModularArmorData(dis).tier().nextTierOrCurrent().getDataAmount()-1);
+            cir.cancel();
+        }
     }
 }

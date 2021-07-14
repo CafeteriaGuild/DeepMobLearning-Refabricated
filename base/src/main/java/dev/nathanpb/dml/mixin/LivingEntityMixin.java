@@ -20,7 +20,6 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
-import dev.nathanpb.safer.Safer;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,16 +31,13 @@ public class LivingEntityMixin {
 
     @Inject(at = @At("HEAD"), method = "getMaxHealth", cancellable = true)
     public void getMaxHealth(CallbackInfoReturnable<Float> cir) {
-        Safer.run(() -> {
-            if ((Object) this instanceof SystemGlitchEntity) {
-                SystemGlitchEntity dis = (SystemGlitchEntity) ((Object)this);
-                if (dis.getTier() != null) {
-                    float health = dis.getTier().getSystemGlitchMaxHealth();
-                    cir.setReturnValue(health);
-                    cir.cancel();
-                }
+        if ((Object) this instanceof SystemGlitchEntity dis) {
+            if (dis.getTier() != null) {
+                float health = dis.getTier().getSystemGlitchMaxHealth();
+                cir.setReturnValue(health);
+                cir.cancel();
             }
-        });
+        }
     }
 
 }
