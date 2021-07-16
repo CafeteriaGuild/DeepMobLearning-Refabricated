@@ -16,11 +16,10 @@
   },
   "mixins": ["mixins.dml-refabricated-rei.json"],
   "depends": {
-    "dml-refabricated": "${version}",
-    "ktdatataglib": "1.5.2"
+    "dml-refabricated": "${version}"
   },
   "suggests": {
-    "roughlyenoughitems": ">=6.0.247-alpha"
+    "roughlyenoughitems": ">=6.0.262-alpha"
   },
   "custom": {
     "modmenu": {

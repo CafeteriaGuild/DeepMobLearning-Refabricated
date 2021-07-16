@@ -18,8 +18,7 @@
   },
   "mixins": ["mixins.dml-refabricated-modular-armor.json"],
   "depends": {
-    "dml-refabricated": "${version}",
-    "ktdatataglib": "1.5.2"
+    "dml-refabricated": "${version}"
   },
   "suggests": {},
   "custom": {

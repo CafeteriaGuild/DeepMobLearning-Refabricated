@@ -1,4 +1,4 @@
-val libgui_version = "4.0.0-beta.4+1.17-rc1"
+val libgui_version = "4.1.1+1.17.1-rc1"
 
 repositories {
     maven { url = uri("https://server.bbkr.space/artifactory/libs-release") }

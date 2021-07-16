@@ -15,10 +15,10 @@
   "mixins": [],
   "depends": {
     "fabricloader": ">=0.11.3",
-    "fabric": ">=0.34.9+1.17",
+    "fabric": ">=0.36.1+1.17",
     "fabric-language-kotlin": "*",
-    "minecraft": "1.17",
-    "ktdatataglib": "1.5.2"
+    "minecraft": "1.17.1",
+    "ktdatataglib": "1.5.4"
   },
   "suggests": {
     "flamingo": "*"

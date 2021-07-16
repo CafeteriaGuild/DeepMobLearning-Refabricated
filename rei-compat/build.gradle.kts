@@ -1,4 +1,4 @@
-val rei_version = "6.0.247-alpha"
+val rei_version = "6.0.262-alpha"
 
 repositories {
     maven { url = uri("https://maven.shedaniel.me/") }
