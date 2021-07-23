@@ -26,6 +26,7 @@ import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
+import net.minecraft.block.Blocks
 import net.minecraft.entity.Entity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.EndermanEntity
@@ -36,6 +37,7 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
 import net.minecraft.world.explosion.ExplosionBehavior
@@ -63,6 +65,11 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
             !world.isClient
             && config.trial.interactGriefPrevention
             && isBlockProtected(world, pos)
+            && world.getBlockState(pos)?.run {
+                block !== Blocks.CHEST
+                && block !== Blocks.TRAPPED_CHEST
+                && "grave" !in Registry.BLOCK.getId(block).path
+            } != false
         ) {
             ActionResult.FAIL
         } else ActionResult.PASS
