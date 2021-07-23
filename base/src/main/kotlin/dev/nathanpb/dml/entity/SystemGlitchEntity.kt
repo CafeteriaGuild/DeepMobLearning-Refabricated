@@ -176,7 +176,9 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             super.applyDamage(source, amount)
         }
 
-        (world.getBlockEntity(trial?.pos) as? BlockEntityTrialKeystone)
-            ?.markDirty()
+        trial?.pos?.let { pos ->
+            (world.getBlockEntity(pos) as? BlockEntityTrialKeystone)
+                ?.markDirty()
+        }
     }
 }
