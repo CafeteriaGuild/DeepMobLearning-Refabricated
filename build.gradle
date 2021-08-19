@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom'
+    id 'fabric-loom' version '0.8.12'
     id 'maven-publish'
     id "org.jetbrains.kotlin.jvm" version "1.5.0"
 }
@@ -89,4 +89,82 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
     from "LICENSE"
+}
+
+subprojects {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                remapJar {
+                    input = file("${project.buildDir}/libs/$archivesBaseName-$version-dev.jar")
+                    archiveName = "${archivesBaseName}-${version}.jar"
+                }
+
+                artifact(jar) {
+                    builtBy jar
+                    classifier "$archivesBaseName-dev"
+                }
+
+                artifact(remapJar) {
+                    builtBy remapJar
+                    classifier archivesBaseName
+                }
+
+                processResources {
+                    inputs.property "version", project.version
+
+                    filesMatching("fabric.mod.json") {
+                        expand "version": project.version
+                    }
+                }
+
+                // artifact(sourcesJar) {
+                //     builtBy remapSourcesJar
+                // }
+            }
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        maven {
+            url "https://maven.cafeteria.dev/releases"
+            credentials {
+                username = project.property("mcdUsername")
+                password = project.property("mcdPassword")
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+
+            // artifact(sourcesJar) {
+            //     builtBy remapSourcesJar
+            // }
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishipathng_maven.html for information on how to set up publishing.
+    repositories {
+        maven {
+            url "https://maven.cafeteria.dev/releases"
+            credentials {
+                username = project.property("mcdUsername")
+                password = project.property("mcdPassword")
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
 }
