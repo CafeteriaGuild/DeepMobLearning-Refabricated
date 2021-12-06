@@ -1,0 +1,32 @@
+name: Publish
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_VERSION: ${{github.ref_name}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 16
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+
+      - name: Bump version
+      - run: ./.github/scripts/bumbVersion.sh "$NEXT_VERSION"
+
+      - run: |
+          chmod +x ./gradlew
+          ./gradlew build curseforge publishing --stacktrace
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+
+      - name: Commit version bump
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: ./gradle.properties
+          message: ${{ format('[CI] Bump version to {0}', github.ref_name) }}
+          branch: main

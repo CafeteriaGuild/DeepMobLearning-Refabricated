@@ -2,6 +2,7 @@ plugins {
     id 'fabric-loom' version '0.8.12'
     id 'maven-publish'
     id "org.jetbrains.kotlin.jvm" version "1.5.0"
+    id "com.matthewprenger.cursegradle" version '1.4.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -159,12 +160,47 @@ publishing {
         maven {
             url "https://maven.cafeteria.dev/releases"
             credentials {
-                username = project.property("mcdUsername")
-                password = project.property("mcdPassword")
+                username = System.getenv("CAFETERIA_USERNAME")
+                password = System.getenv("CAFETERIA_PWD")
             }
             authentication {
                 basic(BasicAuthentication)
             }
         }
+    }
+}
+
+
+curseforge {
+    apiKey = project.property("curseforgeToken")
+    project {
+        id = project.curseforge_id
+        changelog = "https://github.com/NathanPB/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.minecraft_version + '+' + project.mod_version, "utf-8")}"
+        releaseType = project.mod_version.contains('alpha')
+            ? 'alpha'
+            : project.mod_version.contains('beta')
+                ? 'beta'
+                : 'release'
+
+        addGameVersion(project.minecraft_version)
+        addGameVersion("Fabric")
+
+        mainArtifact(remapJar)  {
+            displayName = "Deep Mob Learning: Refabricated $project.minecraft_version+$version"
+            relations {
+                optionalDependency("roughly-enough-items")
+                requiredDependency("fabric-api")
+                requiredDependency("fabric-language-kotlin")
+            }
+        }
+
+        afterEvaluate {
+            uploadTask.dependsOn("remapJar")
+        }
+
+    }
+
+    options {
+        forgeGradleIntegration = false
     }
 }
