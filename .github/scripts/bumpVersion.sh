@@ -19,4 +19,3 @@
 
 IFS='+' read -ra VERSIONS <<< "$1"
 sed -ri "s/^mod_version = .*/mod_version = ${VERSIONS[0]}/" ../../gradle.properties
-sed -ri "s/^minecraft_version=.*/minecraft_version=${VERSIONS[1]}/" ../../gradle.properties
