@@ -36,7 +36,7 @@ class CrushingRecipeDisplay(
 
     override fun getInputEntries(): MutableList<EntryIngredient> {
         return (
-            recipe.input.matchingStacksClient.map(EntryIngredients::of)
+            recipe.input.matchingStacks.map(EntryIngredients::of)
                 + arrayOf(EntryIngredients.of(recipe.block))
         ).toMutableList()
     }

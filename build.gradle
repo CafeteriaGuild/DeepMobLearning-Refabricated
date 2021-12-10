@@ -1,7 +1,7 @@
 plugins {
-    id 'fabric-loom'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'maven-publish'
-    id "org.jetbrains.kotlin.jvm" version "1.5.0"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
     id "com.matthewprenger.cursegradle" version '1.4.0'
 }
 
@@ -13,25 +13,25 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
+/*minecraft {
 }
-
 
 repositories {
-    // maven { url = "https://maven.terraformersmc.com/releases/" }
-}
+    maven { url = "https://maven.terraformersmc.com/releases/" }
+}*/
 
 dependencies {
-    api project("base")
-    include project("base")
+    api project(path: ":base", configuration: "namedElements")
+    include project(path: ":base", configuration: "namedElements")
 
-    api project("rei-compat")
-    include project("rei-compat")
+    api project(path: ":rei-compat", configuration: "namedElements")
+    include project(path: ":rei-compat", configuration: "namedElements")
 
-    api project("modular-armor")
-    include project("modular-armor")
+    api project(path: ":modular-armor", configuration: "namedElements")
+    include project(path: ":modular-armor", configuration: "namedElements")
 
-    include project("vanilla-events")
+    include project(path: ":vanilla-events", configuration: "namedElements")
+
 
     // modRuntime "com.terraformersmc:modmenu:2.0.0-beta.7"
 }
@@ -54,8 +54,8 @@ allprojects {
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-        modApi("dev.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
-        include("dev.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
+        modApi("com.github.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
+        include("com.github.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
     }
 
     jar {
@@ -92,14 +92,96 @@ jar {
     from "LICENSE"
 }
 
+subprojects {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                //from components.java
+
+                /*artifact(jar) {
+                    builtBy jar
+                    classifier "${archivesBaseName}-dev"
+                }
+
+                remapJar {
+                    input = file("libs/${archivesBaseName}-${version}-dev.jar")
+                    archiveName = "${archivesBaseName}-${version}.jar"
+                }*/
+
+                artifact(remapJar) {
+                    builtBy remapJar
+                    classifier archivesBaseName
+                }
+
+                artifact(sourcesJar) {
+                    builtBy remapSourcesJar
+                }
+
+                processResources {
+                    inputs.property "version", project.version
+
+                    filesMatching("fabric.mod.json") {
+                        expand "version": project.version
+                    }
+                }
+            }
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        maven {
+            url "https://maven.cafeteria.dev/releases"
+            credentials {
+                username = project.property("mcdUsername")
+                password = project.property("mcdPassword")
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishipathng_maven.html for information on how to set up publishing.
+    repositories {
+        maven {
+            url "https://maven.cafeteria.dev/releases"
+            credentials {
+                username = System.getenv("CAFETERIA_USERNAME")
+                password = System.getenv("CAFETERIA_PWD")
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+
+
 curseforge {
     apiKey = project.property("curseforgeToken")
     project {
         id = project.curseforge_id
         changelog = "https://github.com/NathanPB/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.minecraft_version + '+' + project.mod_version, "utf-8")}"
         releaseType = project.mod_version.contains('alpha')
-                ? 'alpha'
-                : project.mod_version.contains('beta')
+            ? 'alpha'
+            : project.mod_version.contains('beta')
                 ? 'beta'
                 : 'release'
 

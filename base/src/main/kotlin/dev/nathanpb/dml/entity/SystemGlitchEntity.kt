@@ -107,7 +107,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         goalSelector.add(2, MeleeAttackGoal(this, 1.0, true))
 
         targetSelector.add(1, GlitchTeleportTowardsPlayerGoal(this))
-        targetSelector.add(2, FollowTargetGoal(this, PlayerEntity::class.java, true))
+        targetSelector.add(2, ActiveTargetGoal(this, PlayerEntity::class.java, true))
         targetSelector.add(3, RevengeGoal(this))
 
         // rage attacks

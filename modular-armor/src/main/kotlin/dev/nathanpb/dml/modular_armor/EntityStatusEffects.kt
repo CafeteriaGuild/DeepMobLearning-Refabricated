@@ -21,12 +21,12 @@ package dev.nathanpb.dml.modular_armor
 
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.effect.StatusEffect
-import net.minecraft.entity.effect.StatusEffectType
+import net.minecraft.entity.effect.StatusEffectCategory
 import net.minecraft.util.registry.Registry
 
-class UnderwaterHasteEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0x46D99C)
-class DepthStriderEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0x02A7D9)
-class SoulVisionEffect : StatusEffect(StatusEffectType.BENEFICIAL, 0xFFD900)
+class UnderwaterHasteEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x46D99C)
+class DepthStriderEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x02A7D9)
+class SoulVisionEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0xFFD900)
 
 val UNDERWATER_HASTE_EFFECT = register("underwater_haste", UnderwaterHasteEffect())
 val DEPTH_STRIDER_EFFECT = register("depth_strider", DepthStriderEffect())

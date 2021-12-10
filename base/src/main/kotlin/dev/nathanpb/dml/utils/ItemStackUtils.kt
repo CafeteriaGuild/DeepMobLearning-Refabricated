@@ -27,7 +27,7 @@ fun combineStacksIfPossible(source: ItemStack, target: ItemStack, maxInventoryCo
         return (
             source.item === target.item
             && target.count < target.maxCount
-            && ItemStack.areTagsEqual(source, target)
+            && ItemStack.areNbtEqual(source, target)
         )
     }
 

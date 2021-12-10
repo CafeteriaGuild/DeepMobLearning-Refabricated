@@ -109,7 +109,7 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
 
     override fun getPropertyDelegate() = propertyDelegate
 
-    override fun writeNbt(tag: NbtCompound?): NbtCompound {
+    override fun writeNbt(tag: NbtCompound?) {
         return super.writeNbt(tag).also {
             if (tag != null) {
                 Inventories.writeNbt(tag, inventory.items())

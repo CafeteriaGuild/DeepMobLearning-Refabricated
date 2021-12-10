@@ -1,4 +1,4 @@
-val rei_version = "6.0.262-alpha"
+val reiVersion = "7.0.346"
 
 repositories {
     maven { url = uri("https://maven.shedaniel.me/") }
@@ -6,5 +6,5 @@ repositories {
 
 dependencies {
     api(project(":base"))
-    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:$rei_version")
+    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${reiVersion}")
 }

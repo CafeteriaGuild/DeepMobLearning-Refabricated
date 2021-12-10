@@ -28,7 +28,7 @@ import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
 
-class DataModelData(val stack: ItemStack, val category: EntityCategory?) : MutableCompoundData(stack.orCreateTag) {
+class DataModelData(val stack: ItemStack, val category: EntityCategory?) : MutableCompoundData(stack.orCreateNbt) {
 
     companion object {
         const val DATA_AMOUNT_TAG_KEY = "${MOD_ID}.datamodel.dataAmount"
