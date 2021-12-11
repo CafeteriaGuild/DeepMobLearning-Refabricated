@@ -36,8 +36,9 @@ import dev.nathanpb.dml.modular_armor.net.C2S_SOUL_VISION_REQUESTED
 import io.netty.buffer.Unpooled
 import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.network.PacketByteBuf
@@ -55,9 +56,9 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     override fun registerEvents() {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             ClientTickEvents.END_CLIENT_TICK.register(ClientTickEvents.EndTick {
-                if (SOUL_VISION_KEYBINDING.isPressed) {
+                if (MinecraftClient.getInstance().world != null && SOUL_VISION_KEYBINDING.isPressed) {
                     SOUL_VISION_KEYBINDING.isPressed = false
-                    ClientSidePacketRegistry.INSTANCE.sendToServer(C2S_SOUL_VISION_REQUESTED, PacketByteBuf(Unpooled.buffer()))
+                    ClientPlayNetworking.send(C2S_SOUL_VISION_REQUESTED, PacketByteBuf(Unpooled.buffer()))
                 }
             })
         }
