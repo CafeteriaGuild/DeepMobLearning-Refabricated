@@ -6,5 +6,5 @@ repositories {
 
 dependencies {
     api(project(":base", configuration = "namedElements"))
-    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${reiVersion}")
+    modApi("me.shedaniel:RoughlyEnoughItems-fabric:${reiVersion}")
 }

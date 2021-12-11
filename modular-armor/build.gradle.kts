@@ -16,9 +16,9 @@ dependencies {
     api(project(":base", configuration = "namedElements"))
     api(project(":vanilla-events", configuration = "namedElements"))
 
-    modImplementation("io.github.ladysnake:PlayerAbilityLib:${palVersion}")
+    modApi("io.github.ladysnake:PlayerAbilityLib:${palVersion}")
     include("io.github.ladysnake:PlayerAbilityLib:${palVersion}")
 
-    modImplementation("io.github.cottonmc:LibGui:${libguiVersion}")
+    modApi("io.github.cottonmc:LibGui:${libguiVersion}")
     include("io.github.cottonmc:LibGui:${libguiVersion}")
 }
