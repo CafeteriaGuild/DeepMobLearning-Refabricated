@@ -1,17 +1,24 @@
-val libgui_version = "4.1.1+1.17.1-rc1"
-val pal_version = "1.3.0-nightly.1.17-rc1"
+val palVersion: String by project
+val libguiVersion: String by project
 
 repositories {
-    maven { url = uri("https://ladysnake.jfrog.io/artifactory/mods") }
-    maven { url = uri("https://server.bbkr.space/artifactory/libs-release") }
+    maven {
+        name = "LadySnake"
+        url = uri("https://ladysnake.jfrog.io/artifactory/mods")
+    }
+    maven {
+        name = "CottonMC"
+        url = uri("https://server.bbkr.space/artifactory/libs-release")
+    }
 }
 
 dependencies {
-    api(project(":base"))
-    api(project(":vanilla-events"))
+    api(project(":base", configuration = "namedElements"))
+    api(project(":vanilla-events", configuration = "namedElements"))
 
-    modImplementation("io.github.ladysnake:PlayerAbilityLib:$pal_version")
-    include("io.github.ladysnake:PlayerAbilityLib:$pal_version")
+    modApi("io.github.ladysnake:PlayerAbilityLib:${palVersion}")
+    include("io.github.ladysnake:PlayerAbilityLib:${palVersion}")
 
-    modImplementation("io.github.cottonmc:LibGui:$libgui_version")
+    modApi("io.github.cottonmc:LibGui:${libguiVersion}")
+    include("io.github.cottonmc:LibGui:${libguiVersion}")
 }

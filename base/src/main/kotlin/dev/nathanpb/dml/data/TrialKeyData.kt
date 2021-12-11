@@ -32,7 +32,7 @@ import net.minecraft.nbt.NbtCompound
 
 class TrialKeyData (tag: NbtCompound) : MutableCompoundData(tag) {
 
-    constructor(stack: ItemStack) : this(stack.getOrCreateSubTag(TAG_KEY))
+    constructor(stack: ItemStack) : this(stack.getOrCreateSubNbt(TAG_KEY))
 
     companion object {
         const val TAG_KEY = "${MOD_ID}.trialkey"
@@ -54,11 +54,11 @@ class TrialKeyData (tag: NbtCompound) : MutableCompoundData(tag) {
 }
 
 var ItemStack.trialKeyData : TrialKeyData?
-    get() = takeOrNull(orCreateTag.contains(TrialKeyData.TAG_KEY)) {
+    get() = takeOrNull(orCreateNbt.contains(TrialKeyData.TAG_KEY)) {
         TrialKeyData(this)
     }
     set(value) = if (value != null) {
-        this.putSubTag(TrialKeyData.TAG_KEY, value.tag)
+        this.setSubNbt(TrialKeyData.TAG_KEY, value.tag)
     } else {
-        this.removeSubTag(TrialKeyData.TAG_KEY)
+        this.removeSubNbt(TrialKeyData.TAG_KEY)
     }

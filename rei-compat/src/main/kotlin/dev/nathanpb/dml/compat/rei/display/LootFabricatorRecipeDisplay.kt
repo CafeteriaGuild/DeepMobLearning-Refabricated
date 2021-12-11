@@ -33,7 +33,7 @@ class LootFabricatorRecipeDisplay (
 
     override fun getCategoryIdentifier(): CategoryIdentifier<LootFabricatorRecipeDisplay> = CategoryIdentifier.of(categoryId)
 
-    override fun getInputEntries() = recipe.input.matchingStacksClient
+    override fun getInputEntries() = recipe.input.matchingStacks
         .map(EntryStacks::of)
         .map(EntryIngredient::of)
         .toMutableList()

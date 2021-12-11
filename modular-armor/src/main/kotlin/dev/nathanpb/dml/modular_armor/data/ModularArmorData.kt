@@ -32,7 +32,7 @@ import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
 import kotlin.math.max
 
-class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreateTag) {
+class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreateNbt) {
 
     companion object {
         fun amountRequiredTo(tier: DataModelTier) = when (tier) {

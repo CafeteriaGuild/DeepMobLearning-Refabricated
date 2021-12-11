@@ -58,8 +58,8 @@ class LootFabricatorRecipe (
     override fun equals(other: Any?): Boolean {
         if (other is LootFabricatorRecipe) {
             return other.category.name == category.name
-                && other.input.matchingStacksClient.all { input.test(it) }
-                && input.matchingStacksClient.all { other.input.test(it) }
+                && other.input.matchingStacks.all { input.test(it) }
+                && input.matchingStacks.all { other.input.test(it) }
         }
         return false
     }

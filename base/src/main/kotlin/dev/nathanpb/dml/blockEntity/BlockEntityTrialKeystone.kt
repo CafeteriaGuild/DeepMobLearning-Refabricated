@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.blockEntity
 
-import dev.nathanpb.dml.MOD_ID
+import com.google.common.base.Preconditions
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
@@ -31,7 +31,6 @@ import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.utils.*
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
@@ -45,6 +44,7 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.particle.ParticleTypes
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -55,7 +55,6 @@ import kotlin.random.Random
 
 class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     BlockEntity(BLOCKENTITY_TRIAL_KEYSTONE, pos, state),
-    BlockEntityClientSerializable,
     InventoryProvider
 {
 
@@ -229,8 +228,8 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
         mobs.filter(LivingEntity::isAlive)
             .filterNot {
                 config.trial.allowPlayersLeavingArena
-                && currentTrial != null
-                && (it as? SystemGlitchEntity)?.trial == currentTrial
+                        && currentTrial != null
+                        && (it as? SystemGlitchEntity)?.trial == currentTrial
             }.filter {
                 val squaredDistance = it.squaredDistanceTo(posVector.x, posVector.y, posVector.z)
                 squaredDistance in BORDERS_RANGE
@@ -285,8 +284,8 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
         } else emptyList()
     }
 
-    override fun writeNbt(tag: NbtCompound?): NbtCompound? {
-        return super.writeNbt(tag)?.also {
+    override fun writeNbt(tag: NbtCompound?) {
+        return super.writeNbt(tag).also {
             if (tag != null) {
                 Inventories.writeNbt(tag, internalInventory.items())
                 currentTrial?.also { trial ->
@@ -310,7 +309,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
         }
     }
 
-    override fun toClientTag(tag: NbtCompound) = tag.also {
+    /*override fun toClientTag(tag: NbtCompound) = tag.also { // TODO: Do client sync stuff
         it.putString("${MOD_ID}:state", (currentTrial?.state ?: TrialState.NOT_STARTED).name)
     }
 
@@ -318,9 +317,15 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
         clientTrialState = tag.getString("${MOD_ID}:state").let { name ->
             if (name.isNotEmpty()) TrialState.valueOf(name) else TrialState.NOT_STARTED
         }
-    }
+    }*/
 
     override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
         return (world.getBlockEntity(pos) as BlockEntityTrialKeystone).internalInventory
+    }
+
+    fun sync() { // Thanks, Technici4n :happy_tater:
+        Preconditions.checkNotNull(world)
+        check(world is ServerWorld) { "Cannot call sync() on the logical client!" }
+        (world as ServerWorld).chunkManager.markForUpdate(getPos())
     }
 }

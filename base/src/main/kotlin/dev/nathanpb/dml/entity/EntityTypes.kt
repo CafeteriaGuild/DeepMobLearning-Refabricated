@@ -23,7 +23,7 @@ import dev.nathanpb.dml.entity.renderer.SystemGlitchRenderer
 import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.minecraft.client.render.entity.model.EntityModelLayers
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
@@ -50,7 +50,7 @@ fun registerEntityTypes() {
 }
 
 fun registerEntityRenderer() {
-    EntityRendererRegistry.INSTANCE.register(SYSTEM_GLITCH_ENTITY_TYPE) { dispatcher ->
+    EntityRendererRegistry.register(SYSTEM_GLITCH_ENTITY_TYPE) { dispatcher ->
         SystemGlitchRenderer(dispatcher, EntityModelLayers.ZOMBIE)
     }
 }

@@ -38,6 +38,8 @@ import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
 import me.shedaniel.rei.api.client.registry.entry.EntryRegistry
+import me.shedaniel.rei.api.common.plugins.PluginManager
+import me.shedaniel.rei.api.common.registry.ReloadStage
 import me.shedaniel.rei.api.common.util.EntryStacks
 
 
@@ -74,7 +76,7 @@ class ReiPlugin :  REIClientPlugin {
         }
     }
 
-    override fun postRegister() {
+    override fun postStage(manager: PluginManager<REIClientPlugin>?, stage: ReloadStage?) {
         val hiddenItems = listOf(ITEM_EMERITUS_HAT, ITEM_DML)
         EntryRegistry.getInstance().removeEntryIf {
             it.itemStack().item in hiddenItems

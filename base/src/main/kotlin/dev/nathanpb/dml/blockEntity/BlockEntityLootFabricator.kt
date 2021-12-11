@@ -157,7 +157,7 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
         return (world.getBlockEntity(pos) as BlockEntityLootFabricator).inventory
     }
 
-    override fun writeNbt(tag: NbtCompound?): NbtCompound {
+    override fun writeNbt(tag: NbtCompound?) {
         return super.writeNbt(tag).also {
             if (tag != null) {
                 NbtCompound().let { invTag ->
