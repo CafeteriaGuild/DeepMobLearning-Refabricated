@@ -1,4 +1,5 @@
 name: Publish
+
 on:
   release:
     types: [created]
@@ -8,21 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_VERSION: ${{github.ref_name}}
+
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 16
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
-          java-version: 16
+          java-version: 17
 
       - name: Bump version
       - run: ./.github/scripts/bumbVersion.sh "$NEXT_VERSION"
 
+      - name: Publish
       - run: |
           chmod +x ./gradlew
-          ./gradlew build curseforge --stacktrace
+          ./gradlew build publish curseforge --stacktrace
         env:
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
+          ORG_GRADLE_PROJECT_mcdUsername: ${{ secrets.MCD_USERNAME }}
+          ORG_GRADLE_PROJECT_mcdPassword: ${{ secrets.MCD_PASSWORD }}
 
       - name: Commit version bump
         uses: EndBug/add-and-commit@v7
@@ -30,3 +36,4 @@ jobs:
           add: ./gradle.properties
           message: ${{ format('[CI] Bump version to {0}', github.ref_name) }}
           branch: main
+          tag: '${{github.ref_name}} --force'

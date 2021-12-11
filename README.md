@@ -24,6 +24,17 @@ Absolutely! You can download the mod on [Curseforge](https://www.curseforge.com/
 
 About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [the original author of the mod](#xt9s-version) and you should be fine.
 
+## Setting up dev env
+The only special thing that differs from a gradle project is that you will need to have this section in your ``~/.gradle/gradle.properties`` file:
+
+```
+mcdUsername=foo
+mcdPassword=bar
+curseforgeToken=foobar
+```
+
+The values can be dummy, fill with the right ones if you somehow need to do the publications.
+
 ## Contact
 If you want to **report bugs**, give ideas, **feedbacks** or discuss the mod at all, feel free to open an Issue or join our [Discord Guild](https://discord.com/invite/G4PjhEf) and go to the Deep Mob Learning: Refabricated section. Please note that this guild is a shared place where me and some friends are making mods, take a look at their mods too!
 
