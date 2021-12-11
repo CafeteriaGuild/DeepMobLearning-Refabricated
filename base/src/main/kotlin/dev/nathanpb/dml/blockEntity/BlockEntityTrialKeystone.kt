@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.blockEntity
 
 import com.google.common.base.Preconditions
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
@@ -36,6 +37,7 @@ import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -284,6 +286,10 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
         } else emptyList()
     }
 
+    override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
+        return (world.getBlockEntity(pos) as BlockEntityTrialKeystone).internalInventory
+    }
+
     override fun writeNbt(tag: NbtCompound?) {
         return super.writeNbt(tag).also {
             if (tag != null) {
@@ -298,34 +304,58 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     }
 
     override fun readNbt(tag: NbtCompound?) {
-        super.readNbt(tag)
-        if (tag != null && currentTrial == null) {
-            val stacks = DefaultedList.ofSize(internalInventory.size(), ItemStack.EMPTY)
-            Inventories.readNbt(tag, stacks)
-            internalInventory.setStacks(stacks)
-            if (tag.contains("trial")) {
-                trialToLoad = TrialDataSerializer().read(tag, "trial")
+        if(tag?.contains("#c") == true) {
+            fromClientTag(tag)
+            if(tag.getBoolean("#c")) {
+                remesh()
+            }
+        } else {
+            super.readNbt(tag)
+            if (tag != null && currentTrial == null) {
+                val stacks = DefaultedList.ofSize(internalInventory.size(), ItemStack.EMPTY)
+                Inventories.readNbt(tag, stacks)
+                internalInventory.setStacks(stacks)
+                if (tag.contains("trial")) {
+                    trialToLoad = TrialDataSerializer().read(tag, "trial")
+                }
             }
         }
     }
 
-    /*override fun toClientTag(tag: NbtCompound) = tag.also { // TODO: Do client sync stuff
+    private fun toClientTag(tag: NbtCompound) = tag.also {
         it.putString("${MOD_ID}:state", (currentTrial?.state ?: TrialState.NOT_STARTED).name)
     }
 
-    override fun fromClientTag(tag: NbtCompound) {
+    private fun fromClientTag(tag: NbtCompound) {
         clientTrialState = tag.getString("${MOD_ID}:state").let { name ->
             if (name.isNotEmpty()) TrialState.valueOf(name) else TrialState.NOT_STARTED
         }
-    }*/
-
-    override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
-        return (world.getBlockEntity(pos) as BlockEntityTrialKeystone).internalInventory
     }
 
-    fun sync() { // Thanks, Technici4n :happy_tater:
+    override fun toInitialChunkDataNbt(): NbtCompound {
+        val nbt = super.toInitialChunkDataNbt()
+        toClientTag(nbt)
+        nbt.putBoolean("#c", shouldClientRemesh) // mark client tag
+        shouldClientRemesh = false
+        return nbt
+    }
+
+    private fun sync(shouldRemesh : Boolean) { // Thanks, Technici4n :happy_tater:
         Preconditions.checkNotNull(world)
         check(world is ServerWorld) { "Cannot call sync() on the logical client!" }
+        shouldClientRemesh = shouldRemesh or shouldClientRemesh
         (world as ServerWorld).chunkManager.markForUpdate(getPos())
     }
+
+    private fun sync() {
+        sync(true)
+    }
+
+    private fun remesh() {
+        Preconditions.checkNotNull(world)
+        check(world is ClientWorld) { "Cannot call remesh() on the server!" }
+        world!!.updateListeners(pos, null, null, 0)
+    }
+
+    private var shouldClientRemesh = true
 }
