@@ -1,4 +1,4 @@
-val reiVersion = "7.0.346"
+val reiVersion: String by project
 
 repositories {
     maven { url = uri("https://maven.shedaniel.me/") }

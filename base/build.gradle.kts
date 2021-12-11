@@ -1,4 +1,4 @@
-val libguiVersion = "5.1.0+1.18"
+val libguiVersion: String by project
 
 repositories {
     maven {

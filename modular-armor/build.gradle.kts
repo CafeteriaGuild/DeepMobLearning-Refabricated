@@ -1,5 +1,5 @@
-val palVersion = "1.5.0"
-val libguiVersion = "5.1.0+1.18"
+val palVersion: String by project
+val libguiVersion: String by project
 
 repositories {
     maven {
