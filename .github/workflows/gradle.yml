@@ -5,9 +5,9 @@ name: Artifact Generation
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   build:
@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 16
+
       - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
@@ -29,14 +30,21 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Build with Gradle
         run: ./gradlew build
+        env:
+          ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
+          ORG_GRADLE_PROJECT_mcdUsername: ${{ secrets.MCD_USERNAME }}
+          ORG_GRADLE_PROJECT_mcdPassword: ${{ secrets.MCD_PASSWORD }}
+
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
+
       - uses: actions/upload-artifact@v2
         with:
           path: build/libs/*

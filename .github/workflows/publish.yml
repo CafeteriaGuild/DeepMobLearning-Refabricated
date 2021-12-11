@@ -20,9 +20,11 @@ jobs:
 
       - run: |
           chmod +x ./gradlew
-          ./gradlew build curseforge --stacktrace
+          ./gradlew build publish curseforge --stacktrace
         env:
           ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
+          ORG_GRADLE_PROJECT_mcdUsername: ${{ secrets.MCD_USERNAME }}
+          ORG_GRADLE_PROJECT_mcdPassword: ${{ secrets.MCD_PASSWORD }}
 
       - name: Commit version bump
         uses: EndBug/add-and-commit@v7

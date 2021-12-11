@@ -71,6 +71,28 @@ allprojects {
     }
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishipathng_maven.html for information on how to set up publishing.
+    repositories {
+        maven {
+            url "https://maven.cafeteria.dev/releases"
+            credentials {
+                username = project.property("mcdUsername")
+                password = project.property("mcdPassword")
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+
 // ensure that the encoding is set to UTF-8, no matter what the system default is
 // this fixes some edge cases with special characters not displaying correctly
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
@@ -89,88 +111,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 jar {
     from "LICENSE"
 }
-
-subprojects {
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                //from components.java
-
-                /*artifact(jar) {
-                    builtBy jar
-                    classifier "${archivesBaseName}-dev"
-                }
-
-                remapJar {
-                    input = file("libs/${archivesBaseName}-${version}-dev.jar")
-                    archiveName = "${archivesBaseName}-${version}.jar"
-                }*/
-
-                artifact(remapJar) {
-                    builtBy remapJar
-                    classifier archivesBaseName
-                }
-
-                artifact(sourcesJar) {
-                    builtBy remapSourcesJar
-                }
-
-                processResources {
-                    inputs.property "version", project.version
-
-                    filesMatching("fabric.mod.json") {
-                        expand "version": project.version
-                    }
-                }
-            }
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        maven {
-            url "https://maven.cafeteria.dev/releases"
-            credentials {
-                username = project.property("mcdUsername")
-                password = project.property("mcdPassword")
-            }
-            authentication {
-                basic(BasicAuthentication)
-            }
-        }
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishipathng_maven.html for information on how to set up publishing.
-    repositories {
-        maven {
-            url "https://maven.cafeteria.dev/releases"
-            credentials {
-                username = System.getenv("CAFETERIA_USERNAME")
-                password = System.getenv("CAFETERIA_PWD")
-            }
-            authentication {
-                basic(BasicAuthentication)
-            }
-        }
-    }
-}
-
 
 curseforge {
     apiKey = project.property("curseforgeToken")
