@@ -3,7 +3,9 @@
   "tier": 3,
   "category": "NETHER",
   "spawnRates": {
-    ".*": 1
+    ".*": 10,
+    "minecraft:wither_skeleton": 3,
+    "minecraft:hoglin": 3
   },
   "rewards": [
     {

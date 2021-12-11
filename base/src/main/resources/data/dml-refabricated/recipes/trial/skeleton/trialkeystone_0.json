@@ -3,7 +3,8 @@
   "tier": 0,
   "category": "SKELETON",
   "spawnRates": {
-    ".*": 1
+    ".*": 10,
+    "minecraft:wither_skeleton": 0
   },
   "rewards": [
     {

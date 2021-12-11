@@ -3,7 +3,9 @@
   "tier": 0,
   "category": "GHOST",
   "spawnRates": {
-    ".*": 1
+    ".*": 10,
+    "minecraft:phantom": 3,
+    "minecraft:vex": 1
   },
   "rewards": [
     {

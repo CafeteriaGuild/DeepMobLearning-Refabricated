@@ -3,7 +3,10 @@
   "tier": 4,
   "category": "OVERWORLD",
   "spawnRates": {
-    ".*": 1
+    ".*": 10,
+    "minecraft:enderman": 4,
+    "minecraft:creeper": 4,
+    "minecraft:witch": 4
   },
   "rewards": [
     {

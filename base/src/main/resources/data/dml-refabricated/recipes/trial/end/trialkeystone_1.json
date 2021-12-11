@@ -3,7 +3,9 @@
   "tier": 1,
   "category": "END",
   "spawnRates": {
-    ".*": 1
+    ".*": 10,
+    "minecraft:shulker": 4,
+    "minecraft:endermite": 2
   },
   "rewards": [
     {

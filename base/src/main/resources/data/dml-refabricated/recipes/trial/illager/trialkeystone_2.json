@@ -3,7 +3,9 @@
   "tier": 2,
   "category": "ILLAGER",
   "spawnRates": {
-    ".*": 1
+    ".*": 10,
+    "minecraft:evoker": 2,
+    "minecraft:ravager": 2
   },
   "rewards": [
     {
