@@ -37,6 +37,7 @@ class TrialKeystoneRecipe (
     private val id: Identifier,
     val category: EntityCategory,
     val tier: DataModelTier,
+    val spawnRate: Map<Regex, Float>,
     private val rewards: List<ItemStack>,
     waveEntityCount: Int?,
     waveRespawnTimeout: Int?
@@ -79,6 +80,11 @@ class TrialKeystoneRecipe (
             buf.writeInt(recipe.waveRespawnTimeout)
             buf.writeInt(recipe.rewards.size)
             recipe.rewards.forEach { buf.writeItemStack(it) }
+            buf.writeInt(recipe.spawnRate.size)
+            recipe.spawnRate.forEach { (k, v) ->
+                buf.writeString(k.toString())
+                buf.writeFloat(v)
+            }
         }
 
         override fun read(id: Identifier, json: JsonObject): TrialKeystoneRecipe {
@@ -96,10 +102,20 @@ class TrialKeystoneRecipe (
                 json.getAsJsonPrimitive("waveRespawnTimeout").asInt
             }
 
+            val rates = json.getAsJsonObject("spawnRates").let { obj ->
+                val sum = obj.entrySet().sumOf { it.value.asInt }.toFloat()
+                obj.entrySet()
+                    .asSequence()
+                    .map { (k, v) -> k.toRegex() to v.asInt.toFloat() }
+                    .map { (k, v) -> k to (v * 1f) / sum }
+                    .toMap()
+            }
+
             return TrialKeystoneRecipe(
                 id,
                 category,
                 tier,
+                rates,
                 rewards,
                 waveEntityCount,
                 waveRespawnTimeout
@@ -115,7 +131,11 @@ class TrialKeystoneRecipe (
                 buf.readItemStack()
             }
 
-            return TrialKeystoneRecipe(id, category, tier, stacks, waveCount, waveRespawnTimeout)
+            val spawnRates = (1..buf.readInt()).associate {
+                buf.readString().toRegex() to buf.readFloat()
+            }
+
+            return TrialKeystoneRecipe(id, category, tier, spawnRates, stacks, waveCount, waveRespawnTimeout)
         }
     }
 }

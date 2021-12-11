@@ -2,6 +2,9 @@
   "type": "dml-refabricated:trial_keystone",
   "tier": 2,
   "category": "OVERWORLD",
+  "spawnRates": {
+    ".*": 1
+  },
   "rewards": [
     {
       "item": "dml-refabricated:pristine_matter_overworld",

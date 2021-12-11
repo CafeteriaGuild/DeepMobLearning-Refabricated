@@ -19,7 +19,20 @@
 
 package dev.nathanpb.dml.utils
 
+import kotlin.random.Random
+
 fun Double.lerp(min: Double, max: Double) = (1 - this) * min + this * max
 fun Int.lerp(min: Double, max: Double) = (1 - this) * min + this * max
 
 fun Int.squared() = this * this
+
+// https://stackoverflow.com/a/35701777/9893963
+fun <T> discreteDistribution(table: Map<T, Float>): T {
+  var prob = Random.nextFloat() * table.values.sum()
+  var i = 0
+  while (prob > 0) {
+    prob -= table.values.toList()[i]
+    i++
+  }
+  return table.keys.toList()[i - 1]
+}

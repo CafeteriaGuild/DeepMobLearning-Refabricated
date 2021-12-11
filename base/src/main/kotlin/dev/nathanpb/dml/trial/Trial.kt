@@ -45,6 +45,7 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import java.util.*
 import kotlin.random.Random
@@ -266,7 +267,17 @@ class Trial (
     private fun spawnWave() {
         (world as? ServerWorld)?.let { world ->
             (0 until recipe.waveEntityCount).map {
-                recipe.category.tag.getRandom(java.util.Random()).spawn(
+                val distributionTable = recipe.category.tag
+                    .values()
+                    .associateWith {
+                        val id = Registry.ENTITY_TYPE.getId(it).toString()
+                        recipe.spawnRate.entries
+                            .last { (k) -> k.matches(id) }
+                            .value
+                    }
+
+                val entity = discreteDistribution(distributionTable)
+                entity.spawn(
                     world,
                     null, null, null,
                     pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
@@ -285,7 +296,8 @@ class Trial (
     fun getMonstersInArena(): List<HostileEntity> {
         return world.getEntitiesAroundCircle(
             TypeFilter.instanceOf(HostileEntity::class.java),
-            pos, config.trial.arenaRadius.squared().toDouble()
+            pos,
+            config.trial.arenaRadius.toDouble()
         )
     }
 }

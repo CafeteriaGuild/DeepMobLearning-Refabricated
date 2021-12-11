@@ -2,6 +2,9 @@
   "type": "dml-refabricated:trial_keystone",
   "tier": 0,
   "category": "NETHER",
+  "spawnRates": {
+    ".*": 1
+  },
   "rewards": [
     {
       "item": "dml-refabricated:pristine_matter_nether",
