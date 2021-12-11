@@ -13,8 +13,8 @@ repositories {
 }
 
 dependencies {
-    api(project(":base"))
-    api(project(":vanilla-events"))
+    api(project(":base", configuration = "namedElements"))
+    api(project(":vanilla-events", configuration = "namedElements"))
 
     modImplementation("io.github.ladysnake:PlayerAbilityLib:${palVersion}")
     include("io.github.ladysnake:PlayerAbilityLib:${palVersion}")

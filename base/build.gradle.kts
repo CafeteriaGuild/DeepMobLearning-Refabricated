@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":vanilla-events"))
+    api(project(":vanilla-events", configuration = "namedElements"))
 
     modImplementation("io.github.cottonmc:LibGui:${libguiVersion}")
     include("io.github.cottonmc:LibGui:${libguiVersion}")
