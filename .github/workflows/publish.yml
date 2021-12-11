@@ -36,4 +36,3 @@ jobs:
           add: ./gradle.properties
           message: ${{ format('[CI] Bump version to {0}', github.ref_name) }}
           branch: main
-          tag: '${{github.ref_name}} --force'
