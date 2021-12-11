@@ -19,10 +19,10 @@ jobs:
           java-version: 17
 
       - name: Bump version
-      - run: ./.github/scripts/bumbVersion.sh "$NEXT_VERSION"
+        run: ./.github/scripts/bumpVersion.sh "$NEXT_VERSION"
 
       - name: Publish
-      - run: |
+        run: |
           chmod +x ./gradlew
           ./gradlew build publish curseforge --stacktrace
         env:
