@@ -22,7 +22,7 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build curseforge --stacktrace
         env:
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
 
       - name: Commit version bump
         uses: EndBug/add-and-commit@v7
