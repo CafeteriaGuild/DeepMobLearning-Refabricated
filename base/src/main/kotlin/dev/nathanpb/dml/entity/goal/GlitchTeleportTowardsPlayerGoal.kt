@@ -25,7 +25,7 @@ import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.getPlayersByUUID
 import dev.nathanpb.dml.utils.squared
 import net.minecraft.entity.ai.TargetPredicate
-import net.minecraft.entity.ai.goal.FollowTargetGoal
+import net.minecraft.entity.ai.goal.ActiveTargetGoal
 import net.minecraft.entity.player.PlayerEntity
 import kotlin.random.Random
 
@@ -39,7 +39,7 @@ import kotlin.random.Random
  * The entity has 5% chance of teleporting per tick if the timeout its cleared
  * It also sets the entity's target to the target the goal picked
  */
-class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : FollowTargetGoal<PlayerEntity?>(
+class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : ActiveTargetGoal<PlayerEntity?>(
     glitch,
     PlayerEntity::class.java as Class<PlayerEntity?>,
     false
@@ -72,8 +72,8 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
             ticksToTeleportCountdown--
         }
         if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= config.systemGlitch.teleportChance) {
-            if (targetEntity.squaredDistanceTo(glitch) >= config.systemGlitch.teleportMinDistance.squared()) {
-                if (glitch.tryTeleportRandomly(targetEntity.blockPos, config.systemGlitch.teleportAroundPlayerRadius)) {
+            if (targetEntity!!.squaredDistanceTo(glitch) >= config.systemGlitch.teleportMinDistance.squared()) {
+                if (glitch.tryTeleportRandomly(targetEntity!!.blockPos, config.systemGlitch.teleportAroundPlayerRadius)) {
                     ticksToTeleportCountdown = config.systemGlitch.teleportDelay
                     glitch.target = targetEntity
                     return

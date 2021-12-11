@@ -20,7 +20,7 @@ jobs:
 
       - run: |
           chmod +x ./gradlew
-          ./gradlew build curseforge publishing --stacktrace
+          ./gradlew build curseforge --stacktrace
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
 

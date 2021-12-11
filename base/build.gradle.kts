@@ -1,13 +1,19 @@
-val libgui_version = "4.1.1+1.17.1-rc1"
+val libguiVersion: String by project
 
 repositories {
-    maven { url = uri("https://server.bbkr.space/artifactory/libs-release") }
-    maven { url = uri("https://maven.shedaniel.me/") }
+    maven {
+        name = "CottonMC"
+        url = uri("https://server.bbkr.space/artifactory/libs-release")
+    }
+    /*maven {
+        name = "Shedaniel"
+        url = uri("https://maven.shedaniel.me/")
+    }*/
 }
 
 dependencies {
-    api(project(":vanilla-events"))
+    api(project(":vanilla-events", configuration = "namedElements"))
 
-    modImplementation("io.github.cottonmc:LibGui:$libgui_version")
-    include("io.github.cottonmc:LibGui:$libgui_version")
+    modApi("io.github.cottonmc:LibGui:${libguiVersion}")
+    include("io.github.cottonmc:LibGui:${libguiVersion}")
 }

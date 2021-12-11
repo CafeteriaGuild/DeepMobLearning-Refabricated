@@ -49,7 +49,7 @@ class PartyPoisonAffix : TrialAffix(identifier("party_poison")), TrialAffix.Tick
                 val stack = ItemStack(Items.SPLASH_POTION)
                 PotionUtil.setPotion(stack, Potions.POISON)
                 potionEntity.setItem(stack)
-                potionEntity.setProperties(trial.systemGlitch, -60F, angle.toFloat(), -20.0f, 0.5f, 1.0f)
+                potionEntity.setVelocity(trial.systemGlitch, -60F, angle.toFloat(), -20.0f, 0.5f, 1.0f)
                 trial.world.spawnEntity(potionEntity)
             }
 
