@@ -19,7 +19,7 @@ jobs:
           java-version: 17
 
       - name: Bump version
-        run: ./.github/scripts/bumbVersion.sh "$NEXT_VERSION"
+        run: ./.github/scripts/bumpVersion.sh "$NEXT_VERSION"
 
       - name: Publish
         run: |
