@@ -13,7 +13,8 @@
   "environment": "*",
   "entrypoints": {
     "main": ["dev.nathanpb.dml.DeepMobLearningKt::init"],
-    "client": ["dev.nathanpb.dml.DeepMobLearningKt::initClient"]
+    "client": ["dev.nathanpb.dml.DeepMobLearningKt::initClient"],
+    "modmenu": [ "dev.nathanpb.dml.config.ModMenuCompat"]
   },
   "mixins": ["mixins.dml-refabricated-base.json"],
   "depends": {

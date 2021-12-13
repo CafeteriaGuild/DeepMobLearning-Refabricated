@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "minecraft:rotten_flesh" }
+  ],
+  "result": {
+    "item": "minecraft:iron_ingot",
+    "count": 8
+  }
+}
