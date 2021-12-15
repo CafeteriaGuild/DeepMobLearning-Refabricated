@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "PMP",
+    "DCD"
+  ],
+  "key": {
+    "M": { "item": "dml-refabricated:machine_casing" },
+    "P": { "item": "minecraft:ender_pearl" },
+    "G": { "item": "minecraft:glass_pane" },
+    "C": { "item": "minecraft:comparator" },
+    "D": { "item": "minecraft:cyan_dye" }
+  },
+  "result": {
+    "item": "dmlsimulacrum:simulation_chamber"
+  }
+}

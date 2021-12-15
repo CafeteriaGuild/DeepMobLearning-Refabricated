@@ -1,0 +1,8 @@
+{
+  "variants": {
+      "facing=north": { "model": "dmlsimulacrum:block/simulation_chamber" },
+      "facing=east": { "model": "dmlsimulacrum:block/simulation_chamber", "y": 90 },
+      "facing=south": { "model": "dmlsimulacrum:block/simulation_chamber", "y": 180 },
+      "facing=west": { "model": "dmlsimulacrum:block/simulation_chamber", "y": 270 }
+  }
+}

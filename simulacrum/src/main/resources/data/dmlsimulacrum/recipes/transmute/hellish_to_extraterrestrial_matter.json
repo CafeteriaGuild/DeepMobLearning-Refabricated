@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    "HEH",
+    " H "
+  ],
+  "key": {
+    "H": {
+      "item": "dmlsimulacrum:hellish_matter"
+    },
+    "E": {
+      "item": "minecraft:end_stone"
+    }
+  },
+  "result": {
+    "item": "dmlsimulacrum:extraterrestrial_matter"
+  }
+}

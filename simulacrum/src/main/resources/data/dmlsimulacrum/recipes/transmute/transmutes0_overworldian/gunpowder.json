@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "dmlsimulacrum:overworld_matter" },
+    { "item": "minecraft:coal" }
+  ],
+  "result": {
+    "item": "minecraft:gunpowder",
+    "count": 16
+  }
+}
