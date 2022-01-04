@@ -19,10 +19,10 @@
     "fabric-language-kotlin": "*",
     "minecraft": "1.18.x",
     "ktdatataglib": "*",
-    "patchouli": "*",
     "cloth-config2": ">=6.0.42"
   },
   "suggests": {
+    "patchouli": "*",
     "flamingo": "*"
   },
   "custom": {
