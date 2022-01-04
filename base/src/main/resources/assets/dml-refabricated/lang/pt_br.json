@@ -151,7 +151,6 @@
     "affix.dml-refabricated.thunderstorm.name": "Tempestade",
     "affix.dml-refabricated.party_poison.name": "Gás venenoso",
     "text.dml-refabricated.ineedatexture": "§8Preciso de textura =P",
-    "advancements.dml-refabricated.dml": "Redstone Fulida",
     "advancements.dml-refabricated.dml.description": "Soque redstone em um Bloco de Carvão para fazer Redstone Coberta por Fuligem.",
     "advancements.dml-refabricated.blank_data_model": "Vácuo de Dados",
     "advancements.dml-refabricated.blank_data_model.description": "Fabrique um Modelo de Dados Vazio.",
@@ -165,6 +164,6 @@
     "advancements.dml-refabricated.pristine_matter.description": "Obtenha Matéria Pura ao concluir uma Simulação com Sucesso.",
     "advancements.dml-refabricated.loot_fabricator": "Saqueio Automático",
     "advancements.dml-refabricated.loot_fabricator.description": "Fabrique um Gerador de Saque.",
-    "advancements.dml-refabricated.glitch_ingot": "100% Glitch",
+    "advancements.dml-refabricated.glitch_ingot": "Corrupção Enlatada",
     "advancements.dml-refabricated.glitch_ingot.description": "Fabrique um Lingote Corrompido."
 }

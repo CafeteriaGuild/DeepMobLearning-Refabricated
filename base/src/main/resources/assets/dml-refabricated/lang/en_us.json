@@ -152,7 +152,6 @@
   "affix.dml-refabricated.thunderstorm.name": "Thunderstorm",
   "affix.dml-refabricated.party_poison.name": "Party Poison",
   "text.dml-refabricated.ineedatexture": "§8I need a texture =P",
-  "advancements.dml-refabricated.dml": "Soot'ed Redstone",
   "advancements.dml-refabricated.dml.description": "Punch redstone into a Coal Block to make Soot-covered Redstone.",
   "advancements.dml-refabricated.blank_data_model": "At a Total Blank!",
   "advancements.dml-refabricated.blank_data_model.description": "Craft a Blank Data Model.",
@@ -166,6 +165,6 @@
   "advancements.dml-refabricated.pristine_matter.description": "Obtain Pristine Matter by successfully ending a Trial.",
   "advancements.dml-refabricated.loot_fabricator": "Fabric-ating Loot",
   "advancements.dml-refabricated.loot_fabricator.description": "Craft a Loot Fabricator.",
-  "advancements.dml-refabricated.glitch_ingot": "100% Glitch",
+  "advancements.dml-refabricated.glitch_ingot": "Canned Glitches",
   "advancements.dml-refabricated.glitch_ingot.description": "Craft a Glitch Ingot."
 }
