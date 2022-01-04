@@ -18,7 +18,8 @@
   },
   "mixins": ["mixins.dml-refabricated-modular-armor.json"],
   "depends": {
-    "dml-refabricated": "${version}"
+    "dml-refabricated": "${version}",
+    "dml-refabricated-base": "${version}"
   },
   "suggests": {},
   "custom": {

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:glitch_ingot"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.glitch_ingot"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.glitch_ingot.description"
+    }
+  },
+  "parent": "dml-refabricated:trial",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:glitch_ingot"]
+          }
+        ]
+      }
+    }
+  }
+}

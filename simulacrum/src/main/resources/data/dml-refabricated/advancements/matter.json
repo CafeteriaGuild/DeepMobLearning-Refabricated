@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "dmlsimulacrum:overworld_matter"
+    },
+    "title": {
+      "translate": "advancements.dmlsimulacrum.matter"
+    },
+    "description": {
+      "translate": "advancements.dmlsimulacrum.matter.description"
+    }
+  },
+  "parent": "dml-refabricated:simulation_chamber",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dmlsimulacrum:overworld_matter"]
+          },
+          {
+            "items": ["dmlsimulacrum:hellish_matter"]
+          },
+          {
+            "items": ["dmlsimulacrum:extraterrestrial_matter"]
+          }
+        ]
+      }
+    }
+  }
+}

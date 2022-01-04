@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dmlsimulacrum:simulation_chamber"
+    },
+    "title": {
+      "translate": "advancements.dmlsimulacrum.simulation_chamber"
+    },
+    "description": {
+      "translate": "advancements.dmlsimulacrum.simulation_chamber.description"
+    }
+  },
+  "parent": "dml-refabricated:data_models",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dmlsimulacrum:simulation_chamber"]
+          }
+        ]
+      }
+    }
+  }
+}

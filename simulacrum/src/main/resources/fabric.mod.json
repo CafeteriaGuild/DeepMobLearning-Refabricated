@@ -34,6 +34,7 @@
     "fabric": ">=0.43.1",
     "minecraft": "1.18.*",
     "dml-refabricated": "*",
+    "dml-refabricated-base": "*",
     "cloth-config2": ">=6.0.42"
   }
 }

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:matter_condenser"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.matter_condenser"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.matter_condenser.description"
+    }
+  },
+  "parent": "dml-refabricated:glitch_armor",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:matter_condenser"]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,14 +1,15 @@
 val libguiVersion: String by project
+val patchouliVersion: String by project
 
 repositories {
     maven {
         name = "CottonMC"
         url = uri("https://server.bbkr.space/artifactory/libs-release")
     }
-    /*maven {
-        name = "Shedaniel"
-        url = uri("https://maven.shedaniel.me/")
-    }*/
+    maven {
+        name = "Patchouli"
+        url = uri("https://maven.blamejared.com")
+    }
 }
 
 dependencies {
@@ -16,4 +17,6 @@ dependencies {
 
     modApi("io.github.cottonmc:LibGui:${libguiVersion}")
     include("io.github.cottonmc:LibGui:${libguiVersion}")
+
+    modImplementation("vazkii.patchouli:Patchouli:${patchouliVersion}")
 }

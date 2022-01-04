@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:glitch_chestplate"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.glitch_armor"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.glitch_armor.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "dml-refabricated:glitch_ingot",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:glitch_helmet"]
+          },
+          {
+            "items": ["dml-refabricated:glitch_chestplate"]
+          },
+          {
+            "items": ["dml-refabricated:glitch_leggings"]
+          },
+          {
+            "items": ["dml-refabricated:glitch_boots"]
+          }
+        ]
+      }
+    }
+  }
+}

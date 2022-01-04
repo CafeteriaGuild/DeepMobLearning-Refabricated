@@ -1,6 +1,7 @@
 {
     "itemGroup.dml-refabricated.tab_dml-refabricated": "Deep Mob Learning: Reconstruído",
     "item.dml-refabricated.dml-refabricated": "Deep Mob Learning: Reconstruído",
+    "item.dml-refabricated.guide_tablet": "Tablet Guia",
     "item.dml-refabricated.deep_learner": "Revelador",
     "item.dml-refabricated.data_model": "Modelo de dados vazio",
     "item.dml-refabricated.data_model_nether": "Modelo de dados do Nether",
@@ -28,6 +29,7 @@
     "item.dml-refabricated.emeritus_hat": "Chapéu de Emeritus",
     "item.dml-refabricated.physically_condensed_matrix_fragment": "Fragmento da realidade fisicamente condensado",
     "item.dml-refabricated.glitch_ingot": "Lingote corrompido",
+    "tooltip.dml-refabricated.guide_tablet": "§3§oO guia altamente tecnológico do Deep Mob Learning: Refabricated!",
     "tooltip.dml-refabricated.data_model.bound_to": "§9Vinculado a:§4 %s",
     "tooltip.dml-refabricated.data_model.data_amount": "§9Dados armazenados:§r %d (%d Para o próximo nível.)",
     "tooltip.dml-refabricated.data_model.data_amount_simple": "§9Dados:§r %d/%d",
@@ -148,5 +150,21 @@
     "affix.dml-refabricated.mob_resistance.name": "Peito de aço",
     "affix.dml-refabricated.thunderstorm.name": "Tempestade",
     "affix.dml-refabricated.party_poison.name": "Gás venenoso",
-    "text.dml-refabricated.ineedatexture": "§8Preciso de textura =P"
+    "text.dml-refabricated.ineedatexture": "§8Preciso de textura =P",
+    "advancements.dml-refabricated.dml": "Redstone Fulida",
+    "advancements.dml-refabricated.dml.description": "Soque redstone em um Bloco de Carvão para fazer Redstone Coberta por Fuligem.",
+    "advancements.dml-refabricated.blank_data_model": "Vácuo de Dados",
+    "advancements.dml-refabricated.blank_data_model.description": "Fabrique um Modelo de Dados Vazio.",
+    "advancements.dml-refabricated.data_models": "Modelando Dados",
+    "advancements.dml-refabricated.data_models.description": "Fabrique um Modelo de Dados vinculado.",
+    "advancements.dml-refabricated.deep_learner": "Revelando",
+    "advancements.dml-refabricated.deep_learner.description": "Fabrique um Relevador.",
+    "advancements.dml-refabricated.trial": "Simulações",
+    "advancements.dml-refabricated.trial.description": "Fabrique uma Chave de Simulação & Pedestal de Simulação.",
+    "advancements.dml-refabricated.pristine_matter": "Matéria Anciã",
+    "advancements.dml-refabricated.pristine_matter.description": "Obtenha Matéria Pura ao concluir uma Simulação com Sucesso.",
+    "advancements.dml-refabricated.loot_fabricator": "Saqueio Automático",
+    "advancements.dml-refabricated.loot_fabricator.description": "Fabrique um Gerador de Saque.",
+    "advancements.dml-refabricated.glitch_ingot": "100% Glitch",
+    "advancements.dml-refabricated.glitch_ingot.description": "Fabrique um Lingote Corrompido."
 }

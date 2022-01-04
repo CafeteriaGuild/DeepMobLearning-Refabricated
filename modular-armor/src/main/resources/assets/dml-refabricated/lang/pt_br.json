@@ -26,5 +26,9 @@
     "effect.dml-refabricated.underwater_haste": "Pressa embaixo da água",
     "effect.dml-refabricated.depth_strider": "Passos profundos",
     "effect.dml-refabricated.soul_vision": "Visão de Almas",
-    "death.dml-refabricated.starvedWithPlenty": "%s morreu de fome em uma terra prospera"
+    "death.dml-refabricated.starvedWithPlenty": "%s morreu de fome em uma terra prospera",
+    "advancements.dml-refabricated.glitch_armor": "Corrompido até O Osso",
+    "advancements.dml-refabricated.glitch_armor.description": "Fabrique todas as peças de uma Armadura Corrompida.",
+    "advancements.dml-refabricated.matter_condenser": "Condensando Matéria",
+    "advancements.dml-refabricated.matter_condenser.description": "Fabrique um Condensador de Matéria."
 }

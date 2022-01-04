@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:loot_fabricator"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.loot_fabricator"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.loot_fabricator.description"
+    }
+  },
+  "parent": "dml-refabricated:pristine_matter",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:loot_fabricator"]
+          }
+        ]
+      }
+    }
+  }
+}

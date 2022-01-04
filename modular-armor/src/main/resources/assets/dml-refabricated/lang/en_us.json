@@ -26,5 +26,9 @@
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider",
   "effect.dml-refabricated.soul_vision": "Soul Vision",
-  "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty"
+  "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty",
+  "advancements.dml-refabricated.glitch_armor": "Glitchy to the Bone",
+  "advancements.dml-refabricated.glitch_armor.description": "Craft a full set of Glitch Armor.",
+  "advancements.dml-refabricated.matter_condenser": "Condensing Matter",
+  "advancements.dml-refabricated.matter_condenser.description": "Craft a Matter Condenser."
 }

@@ -23,5 +23,9 @@
   "text.autoconfig.dml-simulacrum.option.Energy_Cost.END": "End",
   "text.autoconfig.dml-simulacrum.option.Energy_Cost.GHOST": "Ghost",
   "text.autoconfig.dml-simulacrum.option.Energy_Cost.ILLAGER": "Illager",
-  "text.autoconfig.dml-simulacrum.option.Energy_Cost.OCEAN": "Ocean"
+  "text.autoconfig.dml-simulacrum.option.Energy_Cost.OCEAN": "Ocean",
+  "advancements.dmlsimulacrum.simulation_chamber": "Simulation & Experimentation",
+  "advancements.dmlsimulacrum.simulation_chamber.description": "Craft a Simulation Chamber.",
+  "advancements.dmlsimulacrum.matter": "A Matter of Simulation",
+  "advancements.dmlsimulacrum.matter.description": "Obtain all 3 types of Matter."
 }

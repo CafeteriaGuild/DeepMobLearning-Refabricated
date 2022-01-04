@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:trial_key"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.trial"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.trial.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "dml-refabricated:deep_learner",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:trial_key"]
+          },
+          {
+            "items": ["dml-refabricated:trial_keystone"]
+          }
+        ]
+      }
+    }
+  }
+}
