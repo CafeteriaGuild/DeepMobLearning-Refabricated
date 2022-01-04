@@ -97,7 +97,7 @@ fun init() {
         EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
-    println("Deep Mob Learning: Refabricated is good to go")
+    LOGGER.info("Deep Mob Learning: Refabricated is good to go")
 }
 
 @Suppress("unused")
