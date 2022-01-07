@@ -35,6 +35,7 @@ class ModularEffectRegistry {
                 // Nether
                 register(FireProtectionEffect())
                 register(AutoExtinguishEffect())
+                register(PiglinTruceEffect())
                 register(FireImmunityEffect())
 
                 // Slimy

@@ -113,6 +113,7 @@ class GlitchArmor {
 class GlitchArmorDataConsume {
     var fireProtection = 1F
     var autoExtinguish = 4F
+    var piglinTruce = 3.5F
     var featherFalling = 3F
     var fireImmunity = 1F
     var jumpBoost = .0075F
