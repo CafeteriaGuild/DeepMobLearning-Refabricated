@@ -21,6 +21,7 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
+import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
@@ -31,6 +32,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.text.TranslatableText
 
 class LootFabricatorHandler(
     syncId: Int,
@@ -47,7 +49,7 @@ class LootFabricatorHandler(
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-        val inputSlot = WItemSlot.of(blockInventory, 0).setFilter { stack ->
+        val inputSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.dml-refabricated.pristine_matter_only")).setFilter { stack ->
             world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
                 .any { it.input.test(stack) }
         }

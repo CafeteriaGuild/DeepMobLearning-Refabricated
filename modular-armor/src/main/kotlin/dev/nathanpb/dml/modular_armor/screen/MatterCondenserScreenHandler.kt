@@ -25,15 +25,16 @@ import dev.nathanpb.dml.modular_armor.BlockMatterCondenser
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForBlockEntity
+import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
-import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.data.Texture
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.text.TranslatableText
 
 class MatterCondenserScreenHandler(
     syncId: Int,
@@ -59,14 +60,14 @@ class MatterCondenserScreenHandler(
         setRootPanel(root)
 
         val slots = WGridPanel()
-        val armorSlot = WItemSlot.of(blockInventory, 0).setFilter {
+        val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.dml-refabricated.glitch_armor_only")).setFilter {
             it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
         }
 
         slots.add(armorSlot, 2, 2)
 
         val matterSlots = (1..6).map {
-            WItemSlot.of(blockInventory, it).setFilter { stack ->
+            WTooltippedItemSlot.of(blockInventory, it, TranslatableText("gui.dml-refabricated.pristine_matter_only")).setFilter { stack ->
                 stack.item is ItemPristineMatter
             }
         }
