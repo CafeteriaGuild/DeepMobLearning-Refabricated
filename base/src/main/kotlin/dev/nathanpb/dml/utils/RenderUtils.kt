@@ -29,10 +29,11 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
 import net.minecraft.util.math.Vec3f
 
-class RenderUtils() {
+class RenderUtils {
 
     companion object {
         val BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/ui_panel.png"))
+        const val TITLE_COLOR: Int = 0x04FCC4
     }
 }
 
@@ -85,7 +86,6 @@ fun drawEntity(
     RenderSystem.applyModelViewMatrix()
     DiffuseLighting.enableGuiDepthLighting()
 }
-
 
 
 

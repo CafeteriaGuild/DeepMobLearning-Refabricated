@@ -135,7 +135,6 @@ class DeepLearnerScreenHandler (
 
     private val showcase = WEntityShowcase()
     private val dataAmountText = WText(LiteralText(""))
-    private val dataTierText = WText(LiteralText(""))
 
 
     private fun update() {
@@ -155,15 +154,15 @@ class DeepLearnerScreenHandler (
         showcase.entityTypes = currentDataModel?.category?.tag?.values().orEmpty()
         if (currentDataModel == null) {
             dataAmountText.text = LiteralText("")
-            dataTierText.text = LiteralText("")
         } else {
             dataAmountText.text = TranslatableText(
                 "tooltip.${MOD_ID}.data_model.data_amount_simple",
                 currentDataModel.dataAmount,
                 currentDataModel.tier().nextTierOrCurrent().dataAmount
+            ).append("\n").append(TranslatableText(
+                "tooltip.${MOD_ID}.data_model.tier",
+                currentDataModel.tier().text)
             )
-
-            dataTierText.text = TranslatableText("tooltip.${MOD_ID}.data_model.tier", currentDataModel.tier().text)
         }
     }
 
@@ -173,6 +172,7 @@ class DeepLearnerScreenHandler (
         val root = WGridPanel()
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
+
 
         root.add(showcase, 0, 1, 2, 4)
 
@@ -197,8 +197,7 @@ class DeepLearnerScreenHandler (
 
         WGridPanel().apply {
             insets = Insets(4)
-            add(dataAmountText, 0, 0, 4, 1)
-            add(dataTierText, 0, 1, 4, 1)
+            add(dataAmountText, 0, 0, 5, 1)
             root.add(this, 2, 3, 4, 2)
         }
 
@@ -213,8 +212,13 @@ class DeepLearnerScreenHandler (
         update()
     }
 
+
     override fun addPainters() {
         rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
+    override fun getTitleColor(): Int {
+        return RenderUtils.TITLE_COLOR
     }
 
 }
