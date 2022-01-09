@@ -21,11 +21,20 @@
 package dev.nathanpb.dml.utils
 
 import com.mojang.blaze3d.systems.RenderSystem
+import dev.nathanpb.dml.identifier
+import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
 import net.minecraft.util.math.Vec3f
+
+class RenderUtils() {
+
+    companion object {
+        val BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/ui_panel.png"))
+    }
+}
 
 // not stolen from mojang, I promise
 fun drawEntity(
@@ -76,7 +85,6 @@ fun drawEntity(
     RenderSystem.applyModelViewMatrix()
     DiffuseLighting.enableGuiDepthLighting()
 }
-
 
 
 

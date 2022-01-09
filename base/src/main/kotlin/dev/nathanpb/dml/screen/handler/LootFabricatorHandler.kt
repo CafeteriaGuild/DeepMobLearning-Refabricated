@@ -22,6 +22,7 @@ package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
+import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
@@ -77,4 +78,8 @@ class LootFabricatorHandler(
     }
 
     override fun canUse(entity: PlayerEntity?) = true
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
 }

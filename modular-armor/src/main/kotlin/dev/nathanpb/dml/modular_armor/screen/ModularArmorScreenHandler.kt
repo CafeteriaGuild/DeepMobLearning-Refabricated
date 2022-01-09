@@ -29,6 +29,7 @@ import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.net.C2S_MODULAR_EFFECT_TOGGLE
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForItemStack
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
+import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
@@ -133,4 +134,9 @@ class ModularArmorScreenHandler(
             }
         )
     }
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
 }

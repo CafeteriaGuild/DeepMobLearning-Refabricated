@@ -26,6 +26,7 @@ import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForBlockEntity
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
+import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
@@ -92,5 +93,9 @@ class MatterCondenserScreenHandler(
         (blockInventory as? SimpleInventory)?.addListener {
             sendContentUpdates()
         }
+    }
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
     }
 }

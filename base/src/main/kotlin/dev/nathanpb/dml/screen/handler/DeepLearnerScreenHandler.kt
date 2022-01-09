@@ -27,6 +27,7 @@ import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
+import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.closestValue
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
@@ -172,6 +173,7 @@ class DeepLearnerScreenHandler (
         val root = WGridPanel()
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
+
         root.add(showcase, 0, 1, 2, 4)
 
         root.add(
@@ -182,8 +184,8 @@ class DeepLearnerScreenHandler (
 
                 addChangeListener { _, inventory, index, stack ->
                     if (stack.isEmpty && index == currentSlot) {
-                        currentSlot = inventory.items().mapIndexedNotNull { index, itemStack ->
-                            index.takeUnless { itemStack.isEmpty }
+                        currentSlot = inventory.items().mapIndexedNotNull { slotIndex, itemStack ->
+                            slotIndex.takeUnless { itemStack.isEmpty }
                         }.closestValue(currentSlot)
                     }
                 }
@@ -210,4 +212,9 @@ class DeepLearnerScreenHandler (
         root.validate(this)
         update()
     }
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
 }
