@@ -56,7 +56,7 @@
   "gui.dml-refabricated.next": "Next",
   "gui.dml-refabricated.previous": "Previous",
   "gui.dml-refabricated.pristine_matter_only": "Please insert Pristine Matter here.",
-  "gui.dml-refabricated.data_model_only": "Please insert a Data Model here.",
+  "gui.dml-refabricated.data_model_only": "Please insert a valid Data Model here.",
   "chat.dml-refabricated.trial_wrong_terrain": "§4The terrain is not proper to start a trial",
   "chat.dml-refabricated.trial_no_recipe": "§4That Trial Key seem to be broken",
   "bar.dml-refabricated.trial": "System Glitch",

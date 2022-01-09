@@ -25,6 +25,7 @@ import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.utils.closestValue
 import dev.nathanpb.dml.utils.items
@@ -44,11 +45,10 @@ import net.minecraft.util.Hand
 import kotlin.properties.Delegates
 
 
-/*
-
- */
-
 // I hope no one will ever need to read this code again
+// ... I did
+
+// :(
 
 class DeepLearnerScreenHandler (
     syncId: Int,
@@ -175,7 +175,7 @@ class DeepLearnerScreenHandler (
         root.add(showcase, 0, 1, 2, 4)
 
         root.add(
-            WItemSlot.of(blockInventory, 0, 2, 2).apply {
+            WTooltippedItemSlot.of(blockInventory, 0, 2, 2, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
                 setFilter { stack ->
                     stack.item is ItemDataModel && stack.dataModel.category != null
                 }
