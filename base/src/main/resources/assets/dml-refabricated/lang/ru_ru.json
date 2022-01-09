@@ -55,6 +55,8 @@
   "gui.dml-refabricated.previous": "Предыдущий",
   "chat.dml-refabricated.trial_wrong_terrain": "§4Местность не подходит для испытания",
   "chat.dml-refabricated.trial_no_recipe": "§4Этот ключ испытаний, похоже, сломан",
+  "gui.dml-refabricated.pristine_matter_only": "Пожалуйста, поместите сюда Первозданную материю.",
+  "gui.dml-refabricated.data_model_only": "Пожалуйста, поместите сюда действительную Модель данных.",
   "bar.dml-refabricated.trial": "Системный сбой",
   "bar.dml-refabricated.trial_success": "Испытание завершено",
   "bar.dml-refabricated.trial_fail": "Испытание провалено",
