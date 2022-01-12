@@ -20,6 +20,8 @@
 
 package dev.nathanpb.dml.modular_armor.screen
 
+import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.modular_armor.BlockMatterCondenser
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
@@ -31,7 +33,6 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
-import io.github.cottonmc.cotton.gui.widget.data.Texture
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
@@ -57,18 +58,18 @@ class MatterCondenserScreenHandler(
 
     init {
         val root = WGridPanel()
-        root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
+        root.insets = Insets.ROOT_PANEL
 
         val slots = WGridPanel()
-        val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.dml-refabricated.glitch_armor_only")).setFilter {
+        val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.glitch_armor_only")).setFilter {
             it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
         }
 
         slots.add(armorSlot, 2, 2)
 
         val matterSlots = (1..6).map {
-            WTooltippedItemSlot.of(blockInventory, it, TranslatableText("gui.dml-refabricated.pristine_matter_only")).setFilter { stack ->
+            WTooltippedItemSlot.of(blockInventory, it, TranslatableText("gui.${MOD_ID}.pristine_matter_only")).setFilter { stack ->
                 stack.item is ItemPristineMatter
             }
         }
@@ -81,10 +82,10 @@ class MatterCondenserScreenHandler(
         slots.add(matterSlots[5], 2, 4)
 
         root.add(slots, 2, 1)
-        root.add(this.createPlayerInventoryPanel(), 0, 6)
+        root.add(this.createPlayerInventoryPanel(), 0, 7)
 
-        val progressBar1 = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
-        val progressBar2 = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
+        val progressBar1 = WBar(identifier("textures/gui/progress_bar_background.png"), identifier("textures/gui/progress_bar.png"), 0, 1, WBar.Direction.UP)
+        val progressBar2 = WBar(identifier("textures/gui/progress_bar_background.png"), identifier("textures/gui/progress_bar.png"), 0, 1, WBar.Direction.UP)
         root.add(progressBar1, 0, 1, 1, 5)
         root.add(progressBar2, 8, 1, 1, 5)
 
@@ -98,4 +99,9 @@ class MatterCondenserScreenHandler(
     override fun addPainters() {
         rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
     }
+
+    override fun getTitleColor(): Int {
+        return RenderUtils.TITLE_COLOR
+    }
+
 }

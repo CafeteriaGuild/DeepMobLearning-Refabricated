@@ -20,6 +20,7 @@
 
 package dev.nathanpb.dml.modular_armor.screen
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
@@ -96,7 +97,7 @@ class ModularArmorScreenHandler(
             root.add(lastEffectsList, 1, 0, 8, 5)
         }
 
-        val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.dml-refabricated.data_model_only")).apply {
+        val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
             setFilter {
                 it.isEmpty || (
                         (it.item as? ItemDataModel)?.category != null
@@ -137,6 +138,10 @@ class ModularArmorScreenHandler(
 
     override fun addPainters() {
         rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
+    override fun getTitleColor(): Int {
+        return RenderUtils.TITLE_COLOR
     }
 
 }

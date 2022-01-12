@@ -23,17 +23,20 @@ package dev.nathanpb.dml.utils
 import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
+import io.github.cottonmc.cotton.gui.impl.LibGuiCommon
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3f
 
 class RenderUtils {
 
     companion object {
-        val BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/ui_panel.png"))
         const val TITLE_COLOR: Int = 0x04FCC4
+        val BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/ui_panel.png"))
+        val DARK_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(Identifier(LibGuiCommon.MOD_ID, "textures/widget/panel_dark.png"))
     }
 }
 
