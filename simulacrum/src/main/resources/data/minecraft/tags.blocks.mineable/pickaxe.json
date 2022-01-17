@@ -1,6 +1,9 @@
 {
   "replace": "false",
   "values": [
-    "dmlsimulacrum:simulation_chamber"
+    {
+      "id": "dmlsimulacrum:simulation_chamber",
+      "required":  false
+    }
   ]
 }

@@ -31,6 +31,7 @@ public class SimulationChamber extends BlockWithEntity {
 
     public SimulationChamber(Settings settings) {
         super(settings);
+        settings.requiresTool();
         state = stateManager.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH);
     }
 
