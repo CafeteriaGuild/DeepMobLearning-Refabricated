@@ -20,17 +20,21 @@
 
 package dev.nathanpb.dml.screen.handler
 
+import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
+import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
+import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.data.Insets
-import io.github.cottonmc.cotton.gui.widget.data.Texture
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.text.TranslatableText
 
 class LootFabricatorHandler(
     syncId: Int,
@@ -47,13 +51,13 @@ class LootFabricatorHandler(
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-        val inputSlot = WItemSlot.of(blockInventory, 0).setFilter { stack ->
+        val inputSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.pristine_matter_only")).setFilter { stack ->
             world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
                 .any { it.input.test(stack) }
         }
         root.add(inputSlot, 1, 2)
 
-        val progressBar = WBar(null as Texture?, null, 0, 1, WBar.Direction.UP)
+        val progressBar = WBar(identifier("textures/gui/loot_fabricator_bar_background.png"), identifier("textures/gui/loot_fabricator_bar.png"), 0, 1, WBar.Direction.UP)
         progressBar.setSize(1, 128)
         root.add(progressBar, 3, 1, 1, 3)
 
@@ -75,4 +79,13 @@ class LootFabricatorHandler(
     }
 
     override fun canUse(entity: PlayerEntity?) = true
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
+    override fun getTitleColor(): Int {
+        return RenderUtils.TITLE_COLOR
+    }
+
 }

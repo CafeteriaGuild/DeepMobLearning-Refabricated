@@ -25,7 +25,9 @@ import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
+import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.closestValue
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
@@ -44,11 +46,10 @@ import net.minecraft.util.Hand
 import kotlin.properties.Delegates
 
 
-/*
-
- */
-
 // I hope no one will ever need to read this code again
+// ... I did
+
+// :(
 
 class DeepLearnerScreenHandler (
     syncId: Int,
@@ -134,7 +135,6 @@ class DeepLearnerScreenHandler (
 
     private val showcase = WEntityShowcase()
     private val dataAmountText = WText(LiteralText(""))
-    private val dataTierText = WText(LiteralText(""))
 
 
     private fun update() {
@@ -154,15 +154,15 @@ class DeepLearnerScreenHandler (
         showcase.entityTypes = currentDataModel?.category?.tag?.values().orEmpty()
         if (currentDataModel == null) {
             dataAmountText.text = LiteralText("")
-            dataTierText.text = LiteralText("")
         } else {
             dataAmountText.text = TranslatableText(
                 "tooltip.${MOD_ID}.data_model.data_amount_simple",
                 currentDataModel.dataAmount,
                 currentDataModel.tier().nextTierOrCurrent().dataAmount
+            ).append("\n").append(TranslatableText(
+                "tooltip.${MOD_ID}.data_model.tier",
+                currentDataModel.tier().text)
             )
-
-            dataTierText.text = TranslatableText("tooltip.${MOD_ID}.data_model.tier", currentDataModel.tier().text)
         }
     }
 
@@ -172,18 +172,20 @@ class DeepLearnerScreenHandler (
         val root = WGridPanel()
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
+
+
         root.add(showcase, 0, 1, 2, 4)
 
         root.add(
-            WItemSlot.of(blockInventory, 0, 2, 2).apply {
+            WTooltippedItemSlot.of(blockInventory, 0, 2, 2, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
                 setFilter { stack ->
                     stack.item is ItemDataModel && stack.dataModel.category != null
                 }
 
                 addChangeListener { _, inventory, index, stack ->
                     if (stack.isEmpty && index == currentSlot) {
-                        currentSlot = inventory.items().mapIndexedNotNull { index, itemStack ->
-                            index.takeUnless { itemStack.isEmpty }
+                        currentSlot = inventory.items().mapIndexedNotNull { slotIndex, itemStack ->
+                            slotIndex.takeUnless { itemStack.isEmpty }
                         }.closestValue(currentSlot)
                     }
                 }
@@ -195,8 +197,7 @@ class DeepLearnerScreenHandler (
 
         WGridPanel().apply {
             insets = Insets(4)
-            add(dataAmountText, 0, 0, 4, 1)
-            add(dataTierText, 0, 1, 4, 1)
+            add(dataAmountText, 0, 0, 5, 1)
             root.add(this, 2, 3, 4, 2)
         }
 
@@ -210,4 +211,14 @@ class DeepLearnerScreenHandler (
         root.validate(this)
         update()
     }
+
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
+    override fun getTitleColor(): Int {
+        return RenderUtils.TITLE_COLOR
+    }
+
 }

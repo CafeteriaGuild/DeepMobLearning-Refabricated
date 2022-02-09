@@ -28,10 +28,11 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.net.C2S_MODULAR_EFFECT_TOGGLE
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForItemStack
+import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
+import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
-import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WListPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.netty.buffer.Unpooled
@@ -41,6 +42,7 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ArrayPropertyDelegate
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
@@ -94,7 +96,7 @@ class ModularArmorScreenHandler(
             root.add(lastEffectsList, 1, 0, 8, 5)
         }
 
-        val dataModelSlot = WItemSlot.of(blockInventory, 0).apply {
+        val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.dml-refabricated.data_model_only")).apply {
             setFilter {
                 it.isEmpty || (
                         (it.item as? ItemDataModel)?.category != null
@@ -123,7 +125,7 @@ class ModularArmorScreenHandler(
     }
 
     private fun sendToggleUpdate(effectId: Identifier, flag: Boolean) {
-        ClientSidePacketRegistry.INSTANCE.sendToServer(
+        ClientSidePacketRegistry.INSTANCE.sendToServer( //FIXME: This is deprecated and needs to be updated.
             C2S_MODULAR_EFFECT_TOGGLE,
             PacketByteBuf(Unpooled.buffer()).apply {
                 writeIdentifier(effectId)
@@ -132,4 +134,9 @@ class ModularArmorScreenHandler(
             }
         )
     }
+
+    override fun addPainters() {
+        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+    }
+
 }
