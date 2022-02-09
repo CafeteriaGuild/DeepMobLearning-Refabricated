@@ -48,6 +48,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
+import kotlin.math.roundToInt
 
 class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorItem(
         GlitchArmorMaterial.INSTANCE,
@@ -68,6 +69,17 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
             Registry.register(Registry.ITEM, identifier("glitch_boots"), BOOTS)
         }
 
+    }
+
+    override fun getItemBarColor(stack: ItemStack?) = 0x00FFC0
+    override fun isItemBarVisible(stack: ItemStack) = true
+
+    override fun getItemBarStep(stack: ItemStack): Int {
+        val data = ModularArmorData(stack)
+        val max = data.tier().dataAmount
+        val current = data.dataModel?.dataAmount ?: 0
+
+        return if (max == 0) 0 else ((13f * current) / max).roundToInt()
     }
 
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
