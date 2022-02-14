@@ -21,12 +21,16 @@
 package dev.nathanpb.dml.modular_armor.screen
 
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
+import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.widget.WToggleButton
 import net.minecraft.text.LiteralText
+import net.minecraft.world.World
 import kotlin.properties.Delegates
 
-class WModularEffectToggle : WToggleButton() {
+class WModularEffectToggle(
+    world: World
+) : WToggleButton() {
     var effect by Delegates.observable<ModularEffect<*>?>(null) { _, _, value ->
-        setLabel(value?.name ?: LiteralText(""))
+        setLabel(value?.name?.let { RenderUtils.getTextWithDefaultTextColor(it, world) } ?: LiteralText(""))
     }
 }

@@ -23,20 +23,32 @@ package dev.nathanpb.dml.utils
 import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
-import io.github.cottonmc.cotton.gui.impl.LibGuiCommon
+import io.github.cottonmc.cotton.gui.widget.WLabel
+import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
-import net.minecraft.util.Identifier
+import net.minecraft.text.MutableText
+import net.minecraft.text.Style
 import net.minecraft.util.math.Vec3f
+import net.minecraft.world.World
 
 class RenderUtils {
 
     companion object {
-        const val TITLE_COLOR: Int = 0x04FCC4
-        val BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/ui_panel.png"))
-        val DARK_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(Identifier(LibGuiCommon.MOD_ID, "textures/widget/panel_dark.png"))
+        private const val TITLE_COLOR: Int = 0x04FCC4
+        val DEFAULT_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/default_bg.png"))
+        val DEFAULT_BUTTON_ICON: TextureIcon = TextureIcon(identifier("textures/gui/default_bg.png"))
+
+        fun getDefaultTextColor(world: World): Int {
+            return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR;
+        }
+
+        fun getTextWithDefaultTextColor(text: MutableText, world: World): MutableText? {
+            return text.setStyle(Style.EMPTY.withColor(getDefaultTextColor(world)))
+        }
+
     }
 }
 
@@ -89,47 +101,3 @@ fun drawEntity(
     RenderSystem.applyModelViewMatrix()
     DiffuseLighting.enableGuiDepthLighting()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// vai toma no cu mano que tristeza

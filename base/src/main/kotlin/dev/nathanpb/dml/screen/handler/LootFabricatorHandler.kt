@@ -81,11 +81,11 @@ class LootFabricatorHandler(
     override fun canUse(entity: PlayerEntity?) = true
 
     override fun addPainters() {
-        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+        rootPanel.backgroundPainter = RenderUtils.DEFAULT_BACKGROUND_PAINTER
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.TITLE_COLOR
+        return RenderUtils.getDefaultTextColor(world)
     }
 
 }

@@ -77,12 +77,13 @@ class ModularArmorScreenHandler(
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
+
         var lastEffectsList: WListPanel<ModularEffect<*>, WModularEffectToggle>? = null
         fun updateEffectsList() {
             val disabledEffects = data.disabledEffects
             root.remove(lastEffectsList)
             lastEffectsList = WListPanel(getPossibleEffects(), {
-                WModularEffectToggle().apply {
+                WModularEffectToggle(world).apply {
                     setOnToggle { flag ->
                         effect?.id?.let {
                             sendToggleUpdate(it, flag)
@@ -94,7 +95,12 @@ class ModularArmorScreenHandler(
                 widget.toggle = effect.id !in disabledEffects
             }
 
-            root.add(lastEffectsList, 1, 0, 8, 5)
+
+            root.add(lastEffectsList, 1, 1, 8, 5)
+            lastEffectsList!!.scrollBar.also {
+                it.setLocation(lastEffectsList!!.x+72, lastEffectsList!!.y-90)
+            }
+
         }
 
         val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
@@ -137,11 +143,11 @@ class ModularArmorScreenHandler(
     }
 
     override fun addPainters() {
-        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+        rootPanel.backgroundPainter = RenderUtils.DEFAULT_BACKGROUND_PAINTER
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.TITLE_COLOR
+        return RenderUtils.getDefaultTextColor(world)
     }
 
 }

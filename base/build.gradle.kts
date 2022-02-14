@@ -18,5 +18,5 @@ dependencies {
     modApi("io.github.cottonmc:LibGui:${libguiVersion}")
     include("io.github.cottonmc:LibGui:${libguiVersion}")
 
-    modImplementation("vazkii.patchouli:Patchouli:${patchouliVersion}")
+    modApi("vazkii.patchouli:Patchouli:${patchouliVersion}")
 }

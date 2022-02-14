@@ -24,7 +24,9 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.mixin.EntityTypeMixin
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.utils.RenderUtils
@@ -36,6 +38,7 @@ import io.github.cottonmc.cotton.gui.widget.*
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
@@ -113,7 +116,7 @@ class DeepLearnerScreenHandler (
         update()
     }
 
-    private val prevButton: WButton = WButton(LiteralText("<")).apply {
+    private val prevButton: WButton = WButton(RenderUtils.DEFAULT_BUTTON_ICON, LiteralText("<")).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             addTooltip(TooltipBuilder().add(TranslatableText("gui.$MOD_ID.previous")))
         }
@@ -123,7 +126,7 @@ class DeepLearnerScreenHandler (
         }
     }
 
-    private val nextButton: WButton = WButton(LiteralText(">")).apply {
+    private val nextButton: WButton = WButton(RenderUtils.DEFAULT_BUTTON_ICON, LiteralText(">")).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             addTooltip(TooltipBuilder().add(TranslatableText("gui.${MOD_ID}.next")))
         }
@@ -133,13 +136,25 @@ class DeepLearnerScreenHandler (
         }
     }
 
+    private val showcaseBackground = WSprite(identifier("textures/gui/deep_learner_bg.png"))
     private val showcase = WEntityShowcase()
+
+    // TODO: Change uses of vanilla's blue for RenderUtils#TITLE_COLOR
+    private val entityName = WText(LiteralText(""))
+    private val entityHealth = WText(LiteralText(""))
     private val dataAmountText = WText(LiteralText(""))
+
 
 
     private fun update() {
         prevButton.isEnabled = currentSlot > firstDataModelIndex()
         nextButton.isEnabled = currentSlot < lastDataModelIndex()
+
+        if(showcase.entityType != null) {
+            //FIXME: Info is not synced, only updating when changing selected data model
+            entityName.text = TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName", showcase.entityType!!.name)
+            entityHealth.text = TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth", (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth)
+        }
 
         val currentDataModel: DataModelData? = run {
             if (data.inventory.size > currentSlot) {
@@ -169,12 +184,12 @@ class DeepLearnerScreenHandler (
     init {
         blockInventory.setStacks(data.inventory)
 
-        val root = WGridPanel()
+        val root = WPlainPanel()
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-
-        root.add(showcase, 0, 1, 2, 4)
+        root.add(showcaseBackground, 0, 1*18, 3*18, 4*18)
+        root.add(showcase, 0, 1*18, 3*18, 4*18)
 
         root.add(
             WTooltippedItemSlot.of(blockInventory, 0, 2, 2, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
@@ -189,16 +204,18 @@ class DeepLearnerScreenHandler (
                         }.closestValue(currentSlot)
                     }
                 }
-            }, 7, 2
+            }, 7*18, 1*18
         )
 
-        root.add(prevButton, 7, 4)
-        root.add(nextButton, 8, 4)
+        root.add(prevButton, 7*18, 3*18, 1*18, 1*18)
+        root.add(nextButton, 8*18, 3*18)
 
-        WGridPanel().apply {
+        WPlainPanel().apply {
             insets = Insets(4)
-            add(dataAmountText, 0, 0, 5, 1)
-            root.add(this, 2, 3, 4, 2)
+            add(entityName, 1*18, -2*18, 3*18,1*18)
+            add(entityHealth, 1*18, -1*18+9, 2*18,1*18)
+            add(dataAmountText, 1*18, 1*18, 5*18, 1*18)
+            root.add(this, 2*18, 3*18, 4*18, 2*18)
         }
 
         (blockInventory as? SimpleInventory)?.addListener {
@@ -207,18 +224,18 @@ class DeepLearnerScreenHandler (
             update()
         }
 
-        root.add(this.createPlayerInventoryPanel(), 0, 5)
+        root.add(this.createPlayerInventoryPanel(), 0, 5*18+6)
         root.validate(this)
         update()
     }
 
 
     override fun addPainters() {
-        rootPanel.backgroundPainter = RenderUtils.BACKGROUND_PAINTER
+        rootPanel.backgroundPainter = RenderUtils.DEFAULT_BACKGROUND_PAINTER
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.TITLE_COLOR
+        return RenderUtils.getDefaultTextColor(world)
     }
 
 }

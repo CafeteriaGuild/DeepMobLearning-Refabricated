@@ -36,6 +36,7 @@ fun settings(baseSettings: Item.Settings = Item.Settings()) = baseSettings.apply
     group(ITEM_GROUP)
 }
 
+val ITEM_GUIDE_TABLET = ItemGuideTablet()
 val ITEM_DML = Item(Item.Settings())
 val ITEM_DEEP_LEARNER = ItemDeepLearner()
 val ITEM_TRIAL_KEY = ItemTrialKey()
@@ -73,6 +74,7 @@ val ITEM_GLITCH_INGOT = Item(settings())
 
 fun registerItems() {
     mapOf(
+        ITEM_GUIDE_TABLET to "guide_tablet",
         ITEM_DML to MOD_ID,
         ITEM_DEEP_LEARNER to "deep_learner",
         ITEM_TRIAL_KEY to "trial_key",

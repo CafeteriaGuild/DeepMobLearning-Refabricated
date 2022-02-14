@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.screen.handler.widget
 
-import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.drawEntity
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import net.minecraft.client.MinecraftClient
@@ -31,14 +30,14 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
+
 class WEntityShowcase : WWidget() {
 
     var entityTypes: List<EntityType<*>> = emptyList()
 
     var tickCount = 0
 
-
-    private val entityType: EntityType<*>?
+    val entityType: EntityType<*>?
         get() {
             return entityTypes.takeIf { entityTypes.isNotEmpty() }?.let { values ->
                 values.toTypedArray()[(tickCount / 60) % values.size]
@@ -56,14 +55,12 @@ class WEntityShowcase : WWidget() {
         super.paint(matrices, x, y, mouseX, mouseY)
         matrices.push()
 
-        RenderUtils.DARK_BACKGROUND_PAINTER.paintBackground(matrices, x, y, this) // TODO: Change this for actual texture
-
         val entityType = entityType ?: return
         val world = MinecraftClient.getInstance().world ?: return
         val entity = entityType.create(world) as? LivingEntity ?: return
 
         val w = (this.width / 2)
-        val h = (height / 1.5).roundToInt()
+        val h = (height / 1.25).roundToInt()
 
         val scaleFactor = min(w, h) * 1.5
         val entityScaleFactor = max(entity.width, entity.height)
@@ -78,4 +75,5 @@ class WEntityShowcase : WWidget() {
         )
         matrices.pop()
     }
+
 }

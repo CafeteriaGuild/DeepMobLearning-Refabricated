@@ -36,6 +36,8 @@
   "tooltip.dml-refabricated.data_model.unbound": "§4Unbound",
   "tooltip.dml-refabricated.data_model.tier": "§9Tier:§r %s",
   "tooltip.dml-refabricated.data_model.cheat": "§7Sneak + Right Click to cycle tiers",
+  "tooltip.dml-refabricated.deep_learner.entityName": "§9Name:§r %d",
+  "tooltip.dml-refabricated.deep_learner.entityHealth": "§9Health: %d§c❤§r",
   "tooltip.dml-refabricated.trial_key.unbound.tip": "§9Combine this with a bounded Data Model in the crafting grid",
   "tooltip.dml-refabricated.trial_key.affixes": "§9Affixes:",
   "tooltip.dml-refabricated.cafeteria.joinus": "§9Come join us:",
