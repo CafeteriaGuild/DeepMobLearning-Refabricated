@@ -20,8 +20,8 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import com.google.common.collect.ImmutableMultimap
 import com.google.common.collect.Multimap
+import com.google.common.collect.MultimapBuilder
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.enums.DataModelTier
@@ -48,6 +48,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
+import kotlin.math.roundToInt
 
 class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorItem(
         GlitchArmorMaterial.INSTANCE,
@@ -68,6 +69,17 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
             Registry.register(Registry.ITEM, identifier("glitch_boots"), BOOTS)
         }
 
+    }
+
+    override fun getItemBarColor(stack: ItemStack?) = 0x00FFC0
+    override fun isItemBarVisible(stack: ItemStack) = true
+
+    override fun getItemBarStep(stack: ItemStack): Int {
+        val data = ModularArmorData(stack)
+        val max = data.tier().dataAmount
+        val current = data.dataModel?.dataAmount ?: 0
+
+        return if (max == 0) 0 else ((13f * current) / max).roundToInt()
     }
 
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
@@ -95,12 +107,13 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
 
     fun getAttributeModifiers(stack: ItemStack, slot: EquipmentSlot?): Multimap<EntityAttribute, EntityAttributeModifier> {
         return super.getAttributeModifiers(slot).let { multimap ->
-            val builder = ImmutableMultimap.builder<EntityAttribute, EntityAttributeModifier>()
-            builder.putAll(multimap)
+            val builder = MultimapBuilder.ListMultimapBuilder
+                .hashKeys()
+                .arrayListValues()
+                .build<EntityAttribute, EntityAttributeModifier>()
 
             if (slot != null && slot == this.slot) {
                 (material as? GlitchArmorMaterial)?.let { material ->
-
                     val data = ModularArmorData(stack)
                     val uuid = IArmorItemMixin.dmlRefGetModifierUUIDs()[slot.entitySlotId]
 
@@ -120,7 +133,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
                 }
             }
 
-            builder.build()
+            builder
         }
     }
 
@@ -150,7 +163,10 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
     override fun isDamageable() = false
 
     fun appendModularEffectModifiers(armor: ModularArmorData, dataModel: DataModelData): Multimap<EntityAttribute, EntityAttributeModifier> {
-        val multimap = ImmutableMultimap.builder<EntityAttribute, EntityAttributeModifier>()
+        val multimap = MultimapBuilder.ListMultimapBuilder
+            .hashKeys()
+            .arrayListValues()
+            .build<EntityAttribute, EntityAttributeModifier>()
 
         dataModel.category?.let { category ->
             if (dataModel.category != null) {
@@ -162,7 +178,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
             }
         }
 
-        return multimap.build()
+        return multimap
     }
 
     override fun inventoryTick(stack: ItemStack, world: World?, entity: Entity?, slot: Int, selected: Boolean) {
