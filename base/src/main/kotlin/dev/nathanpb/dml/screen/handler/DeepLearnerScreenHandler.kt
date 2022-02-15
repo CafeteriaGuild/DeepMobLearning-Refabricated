@@ -4,7 +4,7 @@
  *
  *  This file is part of Deep Mob Learning: Refabricated.
  *
- *  Deep Mob Learning: Refabricated is free software: you can redistribute it and/or modify
+ *  Deep Mob Learning: Refabricated is free software: you can redistribute it and/ or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
@@ -45,6 +45,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.text.LiteralText
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import kotlin.properties.Delegates
 
@@ -124,6 +125,8 @@ class DeepLearnerScreenHandler (
         setOnClick {
             currentSlot = nextReverseDataModelIndex()
         }
+
+
     }
 
     private val nextButton: WButton = WButton(RenderUtils.DEFAULT_BUTTON_ICON, LiteralText(">")).apply {
@@ -139,10 +142,10 @@ class DeepLearnerScreenHandler (
     private val showcaseBackground = WSprite(identifier("textures/gui/deep_learner_bg.png"))
     private val showcase = WEntityShowcase()
 
-    // TODO: Change uses of vanilla's blue for RenderUtils#TITLE_COLOR
     private val entityName = WText(LiteralText(""))
     private val entityHealth = WText(LiteralText(""))
-    private val dataAmountText = WText(LiteralText(""))
+    private val dataAmount = WLabel(LiteralText(""))
+    private val dataTier = WLabel(LiteralText(""))
 
 
 
@@ -152,8 +155,16 @@ class DeepLearnerScreenHandler (
 
         if(showcase.entityType != null) {
             //FIXME: Info is not synced, only updating when changing selected data model
-            entityName.text = TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName", showcase.entityType!!.name)
-            entityHealth.text = TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth", (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth)
+            entityName.text =
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
+                ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.2",
+                    showcase.entityType!!.name).formatted(Formatting.WHITE))
+
+            entityHealth.text =
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
+                ?.append(LiteralText("❤").formatted(Formatting.RED))
+                ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
+                    (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
         }
 
         val currentDataModel: DataModelData? = run {
@@ -168,16 +179,16 @@ class DeepLearnerScreenHandler (
 
         showcase.entityTypes = currentDataModel?.category?.tag?.values().orEmpty()
         if (currentDataModel == null) {
-            dataAmountText.text = LiteralText("")
+            dataAmount.text = LiteralText("")
+            dataTier.text = LiteralText("")
         } else {
-            dataAmountText.text = TranslatableText(
-                "tooltip.${MOD_ID}.data_model.data_amount_simple",
-                currentDataModel.dataAmount,
-                currentDataModel.tier().nextTierOrCurrent().dataAmount
-            ).append("\n").append(TranslatableText(
-                "tooltip.${MOD_ID}.data_model.tier",
-                currentDataModel.tier().text)
-            )
+            dataAmount.text =
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.data_amount.1"), world)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
+
+            dataTier.text =
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.tier.1"), world)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.tier.2", currentDataModel.tier().text).formatted(Formatting.WHITE))
         }
     }
 
@@ -207,15 +218,16 @@ class DeepLearnerScreenHandler (
             }, 7*18, 1*18
         )
 
-        root.add(prevButton, 7*18, 3*18, 1*18, 1*18)
+        root.add(prevButton, 7*18, 3*18)
         root.add(nextButton, 8*18, 3*18)
 
         WPlainPanel().apply {
             insets = Insets(4)
-            add(entityName, 1*18, -2*18, 3*18,1*18)
-            add(entityHealth, 1*18, -1*18+9, 2*18,1*18)
-            add(dataAmountText, 1*18, 1*18, 5*18, 1*18)
-            root.add(this, 2*18, 3*18, 4*18, 2*18)
+            add(entityName, 1*18, -2*18, 3*18,1)
+            add(entityHealth, 1*18, -1*18+9, 2*18,1)
+            add(dataAmount, 1*18, 1*18, 1, 1)
+            add(dataTier, 1*18, 1*18+9, 1, 1)
+            root.add(this, 2*18, 3*18, 1, 1)
         }
 
         (blockInventory as? SimpleInventory)?.addListener {
