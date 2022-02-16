@@ -28,6 +28,10 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
+import net.minecraft.village.VillagerData
+import net.minecraft.village.VillagerDataContainer
+import net.minecraft.village.VillagerProfession
+import net.minecraft.village.VillagerType
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -61,6 +65,9 @@ class WEntityShowcase(
         val entityType = entityType ?: return
         val world = MinecraftClient.getInstance().world ?: return
         val entity = entityType.create(world) as? LivingEntity ?: return
+        if(entity is VillagerDataContainer) {
+            (entity as VillagerDataContainer).villagerData = VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 0)
+        }
 
         val w = (this.width / 2)
         val h = (height / 1.25).roundToInt()
