@@ -29,6 +29,7 @@ import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.mixin.EntityTypeMixin
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
+import dev.nathanpb.dml.screen.handler.widget.WStylizedButton
 import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.closestValue
 import dev.nathanpb.dml.utils.items
@@ -88,7 +89,7 @@ class DeepLearnerScreenHandler (
         }
     }
 
-    private fun nextForwardDataModelIndex() : Int {
+    private fun nextDataModelIndex() : Int {
         return if (currentSlot != lastDataModelIndex()) {
             data.inventory.mapIndexed { index, stack ->
                 Pair(stack, index)
@@ -100,7 +101,7 @@ class DeepLearnerScreenHandler (
         } else currentSlot
     }
 
-    private fun nextReverseDataModelIndex() : Int {
+    private fun previousDataModelIndex() : Int {
         return if (currentSlot != firstDataModelIndex()) {
            data.inventory.mapIndexed { index, stack ->
                 Pair(stack, index)
@@ -117,29 +118,27 @@ class DeepLearnerScreenHandler (
         update()
     }
 
-    private val prevButton: WButton = WButton(RenderUtils.DEFAULT_BUTTON_ICON, LiteralText("<")).apply {
+    private val prevButton: WButton = WStylizedButton(LiteralText("<"), RenderUtils.DML_WIDGETS).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             addTooltip(TooltipBuilder().add(TranslatableText("gui.$MOD_ID.previous")))
         }
 
         setOnClick {
-            currentSlot = nextReverseDataModelIndex()
+            currentSlot = previousDataModelIndex()
         }
-
-
     }
 
-    private val nextButton: WButton = WButton(RenderUtils.DEFAULT_BUTTON_ICON, LiteralText(">")).apply {
+    private val nextButton: WButton = WStylizedButton(LiteralText(">"), RenderUtils.DML_WIDGETS).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             addTooltip(TooltipBuilder().add(TranslatableText("gui.${MOD_ID}.next")))
         }
 
         setOnClick {
-            currentSlot = nextForwardDataModelIndex()
+            currentSlot = nextDataModelIndex()
         }
     }
 
-    private val showcaseBackground = WSprite(identifier("textures/gui/deep_learner_bg.png"))
+    private val showcaseBackground = WSprite(identifier("textures/gui/entity_showcase_background.png"))
     private val showcase = WEntityShowcase()
 
     private val entityName = WText(LiteralText(""))
@@ -218,15 +217,15 @@ class DeepLearnerScreenHandler (
             }, 7*18, 1*18
         )
 
-        root.add(prevButton, 7*18, 3*18)
-        root.add(nextButton, 8*18, 3*18)
+        root.add(prevButton, 7*18, 3*18, 18, 20)
+        root.add(nextButton, 8*18, 3*18, 18, 20)
 
         WPlainPanel().apply {
             insets = Insets(4)
-            add(entityName, 1*18, -2*18, 3*18,1)
-            add(entityHealth, 1*18, -1*18+9, 2*18,1)
-            add(dataAmount, 1*18, 1*18, 1, 1)
-            add(dataTier, 1*18, 1*18+9, 1, 1)
+            add(entityName, 1*18, -2*18-3, 4*18,1)
+            add(entityHealth, 1*18, -1*18+6, 2*18,1)
+            add(dataAmount, 1*18, 1*18-3, 1, 1)
+            add(dataTier, 1*18, 1*18+6, 1, 1)
             root.add(this, 2*18, 3*18, 1, 1)
         }
 

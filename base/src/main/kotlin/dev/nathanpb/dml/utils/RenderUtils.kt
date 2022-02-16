@@ -24,13 +24,13 @@ import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.widget.WLabel
-import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Style
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3f
 import net.minecraft.world.World
 
@@ -38,11 +38,11 @@ class RenderUtils {
 
     companion object {
         private const val TITLE_COLOR: Int = 0x04FCC4
-        val DEFAULT_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/default_bg.png"))
-        val DEFAULT_BUTTON_ICON: TextureIcon = TextureIcon(identifier("textures/gui/default_bg.png"))
+        val DEFAULT_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
+        val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
 
         fun getDefaultTextColor(world: World): Int {
-            return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR;
+            return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR
         }
 
         fun getTextWithDefaultTextColor(text: MutableText, world: World): MutableText? {
