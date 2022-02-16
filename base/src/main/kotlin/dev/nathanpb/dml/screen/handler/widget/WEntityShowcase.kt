@@ -20,7 +20,9 @@
 
 package dev.nathanpb.dml.screen.handler.widget
 
+import dev.nathanpb.dml.screen.handler.DeepLearnerScreenHandler
 import dev.nathanpb.dml.utils.drawEntity
+import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
@@ -30,12 +32,13 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-
-class WEntityShowcase : WWidget() {
+class WEntityShowcase(
+    private val root: SyncedGuiDescription
+) : WWidget() {
 
     var entityTypes: List<EntityType<*>> = emptyList()
 
-    var tickCount = 0
+     private var tickCount = 0
 
     val entityType: EntityType<*>?
         get() {
@@ -74,6 +77,11 @@ class WEntityShowcase : WWidget() {
             (tickCount % 360F) * 2F + 150F
         )
         matrices.pop()
+
+        // only update at the exact tick the mob changes
+        if(tickCount % 3 == 0) {
+            (root as DeepLearnerScreenHandler).updateEntityInformation()
+        }
     }
 
 }

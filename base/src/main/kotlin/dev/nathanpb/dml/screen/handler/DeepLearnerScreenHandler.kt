@@ -139,7 +139,7 @@ class DeepLearnerScreenHandler (
     }
 
     private val showcaseBackground = WSprite(identifier("textures/gui/entity_showcase_background.png"))
-    private val showcase = WEntityShowcase()
+    private val showcase = WEntityShowcase(this)
 
     private val entityName = WText(LiteralText(""))
     private val entityHealth = WText(LiteralText(""))
@@ -152,19 +152,7 @@ class DeepLearnerScreenHandler (
         prevButton.isEnabled = currentSlot > firstDataModelIndex()
         nextButton.isEnabled = currentSlot < lastDataModelIndex()
 
-        if(showcase.entityType != null) {
-            //FIXME: Info is not synced, only updating when changing selected data model
-            entityName.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
-                ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.2",
-                    showcase.entityType!!.name).formatted(Formatting.WHITE))
-
-            entityHealth.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
-                ?.append(LiteralText("❤").formatted(Formatting.RED))
-                ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
-                    (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
-        }
+        updateEntityInformation()
 
         val currentDataModel: DataModelData? = run {
             if (data.inventory.size > currentSlot) {
@@ -188,6 +176,21 @@ class DeepLearnerScreenHandler (
             dataTier.text =
                 RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.tier.1"), world)
                     ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.tier.2", currentDataModel.tier().text).formatted(Formatting.WHITE))
+        }
+    }
+
+    fun updateEntityInformation() {
+        if(showcase.entityType != null) {
+            entityName.text =
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.2",
+                        showcase.entityType!!.name).formatted(Formatting.WHITE))
+
+            entityHealth.text =
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
+                    ?.append(LiteralText("❤").formatted(Formatting.RED))
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
+                        (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
         }
     }
 
