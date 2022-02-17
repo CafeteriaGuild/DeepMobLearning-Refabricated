@@ -40,6 +40,8 @@ class RenderUtils {
         private const val TITLE_COLOR: Int = 0x04FCC4
         val DEFAULT_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
         val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
+        val PROGRESS_BAR: Identifier = identifier("textures/gui/progress_bar.png")
+        val PROGRESS_BAR_BACKGROUND: Identifier = identifier("textures/gui/progress_bar_background.png")
 
         fun getDefaultTextColor(world: World): Int {
             return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR

@@ -21,7 +21,6 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.utils.RenderUtils
@@ -57,7 +56,7 @@ class LootFabricatorHandler(
         }
         root.add(inputSlot, 1, 2)
 
-        val progressBar = WBar(identifier("textures/gui/progress_bar_background.png"), identifier("textures/gui/progress_bar.png"), 0, 1, WBar.Direction.UP)
+        val progressBar = WBar(RenderUtils.PROGRESS_BAR_BACKGROUND, RenderUtils.PROGRESS_BAR, 0, 1, WBar.Direction.UP)
         progressBar.setSize(1, 128)
         root.add(progressBar, 3, 1, 1, 3)
 
