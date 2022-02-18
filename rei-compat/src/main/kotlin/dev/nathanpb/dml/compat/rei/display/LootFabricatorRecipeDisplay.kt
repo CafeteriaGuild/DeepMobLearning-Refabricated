@@ -19,19 +19,18 @@
 
 package dev.nathanpb.dml.compat.rei.display
 
+import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.Display
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.util.EntryStacks
-import net.minecraft.util.Identifier
 
 class LootFabricatorRecipeDisplay (
-    private val categoryId: Identifier,
     val recipe: LootFabricatorRecipe
 ) : Display {
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<LootFabricatorRecipeDisplay> = CategoryIdentifier.of(categoryId)
+    override fun getCategoryIdentifier(): CategoryIdentifier<LootFabricatorRecipeDisplay> = ReiPlugin.LOOT_FABRICATOR_CATEGORY
 
     override fun getInputEntries() = recipe.input.matchingStacks
         .map(EntryStacks::of)

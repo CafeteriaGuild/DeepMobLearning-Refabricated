@@ -19,20 +19,19 @@
 
 package dev.nathanpb.dml.compat.rei.display
 
+import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.Display
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.util.EntryIngredients
-import net.minecraft.util.Identifier
 
 class CrushingRecipeDisplay(
-    private val recipe: CrushingRecipe,
-    private val category: Identifier
+    private val recipe: CrushingRecipe
 ) : Display {
 
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<CrushingRecipeDisplay> = CategoryIdentifier.of(category)
+    override fun getCategoryIdentifier(): CategoryIdentifier<CrushingRecipeDisplay> = ReiPlugin.CRUSHING_CATEGORY
 
     override fun getInputEntries(): MutableList<EntryIngredient> {
         return (

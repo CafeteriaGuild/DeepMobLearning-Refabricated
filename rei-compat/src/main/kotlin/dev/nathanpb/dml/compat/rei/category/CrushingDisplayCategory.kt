@@ -20,9 +20,11 @@
 package dev.nathanpb.dml.compat.rei.category
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.compat.rei.display.CrushingRecipeDisplay
 import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
 import dev.nathanpb.dml.compat.rei.itemStack
+import dev.nathanpb.dml.item.ITEM_SOOT_REDSTONE
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.widgets.Widget
@@ -30,22 +32,23 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.entry.EntryStack
+import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.client.MinecraftClient
+import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
-class CrushingDisplayCategory(private val identifier: Identifier, private val logo: EntryStack<*>) : DisplayCategory<CrushingRecipeDisplay> {
+class CrushingDisplayCategory: DisplayCategory<CrushingRecipeDisplay> {
 
-    override fun getIdentifier() = identifier
+    override fun getIdentifier(): Identifier = ReiPlugin.CRUSHING_CATEGORY.identifier
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<out CrushingRecipeDisplay> {
-        return CategoryIdentifier.of(identifier)
-    }
+    override fun getCategoryIdentifier(): CategoryIdentifier<out CrushingRecipeDisplay> = ReiPlugin.CRUSHING_CATEGORY
 
-    override fun getIcon() = logo
+    override fun getIcon(): EntryStack<ItemStack> = EntryStacks.of(ITEM_SOOT_REDSTONE)
 
     override fun getTitle() = TranslatableText("rei.${MOD_ID}.category.crushing")
+
 
     override fun setupDisplay(recipeDisplay: CrushingRecipeDisplay, bounds: Rectangle): MutableList<Widget> {
         val startPoint = Point(bounds.centerX - 41, bounds.centerY - 27)

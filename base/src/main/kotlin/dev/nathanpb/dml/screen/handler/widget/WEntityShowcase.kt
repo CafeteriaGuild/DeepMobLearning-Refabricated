@@ -42,7 +42,7 @@ class WEntityShowcase(
 
     var entityTypes: List<EntityType<*>> = emptyList()
 
-     private var tickCount = 0
+    private var tickCount = 0
 
     val entityType: EntityType<*>?
         get() {
@@ -65,9 +65,9 @@ class WEntityShowcase(
         val entityType = entityType ?: return
         val world = MinecraftClient.getInstance().world ?: return
         val entity = entityType.create(world) as? LivingEntity ?: return
-        if(entity is VillagerDataContainer) {
-            (entity as VillagerDataContainer).villagerData = VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 0)
-        }
+
+        if (entity is VillagerDataContainer)
+            entity.villagerData = VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 0)
 
         val w = (this.width / 2)
         val h = (height / 1.25).roundToInt()

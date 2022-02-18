@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.compat.rei.display
 
+import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -28,14 +29,12 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.util.EntryIngredients
 import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.item.ItemStack
-import net.minecraft.util.Identifier
 
 class TrialRecipeDisplay (
-    private val categoryId: Identifier,
     private val recipe: TrialKeystoneRecipe
 ) : Display {
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<TrialRecipeDisplay> = CategoryIdentifier.of(categoryId)
+    override fun getCategoryIdentifier(): CategoryIdentifier<TrialRecipeDisplay> = ReiPlugin.TRIAL_CATEGORY
 
     override fun getInputEntries() = mutableListOf(
         EntryIngredients.of(
