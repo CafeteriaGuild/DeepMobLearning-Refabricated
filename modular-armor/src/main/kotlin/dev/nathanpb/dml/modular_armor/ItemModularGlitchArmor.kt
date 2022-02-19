@@ -31,6 +31,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.mixin.IArmorItemMixin
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandlerFactory
+import dev.nathanpb.dml.utils.RenderUtils
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
@@ -44,6 +45,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
@@ -89,19 +91,16 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         if (world?.isClient == true && stack != null && tooltip != null) {
             val data = ModularArmorData(stack)
             if (!data.tier().isMaxTier()) {
-                tooltip += TranslatableText(
-                    "tooltip.${MOD_ID}.data_model.data_amount",
-                    data.dataAmount,
-                    data.dataRemainingToNextTier()
-                )
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, data.tier().nextTierOrCurrent().dataAmount - data.dataAmount)
+                        .formatted(Formatting.WHITE))?.let { tooltip.add(it) }
             }
-            tooltip += TranslatableText(
-                "tooltip.${MOD_ID}.data_model.tier",
-                data.tier().text
-            )
+            RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
+                ?.append(TranslatableText("tooltip.${MOD_ID}.tier.2", data.tier().text))?.let { tooltip.add(it) }
+
             MinecraftClient.getInstance().player?.let { player ->
                 if (player.isCreative) {
-                    tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.cheat"))
+                    tooltip.add(TranslatableText("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
                 }
             }
         }
