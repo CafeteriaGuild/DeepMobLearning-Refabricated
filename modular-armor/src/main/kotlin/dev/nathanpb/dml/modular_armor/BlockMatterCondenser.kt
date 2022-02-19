@@ -39,6 +39,7 @@ import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.ItemScatterer
+import net.minecraft.util.Rarity
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -59,7 +60,7 @@ class BlockMatterCondenser : HorizontalFacingBlock(
 
         fun register() {
             Registry.register(Registry.BLOCK, IDENTIFIER, BLOCK)
-            Registry.register(Registry.ITEM, IDENTIFIER, BlockItem(BLOCK, settings()))
+            Registry.register(Registry.ITEM, IDENTIFIER, BlockItem(BLOCK, settings().rarity(Rarity.RARE)))
         }
     }
 

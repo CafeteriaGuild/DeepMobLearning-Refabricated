@@ -11,6 +11,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +22,7 @@ public class ItemMatter extends Item {
 
     int experience;
     public ItemMatter(Settings settings, int experience) {
-        super(settings);
+        super(settings.rarity(Rarity.UNCOMMON));
         this.experience = experience;
     }
 

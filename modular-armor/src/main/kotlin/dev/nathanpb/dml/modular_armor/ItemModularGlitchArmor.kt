@@ -45,6 +45,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
+import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
@@ -70,6 +71,8 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         }
 
     }
+
+    override fun getRarity(stack: ItemStack?) = Rarity.EPIC
 
     override fun getItemBarColor(stack: ItemStack?) = 0x00FFC0
     override fun isItemBarVisible(stack: ItemStack) = true
@@ -189,4 +192,5 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
             }?.let(stack.enchantments::remove)
         }
     }
+
 }

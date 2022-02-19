@@ -26,6 +26,7 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.util.Rarity
 import net.minecraft.util.registry.Registry
 
 val ITEM_GROUP: ItemGroup = FabricItemGroupBuilder.build(identifier("tab_${MOD_ID}")) {
@@ -68,8 +69,8 @@ val ITEM_SOOT_MACHINE_CASE = Item(settings())
 
 val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 
-val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings())
-val ITEM_GLITCH_INGOT = Item(settings())
+val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings().rarity(Rarity.RARE))
+val ITEM_GLITCH_INGOT = Item(settings().rarity(Rarity.RARE))
 
 
 fun registerItems() {
