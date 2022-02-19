@@ -23,6 +23,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.utils.RenderUtils
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
@@ -30,6 +31,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
@@ -46,23 +48,16 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
             if (category != null) {
                 stack.dataModel.let { data ->
                     if (!data.tier().isMaxTier()) {
-                        tooltip.add(
-                            TranslatableText(
-                                "tooltip.${MOD_ID}.data_model.data_amount",
-                                data.dataAmount,
-                                data.tier().nextTierOrCurrent().dataAmount - data.dataAmount
-                            )
-                        )
+                        RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
+                            ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, data.tier().nextTierOrCurrent().dataAmount)
+                                .formatted(Formatting.WHITE))?.let { tooltip.add(it) }
                     }
-                    tooltip.add(
-                        TranslatableText(
-                            "tooltip.${MOD_ID}.data_model.tier",
-                            data.tier().text
-                        )
-                    )
+                    RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
+                        ?.append(TranslatableText("tooltip.${MOD_ID}.tier.2", data.tier().text))?.let { tooltip.add(it) }
+
                     MinecraftClient.getInstance().player?.let { player ->
                         if (player.isCreative) {
-                            tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.cheat"))
+                            tooltip.add(TranslatableText("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
                         }
                     }
                 }

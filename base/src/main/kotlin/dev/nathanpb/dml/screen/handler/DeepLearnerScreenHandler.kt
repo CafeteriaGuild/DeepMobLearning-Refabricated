@@ -170,12 +170,12 @@ class DeepLearnerScreenHandler (
             dataTier.text = LiteralText("")
         } else {
             dataAmount.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.data_amount.1"), world)
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
 
             dataTier.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.tier.1"), world)
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.tier.2", currentDataModel.tier().text).formatted(Formatting.WHITE))
+                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
         }
     }
 
