@@ -77,7 +77,6 @@ class ModularArmorScreenHandler(
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-
         var lastEffectsList: WListPanel<ModularEffect<*>, WModularEffectToggle>? = null
         fun updateEffectsList() {
             val disabledEffects = data.disabledEffects
@@ -95,12 +94,8 @@ class ModularArmorScreenHandler(
                 widget.toggle = effect.id !in disabledEffects
             }
 
-
-            root.add(lastEffectsList, 1, 1, 8, 5)
-            lastEffectsList!!.scrollBar.also {
-                it.setLocation(lastEffectsList!!.x+72, lastEffectsList!!.y-90)
-            }
-
+            root.add(lastEffectsList, 1, 1, 8, 4)
+            lastEffectsList!!.validate(this)
         }
 
         val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {

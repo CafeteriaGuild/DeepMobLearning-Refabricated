@@ -47,8 +47,8 @@ class RenderUtils {
             return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR
         }
 
-        fun getTextWithDefaultTextColor(text: MutableText, world: World): MutableText? {
-            return text.setStyle(Style.EMPTY.withColor(getDefaultTextColor(world)))
+        fun getTextWithDefaultTextColor(text: MutableText?, world: World): MutableText? {
+            return text!!.setStyle(Style.EMPTY.withColor(getDefaultTextColor(world)))
         }
 
     }
