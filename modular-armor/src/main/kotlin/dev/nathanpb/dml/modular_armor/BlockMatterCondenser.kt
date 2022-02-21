@@ -33,7 +33,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
+import net.minecraft.screen.ScreenHandler
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
@@ -44,7 +44,6 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.registry.Registry
-import net.minecraft.world.ServerWorldAccess
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
@@ -86,11 +85,22 @@ class BlockMatterCondenser : HorizontalFacingBlock(
         return ActionResult.SUCCESS
     }
 
-    override fun afterBreak(world: World?, player: PlayerEntity?, pos: BlockPos?, state: BlockState?, blockEntity: BlockEntity?, stack: ItemStack?) {
-        if (world is ServerWorldAccess && blockEntity is BlockEntityMatterCondenser) {
-            ItemScatterer.spawn(world, pos, blockEntity.inventory)
+    override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos?, newState: BlockState, moved: Boolean) {
+        if (state.block !== newState.block) {
+            val blockEntity = world.getBlockEntity(pos)
+            if (blockEntity is BlockEntityMatterCondenser) {
+                ItemScatterer.spawn(world, pos, (blockEntity as BlockEntityMatterCondenser?)!!.inventory)
+
+                world.updateComparators(pos, this)
+            }
+            super.onStateReplaced(state, world, pos, newState, moved)
         }
-        super.afterBreak(world, player, pos, state, blockEntity, stack)
+    }
+
+    override fun hasComparatorOutput(state: BlockState?) = true
+
+    override fun getComparatorOutput(state: BlockState?, world: World, pos: BlockPos?): Int {
+        return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos))
     }
 
     override fun <T : BlockEntity?> getTicker(world: World?, state: BlockState?, type: BlockEntityType<T>?): BlockEntityTicker<T> {
