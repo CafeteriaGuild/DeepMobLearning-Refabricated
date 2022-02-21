@@ -5,10 +5,11 @@
   "name": "DML: Refabricated - Glitch Armor",
   "description": "DML: Refabricated's Glitch Armor'",
   "icon": "assets/dml-refabricated/textures/item/glitch_chestplate.png",
-  "authors": ["NathanPB"],
+  "authors": ["NathanPB", "Luligabi"],
   "contact": {
-    "sources": "https://github.com/NathanPB/DeepMobLearning-Refabricated.git",
-    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues/"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated",
+    "repo": "https://github.com/NathanPB/DeepMobLearning-Refabricated",
+    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues"
   },
   "license": "LGPL-v3",
   "environment": "*",

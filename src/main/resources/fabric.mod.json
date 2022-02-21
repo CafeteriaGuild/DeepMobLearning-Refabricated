@@ -3,11 +3,12 @@
   "id": "dml-refabricated",
   "version": "${version}",
   "name": "Deep Mob Learning: Refabricated",
-  "description": "Server friendly mob loot acquisition",
-  "authors": ["NathanPB", "IterationFunk"],
+  "description": "A revitalized version of IterationFunk's server friendly mob loot acquisition mod, now on Fabric!",
+  "authors": ["NathanPB", "Luligabi", "IterationFunk"],
   "contact": {
-    "sources": "https://github.com/NathanPB/DeepMobLearning-Refabricated.git",
-    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues/"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated",
+    "repo": "https://github.com/NathanPB/DeepMobLearning-Refabricated",
+    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues"
   },
   "license": "LGPL-v3",
   "environment": "*",
