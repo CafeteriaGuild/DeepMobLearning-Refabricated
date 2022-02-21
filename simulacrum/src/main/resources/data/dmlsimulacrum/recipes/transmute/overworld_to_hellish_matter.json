@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " O ",
+    "ONO",
+    " O "
+  ],
+  "key": {
+    "O": {
+      "item": "dmlsimulacrum:overworld_matter"
+    },
+    "N": {
+      "item": "minecraft:netherrack"
+    }
+  },
+  "result": {
+    "item": "dmlsimulacrum:hellish_matter"
+  }
+}

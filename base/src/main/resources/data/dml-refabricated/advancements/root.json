@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:soot_redstone"
+    },
+    "title": {
+      "translate": "itemGroup.dml-refabricated.tab_dml-refabricated"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.dml.description"
+    },
+    "background": "dml-refabricated:textures/block/machine_casing_outer.png"
+  },
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:soot_redstone"]
+          }
+        ]
+      }
+    }
+  }
+}

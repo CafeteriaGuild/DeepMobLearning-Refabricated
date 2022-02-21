@@ -20,6 +20,8 @@
 package dev.nathanpb.dml.compat.rei.category
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
+import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.compat.rei.display.LootFabricatorRecipeDisplay
 import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
 import me.shedaniel.math.Point
@@ -29,25 +31,23 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.entry.EntryStack
+import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.LivingEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 
-class LootFabricatorDisplayCategory(
-    private val identifier: Identifier,
-    private val logo: EntryStack<*>
-    ) : DisplayCategory<LootFabricatorRecipeDisplay> {
+class LootFabricatorDisplayCategory: DisplayCategory<LootFabricatorRecipeDisplay> {
 
-    override fun getIdentifier() = identifier
+    override fun getIdentifier(): Identifier = ReiPlugin.LOOT_FABRICATOR_CATEGORY.identifier
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<out LootFabricatorRecipeDisplay> {
-        return CategoryIdentifier.of(identifier)
-    }
+    override fun getCategoryIdentifier(): CategoryIdentifier<out LootFabricatorRecipeDisplay> = ReiPlugin.LOOT_FABRICATOR_CATEGORY
 
-    override fun getIcon() = logo
+    override fun getIcon(): EntryStack<ItemStack> = EntryStacks.of(BLOCK_LOOT_FABRICATOR)
 
     override fun getTitle() = TranslatableText("rei.$MOD_ID.category.loot_fabricator")
+
 
     override fun setupDisplay(recipeDisplay: LootFabricatorRecipeDisplay, bounds: Rectangle): MutableList<Widget> {
         val centerX = bounds.centerX - 8

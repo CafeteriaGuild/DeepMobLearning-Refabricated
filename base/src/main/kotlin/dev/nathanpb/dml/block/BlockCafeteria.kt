@@ -19,20 +19,25 @@
 
 package dev.nathanpb.dml.block
 
+import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.utils.RenderUtils
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.Material
+import net.minecraft.block.*
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
+import net.minecraft.world.World
 
 class BlockCafeteria : HorizontalFacingBlock(
     FabricBlockSettings.of(Material.STONE)
@@ -42,8 +47,7 @@ class BlockCafeteria : HorizontalFacingBlock(
         .nonOpaque()
 ) {
     init {
-        defaultState = stateManager.defaultState
-            .with(Properties.HORIZONTAL_FACING, Direction.NORTH)
+        defaultState = stateManager.defaultState.with(Properties.HORIZONTAL_FACING, Direction.NORTH)
     }
 
     override fun appendTooltip(
@@ -52,7 +56,10 @@ class BlockCafeteria : HorizontalFacingBlock(
         tooltip: MutableList<Text>,
         options: TooltipContext?
     ) {
-        tooltip += TranslatableText("tooltip.dml-refabricated.cafeteria.joinus").append(" https://discord.gg/G4PjhEf")
+        if(world != null) {
+        RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.cafeteria.joinus"), world as World)
+            ?.append(LiteralText("https://discord.gg/G4PjhEf").formatted(Formatting.WHITE))?.let { tooltip.add(it) }
+        }
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
@@ -63,14 +70,36 @@ class BlockCafeteria : HorizontalFacingBlock(
         return defaultState.with(FACING, ctx?.playerFacing?.opposite)
     }
 
-    /*
-    My complete fail trying obtain a cool model
+
     override fun getOutlineShape(
         state: BlockState?,
         world: BlockView?,
         pos: BlockPos?,
         context: ShapeContext?
-    ): VoxelShape {
-        return VoxelShapes.cuboid(0.125, 0.0, 0.005, 0.875, 0.75, 0.75)
-    }*/
+    ): VoxelShape? {
+        return when(state?.get(FACING)) {
+            Direction.NORTH -> cafeteriaNorth
+            Direction.SOUTH -> cafeteriaSouth
+            Direction.WEST -> cafeteriaWest
+            Direction.EAST -> cafeteriaEast
+            else -> VoxelShapes.empty()
+        }
+    }
+
+    private val baseNorth: VoxelShape = Block.createCuboidShape(4.0, 0.0, 2.0, 16.0, 12.0, 14.0)
+    private val handleNorth: VoxelShape = Block.createCuboidShape(0.0, 2.0, 7.0, 4.0, 10.0, 9.0)
+    private val cafeteriaNorth: VoxelShape = VoxelShapes.union(baseNorth, handleNorth)
+
+    private val baseSouth: VoxelShape = Block.createCuboidShape(0.0, 0.0, 2.0, 12.0, 12.0, 14.0)
+    private val handleSouth: VoxelShape = Block.createCuboidShape(12.0, 2.0, 7.0, 16.0, 10.0, 9.0)
+    private val cafeteriaSouth: VoxelShape = VoxelShapes.union(baseSouth, handleSouth)
+
+    private val baseWest: VoxelShape = Block.createCuboidShape(2.0, 0.0, 0.0, 14.0, 12.0, 12.0)
+    private val handleWest: VoxelShape = Block.createCuboidShape(7.0, 2.0, 12.0, 9.0, 10.0, 16.0)
+    private val cafeteriaWest: VoxelShape = VoxelShapes.union(baseWest, handleWest)
+
+    private val baseEast: VoxelShape = Block.createCuboidShape(2.0, 0.0, 4.0, 14.0, 12.0, 16.0)
+    private val handleEast: VoxelShape = Block.createCuboidShape(7.0, 2.0, 0.0, 9.0, 10.0, 4.0)
+    private val cafeteriaEast: VoxelShape = VoxelShapes.union(baseEast, handleEast)
+
 }

@@ -30,6 +30,7 @@ dependencies {
 
     include project(path: ":vanilla-events", configuration: "namedElements")
 
+    api project(path: ":simulacrum", configuration: "namedElements")
 
     modRuntimeOnly "com.terraformersmc:modmenu:3.0.0"
 }
@@ -129,9 +130,12 @@ curseforge {
         mainArtifact(remapJar)  {
             displayName = "Deep Mob Learning: Refabricated $project.minecraft_version+$version"
             relations {
-                optionalDependency("roughly-enough-items")
                 requiredDependency("fabric-api")
                 requiredDependency("fabric-language-kotlin")
+
+                requiredDependency("patchouli-fabric")
+
+                optionalDependency("roughly-enough-items")
             }
         }
 

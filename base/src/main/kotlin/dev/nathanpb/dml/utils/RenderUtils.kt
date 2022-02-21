@@ -21,11 +21,38 @@
 package dev.nathanpb.dml.utils
 
 import com.mojang.blaze3d.systems.RenderSystem
+import dev.nathanpb.dml.identifier
+import io.github.cottonmc.cotton.gui.client.BackgroundPainter
+import io.github.cottonmc.cotton.gui.widget.WLabel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
+import net.minecraft.text.MutableText
+import net.minecraft.text.Style
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3f
+import net.minecraft.world.World
+
+class RenderUtils {
+
+    companion object {
+        private const val TITLE_COLOR: Int = 0x04FCC4
+        val DEFAULT_BACKGROUND_PAINTER: BackgroundPainter = BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
+        val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
+        val PROGRESS_BAR: Identifier = identifier("textures/gui/progress_bar.png")
+        val PROGRESS_BAR_BACKGROUND: Identifier = identifier("textures/gui/progress_bar_background.png")
+
+        fun getDefaultTextColor(world: World): Int {
+            return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR
+        }
+
+        fun getTextWithDefaultTextColor(text: MutableText?, world: World): MutableText? {
+            return text!!.setStyle(Style.EMPTY.withColor(getDefaultTextColor(world)))
+        }
+
+    }
+}
 
 // not stolen from mojang, I promise
 fun drawEntity(
@@ -76,49 +103,3 @@ fun drawEntity(
     RenderSystem.applyModelViewMatrix()
     DiffuseLighting.enableGuiDepthLighting()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// vai toma no cu mano que tristeza

@@ -97,15 +97,13 @@ fun init() {
         EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
-    dmlSimulacrum.init()
-    println("Deep Mob Learning: Refabricated is good to go")
+    LOGGER.info("Deep Mob Learning: Refabricated is good to go")
 }
 
 @Suppress("unused")
 fun initClient() {
     registerScreens()
     registerEntityRenderer()
-    dmlSimulacrumClient.initClient()
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)

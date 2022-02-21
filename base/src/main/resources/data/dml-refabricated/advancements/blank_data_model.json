@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:data_model"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.blank_data_model"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.blank_data_model.description"
+    }
+  },
+  "parent": "dml-refabricated:root",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:data_model"]
+          }
+        ]
+      }
+    }
+  }
+}

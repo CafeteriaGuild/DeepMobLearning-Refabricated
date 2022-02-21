@@ -10,6 +10,7 @@
     "IArmorItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
+    "PiglinBrainMixin",
     "PlayerEntityMixin",
     "StatusEffectUtilMixin"
   ],

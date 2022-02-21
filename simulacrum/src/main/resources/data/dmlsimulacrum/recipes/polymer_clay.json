@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GC ",
+    "CDC",
+    " CI"
+  ],
+  "key": {
+    "D": { "item": "minecraft:lapis_lazuli" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "I": { "item": "minecraft:iron_ingot" },
+    "C": { "item": "minecraft:clay_ball" }
+  },
+  "result": {
+    "item": "dmlsimulacrum:polymer_clay",
+    "count": 16
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:string" },
+    { "item": "minecraft:slime_ball" },
+    { "item": "dmlsimulacrum:overworld_matter" },
+    { "item": "dmlsimulacrum:overworld_matter" }
+  ],
+  "result": {
+    "item": "minecraft:cobweb",
+    "count": 4
+  }
+}

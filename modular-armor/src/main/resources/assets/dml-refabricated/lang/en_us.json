@@ -7,13 +7,15 @@
   "category.dml-refabricated.modular_armor": "Deep Mob Learning: Refabricated - Modular Armor",
   "key.dml-refabricated.teleport": "Teleport",
   "key.dml-refabricated.soul_vision": "Soul Vision",
+  "gui.dml-refabricated.glitch_armor_only": "Please insert a Glitch Armor Set Piece here.",
   "modulareffect.dml-refabricated.auto_extinguish": "Auto Extinguish",
+  "modulareffect.dml-refabricated.piglin_truce": "Piglin Truce",
   "modulareffect.dml-refabricated.fall_immunity": "Fall Immunity",
   "modulareffect.dml-refabricated.fly": "Fly",
   "modulareffect.dml-refabricated.poseidon_bless": "Poseidon Bless",
   "modulareffect.dml-refabricated.fire_immunity": "Fire Immunity",
   "modulareffect.dml-refabricated.resistance": "Resistance",
-  "modulareffect.dml-refabricated.endermen_proof_vision": "Endermen Proof Vision",
+  "modulareffect.dml-refabricated.endermen_proof_vision": "Enderman Proof Vision",
   "modulareffect.dml-refabricated.teleport": "Teleport",
   "modulareffect.dml-refabricated.zombie_friendly": "Zombie Friendly",
   "modulareffect.dml-refabricated.skeleton_friendly": "Skeleton Friendly",
@@ -26,5 +28,9 @@
   "effect.dml-refabricated.underwater_haste": "Underwater Haste",
   "effect.dml-refabricated.depth_strider": "Depth Strider",
   "effect.dml-refabricated.soul_vision": "Soul Vision",
-  "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty"
+  "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty",
+  "advancements.dml-refabricated.glitch_armor": "Glitchy to the Bone",
+  "advancements.dml-refabricated.glitch_armor.description": "Craft a full set of Glitch Armor.",
+  "advancements.dml-refabricated.matter_condenser": "Condensing Matter",
+  "advancements.dml-refabricated.matter_condenser.description": "Craft a Matter Condenser."
 }

@@ -34,6 +34,7 @@ class ModularEffectRegistry {
             INSTANCE.apply {
                 // Nether
                 register(FireProtectionEffect())
+                register(PiglinTruceEffect())
                 register(AutoExtinguishEffect())
                 register(FireImmunityEffect())
 

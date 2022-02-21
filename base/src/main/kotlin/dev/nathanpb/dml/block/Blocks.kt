@@ -22,6 +22,7 @@ package dev.nathanpb.dml.block
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.settings
 import net.minecraft.item.BlockItem
+import net.minecraft.util.Rarity
 import net.minecraft.util.registry.Registry
 
 val BLOCK_TRIAL_KEYSTONE = BlockTrialKeystone()
@@ -36,6 +37,6 @@ fun registerBlocks() {
     ).forEach { (block, id) ->
         val identifier = identifier(id)
         Registry.register(Registry.BLOCK, identifier, block)
-        Registry.register(Registry.ITEM, identifier, BlockItem(block, settings()))
+        Registry.register(Registry.ITEM, identifier, BlockItem(block, settings().rarity(if(block == BLOCK_CAFETERIA) Rarity.EPIC else Rarity.UNCOMMON))) // This is a bad way to do it, but it's fine for now
     }
 }

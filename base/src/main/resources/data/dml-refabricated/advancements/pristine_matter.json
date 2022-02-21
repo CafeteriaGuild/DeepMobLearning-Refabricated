@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:pristine_matter_overworld"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.pristine_matter"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.pristine_matter.description"
+    }
+  },
+  "parent": "dml-refabricated:trial",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "dml-refabricated:pristine_matter"
+          }
+        ]
+      }
+    }
+  }
+}

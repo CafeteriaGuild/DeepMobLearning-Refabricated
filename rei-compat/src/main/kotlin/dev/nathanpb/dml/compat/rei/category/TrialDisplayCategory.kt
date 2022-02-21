@@ -21,10 +21,12 @@ package dev.nathanpb.dml.compat.rei.category
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
+import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.compat.rei.display.TrialRecipeDisplay
 import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
+import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.widgets.Widget
@@ -39,17 +41,16 @@ import net.minecraft.item.Items
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 
-class TrialDisplayCategory(private val identifier: Identifier, private val logo: EntryStack<*>) : DisplayCategory<TrialRecipeDisplay> {
+class TrialDisplayCategory: DisplayCategory<TrialRecipeDisplay> {
 
-    override fun getIdentifier() = identifier
+    override fun getIdentifier(): Identifier = ReiPlugin.TRIAL_CATEGORY.identifier
 
-    override fun getIcon() = logo
+    override fun getIcon(): EntryStack<ItemStack> = EntryStacks.of(ITEM_TRIAL_KEY)
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<TrialRecipeDisplay> {
-        return CategoryIdentifier.of(identifier)
-    }
+    override fun getCategoryIdentifier(): CategoryIdentifier<TrialRecipeDisplay> = ReiPlugin.TRIAL_CATEGORY
 
     override fun getTitle() = TranslatableText("rei.$MOD_ID.category.trial")
+
 
     override fun setupDisplay(recipeDisplay: TrialRecipeDisplay, bounds: Rectangle): MutableList<Widget> {
         val centerX = bounds.centerX - 5
@@ -59,7 +60,7 @@ class TrialDisplayCategory(private val identifier: Identifier, private val logo:
         val output = recipeDisplay.outputEntries
             .withIndex()
             .groupBy { (index, _) -> index % 5 }
-            .map { it.value.map { it.value } }
+            .map { it -> it.value.map { it.value } }
 
         val keySlot = Widgets.createSlot(Point(centerX, centerY - 24)).entries(input)
 
