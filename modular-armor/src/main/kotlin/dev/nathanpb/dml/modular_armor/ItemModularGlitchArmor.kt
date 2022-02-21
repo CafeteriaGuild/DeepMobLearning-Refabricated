@@ -92,7 +92,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
             val data = ModularArmorData(stack)
             if (!data.tier().isMaxTier()) {
                 RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, data.tier().nextTierOrCurrent().dataAmount - data.dataAmount)
+                    ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, ModularArmorData.amountRequiredTo(data.tier().nextTierOrCurrent()))
                         .formatted(Formatting.WHITE))?.let { tooltip.add(it) }
             }
             RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
@@ -108,7 +108,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
     }
 
     fun getAttributeModifiers(stack: ItemStack, slot: EquipmentSlot?): Multimap<EntityAttribute, EntityAttributeModifier> {
-        return super.getAttributeModifiers(slot).let { multimap ->
+        return super.getAttributeModifiers(slot).let {
             val builder = MultimapBuilder.ListMultimapBuilder
                 .hashKeys()
                 .arrayListValues()
@@ -164,7 +164,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
 
     override fun isDamageable() = false
 
-    fun appendModularEffectModifiers(armor: ModularArmorData, dataModel: DataModelData): Multimap<EntityAttribute, EntityAttributeModifier> {
+    private fun appendModularEffectModifiers(armor: ModularArmorData, dataModel: DataModelData): Multimap<EntityAttribute, EntityAttributeModifier> {
         val multimap = MultimapBuilder.ListMultimapBuilder
             .hashKeys()
             .arrayListValues()
