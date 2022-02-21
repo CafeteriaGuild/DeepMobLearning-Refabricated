@@ -1,5 +1,6 @@
 package io.github.projectet.dmlSimulacrum.item;
 
+import dev.nathanpb.dml.utils.RenderUtils;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -7,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
@@ -46,8 +47,12 @@ public class ItemMatter extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new LiteralText("§7Can be consumed for experience §r(Right click)"));
-        tooltip.add(new LiteralText("§7Hold §rSHIFT§7 to consume entire stack."));
-        tooltip.add(new LiteralText("§7Experience per item: ").append(new LiteralText(String.valueOf(experience)).formatted(Formatting.GREEN)));
+        if(world == null) return;
+        tooltip.add(RenderUtils.Companion.getTextWithDefaultTextColor(new TranslatableText("tooltip.dmlsimulacrum.matter.1"), world)
+                .append(new TranslatableText("tooltip.dmlsimulacrum.matter.2").formatted(Formatting.WHITE)));
+        tooltip.add(new TranslatableText("tooltip.dmlsimulacrum.matter.3")
+                .append(RenderUtils.Companion.getTextWithDefaultTextColor(new TranslatableText("tooltip.dmlsimulacrum.matter.4"), world)));
+        tooltip.add(RenderUtils.Companion.getTextWithDefaultTextColor(new TranslatableText("tooltip.dmlsimulacrum.matter.5"), world)
+                .append(new LiteralText(String.valueOf(experience)).formatted(Formatting.WHITE)));
     }
 }

@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 
@@ -65,16 +66,16 @@ public class DataModelUtil {
     public static Text textType(ItemStack stack) {
         switch(Constants.dataModel.get(getEntityCategory(stack).toString()).getType()) {
             case OVERWORLD -> {
-                return new LiteralText("Overworld").formatted(Formatting.GREEN);
+                return new TranslatableText("modelType.dmlsimulacrum.overworld").formatted(Formatting.GREEN);
             }
             case HELLISH -> {
-                return new LiteralText("Hellish").formatted(Formatting.RED);
+                return new TranslatableText("modelType.dmlsimulacrum.hellish").formatted(Formatting.RED);
             }
             case EXTRATERRESTRIAL -> {
-                return new LiteralText("Extraterrestrial").formatted(Formatting.LIGHT_PURPLE);
+                return new TranslatableText("modelType.dmlsimulacrum.extraterrestrial").formatted(Formatting.LIGHT_PURPLE);
             }
             default -> {
-                return new LiteralText("Invalid Item");
+                return new TranslatableText("modelType.dmlsimulacrum.invalid");
             }
         }
     }
