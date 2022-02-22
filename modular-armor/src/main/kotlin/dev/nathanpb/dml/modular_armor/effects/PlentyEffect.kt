@@ -21,6 +21,7 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents

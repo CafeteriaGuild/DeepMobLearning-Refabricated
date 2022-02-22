@@ -21,6 +21,8 @@ package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
 import dev.nathanpb.dml.data.TrialKeyData
+import dev.nathanpb.dml.entityCategory.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategoryRegistry
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
@@ -101,7 +103,7 @@ class TrialKeystoneRecipe (
 
     class Serializer : RecipeSerializer<TrialKeystoneRecipe> {
         override fun write(buf: PacketByteBuf, recipe: TrialKeystoneRecipe) {
-            buf.writeString(recipe.category.name)
+            buf.writeString(recipe.category.id.toString())
             buf.writeInt(recipe.tier.ordinal)
             buf.writeInt(recipe.waveEntityCount)
             buf.writeInt(recipe.waveRespawnTimeout)
@@ -116,7 +118,9 @@ class TrialKeystoneRecipe (
 
         override fun read(id: Identifier, json: JsonObject): TrialKeystoneRecipe {
             val tier = DataModelTier.fromIndex(json.getAsJsonPrimitive("tier").asInt) ?: DataModelTier.FAULTY
-            val category = EntityCategory.valueOf(json.getAsJsonPrimitive("category").asString)
+            val category = EntityCategoryRegistry.INSTANCE.getOrThrow(
+                Identifier(json.getAsJsonPrimitive("category").asString)
+            )
             val rewards = json.getAsJsonArray("rewards").map {
                 ShapedRecipe.outputFromJson(it.asJsonObject)
             }
@@ -150,7 +154,7 @@ class TrialKeystoneRecipe (
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): TrialKeystoneRecipe {
-            val category = EntityCategory.valueOf(buf.readString())
+            val category = EntityCategoryRegistry.INSTANCE.getOrThrow(Identifier(buf.readString()))
             val tier = DataModelTier.fromIndex(buf.readInt()) ?: DataModelTier.FAULTY
             val waveCount = buf.readInt()
             val waveRespawnTimeout = buf.readInt()

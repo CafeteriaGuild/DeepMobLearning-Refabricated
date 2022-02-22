@@ -20,7 +20,8 @@
 package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategoryRegistry
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
@@ -58,7 +59,7 @@ class LootFabricatorRecipe (
 
     override fun equals(other: Any?): Boolean {
         if (other is LootFabricatorRecipe) {
-            return other.category.name == category.name
+            return other.category == category
                 && other.input.matchingStacks.all { input.test(it) }
                 && input.matchingStacks.all { other.input.test(it) }
         }
@@ -68,19 +69,21 @@ class LootFabricatorRecipe (
     class Serializer : RecipeSerializer<LootFabricatorRecipe> {
         override fun write(buf: PacketByteBuf, recipe: LootFabricatorRecipe) {
             recipe.input.write(buf)
-            buf.writeString(recipe.category.name)
+            buf.writeString(recipe.category.id.toString())
         }
 
         override fun read(id: Identifier, json: JsonObject): LootFabricatorRecipe {
             val input = Ingredient.fromJson(json.get("input"))
-            val category = EntityCategory.valueOf(json.getAsJsonPrimitive("category").asString)
+            val category = EntityCategoryRegistry.INSTANCE.getOrThrow(
+                Identifier(json.getAsJsonPrimitive("category").asString)
+            )
 
             return LootFabricatorRecipe(id, input, category)
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): LootFabricatorRecipe {
             val input = Ingredient.fromPacket(buf)
-            val category = EntityCategory.valueOf(buf.readString())
+            val category = EntityCategoryRegistry.INSTANCE.getOrThrow(Identifier(buf.readString()))
 
             return LootFabricatorRecipe(id, input, category)
         }

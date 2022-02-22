@@ -21,8 +21,8 @@ package dev.nathanpb.dml.data
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.NotDataModelException
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.Serializers

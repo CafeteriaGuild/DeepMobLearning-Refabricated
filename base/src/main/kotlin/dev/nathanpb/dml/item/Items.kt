@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.itemgroup.ITEMS
 import dev.nathanpb.dml.mixin.SmithingTemplateItemAccessor

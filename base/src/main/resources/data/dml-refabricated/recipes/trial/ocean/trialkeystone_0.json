@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 0,
-  "category": "OCEAN",
+  "category": "dml-refabricated:ocean_mobs",
   "spawnRates": {
     ".*": 1
   },

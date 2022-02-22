@@ -25,8 +25,8 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
-import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.ModEvents
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
@@ -266,7 +266,7 @@ class Trial (
     private fun spawnWave() {
         (world as? ServerWorld)?.let { world ->
             (0 until recipe.waveEntityCount).map {
-                val distributionTable = Registries.ENTITY_TYPE.iterateEntries(recipe.category.tagKey)
+                val distributionTable = recipe.category.entityTypes
                     .associateWith {
                         val id = Registries.ENTITY_TYPE.getId(it.value()).toString()
                         recipe.spawnRate.entries

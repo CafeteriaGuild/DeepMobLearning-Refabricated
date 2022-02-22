@@ -20,8 +20,9 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.enums.EntityCategory
+
 import dev.nathanpb.dml.event.VanillaEvents
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload

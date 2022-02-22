@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 1,
-  "category": "OVERWORLD",
+  "category": "dml-refabricated:overworld_mobs",
   "spawnRates": {
     ".*": 10,
     "minecraft:enderman": 1,

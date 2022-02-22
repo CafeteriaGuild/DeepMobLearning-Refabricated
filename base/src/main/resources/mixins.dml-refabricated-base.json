@@ -13,6 +13,7 @@
     "PlayerEntityMixin",
     "ServerWorldMixin",
     "ShapelessRecipeAccessor",
+    "RegistryInvoker",
     "SlotMixin",
     "SmithingTemplateItemAccessor",
     "WorldMixin"

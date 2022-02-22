@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 2,
-  "category": "SKELETON",
+  "category": "dml-refabricated:skeleton_mobs",
   "spawnRates": {
     ".*": 10,
     "minecraft:wither_skeleton": 2

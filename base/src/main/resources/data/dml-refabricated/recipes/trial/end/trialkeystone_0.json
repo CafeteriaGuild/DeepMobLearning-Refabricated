@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 0,
-  "category": "END",
+  "category": "dml-refabricated:end_mobs",
   "spawnRates": {
     ".*": 10,
     "minecraft:shulker": 3,

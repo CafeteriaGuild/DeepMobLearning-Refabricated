@@ -166,13 +166,8 @@ class DeepLearnerScreenHandler (
             }
             null
         }
+        showcase.entityTypes = currentDataModel?.category?.entityTypes.orEmpty()
 
-        val showcaseEntities: MutableList<EntityType<*>> = arrayListOf()
-        Registries.ENTITY_TYPE.iterateEntries(currentDataModel?.category?.tagKey).forEach {
-            showcaseEntities.add(it.value())
-        }
-
-        showcase.entityTypes = showcaseEntities
         if (currentDataModel == null) {
             dataAmount.text = Text.of("")
             dataTier.text = Text.of("")

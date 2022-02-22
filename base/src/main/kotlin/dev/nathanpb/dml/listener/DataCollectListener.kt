@@ -47,7 +47,7 @@ class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity {
             .filter { it.item is ItemDataModel }
             .firstOrNullMapping(
                 map = { it.dataModel },
-                accept = { entity.type.isIn(it.category?.tagKey) && !it.tier().isMaxTier() }
+                accept = { it.category?.entityTypes?.contains(entity.type) ?: false && !it.tier().isMaxTier() }
             )?.let {
                 it.dataAmount += config.dataCollection.baseDataGainPerKill
             }

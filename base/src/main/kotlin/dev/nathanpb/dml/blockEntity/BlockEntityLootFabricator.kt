@@ -20,8 +20,8 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.configimport dev.nathanpb.dml.enums.EntityCategory
+
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import dev.nathanpb.dml.recipe.RECIPE_LOOT_FABRICATOR
 import dev.nathanpb.dml.utils.combineStacksIfPossible

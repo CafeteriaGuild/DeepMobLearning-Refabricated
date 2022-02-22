@@ -110,6 +110,7 @@ fun init() {
     }
     TrialAffixRegistry.registerDefaultAffixes()
     CommandRegistrationCallback.EVENT.register(DMLCommand())
+    EntityCategoryRegistry.INSTANCE
     LOGGER.info("Deep Mob Learning: Refabricated" + quirkyStartupMessages[Random.nextInt(quirkyStartupMessages.size)])
 }
 

@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 1,
-  "category": "GHOST",
+  "category": "dml-refabricated:ghost_mobs",
   "spawnRates": {
     ".*": 10,
     "minecraft:phantom": 3,
