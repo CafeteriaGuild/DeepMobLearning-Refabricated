@@ -31,6 +31,10 @@ class WModularEffectToggle(
     world: World
 ) : WToggleButton() {
     var effect by Delegates.observable<ModularEffect<*>?>(null) { _, _, value ->
-        setLabel(RenderUtils.getTextWithDefaultTextColor(value?.name?.append(""), world) ?: LiteralText(""))
+        setLabel(
+            value?.name?.let {
+                RenderUtils.getTextWithDefaultTextColor(it, world)
+            } ?: LiteralText("")
+        )
     }
 }
