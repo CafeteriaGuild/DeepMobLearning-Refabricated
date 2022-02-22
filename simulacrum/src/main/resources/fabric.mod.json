@@ -7,8 +7,8 @@
   "authors": ["ProjectET", "NathanPB", "Luligabi", "IterationFunk"],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning-simulacrum",
-    "repo": "https://github.com/NathanPB/DeepMobLearning-Refabricated",
-    "issues": "https://github.com/NathanPB/DeepMobLearning-Refabricated/issues"
+    "repo": "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated",
+    "issues": "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/issues"
   },
   "license": "MIT",
   "icon": "assets/dmlsimulacrum/icon.png",

@@ -1,6 +1,6 @@
 I'm accepting contributions of any kinds and any levels. Beginners are absolutely welcome =)
 
-If you don't know exactly what to do and somehow just wanna contribute to random repositories over Github, we have kanbans and tasklists, take a look at [the issues](https://github.com/NathanPB/DeepMobLearning-fabric/issues), [the projects](https://github.com/NathanPB/DeepMobLearning-fabric/projects) and [the milestones](https://github.com/NathanPB/DeepMobLearning-fabric/milestones)
+If you don't know exactly what to do and somehow just wanna contribute to random repositories over Github, we have kanbans and tasklists, take a look at [the issues](https://github.com/CafeteriaGuild/DeepMobLearning-fabric/issues), [the projects](https://github.com/CafeteriaGuild/DeepMobLearning-fabric/projects) and [the milestones](https://github.com/CafeteriaGuild/DeepMobLearning-fabric/milestones)
 
 If you would like to contribute with the project, try to follow some rules to keep everything fine:
 
