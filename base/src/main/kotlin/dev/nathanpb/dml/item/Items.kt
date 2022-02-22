@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.item.Item

@@ -164,7 +164,7 @@ class DeepLearnerScreenHandler (
             null
         }
 
-        showcase.entityTypes = currentDataModel?.category?.tag?.values().orEmpty()
+        showcase.entityTypes = currentDataModel?.category?.entityTypes.orEmpty()
         if (currentDataModel == null) {
             dataAmount.text = LiteralText("")
             dataTier.text = LiteralText("")

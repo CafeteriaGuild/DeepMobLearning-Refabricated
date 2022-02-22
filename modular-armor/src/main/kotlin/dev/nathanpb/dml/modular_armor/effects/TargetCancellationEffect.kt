@@ -20,7 +20,7 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.modular_armor.core.*
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.EntityType

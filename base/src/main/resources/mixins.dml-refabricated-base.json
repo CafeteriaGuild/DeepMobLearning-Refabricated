@@ -6,6 +6,7 @@
     "EntityTypeMixin",
     "ICraftingResultSlotMixin",
     "LivingEntityMixin",
+    "RegistryInvoker",
     "SlotMixin",
     "WorldMixin"
   ],

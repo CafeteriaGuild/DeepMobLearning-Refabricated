@@ -22,7 +22,7 @@ package dev.nathanpb.dml.blockEntity
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.entity.FakePlayerEntity
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import dev.nathanpb.dml.recipe.RECIPE_LOOT_FABRICATOR
 import dev.nathanpb.dml.utils.combineStacksIfPossible
@@ -111,8 +111,8 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
         return (0 until config.lootFabricator.pristineExchangeRate).map {
-            category.tag
-                .getRandom(java.util.Random())
+            category.entityTypes
+                .random()
                 .simulateLootDroppedStacks(world, FakePlayerEntity(world), DamageSource.GENERIC)
         }.flatten().let { stacks ->
             SimpleInventory(stacks.size).also { tempInventory ->

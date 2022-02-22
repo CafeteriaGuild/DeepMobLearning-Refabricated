@@ -53,7 +53,7 @@ class LootFabricatorDisplayCategory: DisplayCategory<LootFabricatorRecipeDisplay
         val centerX = bounds.centerX - 8
         val centerY = bounds.centerY - 8
 
-        val entities = recipeDisplay.recipe.category.tag.values()
+        val entities = recipeDisplay.recipe.category.entityTypes
 
         return mutableListOf<Widget>(
             Widgets.createRecipeBase(bounds),

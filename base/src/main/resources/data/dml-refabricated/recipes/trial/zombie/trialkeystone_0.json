@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 0,
-  "category": "ZOMBIE",
+  "category": "dml-refabricated:zombie_mobs",
   "spawnRates": {
     ".*": 1
   },

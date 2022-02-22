@@ -30,7 +30,7 @@ dependencies {
 
     include project(path: ":vanilla-events", configuration: "namedElements")
 
-    api project(path: ":simulacrum", configuration: "namedElements")
+    //api project(path: ":simulacrum", configuration: "namedElements")
 
     modRuntimeOnly "com.terraformersmc:modmenu:3.0.0"
 }

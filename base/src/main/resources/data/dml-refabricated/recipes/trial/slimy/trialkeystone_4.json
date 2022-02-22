@@ -1,7 +1,7 @@
 {
   "type": "dml-refabricated:trial_keystone",
   "tier": 4,
-  "category": "SLIMY",
+  "category": "dml-refabricated:slimy_mobs",
   "spawnRates": {
     ".*": 1
   },

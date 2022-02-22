@@ -22,8 +22,8 @@ package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.DEPTH_STRIDER_EFFECT
 import dev.nathanpb.dml.modular_armor.core.EffectStackOption

@@ -20,12 +20,12 @@
 package dev.nathanpb.dml.data
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.data.serializers.EntityCategorySerializer
 import dev.nathanpb.dml.data.serializers.TrialAffixListSerializer
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.utils.takeOrNull
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
-import dev.nathanpb.ktdatatag.serializer.EnumSerializer
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
@@ -45,7 +45,7 @@ class TrialKeyData (tag: NbtCompound) : MutableCompoundData(tag) {
         }
     }
 
-    var category by persistentDefaulted(EntityCategory.END, EnumSerializer(EntityCategory::class.java))
+    var category by persistentDefaulted(EntityCategory.END, EntityCategorySerializer())
     var dataAmount by persistentDefaulted(0, Serializers.INT)
     var affixes by persistentDefaulted(emptyList(), TrialAffixListSerializer())
 

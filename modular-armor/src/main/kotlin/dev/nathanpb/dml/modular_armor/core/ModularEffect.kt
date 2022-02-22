@@ -21,8 +21,8 @@
 package dev.nathanpb.dml.modular_armor.core
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.enums.DataModelTier
-import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.attribute.ClampedEntityAttribute

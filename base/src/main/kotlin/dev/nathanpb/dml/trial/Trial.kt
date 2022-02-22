@@ -25,7 +25,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
-import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.entityCategory.EntityCategory
 import dev.nathanpb.dml.event.TrialEndEvent
 import dev.nathanpb.dml.event.TrialStateChanged
 import dev.nathanpb.dml.event.TrialWaveSpawnEvent
@@ -267,8 +267,7 @@ class Trial (
     private fun spawnWave() {
         (world as? ServerWorld)?.let { world ->
             (0 until recipe.waveEntityCount).map {
-                val distributionTable = recipe.category.tag
-                    .values()
+                val distributionTable = recipe.category.entityTypes
                     .associateWith {
                         val id = Registry.ENTITY_TYPE.getId(it).toString()
                         recipe.spawnRate.entries

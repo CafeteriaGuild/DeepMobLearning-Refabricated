@@ -25,6 +25,7 @@ import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
+import dev.nathanpb.dml.entityCategory.EntityCategoryRegistry
 import dev.nathanpb.dml.event.EndermanTeleportEvent
 import dev.nathanpb.dml.event.WorldExplosionEvent
 import dev.nathanpb.dml.item.registerItems
@@ -97,6 +98,7 @@ fun init() {
         EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
+    EntityCategoryRegistry.INSTANCE
     LOGGER.info("Deep Mob Learning: Refabricated is good to go")
 }
 
