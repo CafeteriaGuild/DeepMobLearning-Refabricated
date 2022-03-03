@@ -21,7 +21,7 @@ Absolutely! You can download the mod on [Curseforge](https://www.curseforge.com/
 ## Will there ever be a Forge version?
 **Well yes but actually no.** If you want a Forge version of this mod you should check out the [xt9's version](#xt9s-version)
 
-About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [the original author of the mod](#xt9s-version) and you should be fine.
+About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [Cafeteria](https://discord.com/invite/G4PjhEf) and [the original author of the mod](#xt9s-version) and you should be fine.
 
 ## Setting up dev env
 The only special thing that differs from a gradle project is that you will need to have this section in your ``~/.gradle/gradle.properties`` file:
