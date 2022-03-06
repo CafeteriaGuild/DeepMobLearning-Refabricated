@@ -23,7 +23,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Rarity
 
-class ItemPristineMatter(settings: Settings) : Item(settings) {
+class ItemPristineMatter : Item(settings().fireproof()) {
     override fun hasGlint(stack: ItemStack?) = true
 
     override fun getRarity(stack: ItemStack?) = Rarity.UNCOMMON

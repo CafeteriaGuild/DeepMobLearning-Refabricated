@@ -28,7 +28,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class ItemDeepLearner : Item(settings().maxCount(1)) {
+class ItemDeepLearner : Item(settings().maxCount(1).fireproof()) {
 
     override fun use(world: World?, player: PlayerEntity?, hand: Hand): TypedActionResult<ItemStack> {
         (player as? ServerPlayerEntity)?.let {

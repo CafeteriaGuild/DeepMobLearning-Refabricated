@@ -36,7 +36,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxCount(1)) {
+class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxCount(1).fireproof()) {
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
