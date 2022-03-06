@@ -31,7 +31,7 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
 
-class ItemTrialKey : Item(settings().maxCount(1)) {
+class ItemTrialKey : Item(settings().maxCount(1).fireproof()) {
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
