@@ -33,6 +33,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
+
+
     @Inject(at = @At("HEAD"), method = "getAttributeModifiers", cancellable = true)
     void getAttributeModifiers(EquipmentSlot equipmentSlot, CallbackInfoReturnable<Multimap<EntityAttribute, EntityAttributeModifier>> cir) {
         ItemStack dis = (ItemStack)(Object) this;
@@ -41,4 +43,13 @@ public class ItemStackMixin {
             cir.cancel();
         }
     }
+
+    @Inject(at = @At("HEAD"), method = "isDamageable", cancellable = true) // TODO: Change this mixin for a unbreakable tag?
+    public void isDamageable(CallbackInfoReturnable<Boolean> cir) {
+        ItemStack itemStack = ((ItemStack) (Object) this);
+        if(itemStack.getItem() instanceof ItemModularGlitchArmor) {
+            cir.setReturnValue(false);
+        }
+    }
+
 }
