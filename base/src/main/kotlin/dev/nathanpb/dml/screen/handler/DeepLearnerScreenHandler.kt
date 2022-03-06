@@ -168,28 +168,28 @@ class DeepLearnerScreenHandler (
         if (currentDataModel == null) {
             dataAmount.text = LiteralText("")
             dataTier.text = LiteralText("")
-        } else {
+        } else if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             dataAmount.text =
                 RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
+                    .append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
 
             dataTier.text =
                 RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
+                    .append(TranslatableText("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
         }
     }
 
     fun updateEntityInformation() {
-        if(showcase.entityType != null) {
+        if(showcase.entityType != null && FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             entityName.text =
                 RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.2",
+                    .append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.2",
                         showcase.entityType!!.name).formatted(Formatting.WHITE))
 
             entityHealth.text =
                 RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
-                    ?.append(LiteralText("❤").formatted(Formatting.RED))
-                    ?.append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
+                  .append(LiteralText("❤").formatted(Formatting.RED))
+                  .append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
                         (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
         }
     }
