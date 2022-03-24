@@ -21,6 +21,7 @@ package dev.nathanpb.dml
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
+import com.mojang.logging.LogUtils
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.entity.registerEntityRenderer
@@ -41,13 +42,13 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
-import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files
 
 const val MOD_ID = "dml-refabricated"
-val LOGGER = LogManager.getLogger("Deep Mob Learning: Refabricated")
+
+val LOGGER = LogUtils.getLogger()
 
 val config: ModConfig by lazy {
     val parser = JsonParser()
