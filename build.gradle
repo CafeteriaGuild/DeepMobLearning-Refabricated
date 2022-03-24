@@ -117,7 +117,7 @@ curseforge {
     apiKey = project.property("curseforgeToken")
     project {
         id = project.curseforge_id
-        changelog = "https://github.com/NathanPB/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.minecraft_version + '+' + project.mod_version, "utf-8")}"
+        changelog = "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.minecraft_version + '+' + project.mod_version, "utf-8")}"
         releaseType = project.mod_version.contains('alpha')
             ? 'alpha'
             : project.mod_version.contains('beta')
