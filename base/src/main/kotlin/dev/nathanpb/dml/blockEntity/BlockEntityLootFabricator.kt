@@ -46,6 +46,7 @@ import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.registry.Registry
 import net.minecraft.world.WorldAccess
 
 class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
@@ -71,7 +72,7 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
             // Is it really needed to be there?
             blockEntity.propertyDelegate[1] = config.lootFabricator.processTime
 
-            (world as? ServerWorld)?.let { world ->
+            (world as? ServerWorld)?.let { _ ->
                 if (blockEntity.bufferedInternalInventory.isEmpty) {
                     val stack = blockEntity.inventory.stackInInputSlot
                         ?: return@BlockEntityTicker blockEntity.resetProgress()
@@ -111,9 +112,8 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
         return (0 until config.lootFabricator.pristineExchangeRate).map {
-            category.tag
-                .getRandom(java.util.Random())
-                .simulateLootDroppedStacks(world, FakePlayerEntity(world), DamageSource.GENERIC)
+            Registry.ENTITY_TYPE.iterateEntries(category.tagKey).filter{true}.random()
+                .value().simulateLootDroppedStacks(world, FakePlayerEntity(world), DamageSource.GENERIC)
         }.flatten().let { stacks ->
             SimpleInventory(stacks.size).also { tempInventory ->
                 stacks.forEach { tempInventory.addStack(it) }
