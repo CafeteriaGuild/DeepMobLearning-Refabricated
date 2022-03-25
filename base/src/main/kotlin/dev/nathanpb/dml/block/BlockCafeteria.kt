@@ -43,7 +43,6 @@ class BlockCafeteria : HorizontalFacingBlock(
     FabricBlockSettings.of(Material.STONE)
         .hardness(1F)
         .resistance(.5F)
-        .breakByHand(true)
         .nonOpaque()
 ) {
     init {
@@ -58,7 +57,7 @@ class BlockCafeteria : HorizontalFacingBlock(
     ) {
         if(world != null) {
         RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.cafeteria.joinus"), world as World)
-            ?.append(LiteralText("https://discord.gg/G4PjhEf").formatted(Formatting.WHITE))?.let { tooltip.add(it) }
+            .append(LiteralText("https://discord.gg/G4PjhEf").formatted(Formatting.WHITE))?.let { tooltip.add(it) }
         }
     }
 

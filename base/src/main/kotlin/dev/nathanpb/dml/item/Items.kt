@@ -69,8 +69,8 @@ val ITEM_SOOT_MACHINE_CASE = Item(settings())
 
 val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 
-val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings().rarity(Rarity.RARE))
-val ITEM_GLITCH_INGOT = Item(settings().rarity(Rarity.RARE))
+val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings().fireproof().rarity(Rarity.RARE))
+val ITEM_GLITCH_INGOT = Item(settings().fireproof().rarity(Rarity.RARE))
 
 
 fun registerItems() {

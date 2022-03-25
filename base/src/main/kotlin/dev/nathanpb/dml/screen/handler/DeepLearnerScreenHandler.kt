@@ -39,6 +39,7 @@ import io.github.cottonmc.cotton.gui.widget.*
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
@@ -48,6 +49,7 @@ import net.minecraft.text.LiteralText
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
+import net.minecraft.util.registry.Registry
 import kotlin.properties.Delegates
 
 
@@ -164,7 +166,12 @@ class DeepLearnerScreenHandler (
             null
         }
 
-        showcase.entityTypes = currentDataModel?.category?.tag?.values().orEmpty()
+        val showcaseEntities: MutableList<EntityType<*>> = arrayListOf()
+        Registry.ENTITY_TYPE.iterateEntries(currentDataModel?.category?.tagKey).forEach {
+            showcaseEntities.add(it.value())
+        }
+
+        showcase.entityTypes = showcaseEntities
         if (currentDataModel == null) {
             dataAmount.text = LiteralText("")
             dataTier.text = LiteralText("")

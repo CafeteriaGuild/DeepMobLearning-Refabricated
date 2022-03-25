@@ -60,10 +60,10 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
 ) {
 
     companion object {
-        val HELMET = ItemModularGlitchArmor(EquipmentSlot.HEAD, settings())
-        val CHESTPLATE = ItemModularGlitchArmor(EquipmentSlot.CHEST, settings())
-        val LEGGINGS = ItemModularGlitchArmor(EquipmentSlot.LEGS, settings())
-        val BOOTS = ItemModularGlitchArmor(EquipmentSlot.FEET, settings())
+        val HELMET = ItemModularGlitchArmor(EquipmentSlot.HEAD, settings().fireproof())
+        val CHESTPLATE = ItemModularGlitchArmor(EquipmentSlot.CHEST, settings().fireproof())
+        val LEGGINGS = ItemModularGlitchArmor(EquipmentSlot.LEGS, settings().fireproof())
+        val BOOTS = ItemModularGlitchArmor(EquipmentSlot.FEET, settings().fireproof())
 
         fun register() {
             Registry.register(Registry.ITEM, identifier("glitch_helmet"), HELMET)

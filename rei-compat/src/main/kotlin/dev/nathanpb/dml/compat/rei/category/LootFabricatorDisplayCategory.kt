@@ -33,10 +33,12 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.entry.EntryStack
 import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 
 class LootFabricatorDisplayCategory: DisplayCategory<LootFabricatorRecipeDisplay> {
 
@@ -53,7 +55,10 @@ class LootFabricatorDisplayCategory: DisplayCategory<LootFabricatorRecipeDisplay
         val centerX = bounds.centerX - 8
         val centerY = bounds.centerY - 8
 
-        val entities = recipeDisplay.recipe.category.tag.values()
+        val entities: MutableList<EntityType<*>> = arrayListOf()
+        Registry.ENTITY_TYPE.iterateEntries(recipeDisplay.recipe.category.tagKey).forEach {
+            entities.add(it.value())
+        }
 
         return mutableListOf<Widget>(
             Widgets.createRecipeBase(bounds),

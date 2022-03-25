@@ -267,16 +267,15 @@ class Trial (
     private fun spawnWave() {
         (world as? ServerWorld)?.let { world ->
             (0 until recipe.waveEntityCount).map {
-                val distributionTable = recipe.category.tag
-                    .values()
+                val distributionTable = Registry.ENTITY_TYPE.iterateEntries(recipe.category.tagKey)
                     .associateWith {
-                        val id = Registry.ENTITY_TYPE.getId(it).toString()
+                        val id = Registry.ENTITY_TYPE.getId(it.value()).toString()
                         recipe.spawnRate.entries
                             .last { (k) -> k.matches(id) }
                             .value
                     }
 
-                val entity = discreteDistribution(distributionTable)
+                val entity = discreteDistribution(distributionTable).value()
                 entity.spawn(
                     world,
                     null, null, null,
