@@ -26,11 +26,13 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CrossbowItem.class)
 public abstract class CrossbowItemMixin {
+
+    private LivingEntity user;
 
     @ModifyVariable(at = @At("INVOKE"), ordinal = 0, method = "usageTick")
     public int modifyRemainingTicks(int remainingTicks, World world, LivingEntity user, ItemStack stack, int ignored) {
@@ -41,12 +43,22 @@ public abstract class CrossbowItemMixin {
         }
     }
 
-    @ModifyVariable(at = @At("INVOKE"), ordinal = 0, method = "onStoppedUsing")
-    public int modifyRemainingTicks2(int remainingTicks, ItemStack stack, World world, LivingEntity user, int ignored) {
+    @ModifyArg(method = "onStoppedUsing", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/item/CrossbowItem;getPullProgress(ILnet/minecraft/item/ItemStack;)F"))
+    public int modifyRemainingTicks2(int useTicks) {
         if (user instanceof PlayerEntity) {
-            return Math.max(0, remainingTicks - ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user));
+            return useTicks + ArcheryEffect.Companion.crossbowFastpullReducedTicks((PlayerEntity) user);
         } else {
-            return remainingTicks;
+            return useTicks;
         }
+    }
+
+    @Inject(method = "onStoppedUsing", at = @At("HEAD"))
+    public void livingEntityGetter(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
+        setUser(user);
+    }
+
+    private void setUser(LivingEntity user) {
+        this.user = user;
     }
 }
