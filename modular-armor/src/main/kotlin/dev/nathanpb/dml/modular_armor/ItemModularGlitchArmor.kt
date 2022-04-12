@@ -84,7 +84,7 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
         val max = data.tier().dataAmount
         val current = data.dataModel?.dataAmount ?: 0
 
-        return if (max == 0) 0 else ((13f * current) / max).roundToInt()
+        return if (max == 0) 0 else if (current > max) 13 else ((13f * current) / max).roundToInt()
     }
 
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {

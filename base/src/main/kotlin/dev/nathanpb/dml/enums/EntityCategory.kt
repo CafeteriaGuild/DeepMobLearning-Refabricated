@@ -22,25 +22,23 @@ package dev.nathanpb.dml.enums
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.*
+import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
-import net.minecraft.tag.EntityTypeTags
+import net.minecraft.tag.TagKey
 import net.minecraft.text.TranslatableText
-import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 
 
-enum class EntityCategory (val id: Identifier, private val itemForRendering: ()->Item = ::ITEM_DATA_MODEL) {
-    NETHER(identifier("nether_mobs"), ::ITEM_DATA_MODEL_NETHER),
-    SLIMY(identifier("slimy_mobs"), ::ITEM_DATA_MODEL_SLIMY),
-    OVERWORLD(identifier("overworld_mobs"), ::ITEM_DATA_MODEL_OVERWORLD),
-    ZOMBIE(identifier("zombie_mobs"), ::ITEM_DATA_MODEL_ZOMBIE),
-    SKELETON(identifier("skeleton_mobs"), ::ITEM_DATA_MODEL_SKELETON),
-    END(identifier("end_mobs"), ::ITEM_DATA_MODEL_END),
-    GHOST(identifier("ghost_mobs"), ::ITEM_DATA_MODEL_GHOST),
-    ILLAGER(identifier("illager_mobs"), ::ITEM_DATA_MODEL_ILLAGER),
-    OCEAN(identifier("ocean_mobs"), ::ITEM_DATA_MODEL_OCEAN);
+enum class EntityCategory(val tagKey: TagKey<EntityType<*>>, private val itemForRendering: ()->Item = ::ITEM_DATA_MODEL) {
+    NETHER(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("nether_mobs")), ::ITEM_DATA_MODEL_NETHER),
+    SLIMY(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("slimy_mobs")), ::ITEM_DATA_MODEL_SLIMY),
+    OVERWORLD(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("overworld_mobs")), ::ITEM_DATA_MODEL_OVERWORLD),
+    ZOMBIE(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("zombie_mobs")), ::ITEM_DATA_MODEL_ZOMBIE),
+    SKELETON(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("skeleton_mobs")), ::ITEM_DATA_MODEL_SKELETON),
+    END(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("end_mobs")), ::ITEM_DATA_MODEL_END),
+    GHOST(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("ghost_mobs")), ::ITEM_DATA_MODEL_GHOST),
+    ILLAGER(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("illager_mobs")), ::ITEM_DATA_MODEL_ILLAGER),
+    OCEAN(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("ocean_mobs")), ::ITEM_DATA_MODEL_OCEAN);
 
-    val tag by lazy {
-        EntityTypeTags.getTagGroup().getTag(id)!!
-    }
-    val displayName = TranslatableText("mobcategory.${MOD_ID}.${id.path}")
+    val displayName = TranslatableText("mobcategory.${MOD_ID}.${tagKey.id.path}")
 }

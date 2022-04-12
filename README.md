@@ -1,11 +1,10 @@
-# Deep Mob Learning: Refabricated
+# Deep Mob Learning: Refabricated <img src="https://imgur.com/Yk9wXR7.png" align="right" width="160"/>
+
+[![Fabric API](https://images2.imgbox.com/8e/38/bfInI5qv_o.png)](https://www.curseforge.com/minecraft/mc-mods/fabric-api) [![Fabric Language Kotlin](https://images2.imgbox.com/e6/72/9pHQB5ZC_o.png)](https://www.curseforge.com/minecraft/mc-mods/fabric-language-kotlin)
 
 Deep Mob Learning: Refabricated is a parallel version of Deep Mob Learning Minecraft Mod (originally authored by [xt9](https://github.com/xt9/DeepMobLearning)) made to Fabric Mod Loader.
 
 The main theme of this mod (by "this" I mean the version you can find in this repository) is providing cool ways to acquire mob loot. I also have a lot of other plans to implement here and give the mod other purposes too, but since the current stage of the mod is pre-pre-pre-pre alpha thats all I have to offer for now :/
-
-## Requires Fabric Mod Loader
-Deep Mob Learning: **Refabricated** runs on [Fabric Mod Loader](https://fabricmc.net/). At this moment you may not be able to run it along with Forge mods
 
 ## Xt9's Version
 This project is a rework of the original Deep Mob Learning mod, authored by [xt9](https://github.com/xt9/DeepMobLearning).
@@ -22,7 +21,7 @@ Absolutely! You can download the mod on [Curseforge](https://www.curseforge.com/
 ## Will there ever be a Forge version?
 **Well yes but actually no.** If you want a Forge version of this mod you should check out the [xt9's version](#xt9s-version)
 
-About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [the original author of the mod](#xt9s-version) and you should be fine.
+About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [Cafeteria](https://discord.com/invite/G4PjhEf) and [the original author of the mod](#xt9s-version) and you should be fine.
 
 ## Setting up dev env
 The only special thing that differs from a gradle project is that you will need to have this section in your ``~/.gradle/gradle.properties`` file:
