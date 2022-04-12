@@ -44,6 +44,8 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.registry.Registry
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
@@ -114,4 +116,16 @@ class BlockMatterCondenser : HorizontalFacingBlock(
     override fun getInventory(state: BlockState?, world: WorldAccess, pos: BlockPos): SidedInventory {
         return (world.getBlockEntity(pos) as BlockEntityMatterCondenser).inventory
     }
+
+    override fun getOutlineShape(
+        state: BlockState?,
+        world: BlockView?,
+        pos: BlockPos?,
+        context: ShapeContext?
+    ): VoxelShape {
+        return voxelShape
+    }
+
+    private val voxelShape: VoxelShape = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 15.99, 16.0)
+
 }
