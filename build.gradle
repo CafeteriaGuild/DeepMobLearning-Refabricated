@@ -117,10 +117,10 @@ curseforge {
     apiKey = project.property("curseforgeToken")
     project {
         id = project.curseforge_id
-        changelog = "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.minecraft_version + '+' + project.mod_version, "utf-8")}"
-        releaseType = project.mod_version.contains('alpha')
+        changelog = "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.mod_version, "utf-8")}"
+        releaseType = project.mod_version.contains('ALPHA')
             ? 'alpha'
-            : project.mod_version.contains('beta')
+            : project.mod_version.contains('BETA')
                 ? 'beta'
                 : 'release'
 
@@ -128,12 +128,12 @@ curseforge {
         addGameVersion("Fabric")
 
         mainArtifact(remapJar)  {
-            displayName = "Deep Mob Learning: Refabricated $project.minecraft_version+$version"
+            displayName = "Deep Mob Learning: Refabricated v$version"
             relations {
                 requiredDependency("fabric-api")
                 requiredDependency("fabric-language-kotlin")
 
-                requiredDependency("patchouli-fabric")
+                //requiredDependency("patchouli-fabric")
 
                 optionalDependency("roughly-enough-items")
             }
