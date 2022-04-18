@@ -21,8 +21,8 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.identifier
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
-import net.fabricmc.fabric.impl.screenhandler.ExtendedScreenHandlerType
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
@@ -32,6 +32,7 @@ import net.minecraft.util.Identifier
 val HANDLER_LOOT_FABRICATOR = registerScreenHandlerForBlockEntity(identifier("loot_fabricator"), ::LootFabricatorHandler)
 val HANDLER_DEEP_LEARNER = registerScreenHandlerForItemStack(identifier("deep_learner"), ::DeepLearnerScreenHandler)
 
+// TODO: Replace with non-deprecated version
 fun <T: ScreenHandler>registerScreenHandlerForBlockEntity(
     id: Identifier,
     f: (Int, PlayerInventory, ScreenHandlerContext) -> T
