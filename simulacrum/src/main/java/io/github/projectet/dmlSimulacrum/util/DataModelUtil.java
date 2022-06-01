@@ -12,9 +12,7 @@ import io.github.projectet.dmlSimulacrum.dmlSimulacrum;
 import io.github.projectet.dmlSimulacrum.enums.MatterType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 
@@ -66,16 +64,16 @@ public class DataModelUtil {
     public static Text textType(ItemStack stack) {
         switch(Constants.dataModel.get(getEntityCategory(stack).toString()).getType()) {
             case OVERWORLD -> {
-                return new TranslatableText("modelType.dmlsimulacrum.overworld").formatted(Formatting.GREEN);
+                return Text.translatable("modelType.dmlsimulacrum.overworld").formatted(Formatting.GREEN);
             }
             case HELLISH -> {
-                return new TranslatableText("modelType.dmlsimulacrum.hellish").formatted(Formatting.RED);
+                return Text.translatable("modelType.dmlsimulacrum.hellish").formatted(Formatting.RED);
             }
             case EXTRATERRESTRIAL -> {
-                return new TranslatableText("modelType.dmlsimulacrum.extraterrestrial").formatted(Formatting.LIGHT_PURPLE);
+                return Text.translatable("modelType.dmlsimulacrum.extraterrestrial").formatted(Formatting.LIGHT_PURPLE);
             }
             default -> {
-                return new TranslatableText("modelType.dmlsimulacrum.invalid");
+                return Text.translatable("modelType.dmlsimulacrum.invalid");
             }
         }
     }
@@ -113,22 +111,22 @@ public class DataModelUtil {
     public static Text textTier(ItemStack stack) {
         switch (getTier(stack)) {
             case FAULTY -> {
-                return new LiteralText("Faulty").formatted(Formatting.GRAY);
+                return Text.of("Faulty").copy().formatted(Formatting.GRAY);
             }
             case BASIC -> {
-                return new LiteralText("Basic").formatted(Formatting.GREEN);
+                return Text.of("Basic").copy().formatted(Formatting.GREEN);
             }
             case ADVANCED -> {
-                return new LiteralText("Advanced").formatted(Formatting.BLUE);
+                return Text.of("Advanced").copy().formatted(Formatting.BLUE);
             }
             case SUPERIOR -> {
-                return new LiteralText("Superior").formatted(Formatting.LIGHT_PURPLE);
+                return Text.of("Superior").copy().formatted(Formatting.LIGHT_PURPLE);
             }
             case SELF_AWARE -> {
-                return new LiteralText("Self Aware").formatted(Formatting.GOLD);
+                return Text.of("Self Aware").copy().formatted(Formatting.GOLD);
             }
             default -> {
-                return new LiteralText("Invalid Item");
+                return Text.of("Invalid Item");
             }
         }
     }

@@ -25,7 +25,7 @@ import dev.nathanpb.dml.item.*
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.tag.TagKey
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.registry.Registry
 
 
@@ -40,5 +40,5 @@ enum class EntityCategory(val tagKey: TagKey<EntityType<*>>, private val itemFor
     ILLAGER(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("illager_mobs")), ::ITEM_DATA_MODEL_ILLAGER),
     OCEAN(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier("ocean_mobs")), ::ITEM_DATA_MODEL_OCEAN);
 
-    val displayName = TranslatableText("mobcategory.${MOD_ID}.${tagKey.id.path}")
+    val displayName = Text.translatable("mobcategory.${MOD_ID}.${tagKey.id.path}")
 }

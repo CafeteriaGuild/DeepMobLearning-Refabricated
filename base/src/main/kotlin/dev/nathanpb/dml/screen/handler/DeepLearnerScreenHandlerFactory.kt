@@ -27,7 +27,7 @@ import net.minecraft.item.Item
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.Hand
 
 class DeepLearnerScreenHandlerFactory (
@@ -35,7 +35,7 @@ class DeepLearnerScreenHandlerFactory (
     private val item: Item
 ) : ExtendedScreenHandlerFactory {
 
-    override fun getDisplayName() = TranslatableText(item.translationKey)
+    override fun getDisplayName() = Text.translatable(item.translationKey)
 
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
         return DeepLearnerScreenHandler(syncId, inv, hand)

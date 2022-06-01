@@ -32,7 +32,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.tag.FluidTags
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 
 class WaterBreathingEffect : StatusEffectLikeEffect(
     identifier("water_breathing"),
@@ -41,14 +41,14 @@ class WaterBreathingEffect : StatusEffectLikeEffect(
     EffectStackOption.RANDOMIZE
 ) {
 
-    override val name = TranslatableText("effect.minecraft.water_breathing")
+    override val name = Text.translatable("effect.minecraft.water_breathing")
 
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(StatusEffects.WATER_BREATHING, 16 * 20, 0, true, false)
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+        return EntityAttributeModifier("dml_water_breathing", 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
     override fun acceptTier(tier: DataModelTier): Boolean {

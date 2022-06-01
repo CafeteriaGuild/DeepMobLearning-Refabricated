@@ -1,7 +1,14 @@
 val reiVersion: String by project
 
 repositories {
-    maven { url = uri("https://maven.shedaniel.me/") }
+    maven {
+        name = "Shedaniel's Maven Repository"
+        url = uri("https://maven.shedaniel.me/")
+    }
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/releases/")
+    }
 }
 
 dependencies {

@@ -33,7 +33,7 @@ fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEn
     val lootTable = world.server.lootManager?.getTable(lootTableId)
     val entity = create(world)
     val lootContext = LootContext.Builder(world).apply {
-        random(Random())
+        random(player?.random)
         parameter(LootContextParameters.ORIGIN, entity?.pos)
         parameter(LootContextParameters.THIS_ENTITY, entity)
         parameter(LootContextParameters.DAMAGE_SOURCE, source)

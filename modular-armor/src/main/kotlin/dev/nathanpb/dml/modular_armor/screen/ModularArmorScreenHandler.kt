@@ -43,7 +43,7 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ArrayPropertyDelegate
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
@@ -98,7 +98,7 @@ class ModularArmorScreenHandler(
             lastEffectsList!!.validate(this)
         }
 
-        val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
+        val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, Text.translatable("gui.${MOD_ID}.data_model_only")).apply {
             setFilter {
                 it.isEmpty || (
                         (it.item as? ItemDataModel)?.category != null

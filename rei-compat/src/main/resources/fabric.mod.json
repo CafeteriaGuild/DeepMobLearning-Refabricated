@@ -13,7 +13,7 @@
   "license": "LGPL-v3",
   "environment": "*",
   "entrypoints": {
-    "rei_plugins": ["dev.nathanpb.dml.compat.rei.ReiPlugin"]
+    "rei_client": ["dev.nathanpb.dml.compat.rei.ReiPlugin"]
   },
   "mixins": ["mixins.dml-refabricated-rei.json"],
   "depends": {

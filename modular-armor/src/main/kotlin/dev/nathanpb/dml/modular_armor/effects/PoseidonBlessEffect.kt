@@ -45,7 +45,7 @@ class PoseidonBlessEffect : StatusEffectLikeEffect(
     }
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+        return EntityAttributeModifier("dml_poseidon_bless", 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()

@@ -27,7 +27,7 @@
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric": ">=0.43.1",
-    "minecraft": "1.18.*",
+    "minecraft": "1.19.x",
     "dml-refabricated": "*",
     "dml-refabricated-base": "*",
     "cloth-config2": ">=6.0.42"

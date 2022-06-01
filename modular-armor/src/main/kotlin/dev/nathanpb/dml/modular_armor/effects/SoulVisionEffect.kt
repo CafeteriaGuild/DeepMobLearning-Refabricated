@@ -42,7 +42,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 
 class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
@@ -51,7 +51,7 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     config.glitchArmor.costs::soulVision
 ) {
 
-    override val name = TranslatableText("effect.dml-refabricated.soul_vision")
+    override val name = Text.translatable("effect.dml-refabricated.soul_vision")
 
     override fun registerEvents() {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {

@@ -31,7 +31,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.potion.PotionUtil
 import net.minecraft.potion.Potions
-import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import kotlin.random.Random
 
 class PartyPoisonAffix : TrialAffix(identifier("party_poison")), TrialAffix.TickableAffix {
@@ -55,7 +55,7 @@ class PartyPoisonAffix : TrialAffix(identifier("party_poison")), TrialAffix.Tick
 
             if (Random.nextFloat() < .01F) {
                 trial.world.getPlayersByUUID(trial.players).forEach {
-                    it.sendMessage(LiteralText("Hide your eyes, we're gonna shine tonight"), false)
+                    it.sendMessage(Text.of("Hide your eyes, we're gonna shine tonight"), false)
                 }
             }
         }

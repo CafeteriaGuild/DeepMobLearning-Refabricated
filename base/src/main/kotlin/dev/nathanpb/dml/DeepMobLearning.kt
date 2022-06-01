@@ -42,13 +42,14 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files
 
 const val MOD_ID = "dml-refabricated"
 
-val LOGGER = LogUtils.getLogger()
+val LOGGER = LoggerFactory.getLogger(MOD_ID)
 
 val config: ModConfig by lazy {
     val parser = JsonParser()

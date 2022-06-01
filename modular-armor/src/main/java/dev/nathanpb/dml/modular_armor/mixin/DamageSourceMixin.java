@@ -28,7 +28,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -41,7 +40,7 @@ public class DamageSourceMixin {
 
     @Inject(at = @At("HEAD"), method = "getDeathMessage", cancellable = true)
     public void getDeathMessage(LivingEntity entity, CallbackInfoReturnable<Text> cir) {
-        if (entity instanceof PlayerEntity && this.equals(DamageSource.STARVE)) {
+        if (entity instanceof PlayerEntity && this.equals(DamageSource.STARVE)) { // TODO Use class object, not mixin's class
             Optional<ModularEffect<?>> effectOpt = ModularEffectRegistry.Companion
                 .getINSTANCE()
                 .getAll()
@@ -55,7 +54,7 @@ public class DamageSourceMixin {
                     .stream()
                     .anyMatch((context) -> effect.getCategory() == context.getDataModel().getCategory() && effect.acceptTier(context.getTier()));
                 if (any) {
-                    cir.setReturnValue(new TranslatableText(
+                    cir.setReturnValue(Text.translatable(
                         "death.dml-refabricated.starvedWithPlenty",
                         entity.getDisplayName()
                     ));

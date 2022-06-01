@@ -36,6 +36,6 @@ class SystemGlitchRenderer(context: EntityRendererFactory.Context, layer: Entity
     override fun getTexture(entity: SystemGlitchEntity) = identifier("textures/entity/system_glitch.png")
 
     init {
-        addFeature(HeadFeatureRenderer(this, context.modelLoader, 1.15F, 1.05F, 1.15F))
+        addFeature(HeadFeatureRenderer(this, context.modelLoader, 1.15F, 1.05F, 1.15F, null)) // TODO [1.19] check if null HeldItemRenderer causes issues
     }
 }
