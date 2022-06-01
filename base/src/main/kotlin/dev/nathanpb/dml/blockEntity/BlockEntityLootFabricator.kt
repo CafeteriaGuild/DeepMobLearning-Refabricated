@@ -112,7 +112,7 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
         val entityList = Registry.ENTITY_TYPE.iterateEntries(category.tagKey).filter{true}
-        return (0 until config.lootFabricator.pristineExchangeRate).map {
+        return (0 until category.exchangeRatio).map {
             entityList.random().value()
                 .simulateLootDroppedStacks(world, FakePlayerEntity(world, null), DamageSource.GENERIC) // TODO [1.19] check if using a null publicKey is a problem
         }.flatten().let { stacks ->

@@ -62,8 +62,17 @@ class TrialAffix {
 }
 
 
-class LootFabricator {
-    var pristineExchangeRate = 16
+class LootFabricator { // TODO Properly adjust the ratios when the mod is compiling
+    var overworldExchangeRatio = 16
+    var zombieExchangeRatio = 16
+    var skeletonExchangeRatio = 16
+    var slimyExchangeRatio = 16
+    var illagerExchangeRatio = 12
+    var oceanExchangeRatio = 16
+    var ghostExchangeRatio = 16
+    var netherExchangeRatio = 16
+    var endExchangeRatio = 14
+
     var processTime = 200
 }
 
