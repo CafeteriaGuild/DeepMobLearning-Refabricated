@@ -28,7 +28,7 @@ import dev.nathanpb.dml.modular_armor.effects.FlyEffect
 import dev.nathanpb.dml.modular_armor.net.S2C_FLIGHT_BURNOUT_MANAGER_UPDATE
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.world.World
@@ -99,9 +99,8 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
                 writeInt(maxFlightTicks)
                 writeBoolean(canFly)
             }
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, S2C_FLIGHT_BURNOUT_MANAGER_UPDATE, packet)
+            ServerPlayNetworking.send(player, S2C_FLIGHT_BURNOUT_MANAGER_UPDATE, packet)
         }
-
     }
 
 }

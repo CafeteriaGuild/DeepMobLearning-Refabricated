@@ -32,7 +32,7 @@ dependencies {
 
     api project(path: ":simulacrum", configuration: "namedElements")
 
-    modRuntimeOnly "com.terraformersmc:modmenu:3.0.0"
+    modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenuVersion}"
 }
 
 allprojects {
@@ -42,7 +42,7 @@ allprojects {
     version = project.mod_version
 
     repositories {
-        maven { url = uri("https://jitpack.io/") }
+        maven { url = "https://jitpack.io/" }
         maven { url = "https://maven.cafeteria.dev/" }
     }
 
@@ -53,8 +53,8 @@ allprojects {
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-        modApi("com.github.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
-        include("com.github.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
+        modApi("com.github.CafeteriaGuild:KtDataTagLib:${project.ktdatataglib_version}")
+        include("com.github.CafeteriaGuild:KtDataTagLib:${project.ktdatataglib_version}")
     }
 
     jar {

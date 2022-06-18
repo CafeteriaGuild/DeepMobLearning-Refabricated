@@ -37,7 +37,7 @@ import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WListPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
@@ -127,8 +127,7 @@ class ModularArmorScreenHandler(
     }
 
     private fun sendToggleUpdate(effectId: Identifier, flag: Boolean) {
-        ClientSidePacketRegistry.INSTANCE.sendToServer( //FIXME: This is deprecated and needs to be updated.
-            C2S_MODULAR_EFFECT_TOGGLE,
+        ClientPlayNetworking.send(C2S_MODULAR_EFFECT_TOGGLE,
             PacketByteBuf(Unpooled.buffer()).apply {
                 writeIdentifier(effectId)
                 writeBoolean(flag)

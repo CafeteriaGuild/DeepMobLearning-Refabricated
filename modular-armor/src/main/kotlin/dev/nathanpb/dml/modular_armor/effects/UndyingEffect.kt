@@ -31,7 +31,7 @@ import dev.nathanpb.dml.modular_armor.undyingLastUsage
 import dev.nathanpb.dml.utils.`if`
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.advancement.criterion.Criteria
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
@@ -106,10 +106,12 @@ class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     fun syncCooldown(player: PlayerEntity, maxCooldownTime: Int) {
-        val packet = PacketByteBuf(Unpooled.buffer()).apply {
-            writeInt(remainingCooldownTime(player))
-            writeInt(maxCooldownTime)
+        if (player is ServerPlayerEntity) {
+            val packet = PacketByteBuf(Unpooled.buffer()).apply {
+                writeInt(remainingCooldownTime(player))
+                writeInt(maxCooldownTime)
+            }
+            ServerPlayNetworking.send(player, S2C_UNDYING_COOLDOWN_UPDATE, packet)
         }
-        ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, S2C_UNDYING_COOLDOWN_UPDATE, packet)
     }
 }
