@@ -22,6 +22,7 @@ package dev.nathanpb.dml
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
+import com.sun.jna.StringArray
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.entity.registerEntityRenderer
@@ -42,10 +43,13 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
+import org.checkerframework.checker.units.qual.min
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 const val MOD_ID = "dml-refabricated"
 
@@ -99,7 +103,7 @@ fun init() {
         EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
-    LOGGER.info("Deep Mob Learning: Refabricated is good to go")
+    LOGGER.info("Deep Mob Learning: Refabricated" + quirkyStartupMessages[Random.nextInt(quirkyStartupMessages.size)])
 }
 
 @Suppress("unused")
@@ -109,3 +113,12 @@ fun initClient() {
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)
+
+val quirkyStartupMessages = arrayOf(
+    " is good to go",
+    "'s body is ready!",
+    " is starting up in... well, that depends on the other mods, really.",
+    " will be challenging the System Glitch soon!",
+    " had a good 8 hour sleep and is ready for the day.",
+    " is warming up!"
+)
