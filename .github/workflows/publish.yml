@@ -1,11 +1,17 @@
 name: Publish
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      release-title:
+        description: 'Release Title'
+        required: false
+      mod-version:
+        description: 'Mod Version'
+        required: true
 
 jobs:
-  build:
+  build-and-bump-version:
     runs-on: ubuntu-latest
     env:
       NEXT_VERSION: ${{github.ref_name}}
@@ -19,8 +25,19 @@ jobs:
           java-version: 17
 
       - name: Bump version
-        run: ./.github/scripts/bumpVersion.sh "$NEXT_VERSION"
+        run: VERSION="${{github.events.inputs.mod-version}}" ./.github/scripts/bumpVersion.sh
 
+      - name: Commit version bump
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: ./gradle.properties
+          message: ${{ format('[CI] Bump version to {0}', github.events.inputs.mod-version) }}
+          branch: main
+
+  release-curseforge:
+    runs-on: ubuntu-latest
+    needs: [ build-and-bump-version ]
+    steps:
       - name: Publish
         run: |
           chmod +x ./gradlew
@@ -30,9 +47,14 @@ jobs:
           ORG_GRADLE_PROJECT_mcdUsername: ${{ secrets.MCD_USERNAME }}
           ORG_GRADLE_PROJECT_mcdPassword: ${{ secrets.MCD_PASSWORD }}
 
-      - name: Commit version bump
-        uses: EndBug/add-and-commit@v7
+  release-github:
+    runs-on: ubuntu-latest
+    needs: [ build-and-bump-version ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Release
+        uses: elgohr/Github-Release-Action@v4
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
-          add: ./gradle.properties
-          message: ${{ format('[CI] Bump version to {0}', github.ref_name) }}
-          branch: main
+          title: ${{ github.event.inputs.release-title }}

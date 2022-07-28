@@ -17,5 +17,4 @@
 #  along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-IFS='+' read -ra VERSIONS <<< "$1"
-sed -ri "s/^mod_version=.*/mod_version=${VERSIONS[1]}/" ./gradle.properties
+sed -ri "s/^mod_version=.*/mod_version=$VERSION/" ./gradle.properties
