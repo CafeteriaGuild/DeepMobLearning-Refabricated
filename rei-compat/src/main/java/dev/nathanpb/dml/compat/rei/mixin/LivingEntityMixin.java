@@ -20,6 +20,7 @@ package dev.nathanpb.dml.compat.rei.mixin;
  */
 
 import dev.nathanpb.dml.compat.rei.accessor.ILivingEntityReiStateAccessor;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,10 +43,11 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor {
     }
 
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;playSound(Lnet/minecraft/sound/SoundEvent;FF)V"), method = "onEquipStack", cancellable = true)
-    public void onEquip(ItemStack stack, CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;playEquipSound(Lnet/minecraft/item/ItemStack;)V"), method = "onEquipStack", cancellable = true)
+    public void onEquip(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo ci) {
         if (isDmlRefIsInReiScreen()) {
             ci.cancel();
         }
     }
+
 }

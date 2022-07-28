@@ -29,7 +29,7 @@ import net.minecraft.entity.attribute.ClampedEntityAttribute
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.item.ItemStack
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
@@ -44,6 +44,9 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     val category: EntityCategory,
     applyCost: ()->Float
 ) {
+
+    var modIdFormat = "modulareffect.${MOD_ID}.${id.path}"
+    var otherModIdFormat = "modulareffect.${MOD_ID}.${id.namespace}.${id.path}"
 
     val isEnabled = {
         applyCost() >= 0F
@@ -64,9 +67,9 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     }
 
     open val name = if (id.namespace == MOD_ID) {
-        TranslatableText("modulareffect.${MOD_ID}.${id.path}")
+        Text.translatable(modIdFormat)
     } else {
-        TranslatableText("modulareffect.${MOD_ID}.${id.namespace}.${id.path}")
+        Text.translatable(otherModIdFormat)
     }
 
     lateinit var entityAttribute:  EntityAttribute
@@ -78,7 +81,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
 
     @ApiStatus.OverrideOnly
     protected open fun createEntityAttribute(): EntityAttribute {
-        return ClampedEntityAttribute(name.key, 0.0, 0.0, DataModelTier.values().size.dec() * 4.0)
+        return ClampedEntityAttribute(if(id.namespace == MOD_ID) modIdFormat else otherModIdFormat, 0.0, 0.0, DataModelTier.values().size.dec() * 4.0)
             .setTracked(true)
     }
 
@@ -133,4 +136,5 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
     fun sumLevelsOf(stacks: List<ItemStack>): Double {
         return stacks.sumOf(this::sumLevelsOf)
     }
+
 }

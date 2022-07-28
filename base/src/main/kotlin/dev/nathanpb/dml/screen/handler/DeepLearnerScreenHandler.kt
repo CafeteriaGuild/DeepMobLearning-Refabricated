@@ -26,7 +26,6 @@ import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.mixin.EntityTypeMixin
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.screen.handler.widget.WStylizedButton
@@ -45,8 +44,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ArrayPropertyDelegate
-import net.minecraft.text.LiteralText
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.registry.Registry
@@ -120,9 +118,9 @@ class DeepLearnerScreenHandler (
         update()
     }
 
-    private val prevButton: WButton = WStylizedButton(LiteralText("<"), RenderUtils.DML_WIDGETS).apply {
+    private val prevButton: WButton = WStylizedButton(Text.of("<"), RenderUtils.DML_WIDGETS).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
-            addTooltip(TooltipBuilder().add(TranslatableText("gui.$MOD_ID.previous")))
+            addTooltip(TooltipBuilder().add(Text.translatable("gui.$MOD_ID.previous")))
         }
 
         setOnClick {
@@ -130,9 +128,9 @@ class DeepLearnerScreenHandler (
         }
     }
 
-    private val nextButton: WButton = WStylizedButton(LiteralText(">"), RenderUtils.DML_WIDGETS).apply {
+    private val nextButton: WButton = WStylizedButton(Text.of(">"), RenderUtils.DML_WIDGETS).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
-            addTooltip(TooltipBuilder().add(TranslatableText("gui.${MOD_ID}.next")))
+            addTooltip(TooltipBuilder().add(Text.translatable("gui.${MOD_ID}.next")))
         }
 
         setOnClick {
@@ -143,10 +141,10 @@ class DeepLearnerScreenHandler (
     private val showcaseBackground = WSprite(identifier("textures/gui/entity_showcase_background.png"))
     private val showcase = WEntityShowcase(this)
 
-    private val entityName = WText(LiteralText(""))
-    private val entityHealth = WText(LiteralText(""))
-    private val dataAmount = WLabel(LiteralText(""))
-    private val dataTier = WLabel(LiteralText(""))
+    private val entityName = WText(Text.of(""))
+    private val entityHealth = WText(Text.of(""))
+    private val dataAmount = WLabel(Text.of(""))
+    private val dataTier = WLabel(Text.of(""))
 
 
 
@@ -173,31 +171,31 @@ class DeepLearnerScreenHandler (
 
         showcase.entityTypes = showcaseEntities
         if (currentDataModel == null) {
-            dataAmount.text = LiteralText("")
-            dataTier.text = LiteralText("")
+            dataAmount.text = Text.of("")
+            dataTier.text = Text.of("")
         } else if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             dataAmount.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
-                    .append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
+                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.data_amount.1"), world)
+                    .append(Text.translatable("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
 
             dataTier.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
-                    .append(TranslatableText("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
+                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.tier.1"), world)
+                    .append(Text.translatable("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
         }
     }
 
     fun updateEntityInformation() {
         if(showcase.entityType != null && FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             entityName.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
-                    .append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityName.2",
+                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
+                    .append(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityName.2",
                         showcase.entityType!!.name).formatted(Formatting.WHITE))
 
             entityHealth.text =
-                RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
-                  .append(LiteralText("❤").formatted(Formatting.RED))
-                  .append(TranslatableText("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
-                        (EntityTypeMixin.invokeNewInstance(world, showcase.entityType) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
+                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
+                  .append(Text.of("❤").copy().formatted(Formatting.RED))
+                  .append(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
+                        (showcase.entityType!!.create(world) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
         }
     }
 
@@ -212,7 +210,7 @@ class DeepLearnerScreenHandler (
         root.add(showcase, 0, 1*18, 3*18, 4*18)
 
         root.add(
-            WTooltippedItemSlot.of(blockInventory, 0, 2, 2, TranslatableText("gui.${MOD_ID}.data_model_only")).apply {
+            WTooltippedItemSlot.of(blockInventory, 0, 2, 2, Text.translatable("gui.${MOD_ID}.data_model_only")).apply {
                 setFilter { stack ->
                     stack.item is ItemDataModel && stack.dataModel.category != null
                 }

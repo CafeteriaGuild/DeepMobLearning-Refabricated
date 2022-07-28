@@ -112,9 +112,9 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
         val entityList = Registry.ENTITY_TYPE.iterateEntries(category.tagKey).filter{true}
-        return (0 until config.lootFabricator.pristineExchangeRate).map {
+        return (0 until category.exchangeRatio).map {
             entityList.random().value()
-                .simulateLootDroppedStacks(world, FakePlayerEntity(world), DamageSource.GENERIC)
+                .simulateLootDroppedStacks(world, FakePlayerEntity(world, null), DamageSource.GENERIC)
         }.flatten().let { stacks ->
             SimpleInventory(stacks.size).also { tempInventory ->
                 stacks.forEach { tempInventory.addStack(it) }

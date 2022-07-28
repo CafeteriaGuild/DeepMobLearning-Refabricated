@@ -33,7 +33,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 
 class LootFabricatorHandler(
     syncId: Int,
@@ -50,7 +50,7 @@ class LootFabricatorHandler(
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-        val inputSlot = WTooltippedItemSlot.of(blockInventory, 0, TranslatableText("gui.${MOD_ID}.pristine_matter_only")).setFilter { stack ->
+        val inputSlot = WTooltippedItemSlot.of(blockInventory, 0, Text.translatable("gui.${MOD_ID}.pristine_matter_only")).setFilter { stack ->
             world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
                 .any { it.input.test(stack) }
         }

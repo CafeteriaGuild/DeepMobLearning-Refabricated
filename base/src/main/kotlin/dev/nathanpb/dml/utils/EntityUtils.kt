@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.utils
 
+import dev.nathanpb.dml.config
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
@@ -27,13 +28,12 @@ import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.server.world.ServerWorld
-import java.util.*
 
 fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEntity?, source: DamageSource): List<ItemStack> {
     val lootTable = world.server.lootManager?.getTable(lootTableId)
     val entity = create(world)
     val lootContext = LootContext.Builder(world).apply {
-        random(Random())
+        random(player?.random)
         parameter(LootContextParameters.ORIGIN, entity?.pos)
         parameter(LootContextParameters.THIS_ENTITY, entity)
         parameter(LootContextParameters.DAMAGE_SOURCE, source)
@@ -44,5 +44,8 @@ fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEn
         }
     }.build(LootContextTypes.ENTITY)
 
-    return lootTable?.generateLoot(lootContext) ?: emptyList()
+    val lootList = lootTable?.generateLoot(lootContext)
+    lootList?.removeIf { stack: ItemStack -> !stack.isStackable && world.random.nextDouble() < config.lootFabricator.unstackableNullificationChance }
+
+    return lootList ?: emptyList()
 }

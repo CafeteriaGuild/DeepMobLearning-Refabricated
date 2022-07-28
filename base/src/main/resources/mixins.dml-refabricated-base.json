@@ -3,7 +3,6 @@
   "package": "dev.nathanpb.dml.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "EntityTypeMixin",
     "ICraftingResultSlotMixin",
     "LivingEntityMixin",
     "SlotMixin",

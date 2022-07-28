@@ -11,7 +11,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
@@ -25,10 +25,10 @@ public class dmlSimulacrumClient implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register((item, context, lines) -> {
             World world = MinecraftClient.getInstance().world;
             if(item.getItem() instanceof ItemDataModel && DataModelUtil.getEntityCategory(item) != null && world != null) {
-                lines.add(RenderUtils.Companion.getTextWithDefaultTextColor(new TranslatableText("tooltip.dmlsimulacrum.data_model.1"), world)
-                        .append(new TranslatableText("tooltip.dmlsimulacrum.data_model.2", DataModelUtil.getEnergyCost(item)).formatted(Formatting.WHITE)));
-                lines.add(RenderUtils.Companion.getTextWithDefaultTextColor(new TranslatableText("tooltip.dmlsimulacrum.data_model.3"), world)
-                        .append(new TranslatableText("tooltip.dmlsimulacrum.data_model.4", DataModelUtil.textType(item)).formatted(Formatting.WHITE)));
+                lines.add(RenderUtils.Companion.getTextWithDefaultTextColor(Text.translatable("tooltip.dmlsimulacrum.data_model.1"), world)
+                        .append(Text.translatable("tooltip.dmlsimulacrum.data_model.2", DataModelUtil.getEnergyCost(item)).formatted(Formatting.WHITE)));
+                lines.add(RenderUtils.Companion.getTextWithDefaultTextColor(Text.translatable("tooltip.dmlsimulacrum.data_model.3"), world)
+                        .append(Text.translatable("tooltip.dmlsimulacrum.data_model.4", DataModelUtil.textType(item)).formatted(Formatting.WHITE)));
             }
         });
     }

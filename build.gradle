@@ -1,8 +1,9 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
     id "org.jetbrains.kotlin.jvm" version "1.6.0"
     id "com.matthewprenger.cursegradle" version '1.4.0'
+    id "com.modrinth.minotaur" version '2.3.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -12,6 +13,16 @@ compileKotlin.kotlinOptions.jvmTarget = "17"
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+
+def RELEASE_TYPE =
+        project.mod_version.contains('ALPHA') ? 'alpha' :
+        project.mod_version.contains('BETA') ? 'beta'
+        : 'release'
+
+@SuppressWarnings('GrMethodMayBeStatic')
+def getChangeLog() {
+    return "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.mod_version, "utf-8")}"
+}
 
 
 repositories {
@@ -32,7 +43,7 @@ dependencies {
 
     api project(path: ":simulacrum", configuration: "namedElements")
 
-    modRuntimeOnly "com.terraformersmc:modmenu:3.0.0"
+    modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenuVersion}"
 }
 
 allprojects {
@@ -42,7 +53,7 @@ allprojects {
     version = project.mod_version
 
     repositories {
-        maven { url = uri("https://jitpack.io/") }
+        maven { url = "https://jitpack.io/" }
         maven { url = "https://maven.cafeteria.dev/" }
     }
 
@@ -53,8 +64,8 @@ allprojects {
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-        modApi("com.github.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
-        include("com.github.nathanpb:KtDataTagLib:${project.ktdatataglib_version}")
+        modApi("com.github.CafeteriaGuild:KtDataTagLib:${project.ktdatataglib_version}")
+        include("com.github.CafeteriaGuild:KtDataTagLib:${project.ktdatataglib_version}")
     }
 
     jar {
@@ -79,7 +90,6 @@ publishing {
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishipathng_maven.html for information on how to set up publishing.
     repositories {
         maven {
             url "https://maven.cafeteria.dev/releases"
@@ -94,16 +104,11 @@ publishing {
     }
 }
 
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = "sources"
     from sourceSets.main.allSource
@@ -117,23 +122,16 @@ curseforge {
     apiKey = project.property("curseforgeToken")
     project {
         id = project.curseforge_id
-        changelog = "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.mod_version, "utf-8")}"
-        releaseType = project.mod_version.contains('ALPHA')
-            ? 'alpha'
-            : project.mod_version.contains('BETA')
-                ? 'beta'
-                : 'release'
+        changelog = getChangeLog()
+        releaseType = RELEASE_TYPE
 
         addGameVersion(project.minecraft_version)
         addGameVersion("Fabric")
 
         mainArtifact(remapJar)  {
-            displayName = "Deep Mob Learning: Refabricated v$version"
             relations {
                 requiredDependency("fabric-api")
                 requiredDependency("fabric-language-kotlin")
-
-                //requiredDependency("patchouli-fabric")
 
                 optionalDependency("roughly-enough-items")
             }
@@ -147,5 +145,21 @@ curseforge {
 
     options {
         forgeGradleIntegration = false
+    }
+}
+
+modrinth {
+    token = project.property("modrinthToken")
+
+    projectId = project.modrinth_id
+    versionNumber = project.mod_version
+    uploadFile = remapJar
+    gameVersions = [project.minecraft_version]
+    loaders = ['fabric']
+    versionType = RELEASE_TYPE
+    changelog = getChangeLog()
+    dependencies {
+        required.project 'fabric-api'
+        required.project 'fabric-language-kotlin'
     }
 }

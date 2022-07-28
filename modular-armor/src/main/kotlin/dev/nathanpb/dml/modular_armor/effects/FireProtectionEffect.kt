@@ -25,7 +25,7 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.damage.DamageSource
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 
 class FireProtectionEffect : ProtectionLikeEffect(
     identifier("fire_protection"),
@@ -33,7 +33,7 @@ class FireProtectionEffect : ProtectionLikeEffect(
     config.glitchArmor.costs::fireProtection
 ) {
 
-    override val name = TranslatableText("enchantment.minecraft.fire_protection")
+    override val name = Text.translatable("enchantment.minecraft.fire_protection")
 
     override fun protectsAgainst(source: DamageSource) = source.isFire
 

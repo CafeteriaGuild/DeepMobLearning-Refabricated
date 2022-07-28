@@ -27,7 +27,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 
 class LootFabricatorScreenHandlerFactory(
@@ -35,7 +35,7 @@ class LootFabricatorScreenHandlerFactory(
    private val handlerFactory: (Int, PlayerInventory, ScreenHandlerContext)->ScreenHandler
    ) : ExtendedScreenHandlerFactory {
 
-    override fun getDisplayName() = TranslatableText(BLOCK_LOOT_FABRICATOR.translationKey)//TranslatableText("block.dml-refabricated.loot_fabricator")
+    override fun getDisplayName() = Text.translatable(BLOCK_LOOT_FABRICATOR.translationKey)//TranslatableText("block.dml-refabricated.loot_fabricator")
 
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
         return handlerFactory(syncId, inv, ScreenHandlerContext.create(inv.player.world, pos))

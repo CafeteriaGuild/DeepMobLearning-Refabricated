@@ -14,8 +14,6 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -113,7 +111,7 @@ public class SimulationChamberScreen extends HandledScreen<SimulationChamberScre
                 drawTexture(matrices, x + 6,  y + 48 + experienceBarOffset, 18, 141, 7, experienceBarHeight);
             }
 
-            drawTextWithShadow(matrices, renderer, new LiteralText("Tier: ").append(DataModelUtil.textTier(blockEntity.getDataModel())), x + 10, yStart + spacing, 0xFFFFFF);
+            drawTextWithShadow(matrices, renderer, Text.of("Tier: ").copy().append(DataModelUtil.textTier(blockEntity.getDataModel())), x + 10, yStart + spacing, 0xFFFFFF);
             drawStringWithShadow(matrices, renderer, "Iterations: " + f.format(DataModelUtil.getSimulationCount(blockEntity.getDataModel())), x + 10, yStart + spacing * 2, 0xFFFFFF);
             drawStringWithShadow(matrices, renderer, "Pristine chance: " + dmlSimulacrum.pristineChance.get(DataModelUtil.getTier(blockEntity.getDataModel()).toString()) + "%", x + 10, yStart + spacing * 3, 0xFFFFFF);
         }
@@ -145,20 +143,20 @@ public class SimulationChamberScreen extends HandledScreen<SimulationChamberScre
                     if(!DataModelUtil.getTier(blockEntity.getDataModel()).equals(DataModelTier.SELF_AWARE)) {
                         int currentTierCount = DataModelUtil.getTierCount(blockEntity.getDataModel()) - DataModelUtil.getTier(blockEntity.getDataModel()).getDataAmount();
                         int currentTierRoof = DataModelUtil.getTierRoof(blockEntity.getDataModel()) - DataModelUtil.getTier(blockEntity.getDataModel()).getDataAmount();
-                        tooltip.add(new LiteralText(currentTierCount + "/" + currentTierRoof + " Data collected"));
+                        tooltip.add(Text.of(currentTierCount + "/" + currentTierRoof + " Data collected"));
                     } else {
-                        tooltip.add(new LiteralText("This data model has reached the max tier."));
+                        tooltip.add(Text.of(("This data model has reached the max tier.")));
                     }
                 } else {
-                    tooltip.add(new LiteralText("Machine is missing a data model"));
+                    tooltip.add(Text.of(("Machine is missing a data model")));
                 }
                 renderTooltip(matrices, tooltip, x + 2, y + 2);
             } else if(211 <= x && x < 220) {
                 // Tooltip for energy
-                tooltip.add(new LiteralText(f.format(handler.getSyncedEnergy()) + "/" + f.format(maxEnergy) + " E"));
+                tooltip.add(Text.of((f.format(handler.getSyncedEnergy()) + "/" + f.format(maxEnergy) + " E")));
                 if(blockEntity.hasDataModel()) {
                     int data = DataModelUtil.getEnergyCost(blockEntity.getDataModel());
-                    tooltip.add(new LiteralText("Simulations with current data model drains " + f.format(data) + "E/t"));
+                    tooltip.add(Text.of("Simulations with current data model drains " + f.format(data) + "E/t"));
                 }
                 renderTooltip(matrices, tooltip, x - 90, y - 16);
             }

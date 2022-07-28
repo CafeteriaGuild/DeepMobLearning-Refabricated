@@ -42,7 +42,8 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
@@ -86,19 +87,19 @@ class Trial (
     }
 
     companion object {
-        val BAR_TEXT by lazy {
-            TranslatableText("bar.${MOD_ID}.trial")
+        val BAR_TEXT: MutableText by lazy {
+            Text.translatable("bar.${MOD_ID}.trial")
         }
 
-        val BAR_TEXT_SUCCESS by lazy {
-            TranslatableText("bar.${MOD_ID}.trial_success")
+        val BAR_TEXT_SUCCESS: MutableText by lazy {
+            Text.translatable("bar.${MOD_ID}.trial_success")
         }
 
-        val BAR_TEXT_FAIL by lazy {
-            TranslatableText("bar.${MOD_ID}.trial_fail")
+        val BAR_TEXT_FAIL: MutableText by lazy {
+            Text.translatable("bar.${MOD_ID}.trial_fail")
         }
-        val BAR_TEXT_FAIL_TIMEOUT by lazy {
-            TranslatableText("bar.${MOD_ID}.trial_fail.timeout")
+        val BAR_TEXT_FAIL_TIMEOUT: MutableText by lazy {
+            Text.translatable("bar.${MOD_ID}.trial_fail.timeout")
         }
     }
 

@@ -25,9 +25,7 @@ import dev.nathanpb.dml.utils.RenderUtils
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
 
@@ -41,24 +39,24 @@ class ItemTrialKey : Item(settings().maxCount(1).fireproof()) {
         if (stack != null && tooltip != null && world != null) {
             stack.trialKeyData.also { data ->
                 if (data != null) {
-                    RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_model.bound_to.1"), world)
-                        ?.append(TranslatableText("tooltip.${MOD_ID}.data_model.bound_to.2", data.category.displayName).formatted(Formatting.WHITE))
+                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.data_model.bound_to.1"), world)
+                        .append(Text.translatable("tooltip.${MOD_ID}.data_model.bound_to.2", data.category.displayName).formatted(Formatting.WHITE))
                         ?.let { tooltip.add(it) }
-                    RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
-                        ?.append(TranslatableText("tooltip.${MOD_ID}.tier.2", data.tier().text))
+                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.tier.1"), world)
+                        .append(Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text))
                         ?.let { tooltip.add(it) }
 
                     if (data.affixes.isNotEmpty()) {
-                        RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.trial_key.affixes"), world)
-                            ?.let { tooltip.add(it) }
+                        RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.trial_key.affixes"), world)
+                            .let { tooltip.add(it) }
                         data.affixes.forEach {
-                            tooltip.add(LiteralText(" - ").append(it.name))
+                            tooltip.add(Text.of(" - ").copy().append(it.name))
                         }
                     }
                 } else {
-                    tooltip.add(TranslatableText("tooltip.${MOD_ID}.data_model.unbound").formatted(Formatting.DARK_RED))
-                    RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.trial_key.unbound.tip"), world)
-                        ?.let { tooltip.add(it) }
+                    tooltip.add(Text.translatable("tooltip.${MOD_ID}.data_model.unbound").formatted(Formatting.DARK_RED))
+                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.trial_key.unbound.tip"), world)
+                        .let { tooltip.add(it) }
                 }
             }
         }

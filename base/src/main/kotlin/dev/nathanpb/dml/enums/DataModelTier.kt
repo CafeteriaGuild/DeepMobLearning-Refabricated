@@ -22,7 +22,7 @@ package dev.nathanpb.dml.enums
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.utils.takeOrNull
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -48,7 +48,7 @@ enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->
         }
     }
 
-    val text = TranslatableText(textEntry)
+    val text = Text.translatable(textEntry)
     fun isMaxTier() = this == values().last()
     fun nextTierOrCurrent() = if (isMaxTier()) SELF_AWARE else values()[ordinal+1]
     val defaultWaveEntityCount = ceil((ordinal + 1) * 1.5).toInt()

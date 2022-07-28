@@ -30,7 +30,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
@@ -48,16 +47,16 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxC
             if (category != null) {
                 stack.dataModel.let { data ->
                     if (!data.tier().isMaxTier()) {
-                        RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.data_amount.1"), world)
-                            ?.append(TranslatableText("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, data.tier().nextTierOrCurrent().dataAmount)
+                        RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.data_amount.1"), world)
+                            .append(Text.translatable("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, data.tier().nextTierOrCurrent().dataAmount)
                                 .formatted(Formatting.WHITE))?.let { tooltip.add(it) }
                     }
-                    RenderUtils.getTextWithDefaultTextColor(TranslatableText("tooltip.${MOD_ID}.tier.1"), world)
-                        ?.append(TranslatableText("tooltip.${MOD_ID}.tier.2", data.tier().text))?.let { tooltip.add(it) }
+                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.tier.1"), world)
+                        .append(Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text))?.let { tooltip.add(it) }
 
                     MinecraftClient.getInstance().player?.let { player ->
                         if (player.isCreative) {
-                            tooltip.add(TranslatableText("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
+                            tooltip.add(Text.translatable("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
                         }
                     }
                 }

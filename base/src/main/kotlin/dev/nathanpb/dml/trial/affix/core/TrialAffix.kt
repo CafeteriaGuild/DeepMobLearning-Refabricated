@@ -21,12 +21,12 @@ package dev.nathanpb.dml.trial.affix.core
 
 import dev.nathanpb.dml.trial.Trial
 import net.minecraft.entity.LivingEntity
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 
 abstract class TrialAffix(val id: Identifier) {
-    val name = TranslatableText("affix.${id.namespace}.${id.path}.name")
+    val name = Text.translatable("affix.${id.namespace}.${id.path}.name")
 
     abstract fun isEnabled(): Boolean
 

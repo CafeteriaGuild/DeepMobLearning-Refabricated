@@ -35,7 +35,7 @@ class FallImmunityEffect : DamageImmunityLikeEffect(
 ) {
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
-        return EntityAttributeModifier(name.key, 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
+        return EntityAttributeModifier("dml_fall_immunity", 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
     override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
