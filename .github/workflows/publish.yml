@@ -34,6 +34,13 @@ jobs:
           message: ${{ format('[CI] Bump version to {0}', github.events.inputs.mod-version) }}
           branch: main
 
+      - name: Publish to GitHub
+        uses: elgohr/Github-Release-Action@v4
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          title: ${{ github.event.inputs.release-title }}
+
       - name: Publish to CurseForge
         run: |
           chmod +x ./gradlew
