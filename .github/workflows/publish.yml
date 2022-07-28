@@ -11,10 +11,8 @@ on:
         required: true
 
 jobs:
-  build-and-bump-version:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      build: ${{ steps.build-and-bump-version.outputs.build }}
     env:
       NEXT_VERSION: ${{github.ref_name}}
 
@@ -36,16 +34,16 @@ jobs:
           message: ${{ format('[CI] Bump version to {0}', github.events.inputs.mod-version) }}
           branch: main
 
-        - name: Publish to CurseForge
-            run: |
-              chmod +x ./gradlew
-              ./gradlew build publish curseforge --stacktrace
-            env:
-              ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
+      - name: Publish to CurseForge
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build publish curseforge --stacktrace
+        env:
+          ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
 
-        - name: Publish to Modrinth
-          run: |
-            chmod +x ./gradlew
-            ./gradlew build publish modrinth --stacktrace
-          env:
-            ORG_GRADLE_PROJECT_modrinthToken: ${{ secrets.MODRINTH_API_KEY }}
+      - name: Publish to Modrinth
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build publish modrinth --stacktrace
+        env:
+          ORG_GRADLE_PROJECT_modrinthToken: ${{ secrets.MODRINTH_API_KEY }}
