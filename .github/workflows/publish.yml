@@ -25,13 +25,15 @@ jobs:
           java-version: 17
 
       - name: Bump version
-        run: VERSION="${{github.events.inputs.mod-version}}" ./.github/scripts/bumpVersion.sh
+        run: ./.github/scripts/bumpVersion.sh
+        env:
+          VERSION: ${{ inputs.mod-version }}
 
       - name: Commit version bump
         uses: EndBug/add-and-commit@v7
         with:
           add: ./gradle.properties
-          message: ${{ format('[CI] Bump version to {0}', github.events.inputs.mod-version) }}
+          message: ${{ format('[CI] Bump version to {0}', inputs.mod-version) }}
           branch: main
 
       - name: Publish to GitHub
