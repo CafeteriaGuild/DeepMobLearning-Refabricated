@@ -13,6 +13,8 @@ on:
 jobs:
   build-and-bump-version:
     runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.build-and-bump-version.outputs.build }}
     env:
       NEXT_VERSION: ${{github.ref_name}}
 
@@ -34,38 +36,16 @@ jobs:
           message: ${{ format('[CI] Bump version to {0}', github.events.inputs.mod-version) }}
           branch: main
 
-  release-curseforge:
-    runs-on: ubuntu-latest
-    needs: [ build-and-bump-version ]
-    steps:
-      - name: Publish
-        run: |
-          chmod +x ./gradlew
-          ./gradlew build publish curseforge --stacktrace
-        env:
-          ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
-          ORG_GRADLE_PROJECT_mcdUsername: ${{ secrets.MCD_USERNAME }}
-          ORG_GRADLE_PROJECT_mcdPassword: ${{ secrets.MCD_PASSWORD }}
+        - name: Publish to CurseForge
+            run: |
+              chmod +x ./gradlew
+              ./gradlew build publish curseforge --stacktrace
+            env:
+              ORG_GRADLE_PROJECT_curseforgeToken: ${{ secrets.CURSEFORGE_API_KEY }}
 
-  release-modrinth:
-    runs-on: ubuntu-latest
-    needs: [ build-and-bump-version ]
-    steps:
-      - name: Publish
-        run: |
-          chmod +x ./gradlew
-          ./gradlew build publish modrinth --stacktrace
-        env:
-          ORG_GRADLE_PROJECT_modrinthToken: ${{ secrets.MODRINTH_API_KEY }}
-
-  release-github:
-    runs-on: ubuntu-latest
-    needs: [ build-and-bump-version ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Release
-        uses: elgohr/Github-Release-Action@v4
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          title: ${{ github.event.inputs.release-title }}
+        - name: Publish to Modrinth
+          run: |
+            chmod +x ./gradlew
+            ./gradlew build publish modrinth --stacktrace
+          env:
+            ORG_GRADLE_PROJECT_modrinthToken: ${{ secrets.MODRINTH_API_KEY }}
