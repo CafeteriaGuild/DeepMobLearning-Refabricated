@@ -152,7 +152,7 @@ modrinth {
     token = project.property("modrinthToken")
 
     projectId = project.modrinth_id
-    versionNumber = project.mod_version + "+" + project.game_version
+    versionNumber = project.mod_version + "+" + project.minecraft_version
     uploadFile = remapJar
     gameVersions = [project.minecraft_version]
     loaders = ['fabric']
