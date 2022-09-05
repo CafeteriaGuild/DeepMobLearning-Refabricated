@@ -28,7 +28,7 @@ import dev.nathanpb.dml.modular_armor.TELEPORT_KEYBINDING
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
-import dev.nathanpb.dml.modular_armor.event.TeleportEffectRequestedEvent
+import dev.nathanpb.dml.modular_armor.event.ModularArmorEvents
 import dev.nathanpb.dml.modular_armor.net.C2S_TELEPORT_EFFECT_REQUESTED
 import dev.nathanpb.dml.modular_armor.payload.TeleportEffectPayload
 import dev.nathanpb.dml.utils.toVec3d
@@ -76,7 +76,7 @@ class TeleportEffect : ModularEffect<TeleportEffectPayload>(
             })
         }
 
-        TeleportEffectRequestedEvent.register { player, pos, looking ->
+        ModularArmorEvents.TeleportEffectRequestedEvent.register { player, pos, looking ->
             if (!player.world.isClient) {
                 return@register ModularEffectContext.from(player)
                     .any {

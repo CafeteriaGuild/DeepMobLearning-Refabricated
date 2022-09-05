@@ -24,18 +24,20 @@ import dev.nathanpb.dml.event.event
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Vec3d
 
-val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> { listeners ->
-    { player, pos, rotation ->
-        listeners.any {
-            it(player, pos, rotation)
+object ModularArmorEvents {
+    val TeleportEffectRequestedEvent = event<(PlayerEntity, Vec3d, Vec3d)->Boolean> { listeners ->
+        { player, pos, rotation ->
+            listeners.any {
+                it(player, pos, rotation)
+            }
         }
     }
-}
 
-val SoulVisionEffectRequestedEvent = event<(PlayerEntity)->Unit> { listeners ->
-    { player ->
-        listeners.forEach {
-            it(player)
+    val SoulVisionEffectRequestedEvent = event<(PlayerEntity)->Unit> { listeners ->
+        { player ->
+            listeners.forEach {
+                it(player)
+            }
         }
     }
 }

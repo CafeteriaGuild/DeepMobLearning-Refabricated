@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.modular_armor.net.consumers
 
-import dev.nathanpb.dml.modular_armor.event.TeleportEffectRequestedEvent
+import dev.nathanpb.dml.modular_armor.event.ModularArmorEvents
 import dev.nathanpb.dml.utils.readVec3d
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -44,7 +44,7 @@ class TeleportEffectRequestedPacketConsumer : ServerPlayNetworking.PlayChannelHa
                 pos.squaredDistanceTo(player.pos) <= 4*4
                 && arrayOf(rotation.x, rotation.y, rotation.z).all { it in -128F..128F }
             ) {
-                TeleportEffectRequestedEvent.invoker().invoke(player, pos, rotation)
+                ModularArmorEvents.TeleportEffectRequestedEvent.invoker().invoke(player, pos, rotation)
             }
         }
     }

@@ -31,7 +31,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
-import dev.nathanpb.dml.modular_armor.event.SoulVisionEffectRequestedEvent
+import dev.nathanpb.dml.modular_armor.event.ModularArmorEvents
 import dev.nathanpb.dml.modular_armor.net.C2S_SOUL_VISION_REQUESTED
 import io.netty.buffer.Unpooled
 import net.fabricmc.api.EnvType
@@ -63,7 +63,7 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
             })
         }
 
-        SoulVisionEffectRequestedEvent.register { player ->
+        ModularArmorEvents.SoulVisionEffectRequestedEvent.register { player ->
             if (!player.world.isClient && !player.hasStatusEffect(SOUL_VISION_EFFECT)) {
                 ModularEffectContext.from(player)
                     .run(EffectStackOption.RANDOMIZE.apply)

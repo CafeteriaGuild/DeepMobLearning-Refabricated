@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.modular_armor.net.consumers
 
-import dev.nathanpb.dml.modular_armor.event.SoulVisionEffectRequestedEvent
+import dev.nathanpb.dml.modular_armor.event.ModularArmorEvents
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
@@ -37,7 +37,7 @@ class SoulVisionRequestedPacketConsumer : ServerPlayNetworking.PlayChannelHandle
         responseSender: PacketSender
     ) {
         server.execute {
-            SoulVisionEffectRequestedEvent.invoker().invoke(player)
+            ModularArmorEvents.SoulVisionEffectRequestedEvent.invoker().invoke(player)
         }
     }
 }
