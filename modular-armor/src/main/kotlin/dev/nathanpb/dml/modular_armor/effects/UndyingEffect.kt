@@ -23,7 +23,7 @@ package dev.nathanpb.dml.modular_armor.effects
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.*
 import dev.nathanpb.dml.modular_armor.net.S2C_UNDYING_COOLDOWN_UPDATE
@@ -79,7 +79,7 @@ class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun registerEvents() {
-        PlayerEntityTickEvent.register { player ->
+        VanillaEvents.PlayerEntityTickEvent.register { player ->
             if (!player.world.isClient && player.world.time % 40 == 0L) {
                 ModularEffectContext.from(player)
                     .any { super.canApply(it, ModularEffectTriggerPayload.EMPTY) }

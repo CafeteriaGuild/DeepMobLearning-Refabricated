@@ -21,8 +21,7 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.LivingEntityDamageContext
-import dev.nathanpb.dml.event.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.core.WrappedEffectTriggerPayload
@@ -38,7 +37,7 @@ abstract class DamageImmunityLikeEffect(
 ) : ProtectionLikeEffect(id, category, applyCost) {
 
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { eventContext ->
+        VanillaEvents.LivingEntityDamageEvent.register { eventContext ->
             takeOrNull(eventContext.entity is PlayerEntity) {
                 ModularEffectContext.from(eventContext.entity as PlayerEntity)
                     .shuffled()
@@ -51,7 +50,7 @@ abstract class DamageImmunityLikeEffect(
         }
     }
 
-    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntityDamageContext>): Boolean {
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>): Boolean {
         return super.canApply(context, payload) && sumLevelsOf(context.armor.stack) > 0
     }
 }

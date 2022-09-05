@@ -17,7 +17,6 @@ pluginManagement {
 
 include 'base'
 include 'rei-compat'
-include 'vanilla-events'
 include 'modular-armor'
 include 'simulacrum'
 

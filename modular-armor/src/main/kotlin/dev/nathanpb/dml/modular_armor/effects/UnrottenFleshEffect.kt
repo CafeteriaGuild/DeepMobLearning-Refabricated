@@ -23,7 +23,7 @@ package dev.nathanpb.dml.modular_armor.effects
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.LivingEntityEatEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
@@ -56,7 +56,7 @@ class UnrottenFleshEffect : ModularEffect<ModularEffectTriggerPayload> (
     }
 
     override fun registerEvents() {
-        LivingEntityEatEvent.register { player, stack ->
+        VanillaEvents.LivingEntityEatEvent.register { player, stack ->
             if (player is PlayerEntity && !player.world.isClient && stack.item == Items.ROTTEN_FLESH) {
                 ModularEffectContext.from(player)
                     .forEach { context ->

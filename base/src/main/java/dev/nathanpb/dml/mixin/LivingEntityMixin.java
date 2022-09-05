@@ -20,10 +20,15 @@ package dev.nathanpb.dml.mixin;
  */
 
 import dev.nathanpb.dml.entity.SystemGlitchEntity;
+import dev.nathanpb.dml.event.VanillaEvents;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -38,6 +43,24 @@ public class LivingEntityMixin {
                 cir.cancel();
             }
         }
+    }
+
+    @Inject(at = @At("RETURN"), method = "eatFood")
+    public void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+        if (stack.isFood()) {
+            VanillaEvents.INSTANCE.getLivingEntityEatEvent()
+                    .invoker()
+                    .invoke((LivingEntity) (Object) this, stack);
+        }
+    }
+
+    @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyArmorToDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
+    private float applyDamage(DamageSource source, float amount) {
+        LivingEntity dis = (LivingEntity) (Object) this;
+        return VanillaEvents.INSTANCE.getLivingEntityDamageEvent()
+                .invoker()
+                .invoke(new VanillaEvents.LivingEntityDamageContext(dis, source, amount))
+                .getDamage();
     }
 
 }

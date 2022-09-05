@@ -1,4 +1,4 @@
-package dev.nathanpb.dml.event.vanilla.mixin;
+package dev.nathanpb.dml.mixin;
 
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
@@ -19,8 +19,7 @@ package dev.nathanpb.dml.event.vanilla.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.event.LivingEntityDamageContext;
-import dev.nathanpb.dml.event.VanillaEventsKt;
+import dev.nathanpb.dml.event.VanillaEvents;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,16 +34,16 @@ public class PlayerEntityMixin {
     @ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), method = "applyDamage")
     private float applyDamage(DamageSource source, float amount) {
         PlayerEntity dis = (PlayerEntity) (Object) this;
-        return VanillaEventsKt.getLivingEntityDamageEvent()
+        return VanillaEvents.INSTANCE.getLivingEntityDamageEvent()
             .invoker()
-            .invoke(new LivingEntityDamageContext(dis, source, amount))
+            .invoke(new VanillaEvents.LivingEntityDamageContext(dis, source, amount))
             .getDamage();
     }
 
 
     @Inject(at = @At("HEAD"), method = "tick")
     private void tick(CallbackInfo ci) {
-        VanillaEventsKt.getPlayerEntityTickEvent()
+        VanillaEvents.INSTANCE.getPlayerEntityTickEvent()
             .invoker()
             .invoke((PlayerEntity) (Object) this);
     }

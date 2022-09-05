@@ -27,8 +27,7 @@ import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
-import dev.nathanpb.dml.event.EndermanTeleportEvent
-import dev.nathanpb.dml.event.WorldExplosionEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
@@ -99,8 +98,8 @@ fun init() {
     TrialGriefPrevention().apply {
         AttackBlockCallback.EVENT.register(this)
         UseBlockCallback.EVENT.register(this)
-        WorldExplosionEvent.register(this::explode)
-        EndermanTeleportEvent.register(this::onEndermanTeleport)
+        VanillaEvents.WorldExplosionEvent.register(this::explode)
+        VanillaEvents.EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
     LOGGER.info("Deep Mob Learning: Refabricated" + quirkyStartupMessages[Random.nextInt(quirkyStartupMessages.size)])

@@ -39,8 +39,6 @@ dependencies {
     api project(path: ":modular-armor", configuration: "namedElements")
     include project(path: ":modular-armor", configuration: "namedElements")
 
-    include project(path: ":vanilla-events", configuration: "namedElements")
-
     api project(path: ":simulacrum", configuration: "namedElements")
 
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenuVersion}"

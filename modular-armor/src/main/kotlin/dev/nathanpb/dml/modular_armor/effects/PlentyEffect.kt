@@ -23,7 +23,7 @@ package dev.nathanpb.dml.modular_armor.effects
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.PlayerTakeHungerEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
@@ -42,7 +42,7 @@ class PlentyEffect : ModularEffect<ModularEffectTriggerPayload>(
     config.glitchArmor.costs::plenty
 ) {
     override fun registerEvents() {
-        PlayerTakeHungerEvent.register { player, amount ->
+        VanillaEvents.PlayerTakeHungerEvent.register { player, amount ->
             if (!player.world.isClient) {
                 return@register ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)

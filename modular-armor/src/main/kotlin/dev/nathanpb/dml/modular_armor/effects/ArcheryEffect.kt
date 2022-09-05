@@ -23,8 +23,7 @@ package dev.nathanpb.dml.modular_armor.effects
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.BowShotEvent
-import dev.nathanpb.dml.event.CrossbowReloadedEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.*
 import dev.nathanpb.dml.utils.firstInstanceOrNull
@@ -77,8 +76,8 @@ class ArcheryEffect : ModularEffect<ModularEffectTriggerPayload>(
             }
         }
 
-        BowShotEvent.register(::trigger)
-        CrossbowReloadedEvent.register(::trigger)
+        VanillaEvents.BowShotEvent.register(::trigger)
+        VanillaEvents.CrossbowReloadedEvent.register(::trigger)
     }
 
     override fun acceptTier(tier: DataModelTier) = true

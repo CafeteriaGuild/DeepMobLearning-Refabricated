@@ -23,7 +23,7 @@ package dev.nathanpb.dml.modular_armor.effects
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
@@ -42,7 +42,7 @@ class FlyEffect : AbilityBasedEffect(
 ) {
     override fun registerEvents() {
         super.registerEvents()
-        PlayerEntityTickEvent.register { player ->
+        VanillaEvents.PlayerEntityTickEvent.register { player ->
             // Check if the data should be consumed
             if (
                 !player.world.isClient

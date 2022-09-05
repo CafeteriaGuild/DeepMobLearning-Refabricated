@@ -3,8 +3,14 @@
   "package": "dev.nathanpb.dml.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BowItemMixin",
+    "CrossbowItemMixin",
+    "EndermanEntityMixin",
+    "HungerManagerMixin",
     "ICraftingResultSlotMixin",
     "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "ServerWorldMixin",
     "SlotMixin",
     "WorldMixin"
   ],

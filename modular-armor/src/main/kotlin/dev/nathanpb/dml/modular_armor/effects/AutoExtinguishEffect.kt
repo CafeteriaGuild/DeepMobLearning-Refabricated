@@ -23,8 +23,7 @@ package dev.nathanpb.dml.modular_armor.effects
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.LivingEntityDamageContext
-import dev.nathanpb.dml.event.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
@@ -42,7 +41,7 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     config.glitchArmor.costs::autoExtinguish
 ) {
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { eventContext ->
+        VanillaEvents.LivingEntityDamageEvent.register { eventContext ->
             if (eventContext.entity is PlayerEntity) {
                 ModularEffectContext.from(eventContext.entity as PlayerEntity)
                     .shuffled()
@@ -64,7 +63,7 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
     }
 
     // todo check if the player is standing in fire too
-    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntityDamageContext>): Boolean {
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>): Boolean {
         return super.canApply(context, payload) && !context.player.isInLava
     }
 

@@ -1,4 +1,4 @@
-package dev.nathanpb.dml.event.vanilla.mixin;/*
+package dev.nathanpb.dml.mixin;/*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
@@ -37,7 +37,7 @@ package dev.nathanpb.dml.event.vanilla.mixin;/*
  *  along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.event.VanillaEventsKt;
+import dev.nathanpb.dml.event.VanillaEvents;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,7 +61,7 @@ public class HungerManagerMixin {
         )
     )
     private int redirect$max(int a, int b, PlayerEntity player) {
-        int eventResult = VanillaEventsKt.getPlayerTakeHungerEvent()
+        int eventResult = VanillaEvents.INSTANCE.getPlayerTakeHungerEvent()
             .invoker()
             .invoke(player, foodLevel - a);
 

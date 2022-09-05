@@ -1,4 +1,4 @@
-package dev.nathanpb.dml.event.vanilla.mixin;
+package dev.nathanpb.dml.mixin;
 
 /*
  *
@@ -20,7 +20,7 @@ package dev.nathanpb.dml.event.vanilla.mixin;
  *  along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.event.VanillaEventsKt;
+import dev.nathanpb.dml.event.VanillaEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
@@ -35,7 +35,7 @@ public class BowItemMixin {
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"), method = "onStoppedUsing")
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
-        VanillaEventsKt.getBowShotEvent()
+        VanillaEvents.INSTANCE.getBowShotEvent()
             .invoker()
             .invoke(user, stack);
     }

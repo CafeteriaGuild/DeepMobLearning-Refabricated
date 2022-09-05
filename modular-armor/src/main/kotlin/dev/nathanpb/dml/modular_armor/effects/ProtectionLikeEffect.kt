@@ -21,8 +21,7 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.LivingEntityDamageContext
-import dev.nathanpb.dml.event.LivingEntityDamageEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
@@ -38,10 +37,10 @@ abstract class ProtectionLikeEffect(
     id: Identifier,
     category: EntityCategory,
     applyCost: ()->Float
-) : ModularEffect<WrappedEffectTriggerPayload<LivingEntityDamageContext>>(id, category, applyCost) {
+) : ModularEffect<WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>>(id, category, applyCost) {
 
     override fun registerEvents() {
-        LivingEntityDamageEvent.register { eventContext ->
+        VanillaEvents.LivingEntityDamageEvent.register { eventContext ->
             takeOrNull(eventContext.entity is PlayerEntity && !eventContext.entity.world.isClient) {
                 val armorValues = ModularEffectContext.from(eventContext.entity as PlayerEntity).fold(0.0) { acc, effectContext ->
                     val result = attemptToApply(effectContext, ModularEffectTriggerPayload.wrap(eventContext)) { _, _ ->
@@ -57,13 +56,13 @@ abstract class ProtectionLikeEffect(
         }
     }
 
-    open fun inflictDamage(event: LivingEntityDamageContext, armorValues: Double): Float {
+    open fun inflictDamage(event: VanillaEvents.LivingEntityDamageContext, armorValues: Double): Float {
         return DamageUtil.getInflictedDamage(event.damage, armorValues.toFloat())
     }
 
     abstract fun protectsAgainst(source: DamageSource): Boolean
 
-    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntityDamageContext>): Boolean {
+    override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>): Boolean {
         return super.canApply(context, payload) && protectsAgainst(payload.value.source)
     }
 

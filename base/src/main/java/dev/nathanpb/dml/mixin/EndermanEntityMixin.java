@@ -1,4 +1,4 @@
-package dev.nathanpb.dml.event.vanilla.mixin;/*
+package dev.nathanpb.dml.mixin;/*
  *
  *  Copyright (C) 2021 Nathan P. Bombana, IterationFunk
  *
@@ -18,24 +18,30 @@ package dev.nathanpb.dml.event.vanilla.mixin;/*
  *  along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.event.VanillaEventsKt;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
+import dev.nathanpb.dml.event.VanillaEvents;
+import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(CrossbowItem.class)
-public class CrossbowItemMixin {
+@Mixin(EndermanEntity.class)
+public class EndermanEntityMixin {
 
-    @Inject(at = @At("RETURN"), method = "loadProjectile")
-    private static void loadProjectiles(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) {
-            VanillaEventsKt.getCrossbowReloadedEvent()
-                .invoker()
-                .invoke(shooter, crossbow);
+    @Inject(at = @At("HEAD"), method = "teleportTo(DDD)Z", cancellable = true)
+    public void teleport(double x, double y, double z, CallbackInfoReturnable<Boolean> ci) {
+        EndermanEntity entity = (EndermanEntity) (Object) this;
+        Vec3d pos = new Vec3d(x, y, z);
+        ActionResult result = VanillaEvents.INSTANCE.getEndermanTeleportEvent()
+            .invoker()
+            .invoke(entity, pos);
+
+        if (result == ActionResult.FAIL) {
+            ci.setReturnValue(false);
+            ci.cancel();
         }
     }
+
 }

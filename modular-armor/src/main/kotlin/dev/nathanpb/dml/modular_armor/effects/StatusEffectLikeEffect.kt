@@ -21,7 +21,7 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.event.PlayerEntityTickEvent
+import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
@@ -38,7 +38,7 @@ abstract class StatusEffectLikeEffect(
 ) : ModularEffect<ModularEffectTriggerPayload>(id, category, applyCost) {
 
     override fun registerEvents() {
-        PlayerEntityTickEvent.register { player ->
+        VanillaEvents.PlayerEntityTickEvent.register { player ->
             if (player.world.time % 80 == 0L) {
                 ModularEffectContext.from(player)
                     .run(stackingOption.apply)
