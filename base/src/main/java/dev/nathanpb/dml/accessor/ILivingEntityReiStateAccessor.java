@@ -1,5 +1,7 @@
+package dev.nathanpb.dml.accessor;
+
 /*
- * Copyright (C) 2021 Nathan P. Bombana, IterationFunk
+ * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
  * This file is part of Deep Mob Learning: Refabricated.
  *
@@ -17,14 +19,7 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.compat.rei
-
-import dev.nathanpb.dml.compat.rei.accessor.ILivingEntityReiStateAccessor
-import net.minecraft.entity.LivingEntity
-
-
-var LivingEntity.isInReiScreen: Boolean
-    get() = (this as ILivingEntityReiStateAccessor).isDmlRefIsInReiScreen
-    set(flag) {
-        (this as ILivingEntityReiStateAccessor).setDmlRefInReiScreen(flag)
-    }
+public interface ILivingEntityReiStateAccessor {
+    boolean isDmlRefIsInReiScreen();
+    void setDmlRefInReiScreen(boolean flag);
+}

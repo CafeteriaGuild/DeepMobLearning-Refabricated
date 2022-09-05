@@ -16,7 +16,6 @@ pluginManagement {
 }
 
 include 'base'
-include 'rei-compat'
 include 'modular-armor'
 include 'simulacrum'
 

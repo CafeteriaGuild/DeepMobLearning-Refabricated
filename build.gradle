@@ -33,9 +33,6 @@ dependencies {
     api project(path: ":base", configuration: "namedElements")
     include project(path: ":base", configuration: "namedElements")
 
-    api project(path: ":rei-compat", configuration: "namedElements")
-    include project(path: ":rei-compat", configuration: "namedElements")
-
     api project(path: ":modular-armor", configuration: "namedElements")
     include project(path: ":modular-armor", configuration: "namedElements")
 
