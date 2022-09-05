@@ -23,22 +23,24 @@ import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.TrialEndReason
 import net.minecraft.entity.LivingEntity
 
-val TrialStateChanged = event<(Trial)->Unit> { listeners ->
-    { trial -> listeners.forEach { it(trial) } }
-}
+object ModEvents {
+    val TrialStateChanged = event<(Trial)->Unit> { listeners ->
+        { trial -> listeners.forEach { it(trial) } }
+    }
 
-val TrialEndEvent = event<(Trial, reason: TrialEndReason)->Unit> { listeners ->
-    { trial, reason ->
-        listeners.forEach {
-            it(trial, reason)
+    val TrialEndEvent = event<(Trial, reason: TrialEndReason)->Unit> { listeners ->
+        { trial, reason ->
+            listeners.forEach {
+                it(trial, reason)
+            }
         }
     }
-}
 
-val TrialWaveSpawnEvent = event<(Trial, entities: List<LivingEntity>)->Unit> { listeners ->
-    { trial, entities ->
-        listeners.forEach {
-            it(trial, entities)
+    val TrialWaveSpawnEvent = event<(Trial, entities: List<LivingEntity>)->Unit> { listeners ->
+        { trial, entities ->
+            listeners.forEach {
+                it(trial, entities)
+            }
         }
     }
 }

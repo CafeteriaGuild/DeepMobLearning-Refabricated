@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.trial.affix.core
 
-import dev.nathanpb.dml.event.TrialWaveSpawnEvent
+import dev.nathanpb.dml.event.ModEvents
 import dev.nathanpb.dml.trial.affix.*
 import net.minecraft.util.Identifier
 import org.jetbrains.annotations.ApiStatus
@@ -50,7 +50,7 @@ class TrialAffixRegistry private constructor() {
         if (!isRegistered(affix.id)) {
             registry += affix
             if (affix is TrialAffix.WaveSpawnedListener) {
-                TrialWaveSpawnEvent.register { trial, entities ->
+                ModEvents.TrialWaveSpawnEvent.register { trial, entities ->
                     affix.attemptToInvoke(trial) {
                         affix.onWaveSpawn(trial, entities)
                     }

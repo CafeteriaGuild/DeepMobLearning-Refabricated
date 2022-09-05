@@ -25,8 +25,7 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
 import dev.nathanpb.dml.entity.SystemGlitchEntity
-import dev.nathanpb.dml.event.TrialEndEvent
-import dev.nathanpb.dml.event.TrialStateChanged
+import dev.nathanpb.dml.event.ModEvents
 import dev.nathanpb.dml.inventory.TrialKeystoneInventory
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.*
@@ -146,7 +145,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     private var trialToLoad: TrialData? = null
 
     init {
-        TrialEndEvent.register { trial, reason ->
+        ModEvents.TrialEndEvent.register { trial, reason ->
             if (currentTrial == trial && !trial.world.isClient) {
                 currentTrial = null
                 clientTrialState = TrialState.NOT_STARTED
@@ -161,7 +160,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
             }
         }
 
-        TrialStateChanged.register {
+        ModEvents.TrialStateChanged.register {
             // Keystones do not have finished state, instead this is handled in onTrialEnd
             if (world?.isClient == false && it.state != TrialState.FINISHED) {
                 clientTrialState = it.state
