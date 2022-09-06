@@ -96,7 +96,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     override fun tick() {
         super.tick()
         if (tier == null && belongsToTrial) {
-            remove(Entity.RemovalReason.DISCARDED)
+            remove(RemovalReason.DISCARDED)
         }
     }
 
@@ -121,7 +121,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
      * In that case, the entity will attempt to teleport maximum [maxAttempts] times checking if the random picked block is inside its [trial] area
      * And successfully teleports if it does
      *
-     * If the config entry "trial.allowPlayersLeavingArena" is set to true, than it will completely
+     * If the config entry "trial.allowPlayersLeavingArena" is set to true, then it will completely
      * ignore the protections and just teleport the entity
      *
      * @param at The initial block to find random ones around
@@ -155,6 +155,10 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             slot == EquipmentSlot.HEAD
             && getEquippedStack(EquipmentSlot.HEAD).item is ItemEmeritusHat
         ) 1F else super.getDropChance(slot)
+    }
+
+    override fun canStartRiding(entity: Entity?): Boolean {
+        return false
     }
 
     override fun writeCustomDataToNbt(tag: NbtCompound?) {
