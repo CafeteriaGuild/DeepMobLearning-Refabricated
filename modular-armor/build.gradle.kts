@@ -10,6 +10,10 @@ repositories {
         name = "CottonMC"
         url = uri("https://server.bbkr.space/artifactory/libs-release")
     }
+    maven {
+        name = "Patchouli"
+        url = uri("https://maven.blamejared.com")
+    }
 }
 
 dependencies {

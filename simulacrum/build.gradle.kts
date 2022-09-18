@@ -17,6 +17,10 @@ repositories {
             includeGroup("com.terraformersmc")
         }
     }
+    maven {
+        name = "Patchouli"
+        url = uri("https://maven.blamejared.com")
+    }
 }
 
 dependencies {
