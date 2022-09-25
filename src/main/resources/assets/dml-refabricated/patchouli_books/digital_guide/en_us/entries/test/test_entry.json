@@ -1,0 +1,24 @@
+{
+  "name": "Test Entry",
+  "icon": "minecraft:writable_book",
+  "category": "dml-refabricated:test_category",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This is a test entry, but it should show up!"
+    },
+    {
+      "type": "empty"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:diamond_sword"
+    },
+    {
+      "type": "crafting",
+      "recipe": "minecraft:diamond_sword",
+      "title": "test",
+      "text": "Lorem ipsum"
+    }
+  ]
+}

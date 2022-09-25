@@ -1,6 +1,25 @@
 {
   "name": "item.dml-refabricated.digital_guide",
-  "landing_text": "LANDING TEXT",
-  "version": 1,
+  "subtitle": "digital_guide.dml-refabricated.subtitle",
+  "landing_text": "digital_guide.dml-refabricated.landing_text",
+  "version": 0,
+  "text_color": "FFFFFF",
+  "header_color": "00FFC0",
+  "nameplate_color": "00FFC0",
+  "link_color": "00FFC0",
+  "link_hover_color": "62D8FF",
+  "use_blocky_font": true,
+  "show_progress": false,
+  "model": "dml-refabricated:digital_guide",
+  "book_texture": "dml-refabricated:textures/gui/patchouli/digital_guide.png",
+  "crafting_texture": "dml-refabricated:textures/gui/patchouli/crafting.png",
+  "filler_texture": "dml-refabricated:textures/gui/patchouli/page_filler.png",
+  "open_sound": "",
+  "flip_sound": "minecraft:ui.button.click",
+  "creative_tab": "dml-refabricated.tab_dml-refabricated",
+  "macros": {
+    "$(dml)": "$(#00FFC0)",
+    "$(dml2)": "$(#62D8FF)"
+  },
   "use_resource_pack": true
 }
