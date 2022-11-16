@@ -38,6 +38,8 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
@@ -65,7 +67,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     var tier: DataModelTier? = null
 
     /**
-     * This property is persisted in the Entity's tag. Its main use if to tell if the entity shall despawn on world reloads
+     * This property is persisted in the Entity's tag. Its main use if to tell whether the entity should despawn on world reloads
      */
     var belongsToTrial = false
 
@@ -159,6 +161,10 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
 
     override fun canStartRiding(entity: Entity?): Boolean {
         return false
+    }
+
+    override fun canHaveStatusEffect(effect: StatusEffectInstance?): Boolean {
+        return effect?.effectType != StatusEffects.POISON && effect?.effectType != StatusEffects.WITHER
     }
 
     override fun writeCustomDataToNbt(tag: NbtCompound?) {
