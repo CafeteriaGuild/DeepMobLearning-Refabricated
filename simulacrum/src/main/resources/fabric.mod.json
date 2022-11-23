@@ -14,14 +14,11 @@
   "icon": "assets/dmlsimulacrum/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "io.github.projectet.dmlSimulacrum.dmlSimulacrumClient"
-    ],
     "main": [
-      "io.github.projectet.dmlSimulacrum.dmlSimulacrum"
+      "dev.nathanpb.dml.simulacrum.Init::init"
     ],
-    "modmenu": [
-      "io.github.projectet.dmlSimulacrum.config.ModMenuCompat"
+    "client": [
+      "dev.nathanpb.dml.simulacrum.Init::initClient"
     ]
   },
   "depends": {
@@ -29,8 +26,7 @@
     "fabric": ">=0.43.1",
     "minecraft": "1.19.x",
     "dml-refabricated": "*",
-    "dml-refabricated-base": "*",
-    "cloth-config2": ">=6.0.42"
+    "dml-refabricated-base": "*"
   },
   "custom": {
     "modmenu": {
