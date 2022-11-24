@@ -7,13 +7,13 @@
   ],
   "key": {
     "O": {
-      "item": "dmlsimulacrum:overworld_matter"
+      "item": "dml-refabricated:overworld_matter"
     },
     "N": {
       "item": "minecraft:netherrack"
     }
   },
   "result": {
-    "item": "dmlsimulacrum:hellish_matter"
+    "item": "dml-refabricated:hellish_matter"
   }
 }

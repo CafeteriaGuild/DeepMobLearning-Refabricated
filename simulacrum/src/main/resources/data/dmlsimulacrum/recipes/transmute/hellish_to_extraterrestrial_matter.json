@@ -7,13 +7,13 @@
   ],
   "key": {
     "H": {
-      "item": "dmlsimulacrum:hellish_matter"
+      "item": "dml-refabricated:hellish_matter"
     },
     "E": {
       "item": "minecraft:end_stone"
     }
   },
   "result": {
-    "item": "dmlsimulacrum:extraterrestrial_matter"
+    "item": "dml-refabricated:extraterrestrial_matter"
   }
 }

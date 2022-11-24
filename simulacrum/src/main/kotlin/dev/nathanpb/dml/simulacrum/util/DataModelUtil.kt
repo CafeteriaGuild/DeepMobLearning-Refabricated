@@ -59,16 +59,16 @@ class DataModelUtil {
             return if (getEntityCategory(stack) != null) ENERGY_COST[getEntityCategory(stack).toString()]!! else 0
         }
 
-        fun textType(stack: ItemStack): Text? { // TODO: Replace all 'dmlsimulacrum' id mentions to 'dml-refabricated' and update files accordingly
+        fun textType(stack: ItemStack): Text? {
             return when(dataModel2MatterMap[getEntityCategory(stack).toString()]!!.type) {
                 MatterType.OVERWORLD -> {
-                    Text.translatable("modelType.dmlsimulacrum.overworld").formatted(Formatting.GREEN)
+                    Text.translatable("modelType.dml-refabricated.overworld").formatted(Formatting.GREEN)
                 }
                 MatterType.HELLISH -> {
-                    Text.translatable("modelType.dmlsimulacrum.hellish").formatted(Formatting.RED)
+                    Text.translatable("modelType.dml-refabricated.hellish").formatted(Formatting.RED)
                 }
                 MatterType.EXTRATERRESTRIAL -> {
-                    Text.translatable("modelType.dmlsimulacrum.extraterrestrial").formatted(Formatting.LIGHT_PURPLE)
+                    Text.translatable("modelType.dml-refabricated.extraterrestrial").formatted(Formatting.LIGHT_PURPLE)
                 }
             }
         }
@@ -81,7 +81,7 @@ class DataModelUtil {
             }
         }
 
-        fun getTierRoof(stack: ItemStack): Int { // TODO: Move values to base's config
+        fun getTierRoof(stack: ItemStack): Int {
             if (stack.item is ItemDataModel) {
                 val config = config
                 when(getTier(stack)) {
@@ -107,22 +107,22 @@ class DataModelUtil {
             return 0
         }
 
-        fun textTier(stack: ItemStack): Text? { // TODO: Use base's translation keys
+        fun textTier(stack: ItemStack): Text? {
             return when(getTier(stack)) {
                 DataModelTier.FAULTY -> {
-                    Text.of("Faulty").copy().formatted(Formatting.GRAY)
+                    Text.translatable("tier.dml-refabricated.faulty")
                 }
                 DataModelTier.BASIC -> {
-                    Text.of("Basic").copy().formatted(Formatting.GREEN)
+                    Text.translatable("tier.dml-refabricated.basic")
                 }
                 DataModelTier.ADVANCED -> {
-                    Text.of("Advanced").copy().formatted(Formatting.BLUE)
+                    Text.translatable("tier.dml-refabricated.advanced")
                 }
                 DataModelTier.SUPERIOR -> {
-                    Text.of("Superior").copy().formatted(Formatting.LIGHT_PURPLE)
+                    Text.translatable("tier.dml-refabricated.superior")
                 }
                 DataModelTier.SELF_AWARE -> {
-                    Text.of("Self Aware").copy().formatted(Formatting.GOLD)
+                    Text.translatable("tier.dml-refabricated.self_aware")
                 }
                 else -> {
                     Text.of("Invalid Item")

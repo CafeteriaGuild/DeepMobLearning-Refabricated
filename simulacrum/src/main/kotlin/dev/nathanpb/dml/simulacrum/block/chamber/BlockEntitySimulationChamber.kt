@@ -287,7 +287,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     }
 
     override fun getDisplayName(): Text {
-        return Text.of("Simulation Chamber")
+        return Text.translatable("block.dml-refabricated.simulation_chamber")
     }
 
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler {

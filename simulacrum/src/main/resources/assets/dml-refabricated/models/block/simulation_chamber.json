@@ -2,11 +2,11 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "dmlsimulacrum:block/color_stripes",
-		"1": "dmlsimulacrum:block/machine_base_up",
-		"2": "dmlsimulacrum:block/simulation_chamber_north",
-		"3": "dmlsimulacrum:block/machine_base",
-		"particle": "dmlsimulacrum:block/machine_base"
+		"0": "dml-refabricated:block/color_stripes",
+		"1": "dml-refabricated:block/machine_base_up",
+		"2": "dml-refabricated:block/simulation_chamber_north",
+		"3": "dml-refabricated:block/machine_base",
+		"particle": "dml-refabricated:block/machine_base"
 	},
 	"elements": [
 		{

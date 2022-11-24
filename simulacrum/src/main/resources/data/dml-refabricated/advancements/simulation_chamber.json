@@ -1,13 +1,13 @@
 {
   "display": {
     "icon": {
-      "item": "dmlsimulacrum:simulation_chamber"
+      "item": "dml-refabricated:simulation_chamber"
     },
     "title": {
-      "translate": "advancements.dmlsimulacrum.simulation_chamber"
+      "translate": "advancements.dml-refabricated.simulation_chamber"
     },
     "description": {
-      "translate": "advancements.dmlsimulacrum.simulation_chamber.description"
+      "translate": "advancements.dml-refabricated.simulation_chamber.description"
     }
   },
   "parent": "dml-refabricated:data_models",
@@ -17,7 +17,7 @@
       "conditions": {
         "items": [
           {
-            "items": ["dmlsimulacrum:simulation_chamber"]
+            "items": ["dml-refabricated:simulation_chamber"]
           }
         ]
       }

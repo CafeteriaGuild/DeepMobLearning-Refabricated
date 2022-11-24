@@ -1,0 +1,20 @@
+{
+  "block.dml-refabricated.simulation_chamber": "Câmara de Simulação",
+  "item.dml-refabricated.polymer_clay": "Argila de Polímero",
+  "item.dml-refabricated.overworld_matter": "Matéria Mundana",
+  "item.dml-refabricated.hellish_matter": "Matéria Infernal",
+  "item.dml-refabricated.extraterrestrial_matter": "Matéria Extraterrestre",
+  "modelType.dml-refabricated.hellish": "Infernal",
+  "modelType.dml-refabricated.invalid": "Inválido! Isso não devia acontecer...",
+  "tooltip.dml-refabricated.matter.1": "Pode ser consumido por experiência",
+  "tooltip.dml-refabricated.matter.2": " (Clique-Direito)",
+  "tooltip.dml-refabricated.matter.3": "AGACHE",
+  "tooltip.dml-refabricated.matter.4": " para consumir stack inteiro.",
+  "tooltip.dml-refabricated.matter.5": "Experiência por item: ",
+  "tooltip.dml-refabricated.data_model.1": "Custo de Simulação: ",
+  "tooltip.dml-refabricated.data_model.3": "Tipo: ",
+  "advancements.dml-refabricated.simulation_chamber": "Simulação & Experimentação",
+  "advancements.dml-refabricated.simulation_chamber.description": "Fabrique uma Câmara de Simulação",
+  "advancements.dml-refabricated.matter": "A Matter of Simulation",
+  "advancements.dml-refabricated.matter.description": "Obtenha todos os 3 tipos de Matéria."
+}

@@ -38,15 +38,15 @@ class ItemMatter(_settings: Settings?, _experience: Int) : Item(_settings) {
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text?>, context: TooltipContext?) {
         if(world == null) return
         tooltip.add(
-            getTextWithDefaultTextColor(Text.translatable("tooltip.dmlsimulacrum.matter.1"), world)
-                .append(Text.translatable("tooltip.dmlsimulacrum.matter.2").formatted(Formatting.WHITE))
+            getTextWithDefaultTextColor(Text.translatable("tooltip.dml-refabricated.matter.1"), world)
+                .append(Text.translatable("tooltip.dml-refabricated.matter.2").formatted(Formatting.WHITE))
         )
         tooltip.add(
-            Text.translatable("tooltip.dmlsimulacrum.matter.3")
-                .append(getTextWithDefaultTextColor(Text.translatable("tooltip.dmlsimulacrum.matter.4"), world))
+            Text.translatable("tooltip.dml-refabricated.matter.3")
+                .append(getTextWithDefaultTextColor(Text.translatable("tooltip.dml-refabricated.matter.4"), world))
         )
         tooltip.add(
-            getTextWithDefaultTextColor(Text.translatable("tooltip.dmlsimulacrum.matter.5"), world)
+            getTextWithDefaultTextColor(Text.translatable("tooltip.dml-refabricated.matter.5"), world)
                 .append(Text.of(experience.toString()).copy().formatted(Formatting.WHITE))
         )
     }
