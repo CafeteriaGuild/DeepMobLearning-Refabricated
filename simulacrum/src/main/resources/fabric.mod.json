@@ -15,10 +15,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.nathanpb.dml.simulacrum.Init::init"
+      "dev.nathanpb.dml.simulacrum.InitKt::init"
     ],
     "client": [
-      "dev.nathanpb.dml.simulacrum.Init::initClient"
+      "dev.nathanpb.dml.simulacrum.InitKt::initClient"
     ]
   },
   "depends": {
