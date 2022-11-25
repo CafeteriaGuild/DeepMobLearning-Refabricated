@@ -14,6 +14,7 @@ import dev.nathanpb.dml.simulacrum.util.ImplementedInventory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.client.resource.language.I18n
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
@@ -133,15 +134,19 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
 
     private fun updateSimulationText(stack: ItemStack) {
         val lines = arrayOf(
-            "> Launching runtime",
-            "v1.4.7",
-            "> Iteration #" + (DataModelUtil.getSimulationCount(stack) + 1) + " started",
-            "> Loading model from chip memory",
-            "> Assessing threat level",
-            "> Engaged enemy",
-            "> Pristine procurement",
-            if (byproductSuccess) "succeeded" else "failed",
-            "> Processing results",
+            "text.dml-refabricated.simulation_chamber.sim.1",
+            "text.dml-refabricated.simulation_chamber.sim.2",
+
+            I18n.translate("text.dml-refabricated.simulation_chamber.sim.3") +
+            (DataModelUtil.getSimulationCount(stack) + 1) +
+            I18n.translate("text.dml-refabricated.simulation_chamber.sim.3.2"),
+
+            "text.dml-refabricated.simulation_chamber.sim.4",
+            "text.dml-refabricated.simulation_chamber.sim.5",
+            "text.dml-refabricated.simulation_chamber.sim.6",
+            "text.dml-refabricated.simulation_chamber.sim.7",
+            if (byproductSuccess) "text.dml-refabricated.simulation_chamber.succeeded" else "text.dml-refabricated.simulation_chamber.fail",
+            "text.dml-refabricated.simulation_chamber.sim.8",
             "..."
         )
         val resultPrefix = if (byproductSuccess) "§a" else "§c"

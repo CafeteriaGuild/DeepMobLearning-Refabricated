@@ -83,21 +83,21 @@ fun initClient() {
             world?.let {
                 lines.add(
                     getTextWithDefaultTextColor(Text.translatable(
-                        "tooltip.dmlsimulacrum.data_model.1"),
+                        "tooltip.dml-refabricated.data_model.1"),
                         it
                     )
                     .append(Text.translatable(
-                        "tooltip.dmlsimulacrum.data_model.2",
+                        "tooltip.dml-refabricated.data_model.2",
                         DataModelUtil.getEnergyCost(item)
                     ).formatted(Formatting.WHITE))
                 )
                 lines.add(
                     getTextWithDefaultTextColor(
-                        Text.translatable("tooltip.dmlsimulacrum.data_model.3"),
+                        Text.translatable("tooltip.dml-refabricated.data_model.3"),
                         it
                     )
                     .append(Text.translatable(
-                        "tooltip.dmlsimulacrum.data_model.4",
+                        "tooltip.dml-refabricated.data_model.4",
                         DataModelUtil.textType(item)
                     ).formatted(Formatting.WHITE))
                 )

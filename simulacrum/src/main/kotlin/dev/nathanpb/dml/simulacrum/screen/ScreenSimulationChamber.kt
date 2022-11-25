@@ -65,13 +65,13 @@ open class ScreenSimulationChamber(_handler: ScreenHandlerSimulationChamber, _in
         drawTexture(matrices, x + 203, (y + 48) + energyBarOffset, 25, 141, 7, energyBarHeight)
         val lines: Array<String>
         if (!blockEntity!!.hasDataModel()) {
-            lines = arrayOf("Please insert a data model", "to begin the simulation")
+            lines = arrayOf("text.dml-refabricated.simulation_chamber.insert_data_model.1", "text.dml-refabricated.simulation_chamber.insert_data_model.2")
             val a1 = getAnimation("pleaseInsert1")
             val a2 = getAnimation("pleaseInsert2")
             animateString(matrices, lines[0], a1, null, 1, false, x + 10, yStart + spacing, 0xFFFFFF)
             animateString(matrices, lines[1], a2, a1, 1, false, x + 10, yStart + spacing * 2, 0xFFFFFF)
         } else if (DataModelUtil.getTier(blockEntity!!.dataModel) == DataModelTier.FAULTY) {
-            lines = arrayOf("Insufficient data in model", "please insert a basic model", "or better ")
+            lines = arrayOf("text.dml-refabricated.simulation_chamber.insuficiente_data.1", "text.dml-refabricated.simulation_chamber.insuficiente_data.2", "text.dml-refabricated.simulation_chamber.insuficiente_data.3")
             val insufData = getAnimation("insufData1")
             val insufData2 = getAnimation("insufData2")
             val insufData3 = getAnimation("insufData3")
@@ -92,19 +92,19 @@ open class ScreenSimulationChamber(_handler: ScreenHandlerSimulationChamber, _in
                 drawTexture(matrices, x + 6, y + 48 + experienceBarOffset, 18, 141, 7, experienceBarHeight)
             }
             DrawableHelper.drawTextWithShadow(
-                matrices, renderer, Text.of("Tier: ").copy().append(
+                matrices, renderer, Text.translatable("tooltip.dml-refabricated.data_model.3").copy().append(
                     DataModelUtil.textTier(blockEntity!!.dataModel)
                 ), x + 10, yStart + spacing, 0xFFFFFF
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, "Iterations: " + f.format(
-                    DataModelUtil.getSimulationCount(blockEntity!!.dataModel).toLong()
+            DrawableHelper.drawTextWithShadow(
+                matrices, renderer, Text.translatable("text.dml-refabricated.simulation_chamber.iterations", f.format(
+                    DataModelUtil.getSimulationCount(blockEntity!!.dataModel).toLong())
                 ), x + 10, yStart + spacing * 2, 0xFFFFFF
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, "Pristine chance: " +
+            DrawableHelper.drawTextWithShadow(
+                matrices, renderer, Text.translatable("text.dml-refabricated.simulation_chamber.pristine_chance",
                         PRISTINE_CHANCE[DataModelUtil.getTier(blockEntity!!.dataModel).toString()]
-                        + "%", x + 10, yStart + spacing * 3, 0xFFFFFF
+                ).append("%"), x + 10, yStart + spacing * 3, 0xFFFFFF
             )
         }
 
@@ -137,21 +137,17 @@ open class ScreenSimulationChamber(_handler: ScreenHandlerSimulationChamber, _in
                         ) - (DataModelUtil.getTier(
                             blockEntity!!.dataModel
                         )?.dataAmount ?: 0)
-                        tooltip.add(Text.of("$currentTierCount/$currentTierRoof Data collected"))
+                        tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.data_collected", currentTierCount, currentTierRoof))
                     } else {
-                        tooltip.add(Text.of("This data model has reached the max tier."))
+                        tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.max_tier"))
                     }
                 } else {
-                    tooltip.add(Text.of("Machine is missing a data model"))
+                    tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.missing_data_model"))
                 }
                 renderTooltip(matrices, tooltip, x + 2, y + 2)
             } else if (x in 211..219) {
                 // Tooltip for energy
                 tooltip.add(Text.of(f.format(handler!!.syncedEnergy.toLong()) + "/" + f.format(maxEnergy) + " E"))
-                if (blockEntity!!.hasDataModel()) {
-                    val data = DataModelUtil.getEnergyCost(blockEntity!!.dataModel)
-                    tooltip.add(Text.of("Simulations with current data model drains " + f.format(data.toLong()) + "E/t"))
-                }
                 renderTooltip(matrices, tooltip, x - 90, y - 16)
             }
         }
@@ -198,7 +194,7 @@ open class ScreenSimulationChamber(_handler: ScreenHandlerSimulationChamber, _in
         if (!blockEntity!!.hasDataModel() || DataModelUtil.getTier(blockEntity!!.dataModel) == DataModelTier.FAULTY) {
             animateString(matrices, "_", getAnimation("blinkingUnderline"), null, 16, true, x + 21, y + 49, 0xFFFFFF)
         } else if (!blockEntity!!.hasPolymerClay() && !blockEntity!!.isCrafting) {
-            lines = arrayOf("Cannot begin simulation", "Missing polymer medium", "_")
+            lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.missing_polymer", "_")
             val a1 = getAnimation("inputSlotEmpty1")
             val a2 = getAnimation("inputSlotEmpty2")
             val a3 = getAnimation("blinkingUnderline1")
@@ -206,7 +202,7 @@ open class ScreenSimulationChamber(_handler: ScreenHandlerSimulationChamber, _in
             animateString(matrices, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
             animateString(matrices, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
         } else if (!hasEnergy() && !blockEntity!!.isCrafting) {
-            lines = arrayOf("Cannot begin simulation", "System energy levels critical", "_")
+            lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.missing_energy", "_")
             val a1 = getAnimation("lowEnergy1")
             val a2 = getAnimation("lowEnergy2")
             val a3 = getAnimation("blinkingUnderline2")
@@ -214,7 +210,7 @@ open class ScreenSimulationChamber(_handler: ScreenHandlerSimulationChamber, _in
             animateString(matrices, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
             animateString(matrices, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
         } else if (blockEntity!!.outputIsFull() || blockEntity!!.pristineIsFull()) {
-            lines = arrayOf("Cannot begin simulation", "Output or pristine buffer is full", "_")
+            lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.output_full", "_")
             val a1 = getAnimation("outputSlotFilled1")
             val a2 = getAnimation("outputSlotFilled2")
             val a3 = getAnimation("blinkingUnderline3")
