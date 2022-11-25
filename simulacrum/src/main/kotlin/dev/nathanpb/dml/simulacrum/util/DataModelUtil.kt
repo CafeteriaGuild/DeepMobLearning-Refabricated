@@ -51,7 +51,7 @@ class DataModelUtil {
 
         fun updateTierCount(stack: ItemStack) {
             if (stack.item is ItemDataModel) {
-                stack.dataModel.dataAmount = getTierCount(stack) + 1
+                stack.dataModel.dataAmount = getTierCount(stack) - 1
             }
         }
 

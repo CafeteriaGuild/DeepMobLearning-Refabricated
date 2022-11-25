@@ -213,13 +213,18 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         if (!abort && !world!!.isClient) {
             DataModelUtil.updateSimulationCount(dataModel)
             DataModelUtil.updateTierCount(dataModel)
-            if (inventory[2].item is ItemMatter) inventory[2].count = living.count + 1 else inventory[2] =
-                ItemStack(dataModel2MatterMap[currentDataModelType]?.type?.matter, 1)
+            if (inventory[2].item is ItemMatter) {
+                inventory[2].count = living.count + 1
+            } else {
+                inventory[2] = ItemStack(dataModel2MatterMap[currentDataModelType]?.type?.matter, 1)
+            }
             if (byproductSuccess) {
-                // If Byproduct roll was successful
                 byproductSuccess = false
-                if (inventory[3].item is ItemPristineMatter) inventory[3].increment(1) else inventory[3] =
-                    ItemStack(dataModel2MatterMap[currentDataModelType]?.pristine, 1)
+                if (inventory[3].item is ItemPristineMatter) {
+                    inventory[3].increment(1)
+                } else {
+                    inventory[3] = ItemStack(dataModel2MatterMap[currentDataModelType]?.pristine, 1)
+                }
             }
             updateState()
         }
@@ -364,7 +369,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
                         blockEntity.byproductSuccess = num <= ((chance)?.coerceAtLeast(1)?.coerceAtMost(100) ?: 0)
                     }
                     val energyTickCost = DataModelUtil.getEnergyCost(blockEntity.dataModel)
-                    blockEntity.energyStorage.amount = blockEntity.energyStorage.amount - energyTickCost
+                    blockEntity.energyStorage.amount -= energyTickCost
                     if (blockEntity.ticks % (20 * 15 / 100) == 0) {
                         blockEntity.percentDone++
                     }
