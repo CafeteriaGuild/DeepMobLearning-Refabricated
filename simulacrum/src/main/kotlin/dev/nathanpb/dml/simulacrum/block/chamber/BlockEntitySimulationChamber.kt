@@ -116,6 +116,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     }
 
     override fun markDirty() {
+        super<BlockEntity>.markDirty()
         super<ImplementedInventory>.markDirty()
         if (!world!!.isClient) {
             (world!!.chunkManager as ServerChunkManager).markForUpdate(getPos())
