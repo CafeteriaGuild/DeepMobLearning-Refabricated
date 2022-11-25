@@ -25,7 +25,7 @@ class BlockSimulationChamber : BlockWithEntity(FabricBlockSettings.of(Material.S
         if(world.isClient()) return ActionResult.FAIL
         val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
         screenHandlerFactory?.let {
-            player.openHandledScreen(screenHandlerFactory)
+            player.openHandledScreen(it)
         }
         return ActionResult.SUCCESS
     }
