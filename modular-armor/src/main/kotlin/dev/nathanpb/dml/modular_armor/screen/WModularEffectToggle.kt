@@ -34,7 +34,7 @@ class WModularEffectToggle(
         setLabel(
             value?.name?.let {
                 RenderUtils.getTextWithDefaultTextColor(it, world)
-            } ?: Text.of("")
+            } ?: Text.empty()
         )
     }
 }
