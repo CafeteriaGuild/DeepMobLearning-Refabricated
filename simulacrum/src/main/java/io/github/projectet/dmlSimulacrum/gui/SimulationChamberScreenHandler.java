@@ -6,6 +6,7 @@ import io.github.projectet.dmlSimulacrum.inventory.SlotSimulationChamber;
 import io.github.projectet.dmlSimulacrum.util.Constants;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -28,10 +29,8 @@ public class SimulationChamberScreenHandler extends ScreenHandler implements Con
     private World world;
     PropertyDelegate propertyDelegate;
 
-    public static final ScreenHandlerType<SimulationChamberScreenHandler> SCS_HANDLER_TYPE = ScreenHandlerRegistry.registerExtended(dmlSimulacrum.id("simulation"), SimulationChamberScreenHandler::new);
-
     public SimulationChamberScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf packetByteBuf) {
-        super(SCS_HANDLER_TYPE, syncId);
+        super(dmlSimulacrum.SCS_HANDLER_TYPE, syncId);
         this.player = playerInventory.player;
         this.world = this.player.world;
         this.blockPos = packetByteBuf.readBlockPos();
