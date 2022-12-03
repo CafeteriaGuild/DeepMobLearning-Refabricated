@@ -18,9 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import team.reborn.energy.api.EnergyStorage;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.minecraft.screen.ScreenHandlerType;
-import io.github.projectet.dmlSimulacrum.gui.SimulationChamberScreenHandler;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -29,7 +26,6 @@ public class dmlSimulacrum implements ModInitializer {
 
     public static final Block SIMULATION_CHAMBER = new SimulationChamber(FabricBlockSettings.of(Material.STONE).hardness(4f).resistance(3000f));
     public static BlockEntityType<SimulationChamberEntity> SIMULATION_CHAMBER_ENTITY;
-    public static final ScreenHandlerType<SimulationChamberScreenHandler> SCS_HANDLER_TYPE = ScreenHandlerRegistry.registerExtended(id("simulation"), SimulationChamberScreenHandler::new);
 
     public final static String MOD_ID = "dmlsimulacrum";
 

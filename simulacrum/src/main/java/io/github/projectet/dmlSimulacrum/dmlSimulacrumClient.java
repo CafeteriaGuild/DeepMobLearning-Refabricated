@@ -20,7 +20,7 @@ public class dmlSimulacrumClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ScreenRegistry.register(dmlSimulacrum.SCS_HANDLER_TYPE, SimulationChamberScreen::new);
+        ScreenRegistry.register(SimulationChamberScreenHandler.SCS_HANDLER_TYPE, SimulationChamberScreen::new);
 
         ItemTooltipCallback.EVENT.register((item, context, lines) -> {
             World world = MinecraftClient.getInstance().world;
