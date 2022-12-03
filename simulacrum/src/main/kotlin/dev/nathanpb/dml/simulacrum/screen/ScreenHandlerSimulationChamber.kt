@@ -1,9 +1,8 @@
 package dev.nathanpb.dml.simulacrum.screen
 
-import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.simulacrum.SCS_HANDLER_TYPE
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
@@ -11,7 +10,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.BlockPos
@@ -114,10 +112,4 @@ class ScreenHandlerSimulationChamber(syncId: Int, playerInventory: PlayerInvento
         }
     }
 
-    companion object {
-        val SCS_HANDLER_TYPE: ScreenHandlerType<ScreenHandlerSimulationChamber> = ScreenHandlerRegistry.registerExtended(identifier("simulation")) {
-            syncId: Int, playerInventory: PlayerInventory, packetByteBuf: PacketByteBuf ->
-            ScreenHandlerSimulationChamber(syncId, playerInventory, packetByteBuf)
-        }
-    }
 }

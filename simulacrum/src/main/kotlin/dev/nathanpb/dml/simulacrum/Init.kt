@@ -7,21 +7,25 @@ import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockSimulationChamber
 import dev.nathanpb.dml.simulacrum.item.registerItems
-import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber.Companion.SCS_HANDLER_TYPE
+import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber
 import dev.nathanpb.dml.simulacrum.screen.ScreenSimulationChamber
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
 import dev.nathanpb.dml.utils.RenderUtils.Companion.getTextWithDefaultTextColor
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
@@ -32,11 +36,16 @@ import team.reborn.energy.api.EnergyStorage
 
 val SIMULATION_CHAMBER: Block = BlockSimulationChamber()
 
-var SIMULATION_CHAMBER_ENTITY: BlockEntityType<BlockEntitySimulationChamber> = Registry.register(
+val SIMULATION_CHAMBER_ENTITY: BlockEntityType<BlockEntitySimulationChamber> = Registry.register(
     Registry.BLOCK_ENTITY_TYPE, identifier("simulation_chamber_entity"), FabricBlockEntityTypeBuilder.create(
         { pos: BlockPos?, state: BlockState? ->
             BlockEntitySimulationChamber(pos, state)
         }, SIMULATION_CHAMBER).build())
+
+val SCS_HANDLER_TYPE: ScreenHandlerType<ScreenHandlerSimulationChamber> = ScreenHandlerRegistry.registerExtended(identifier("simulation")) {
+        syncId: Int, playerInventory: PlayerInventory, packetByteBuf: PacketByteBuf ->
+    ScreenHandlerSimulationChamber(syncId, playerInventory, packetByteBuf)
+}
 
 var PRISTINE_CHANCE = hashMapOf(
     "BASIC" to config.pristineChance.basic,
@@ -75,7 +84,6 @@ fun initClient() {
     HandledScreens.register(SCS_HANDLER_TYPE) { handler, inventory, title ->
         ScreenSimulationChamber(handler, inventory, title)
     }
-
 
     ItemTooltipCallback.EVENT.register(ItemTooltipCallback { item: ItemStack, _: TooltipContext?, lines: MutableList<Text?> ->
         val world: World? = MinecraftClient.getInstance().world
