@@ -1,6 +1,5 @@
 val energyVersion: String by project
 val modmenuVersion: String by project
-val clothConfigVersion: String by project
 
 repositories {
     maven {
@@ -20,9 +19,6 @@ repositories {
 }
 
 dependencies {
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${clothConfigVersion}") {
-        exclude(group = "net.fabricmc.fabric-api")
-    }
     include("teamreborn:energy:${energyVersion}")
     modApi("teamreborn:energy:${energyVersion}")
 

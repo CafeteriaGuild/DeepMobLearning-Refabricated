@@ -21,8 +21,6 @@ package dev.nathanpb.dml
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import com.mojang.logging.LogUtils
-import com.sun.jna.StringArray
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
 import dev.nathanpb.dml.entity.registerEntityRenderer
@@ -42,13 +40,11 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
-import org.checkerframework.checker.units.qual.min
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 const val MOD_ID = "dml-refabricated"
 

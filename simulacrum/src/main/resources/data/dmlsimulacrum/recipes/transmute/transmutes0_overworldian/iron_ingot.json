@@ -1,10 +1,10 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    { "item": "dmlsimulacrum:overworld_matter" },
-    { "item": "dmlsimulacrum:overworld_matter" },
-    { "item": "dmlsimulacrum:overworld_matter" },
-    { "item": "dmlsimulacrum:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
+    { "item": "dml-refabricated:overworld_matter" },
     { "item": "minecraft:rotten_flesh" }
   ],
   "result": {

@@ -2,8 +2,8 @@
   "replace": "false",
   "values": [
     {
-      "id": "dmlsimulacrum:simulation_chamber",
-      "required":  false
+      "id": "dml-refabricated:simulation_chamber",
+      "required": false
     }
   ]
 }

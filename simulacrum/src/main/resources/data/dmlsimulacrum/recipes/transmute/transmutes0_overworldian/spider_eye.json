@@ -4,7 +4,7 @@
     { "item": "minecraft:rotten_flesh" },
     { "item": "minecraft:apple" },
     { "item": "minecraft:red_mushroom" },
-    { "item": "dmlsimulacrum:overworld_matter" }
+    { "item": "dml-refabricated:overworld_matter" }
   ],
   "result": {
     "item": "minecraft:spider_eye",
