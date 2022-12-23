@@ -23,6 +23,7 @@ package dev.nathanpb.dml.utils
 import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
+import io.github.cottonmc.cotton.gui.client.NinePatchBackgroundPainter
 import io.github.cottonmc.cotton.gui.widget.WLabel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
@@ -38,7 +39,8 @@ class RenderUtils {
 
     companion object {
         private const val TITLE_COLOR: Int = 0x04FCC4
-        val DEFAULT_BACKGROUND_PAINTER by lazy {
+        val STYLE: Style = Style.EMPTY.withColor(TITLE_COLOR)
+        val DEFAULT_BACKGROUND_PAINTER: NinePatchBackgroundPainter by lazy {
             BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
         }
         val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")

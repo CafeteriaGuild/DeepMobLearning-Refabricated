@@ -251,7 +251,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
      *
      * @return the list of erroneous blocks
      */
-    private fun checkTerrain(): List<BlockPos> {
+    fun checkTerrain(): List<BlockPos> {
         return if (!config.trial.allowStartInWrongTerrain) {
             mutableListOf<BlockPos>().also { list ->
                 val radInt = config.trial.arenaRadius
