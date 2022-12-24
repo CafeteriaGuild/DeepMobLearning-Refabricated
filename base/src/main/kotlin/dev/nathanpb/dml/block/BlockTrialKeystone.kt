@@ -84,11 +84,12 @@ class BlockTrialKeystone : Block(
                                     Text.translatable("chat.$MOD_ID.trial_wrong_terrain").setStyle(RenderUtils.STYLE)
                                 )
                                 blockEntity.checkTerrain().forEach {
-                                    if(!world.getBlockState(it).isSideSolidFullSquare(world, it, Direction.UP)) {
-                                        player.sendMessage(getInvalidTerrainText(it.x, it.y, it.z, true))
-                                    } else {
-                                        player.sendMessage(getInvalidTerrainText(it.x, it.y, it.z, false))
-                                    }
+                                    player.sendMessage(
+                                        getInvalidTerrainText(
+                                            it.x, it.y, it.z,
+                                            !world.getBlockState(it).isSideSolidFullSquare(world, it, Direction.UP)
+                                        )
+                                    )
                                 }
                             }
                         } else {
