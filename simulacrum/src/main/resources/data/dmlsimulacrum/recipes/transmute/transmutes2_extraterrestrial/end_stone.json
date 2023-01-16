@@ -4,7 +4,7 @@
     { "item": "minecraft:sandstone" },
     { "item": "minecraft:sandstone" },
     { "item": "minecraft:ender_pearl" },
-    { "item": "dmlsimulacrum:extraterrestrial_matter" }
+    { "item": "dml-refabricated:extraterrestrial_matter" }
   ],
   "result": {
     "item": "minecraft:end_stone",

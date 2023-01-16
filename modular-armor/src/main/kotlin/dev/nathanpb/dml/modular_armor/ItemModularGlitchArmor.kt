@@ -76,7 +76,11 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
     override fun getRarity(stack: ItemStack?) = Rarity.EPIC
 
     override fun getItemBarColor(stack: ItemStack?) = 0x00FFC0
-    override fun isItemBarVisible(stack: ItemStack) = true
+
+    override fun isItemBarVisible(stack: ItemStack): Boolean {
+        val data = ModularArmorData(stack)
+        return data.dataModel != null
+    }
 
     override fun getItemBarStep(stack: ItemStack): Int {
         val data = ModularArmorData(stack)

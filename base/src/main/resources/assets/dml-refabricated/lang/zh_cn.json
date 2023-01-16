@@ -55,7 +55,7 @@
   "tier.dml-refabricated.self_aware": "§6自我意识§r",
   "gui.dml-refabricated.next": "下一页",
   "gui.dml-refabricated.previous": "上一页",
-  "chat.dml-refabricated.trial_wrong_terrain": "§4这里的地形不适合试炼",
+  "chat.dml-refabricated.trial_wrong_terrain": "这里的地形不适合试炼：",
   "chat.dml-refabricated.trial_no_recipe": "§4试炼秘钥好像坏了",
   "bar.dml-refabricated.trial": "系统故障",
   "bar.dml-refabricated.trial_success": "试炼成功",

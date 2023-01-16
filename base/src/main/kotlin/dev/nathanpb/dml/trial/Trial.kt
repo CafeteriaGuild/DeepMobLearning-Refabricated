@@ -63,7 +63,7 @@ class Trial (
         players: List<UUID>,
         affixes: List<TrialAffix>
     ): this(
-        keystone.world!!, // TODO why is World nullable? Assert this
+        keystone.world!!,
         keystone.pos,
         recipe,
         players.toHashSet(),

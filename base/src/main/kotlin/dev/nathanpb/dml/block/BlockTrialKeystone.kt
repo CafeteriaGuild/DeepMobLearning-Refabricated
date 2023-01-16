@@ -27,6 +27,7 @@ import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
 import dev.nathanpb.dml.trial.TrialKeystoneIllegalStartException
 import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
+import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
@@ -34,11 +35,14 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
@@ -76,7 +80,17 @@ class BlockTrialKeystone : Block(
                             } catch (ex: TrialKeystoneIllegalStartException) {
                                 return ActionResult.PASS
                             } catch (ex: TrialKeystoneWrongTerrainException) {
-                                player.sendMessage(Text.translatable("chat.$MOD_ID.trial_wrong_terrain"), false)
+                                player.sendMessage(
+                                    Text.translatable("chat.$MOD_ID.trial_wrong_terrain").setStyle(RenderUtils.STYLE)
+                                )
+                                blockEntity.checkTerrain().forEach {
+                                    player.sendMessage(
+                                        getInvalidTerrainText(
+                                            it.x, it.y, it.z,
+                                            !world.getBlockState(it).isSideSolidFullSquare(world, it, Direction.UP)
+                                        )
+                                    )
+                                }
                             }
                         } else {
                             player.sendMessage(Text.translatable("chat.${MOD_ID}.trial_no_recipe"), false)
@@ -98,4 +112,13 @@ class BlockTrialKeystone : Block(
     }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = BlockEntityTrialKeystone(pos, state)
+
+
+    private fun getInvalidTerrainText(x: Int, y: Int, z: Int, isFloor: Boolean): MutableText {
+        return Text.literal("- ").formatted(Formatting.WHITE)
+            .append(Text.translatable("chat.$MOD_ID.trial_wrong_terrain." + (if(isFloor) "floor" else "dome"))
+                .setStyle(RenderUtils.STYLE))
+            .append(Text.literal(String.format(" (%d, %d, %d)", x, y, z))
+                .formatted(Formatting.WHITE))
+    }
 }

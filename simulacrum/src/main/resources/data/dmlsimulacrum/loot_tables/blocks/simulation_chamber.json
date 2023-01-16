@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "dmlsimulacrum:simulation_chamber"
+          "name": "dml-refabricated:simulation_chamber"
         }
       ],
       "conditions": [

@@ -13,6 +13,6 @@
     "D": { "item": "minecraft:cyan_dye" }
   },
   "result": {
-    "item": "dmlsimulacrum:simulation_chamber"
+    "item": "dml-refabricated:simulation_chamber"
   }
 }

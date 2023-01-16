@@ -1,13 +1,13 @@
 {
   "display": {
     "icon": {
-      "item": "dmlsimulacrum:overworld_matter"
+      "item": "dml-refabricated:overworld_matter"
     },
     "title": {
-      "translate": "advancements.dmlsimulacrum.matter"
+      "translate": "advancements.dml-refabricated.matter"
     },
     "description": {
-      "translate": "advancements.dmlsimulacrum.matter.description"
+      "translate": "advancements.dml-refabricated.matter.description"
     }
   },
   "parent": "dml-refabricated:simulation_chamber",
@@ -17,13 +17,13 @@
       "conditions": {
         "items": [
           {
-            "items": ["dmlsimulacrum:overworld_matter"]
+            "items": ["dml-refabricated:overworld_matter"]
           },
           {
-            "items": ["dmlsimulacrum:hellish_matter"]
+            "items": ["dml-refabricated:hellish_matter"]
           },
           {
-            "items": ["dmlsimulacrum:extraterrestrial_matter"]
+            "items": ["dml-refabricated:extraterrestrial_matter"]
           }
         ]
       }

@@ -38,6 +38,8 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
@@ -65,7 +67,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     var tier: DataModelTier? = null
 
     /**
-     * This property is persisted in the Entity's tag. Its main use if to tell if the entity shall despawn on world reloads
+     * This property is persisted in the Entity's tag. Its main use if to tell whether the entity should despawn on world reloads
      */
     var belongsToTrial = false
 
@@ -96,7 +98,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
     override fun tick() {
         super.tick()
         if (tier == null && belongsToTrial) {
-            remove(Entity.RemovalReason.DISCARDED)
+            remove(RemovalReason.DISCARDED)
         }
     }
 
@@ -121,7 +123,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
      * In that case, the entity will attempt to teleport maximum [maxAttempts] times checking if the random picked block is inside its [trial] area
      * And successfully teleports if it does
      *
-     * If the config entry "trial.allowPlayersLeavingArena" is set to true, than it will completely
+     * If the config entry "trial.allowPlayersLeavingArena" is set to true, then it will completely
      * ignore the protections and just teleport the entity
      *
      * @param at The initial block to find random ones around
@@ -155,6 +157,14 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
             slot == EquipmentSlot.HEAD
             && getEquippedStack(EquipmentSlot.HEAD).item is ItemEmeritusHat
         ) 1F else super.getDropChance(slot)
+    }
+
+    override fun canStartRiding(entity: Entity?): Boolean {
+        return false
+    }
+
+    override fun canHaveStatusEffect(effect: StatusEffectInstance?): Boolean {
+        return effect?.effectType != StatusEffects.POISON && effect?.effectType != StatusEffects.WITHER
     }
 
     override fun writeCustomDataToNbt(tag: NbtCompound?) {

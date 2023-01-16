@@ -12,7 +12,7 @@
     "C": { "item": "minecraft:clay_ball" }
   },
   "result": {
-    "item": "dmlsimulacrum:polymer_clay",
+    "item": "dml-refabricated:polymer_clay",
     "count": 16
   }
 }

@@ -21,14 +21,23 @@ package dev.nathanpb.dml
 
 class ModConfig {
 
+    // Base
     var trial = Trial()
     var lootFabricator = LootFabricator()
     var dataModel = DataModel()
     var systemGlitch = SystemGlitch()
     var dataCollection = DataCollection()
     var affix = TrialAffix()
+
+    // Modular Armor
     var matterCondenser = MatterCondenser()
     var glitchArmor = GlitchArmor()
+
+    // Simulacrum
+    var matterXP = MatterXP()
+    var pristineChance = SimulationChamberPristineChance()
+    var energyCost = SimulationChamberEnergyCost()
+
 }
 
 class Trial {
@@ -146,4 +155,29 @@ class GlitchArmorDataConsume {
     var poseidonBless = .015F
     var resistance = .3F
     var undying = 8F
+}
+
+class MatterXP {
+    var overworldMatterXP = 10
+    var hellishMatterXP = 14
+    var extraterrestrialMatterXP = 20
+}
+
+class SimulationChamberPristineChance {
+    var basic = 5
+    var advanced = 11
+    var superior = 24
+    var self_aware = 42
+}
+
+class SimulationChamberEnergyCost {
+    var nether = 300
+    var slimy = 160
+    var overworld = 100
+    var zombie = 300
+    var skeleton = 80
+    var end = 512
+    var ghost = 372
+    var illager = 412
+    var ocean = 160
 }
