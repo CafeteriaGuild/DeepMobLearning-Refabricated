@@ -14,7 +14,6 @@ import dev.nathanpb.dml.simulacrum.util.ImplementedInventory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.client.resource.language.I18n
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
@@ -137,11 +136,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         val lines = arrayOf(
             "text.dml-refabricated.simulation_chamber.sim.1",
             "text.dml-refabricated.simulation_chamber.sim.2",
-
-            I18n.translate("text.dml-refabricated.simulation_chamber.sim.3") +
-            (DataModelUtil.getSimulationCount(stack) + 1) +
-            I18n.translate("text.dml-refabricated.simulation_chamber.sim.3.2"),
-
+            "text.dml-refabricated.simulation_chamber.sim.3",
             "text.dml-refabricated.simulation_chamber.sim.4",
             "text.dml-refabricated.simulation_chamber.sim.5",
             "text.dml-refabricated.simulation_chamber.sim.6",
@@ -164,7 +159,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         simulationText["simulationProgressLine1"] = animate(lines[0], aLine1, null, 1, false)
         simulationText["simulationProgressLine1Version"] =
             "§6" + animate(lines[1], aLine1Version, aLine1, 1, false) + "§r"
-        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false)
+        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false, (DataModelUtil.getSimulationCount(stack) + 1))
         simulationText["simulationProgressLine3"] = animate(lines[3], aLine3, aLine2, 2, false)
         simulationText["simulationProgressLine4"] = animate(lines[4], aLine4, aLine3, 1, false)
         simulationText["simulationProgressLine5"] = animate(lines[5], aLine5, aLine4, 2, false)
@@ -176,13 +171,17 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     }
 
     private fun animate(string: String, anim: Animation?, precedingAnim: Animation?, delayInTicks: Int, loop: Boolean): String? {
+        return animate(string, anim, precedingAnim, delayInTicks, loop, -1)
+    }
+
+    private fun animate(string: String, anim: Animation?, precedingAnim: Animation?, delayInTicks: Int, loop: Boolean, intArg: Int): String? {
         return if (precedingAnim != null) {
             if (precedingAnim.hasFinished()) {
-                anim?.animate(string, delayInTicks, world!!.levelProperties.time, loop)
+                anim?.animate(string, delayInTicks, world!!.levelProperties.time, loop, intArg)
             } else {
                 ""
             }
-        } else anim?.animate(string, delayInTicks, world!!.levelProperties.time, loop)
+        } else anim?.animate(string, delayInTicks, world!!.levelProperties.time, loop, intArg)
     }
 
     private fun getAnimation(key: String): Animation? {

@@ -11,9 +11,14 @@ class Animation {
     private var lastAlterTick: Long = 0
     private var currentString = ""
 
+
     fun animate(key: String, totalTickTime: Int, currentWorldTick: Long, loop: Boolean): String {
+        return animate(key, totalTickTime, currentWorldTick, loop, -1)
+    }
+
+    fun animate(key: String, totalTickTime: Int, currentWorldTick: Long, loop: Boolean, intArg: Int): String {
         if (lastAlterTick != currentWorldTick) {
-            alterString(I18n.translate(key), totalTickTime, loop)
+            alterString(I18n.translate(key, intArg), totalTickTime, loop)
             lastAlterTick = currentWorldTick
         }
         return currentString
