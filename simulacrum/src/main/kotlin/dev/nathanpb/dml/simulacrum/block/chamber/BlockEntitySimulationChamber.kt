@@ -134,15 +134,15 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
 
     private fun updateSimulationText(stack: ItemStack) {
         val lines = arrayOf(
-            "text.dml-refabricated.simulation_chamber.sim.1",
-            "text.dml-refabricated.simulation_chamber.sim.2",
-            "text.dml-refabricated.simulation_chamber.sim.3",
-            "text.dml-refabricated.simulation_chamber.sim.4",
-            "text.dml-refabricated.simulation_chamber.sim.5",
-            "text.dml-refabricated.simulation_chamber.sim.6",
-            "text.dml-refabricated.simulation_chamber.sim.7",
-            if (byproductSuccess) "text.dml-refabricated.simulation_chamber.succeeded" else "text.dml-refabricated.simulation_chamber.fail",
-            "text.dml-refabricated.simulation_chamber.sim.8",
+            "> Launching runtime",
+            "v1.4.7",
+            "> Iteration #" + (DataModelUtil.getSimulationCount(stack) + 1) + " started",
+            "> Loading model from chip memory",
+            "> Assessing threat level",
+            "> Engaged enemy",
+            "> Pristine procurement",
+            if (byproductSuccess) "succeeded" else "failed",
+            "> Processing results",
             "..."
         )
         val resultPrefix = if (byproductSuccess) "§a" else "§c"
@@ -159,7 +159,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         simulationText["simulationProgressLine1"] = animate(lines[0], aLine1, null, 1, false)
         simulationText["simulationProgressLine1Version"] =
             "§6" + animate(lines[1], aLine1Version, aLine1, 1, false) + "§r"
-        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false, (DataModelUtil.getSimulationCount(stack) + 1))
+        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false)
         simulationText["simulationProgressLine3"] = animate(lines[3], aLine3, aLine2, 2, false)
         simulationText["simulationProgressLine4"] = animate(lines[4], aLine4, aLine3, 1, false)
         simulationText["simulationProgressLine5"] = animate(lines[5], aLine5, aLine4, 2, false)
