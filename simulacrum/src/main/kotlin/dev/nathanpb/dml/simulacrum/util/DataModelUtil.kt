@@ -31,10 +31,9 @@ class DataModelUtil {
 
 
         fun updateSimulationCount(stack: ItemStack) {
-            if (stack.item is ItemDataModel) {
-                val i = getSimulationCount(stack) + 1
-                stack.dataModel.tag.putInt("simulationCount", i)
-            }
+            if(stack.item !is ItemDataModel) return
+            val i = getSimulationCount(stack) + 1
+            stack.dataModel.tag.putInt("simulationCount", i)
         }
 
         fun getSimulationCount(stack: ItemStack): Int {
@@ -50,9 +49,10 @@ class DataModelUtil {
         }
 
         fun updateTierCount(stack: ItemStack) {
-            if (stack.item is ItemDataModel) {
-                stack.dataModel.dataAmount = getTierCount(stack) - 1
-            }
+            val dataBonus = config.simulationChamber.dataBonus
+            if(stack.item !is ItemDataModel || dataBonus == 0) return
+
+            stack.dataModel.dataAmount = (getTierCount(stack) + dataBonus).coerceIn(0, config.dataModel.selfAwareDataRequired)
         }
 
         fun getEnergyCost(stack: ItemStack): Int {

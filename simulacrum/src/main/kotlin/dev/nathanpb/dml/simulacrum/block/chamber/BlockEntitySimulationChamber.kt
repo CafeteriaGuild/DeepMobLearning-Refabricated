@@ -209,7 +209,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         resetAnimations()
         percentDone = 0
         isCrafting = false
-        // Only decrease input and increase output if not aborted, and only if on the server's TE
+        // Only decrease input and increase output if not aborted, and only if on the server's BE
         if (!abort && !world!!.isClient) {
             DataModelUtil.updateSimulationCount(dataModel)
             DataModelUtil.updateTierCount(dataModel)

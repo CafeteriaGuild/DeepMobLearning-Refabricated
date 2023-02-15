@@ -34,9 +34,8 @@ class ModConfig {
     var glitchArmor = GlitchArmor()
 
     // Simulacrum
+    var simulationChamber = SimulationChamber()
     var matterXP = MatterXP()
-    var pristineChance = SimulationChamberPristineChance()
-    var energyCost = SimulationChamberEnergyCost()
 
 }
 
@@ -157,27 +156,27 @@ class GlitchArmorDataConsume {
     var undying = 8F
 }
 
+class SimulationChamber {
+    var basicTierPristineChance = 5
+    var advancedTierPristineChance = 11
+    var superiorTierPristineChance = 24
+    var selfAwareTierPristineChance = 42
+
+    var overworldEnergyCost = 100
+    var zombieEnergyCost = 300
+    var skeletonEnergyCost = 80
+    var slimyEnergyCost = 160
+    var illagerEnergyCost = 412
+    var oceanEnergyCost = 160
+    var ghostEnergyCost = 372
+    var netherEnergyCost = 300
+    var endEnergyCost = 512
+
+    var dataBonus = -1
+}
+
 class MatterXP {
     var overworldMatterXP = 10
     var hellishMatterXP = 14
     var extraterrestrialMatterXP = 20
-}
-
-class SimulationChamberPristineChance {
-    var basic = 5
-    var advanced = 11
-    var superior = 24
-    var self_aware = 42
-}
-
-class SimulationChamberEnergyCost {
-    var nether = 300
-    var slimy = 160
-    var overworld = 100
-    var zombie = 300
-    var skeleton = 80
-    var end = 512
-    var ghost = 372
-    var illager = 412
-    var ocean = 160
 }
