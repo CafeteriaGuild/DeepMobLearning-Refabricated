@@ -23,6 +23,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
+import dev.nathanpb.dml.command.DMLCommand
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.VanillaEvents
@@ -35,6 +36,7 @@ import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
@@ -98,6 +100,7 @@ fun init() {
         VanillaEvents.EndermanTeleportEvent.register(this::onEndermanTeleport)
     }
     TrialAffixRegistry.registerDefaultAffixes()
+    CommandRegistrationCallback.EVENT.register(DMLCommand())
     LOGGER.info("Deep Mob Learning: Refabricated" + quirkyStartupMessages[Random.nextInt(quirkyStartupMessages.size)])
 }
 
