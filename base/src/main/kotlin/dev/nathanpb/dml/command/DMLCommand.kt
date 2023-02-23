@@ -25,11 +25,10 @@ class DMLCommand: CommandRegistrationCallback {
             .then(literal("modules")
                 .executes {
                     it.source.sendMessage(appendModuleText("dml-refabricated-base", "Base"))
-                    it.source.sendMessage(appendModuleText("dml-refabricated-modular-armor", "Modular Armor"))
+                    it.source.sendMessage(appendModuleText("dml-refabricated-modular-armor", "Glitch Armor"))
                     it.source.sendMessage(appendModuleText("dmlsimulacrum", "Simulacrum"))
                     return@executes 1
                 }
-
             )
 
             // Main Command
@@ -41,13 +40,16 @@ class DMLCommand: CommandRegistrationCallback {
     }
 
 
-    private fun appendModuleText(modId: String, fancyName: String): Text { // TODO: Add module version
-        var isLoaded = FabricLoader.getInstance().isModLoaded(modId)
+    private fun appendModuleText(modId: String, fancyName: String): Text {
+        val isLoaded = FabricLoader.getInstance().isModLoaded(modId)
+        val version: String = FabricLoader.getInstance().getModContainer(modId).orElse(null).let {
+            if(it != null) "v${it.metadata.version}" else ""
+        }
 
         return coloredText("- [")
             .append(Text.literal(if(isLoaded) "✔" else "✕").formatted(if(isLoaded) Formatting.GREEN else Formatting.RED))
             .append(coloredText("] "))
-            .append(coloredText(fancyName))
+            .append(coloredText("$fancyName $version"))
     }
 
     private fun coloredText(message: String): MutableText {
