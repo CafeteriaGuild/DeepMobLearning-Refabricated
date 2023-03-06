@@ -8,8 +8,7 @@ import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.server.command.CommandManager.RegistrationEnvironment
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
+import net.minecraft.text.*
 import net.minecraft.util.Formatting
 
 
@@ -33,7 +32,27 @@ class DMLCommand: CommandRegistrationCallback {
 
             // Main Command
             .executes {
-                it.source.sendMessage(Text.literal("Hello, Brigadier!"))
+                val metadata = FabricLoader.getInstance().getModContainer("dml-refabricated").get().metadata
+                val authors = metadata.authors.filter { person -> person.name != "IterationFunk" }.joinToString {
+                        person -> person.name
+                }
+                val contributors = metadata.contributors.joinToString {
+                        person -> person.name
+                }
+
+                it.source.sendMessage(coloredText("-=  ", true).append(coloredText("${metadata.name} v${metadata.version}")).append(coloredText("  =-", true)))
+                it.source.sendMessage(coloredText("Original mod by ").append(coloredText("IterationFunk", true)))
+                it.source.sendMessage(coloredText("Reimagining/port by ").append(coloredText(authors, true)))
+                it.source.sendMessage(coloredText("With contributions of ").append(coloredText(contributors, true)))
+                it.source.sendMessage(Text.empty())
+                it.source.sendMessage(
+                    hyperlink("CurseForge", "https://curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated", 0xF46434).append(
+                    " ").append(
+                    hyperlink("Modrinth", "https://modrinth.com/mod/deep-mob-learning-refabricated", 0x1CD368)).append(
+                    " ").append(
+                    hyperlink("Issue Tracker", "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/issues", 0x6E5494))
+                )
+
 
                 return@executes 1
             })
@@ -56,7 +75,16 @@ class DMLCommand: CommandRegistrationCallback {
         return coloredText(message, false)
     }
 
-    private fun coloredText(message: String, translatable: Boolean): MutableText {
-        return (if(translatable) Text.translatable(message) else Text.literal(message)).styled { RenderUtils.STYLE }
+    private fun coloredText(message: String, altStyle: Boolean): MutableText {
+        return Text.literal(message).styled { if(altStyle) RenderUtils.ALT_STYLE else RenderUtils.STYLE }
+    }
+
+    private fun hyperlink(title: String, url: String, color: Int): MutableText {
+        return Text.literal("[$title]").styled { Style.EMPTY
+                .withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, url))
+                .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Click to open link").styled { Style.EMPTY.withColor(color) }))
+                .withColor(color)
+                .withBold(true)
+        }
     }
 }
