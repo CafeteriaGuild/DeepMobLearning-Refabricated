@@ -32,26 +32,34 @@ class DMLCommand: CommandRegistrationCallback {
 
             // Main Command
             .executes {
-                val metadata = FabricLoader.getInstance().getModContainer("dml-refabricated").get().metadata
-                val authors = metadata.authors.filter { person -> person.name != "IterationFunk" }.joinToString {
-                        person -> person.name
+                val metadata by lazy {
+                    FabricLoader.getInstance().getModContainer("dml-refabricated").get().metadata
                 }
-                val contributors = metadata.contributors.joinToString {
-                        person -> person.name
+                val authors by lazy {
+                    metadata.authors.filter { person -> person.name != "IterationFunk" }.joinToString {
+                            person -> person.name
+                    }
+                }
+                val contributors by lazy {
+                    metadata.contributors.joinToString {
+                            person -> person.name
+                    }
                 }
 
                 it.source.sendMessage(coloredText("-=  ", true).append(coloredText("${metadata.name} v${metadata.version}")).append(coloredText("  =-", true)))
                 it.source.sendMessage(coloredText("Original mod by ").append(coloredText("IterationFunk", true)))
                 it.source.sendMessage(coloredText("Reimagining/port by ").append(coloredText(authors, true)))
                 it.source.sendMessage(coloredText("With contributions of ").append(coloredText(contributors, true)))
-                it.source.sendMessage(Text.empty())
-                it.source.sendMessage(
-                    hyperlink("CurseForge", "https://curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated", 0xF46434).append(
-                    " ").append(
-                    hyperlink("Modrinth", "https://modrinth.com/mod/deep-mob-learning-refabricated", 0x1CD368)).append(
-                    " ").append(
-                    hyperlink("Issue Tracker", "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/issues", 0x6E5494))
-                )
+                if(it.source.isExecutedByPlayer) {
+                    it.source.sendMessage(Text.empty())
+                    it.source.sendMessage(
+                        hyperlink("CurseForge", "https://curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated", 0xF46434).append(
+                        " ").append(
+                        hyperlink("Modrinth", "https://modrinth.com/mod/deep-mob-learning-refabricated", 0x1CD368)).append(
+                        " ").append(
+                        hyperlink("Issue Tracker", "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/issues", 0x6E5494))
+                    )
+                }
 
 
                 return@executes 1
