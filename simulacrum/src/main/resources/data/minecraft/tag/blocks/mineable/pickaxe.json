@@ -1,9 +1,0 @@
-{
-  "replace": "false",
-  "values": [
-    {
-      "id": "dml-refabricated:simulation_chamber",
-      "required": false
-    }
-  ]
-}
