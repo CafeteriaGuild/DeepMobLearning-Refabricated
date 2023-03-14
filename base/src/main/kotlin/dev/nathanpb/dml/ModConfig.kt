@@ -87,7 +87,6 @@ class LootFabricator {
 
 
 class DataModel {
-
     var basicDataRequired = 8
     var advancedDataRequired = 16
     var superiorDataRequired = 32
@@ -172,7 +171,7 @@ class SimulationChamber {
     var netherEnergyCost = 300
     var endEnergyCost = 512
 
-    var dataBonus = -1
+    var dataBonus = 1
 }
 
 class MatterXP {
