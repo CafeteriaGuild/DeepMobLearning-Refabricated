@@ -7,7 +7,6 @@ import dev.nathanpb.dml.simulacrum.SIMULATION_CHAMBER_ENTITY
 import dev.nathanpb.dml.simulacrum.item.ItemMatter
 import dev.nathanpb.dml.simulacrum.item.POLYMER_CLAY
 import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber
-import dev.nathanpb.dml.simulacrum.util.Animation
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil.Companion.dataModel2MatterMap
 import dev.nathanpb.dml.simulacrum.util.ImplementedInventory
@@ -46,11 +45,9 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     var percentDone = 0
     var isCrafting = false
         private set
-    private var byproductSuccess = false
+    var byproductSuccess = false
     private var currentDataModelType = ""
     var energyStorage = SimpleEnergyStorage(2000000, 25600, 0)
-    private var simulationText = HashMap<String?, String?>()
-    private var simulationAnimations: HashMap<String, Animation> = HashMap<String, Animation>()
 
     var propertyDelegate: PropertyDelegate = object : PropertyDelegate {
         override fun get(index: Int): Int {
@@ -71,25 +68,8 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         world!!.updateListeners(getPos(), state, state, 3)
     }
 
-    private fun dataModelTypeChanged(): Boolean {
+    fun dataModelTypeChanged(): Boolean {
         return currentDataModelType != DataModelUtil.getEntityCategory(dataModel).toString()
-    }
-
-    fun createTagFromSimText(): NbtCompound {
-        val tag = NbtCompound()
-        simulationText.forEach { (key: String?, value: String?) ->
-            tag.putString(
-                key,
-                value
-            )
-        }
-        return tag
-    }
-
-    fun getSimTextfromTag(tag: NbtCompound) {
-        simulationText.forEach { (key: String?, _: String?) ->
-            simulationText[key] = tag.getString(key)
-        }
     }
 
     override fun readNbt(compound: NbtCompound) {
@@ -99,7 +79,6 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         isCrafting = compound.getBoolean("isCrafting")
         percentDone = compound.getInt("percentDone")
         currentDataModelType = compound.getString("currentDataModelType")
-        getSimTextfromTag(compound.getCompound("simulationText"))
         Inventories.readNbt(compound, inventory)
     }
 
@@ -110,7 +89,6 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         compound.putBoolean("isCrafting", isCrafting)
         compound.putInt("percentDone", percentDone)
         compound.putString("currentDataModelType", currentDataModelType)
-        compound.put("simulationText", createTagFromSimText())
         Inventories.writeNbt(compound, inventory)
     }
 
@@ -132,81 +110,13 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         return nbt
     }
 
-    private fun updateSimulationText(stack: ItemStack) {
-        val lines = arrayOf(
-            "text.dml-refabricated.simulation_chamber.sim.1",
-            "text.dml-refabricated.simulation_chamber.sim.2",
-            "text.dml-refabricated.simulation_chamber.sim.3",
-            "text.dml-refabricated.simulation_chamber.sim.4",
-            "text.dml-refabricated.simulation_chamber.sim.5",
-            "text.dml-refabricated.simulation_chamber.sim.6",
-            "text.dml-refabricated.simulation_chamber.sim.7",
-            if (byproductSuccess) "text.dml-refabricated.simulation_chamber.succeeded" else "text.dml-refabricated.simulation_chamber.fail",
-            "text.dml-refabricated.simulation_chamber.sim.8",
-            "..."
-        )
-        val resultPrefix = if (byproductSuccess) "§a" else "§c"
-        val aLine1: Animation? = getAnimation("simulationProgressLine1")
-        val aLine1Version: Animation? = getAnimation("simulationProgressLine1Version")
-        val aLine2: Animation? = getAnimation("simulationProgressLine2")
-        val aLine3: Animation? = getAnimation("simulationProgressLine3")
-        val aLine4: Animation? = getAnimation("simulationProgressLine4")
-        val aLine5: Animation? = getAnimation("simulationProgressLine5")
-        val aLine6: Animation? = getAnimation("simulationProgressLine6")
-        val aLine6Result: Animation? = getAnimation("simulationProgressLine6Result")
-        val aLine7: Animation? = getAnimation("simulationProgressLine7")
-        val aLine8: Animation? = getAnimation("blinkingDots1")
-        simulationText["simulationProgressLine1"] = animate(lines[0], aLine1, null, 1, false)
-        simulationText["simulationProgressLine1Version"] =
-            "§6" + animate(lines[1], aLine1Version, aLine1, 1, false) + "§r"
-        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false, (DataModelUtil.getSimulationCount(stack) + 1))
-        simulationText["simulationProgressLine3"] = animate(lines[3], aLine3, aLine2, 2, false)
-        simulationText["simulationProgressLine4"] = animate(lines[4], aLine4, aLine3, 1, false)
-        simulationText["simulationProgressLine5"] = animate(lines[5], aLine5, aLine4, 2, false)
-        simulationText["simulationProgressLine6"] = animate(lines[6], aLine6, aLine5, 2, false)
-        simulationText["simulationProgressLine6Result"] =
-            resultPrefix + animate(lines[7], aLine6Result, aLine6, 2, false) + "§r"
-        simulationText["simulationProgressLine7"] = animate(lines[8], aLine7, aLine6Result, 1, false)
-        simulationText["blinkingDots1"] = animate(lines[9], aLine8, aLine7, 8, true)
-    }
-
-    private fun animate(string: String, anim: Animation?, precedingAnim: Animation?, delayInTicks: Int, loop: Boolean): String? {
-        return animate(string, anim, precedingAnim, delayInTicks, loop, -1)
-    }
-
-    private fun animate(string: String, anim: Animation?, precedingAnim: Animation?, delayInTicks: Int, loop: Boolean, intArg: Int): String? {
-        return if (precedingAnim != null) {
-            if (precedingAnim.hasFinished()) {
-                anim?.animate(string, delayInTicks, world!!.levelProperties.time, loop, intArg)
-            } else {
-                ""
-            }
-        } else anim?.animate(string, delayInTicks, world!!.levelProperties.time, loop, intArg)
-    }
-
-    private fun getAnimation(key: String): Animation? {
-        if (!simulationAnimations.containsKey(key)) {
-            simulationAnimations[key] = Animation()
-        }
-        return simulationAnimations[key]
-    }
-
-    fun getSimulationText(key: String): String? {
-        if (!simulationText.containsKey(key)) {
-            simulationText[key] = ""
-        }
-        return simulationText[key]
-    }
-
     private fun startSimulation() {
         isCrafting = true
         currentDataModelType = DataModelUtil.getEntityCategory(dataModel).toString()
         inventory[1].count = polymerClay.count - 1
-        resetAnimations()
     }
 
     private fun finishSimulation(abort: Boolean) {
-        resetAnimations()
         percentDone = 0
         isCrafting = false
         // Only decrease input and increase output if not aborted, and only if on the server's BE
@@ -230,11 +140,11 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         }
     }
 
-    private fun canStartSimulation(): Boolean {
+    fun canStartSimulation(): Boolean {
         return hasEnergyForSimulation() && canContinueSimulation() && !outputIsFull() && !pristineIsFull() && hasPolymerClay()
     }
 
-    private fun canContinueSimulation(): Boolean {
+    fun canContinueSimulation(): Boolean {
         return hasDataModel() && !DataModelUtil.getTier(dataModel).toString().equals("faulty", ignoreCase = true)
     }
 
@@ -247,10 +157,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         }
     }
 
-    fun resetAnimations() {
-        simulationAnimations = HashMap<String, Animation>()
-        simulationText = HashMap()
-    }
+
 
     val dataModel: ItemStack
         get() = getStack(0)
@@ -361,7 +268,6 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
                         blockEntity.finishSimulation(true)
                         return
                     }
-                    blockEntity.updateSimulationText(blockEntity.dataModel)
                     if (blockEntity.percentDone == 0) {
                         val rand = Random()
                         val num = rand.nextInt(100)
