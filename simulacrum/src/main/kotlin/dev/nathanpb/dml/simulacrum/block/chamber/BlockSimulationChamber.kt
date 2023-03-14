@@ -17,7 +17,7 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-@Suppress("DEPRECATION")
+@Suppress("deprecated")
 class BlockSimulationChamber : BlockWithEntity(FabricBlockSettings.of(Material.STONE).hardness(4F).resistance(3000F)) {
 
 
@@ -78,5 +78,5 @@ class BlockSimulationChamber : BlockWithEntity(FabricBlockSettings.of(Material.S
         }
     }
 
-    private var facing: DirectionProperty = Properties.HORIZONTAL_FACING
+    private val facing: DirectionProperty = Properties.HORIZONTAL_FACING
 }

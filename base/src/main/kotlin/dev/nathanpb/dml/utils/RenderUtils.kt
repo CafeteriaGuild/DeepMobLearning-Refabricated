@@ -39,7 +39,9 @@ class RenderUtils {
 
     companion object {
         private const val TITLE_COLOR: Int = 0x04FCC4
+        private const val ALT_TITLE_COLOR: Int = 0x62D8FF
         val STYLE: Style = Style.EMPTY.withColor(TITLE_COLOR)
+        val ALT_STYLE: Style = Style.EMPTY.withColor(ALT_TITLE_COLOR)
         val DEFAULT_BACKGROUND_PAINTER: NinePatchBackgroundPainter by lazy {
             BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
         }

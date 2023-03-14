@@ -36,22 +36,22 @@ val SCS_HANDLER_TYPE: ScreenHandlerType<ScreenHandlerSimulationChamber> = Screen
 }
 
 var PRISTINE_CHANCE = hashMapOf(
-    "BASIC" to config.pristineChance.basic,
-    "ADVANCED" to config.pristineChance.advanced,
-    "SUPERIOR" to config.pristineChance.superior,
-    "SELF_AWARE" to config.pristineChance.self_aware
+    "BASIC" to config.simulationChamber.basicTierPristineChance,
+    "ADVANCED" to config.simulationChamber.advancedTierPristineChance,
+    "SUPERIOR" to config.simulationChamber.superiorTierPristineChance,
+    "SELF_AWARE" to config.simulationChamber.selfAwareTierPristineChance
 )
 
 var ENERGY_COST = hashMapOf(
-    "NETHER" to config.energyCost.nether,
-    "SLIMY" to config.energyCost.slimy,
-    "OVERWORLD" to config.energyCost.overworld,
-    "ZOMBIE" to config.energyCost.zombie,
-    "SKELETON" to config.energyCost.skeleton,
-    "END" to config.energyCost.end,
-    "GHOST" to config.energyCost.ghost,
-    "ILLAGER" to config.energyCost.illager,
-    "OCEAN" to config.energyCost.ocean
+    "NETHER" to config.simulationChamber.netherEnergyCost,
+    "SLIMY" to config.simulationChamber.slimyEnergyCost,
+    "OVERWORLD" to config.simulationChamber.overworldEnergyCost,
+    "ZOMBIE" to config.simulationChamber.zombieEnergyCost,
+    "SKELETON" to config.simulationChamber.skeletonEnergyCost,
+    "END" to config.simulationChamber.endEnergyCost,
+    "GHOST" to config.simulationChamber.ghostEnergyCost,
+    "ILLAGER" to config.simulationChamber.illagerEnergyCost,
+    "OCEAN" to config.simulationChamber.oceanEnergyCost
 )
 
 @Suppress("unused")
