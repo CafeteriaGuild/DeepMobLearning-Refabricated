@@ -4,7 +4,7 @@
 
 Deep Mob Learning: Refabricated is a parallel version of Deep Mob Learning Minecraft Mod (originally authored by [xt9](https://github.com/xt9/DeepMobLearning)) made to Fabric Mod Loader.
 
-The main theme of this mod (by "this" I mean the version you can find in this repository) is providing cool ways to acquire mob loot. I also have a lot of other plans to implement here and give the mod other purposes too, but since the current stage of the mod is pre-pre-pre-pre alpha thats all I have to offer for now :/
+The main theme of this mod (by "this" I mean the version you can find in this repository) is providing cool ways to acquire mob loot. I also have a lot of other plans to implement here and give the mod other purposes too, but since the current stage of the mod is beta thats all I have to offer for now :/
 
 ## Xt9's Version
 This project is a rework of the original Deep Mob Learning mod, authored by [xt9](https://github.com/xt9/DeepMobLearning).
