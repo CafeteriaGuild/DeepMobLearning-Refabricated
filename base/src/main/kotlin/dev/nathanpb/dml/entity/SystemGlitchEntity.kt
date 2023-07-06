@@ -112,8 +112,8 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         targetSelector.add(2, ActiveTargetGoal(this, PlayerEntity::class.java, true))
         targetSelector.add(3, RevengeGoal(this))
 
-        // rage attacks
-        // ranged attack
+        // TODO rage attacks
+        // TODO ranged attack
     }
 
     /**
@@ -179,8 +179,8 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         }
     }
 
-    override fun applyDamage(source: DamageSource?, amount: Float) {
-        if (source?.isOutOfWorld == false && config.systemGlitch.damageLimiter > 0) {
+    override fun applyDamage(source: DamageSource, amount: Float) {
+        if (source != world.damageSources.outOfWorld() && config.systemGlitch.damageLimiter > 0) {
             super.applyDamage(source, min(amount, config.systemGlitch.damageLimiter))
         } else {
             super.applyDamage(source, amount)

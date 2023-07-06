@@ -43,11 +43,11 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
-import net.minecraft.util.registry.Registry
 import kotlin.properties.Delegates
 
 
@@ -165,7 +165,7 @@ class DeepLearnerScreenHandler (
         }
 
         val showcaseEntities: MutableList<EntityType<*>> = arrayListOf()
-        Registry.ENTITY_TYPE.iterateEntries(currentDataModel?.category?.tagKey).forEach {
+        Registries.ENTITY_TYPE.iterateEntries(currentDataModel?.category?.tagKey).forEach {
             showcaseEntities.add(it.value())
         }
 

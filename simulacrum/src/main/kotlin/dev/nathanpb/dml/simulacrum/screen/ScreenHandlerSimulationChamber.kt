@@ -82,7 +82,7 @@ class ScreenHandlerSimulationChamber(syncId: Int, playerInventory: PlayerInvento
         }
     }
 
-    override fun transferSlot(player: PlayerEntity, index: Int): ItemStack {
+    override fun quickMove(player: PlayerEntity, index: Int): ItemStack {
         var newStack = ItemStack.EMPTY
         if (!world.isClient) {
             val slot = slots[index]

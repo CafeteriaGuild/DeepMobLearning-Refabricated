@@ -29,25 +29,26 @@ import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
+import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 class CrushingRecipe (
     private val id: Identifier,
     val input: Ingredient,
     val block: Block,
-    private val output: ItemStack
+    val output: ItemStack
 ) : Recipe<SimpleInventory> {
 
     override fun getId() = id
     override fun getType() = RECIPE_CRUSHING
     override fun fits(width: Int, height: Int) = true
     override fun getSerializer() = CRUSHING_RECIPE_SERIALIZER
-    override fun getOutput() = output
+    override fun getOutput(registry: DynamicRegistryManager) = output
 
-    override fun craft(inv: SimpleInventory): ItemStack {
-        return getOutput().copy().also {
+    override fun craft(inv: SimpleInventory, registry: DynamicRegistryManager): ItemStack {
+        return getOutput(registry).copy().also {
             inv.items().firstOrNull {
                 input.test(it)
             }?.decrement(1)
@@ -61,7 +62,7 @@ class CrushingRecipe (
     class Serializer : RecipeSerializer<CrushingRecipe> {
         override fun write(buf: PacketByteBuf, recipe: CrushingRecipe) {
             recipe.input.write(buf)
-            buf.writeIdentifier(Registry.BLOCK.getId(recipe.block))
+            buf.writeIdentifier(Registries.BLOCK.getId(recipe.block))
             buf.writeItemStack(recipe.output)
         }
 
@@ -69,7 +70,7 @@ class CrushingRecipe (
             return CrushingRecipe(
                 id,
                 Ingredient.fromPacket(buf),
-                Registry.BLOCK[buf.readIdentifier()],
+                Registries.BLOCK[buf.readIdentifier()],
                 buf.readItemStack()
             )
         }
@@ -78,7 +79,7 @@ class CrushingRecipe (
             return CrushingRecipe(
                 id,
                 Ingredient.fromJson(json.getAsJsonObject("input")),
-                Registry.BLOCK[Identifier(json.getAsJsonPrimitive("block").asString)],
+                Registries.BLOCK[Identifier(json.getAsJsonPrimitive("block").asString)],
                 ShapedRecipe.outputFromJson(json.getAsJsonObject("output"))
             )
         }

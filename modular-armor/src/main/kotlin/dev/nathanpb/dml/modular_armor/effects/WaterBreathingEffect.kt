@@ -31,7 +31,7 @@ import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.tag.FluidTags
+import net.minecraft.registry.tag.FluidTags
 import net.minecraft.text.Text
 
 class WaterBreathingEffect : StatusEffectLikeEffect(

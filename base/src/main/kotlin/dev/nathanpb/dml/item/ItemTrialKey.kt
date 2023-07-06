@@ -22,6 +22,7 @@ package dev.nathanpb.dml.item
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.utils.RenderUtils
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -29,7 +30,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
 
-class ItemTrialKey : Item(settings().maxCount(1).fireproof()) {
+class ItemTrialKey : Item(FabricItemSettings().maxCount(1).fireproof()) {
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,

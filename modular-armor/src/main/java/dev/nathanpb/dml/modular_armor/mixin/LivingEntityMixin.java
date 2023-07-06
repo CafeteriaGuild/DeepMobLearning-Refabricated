@@ -19,7 +19,6 @@ package dev.nathanpb.dml.modular_armor.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import com.mojang.datafixers.util.Pair;
 import dev.nathanpb.dml.item.ItemEmeritusHat;
 import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor;
@@ -39,19 +38,30 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 
+    // FIXME
     @ModifyVariable(
-            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z"),
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F", ordinal = 0),
-                    to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z", ordinal = 0)
-            ),
             method = "travel",
+            at = @At(
+                    target = "Lnet/minecraft/entity/LivingEntity;onGround:Z",
+                    value = "FIELD"
+            ),
+            slice = @Slice(
+                    from = @At(
+                            target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F",
+                            value = "INVOKE",
+                            ordinal = 0
+                    ),
+                    to = @At(
+                            target = "Lnet/minecraft/entity/LivingEntity;onGround:Z",
+                            value = "FIELD",
+                            ordinal = 0
+                    )
+            ),
             ordinal = 2
     )
     public float depthStriderEffectTravelPath(float value) {
@@ -90,14 +100,18 @@ public class LivingEntityMixin {
         }
     }
 
-    @ModifyVariable(
-        at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;"),
-        method = "applyFoodEffects"
+    // FIXME
+    /*@ModifyVariable(
+        method = "applyFoodEffects",
+        at = @At(
+            target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;",
+            value = "INVOKE"
+        )
     )
     public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
         return RotResistanceEffect.Companion
             .attemptToCancelHunger((LivingEntity) (Object) this, stack, effects);
-    }
+    }*/
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
     public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float damage2) {

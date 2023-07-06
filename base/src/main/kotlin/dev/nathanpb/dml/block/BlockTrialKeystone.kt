@@ -49,7 +49,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 class BlockTrialKeystone : Block(
-    FabricBlockSettings.of(Material.STONE)
+    FabricBlockSettings.create()
         .hardness(4F)
         .resistance(3000F)
 ), BlockEntityProvider {

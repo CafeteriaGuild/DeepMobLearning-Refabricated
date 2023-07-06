@@ -15,10 +15,11 @@ import net.minecraft.state.property.Properties
 import net.minecraft.util.*
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
 @Suppress("deprecated")
-class BlockSimulationChamber : BlockWithEntity(FabricBlockSettings.of(Material.STONE).hardness(4F).resistance(3000F)) {
+class BlockSimulationChamber : BlockWithEntity(FabricBlockSettings.create().hardness(4F).resistance(3000F)) {
 
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos?, player: PlayerEntity, hand: Hand?, hit: BlockHitResult?): ActionResult {
@@ -52,7 +53,15 @@ class BlockSimulationChamber : BlockWithEntity(FabricBlockSettings.of(Material.S
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState? {
-        return defaultState.with(facing, ctx.playerFacing.opposite)
+        var blockState = defaultState
+
+        for(direction in ctx.placementDirections) {
+            if(direction.axis.isHorizontal) {
+                blockState = blockState.with(HorizontalFacingBlock.FACING, direction.opposite)
+                if(blockState.canPlaceAt(ctx.world, ctx.blockPos)) return blockState
+            }
+        }
+        return blockState.with(HorizontalFacingBlock.FACING, Direction.NORTH)
     }
 
     override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos?, newState: BlockState, moved: Boolean) {

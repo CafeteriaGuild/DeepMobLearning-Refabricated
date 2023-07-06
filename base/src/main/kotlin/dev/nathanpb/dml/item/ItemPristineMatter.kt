@@ -19,11 +19,12 @@
 
 package dev.nathanpb.dml.item
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Rarity
 
-class ItemPristineMatter : Item(settings().fireproof()) {
+class ItemPristineMatter : Item(FabricItemSettings().fireproof()) {
     override fun hasGlint(stack: ItemStack?) = true
 
     override fun getRarity(stack: ItemStack?) = Rarity.UNCOMMON

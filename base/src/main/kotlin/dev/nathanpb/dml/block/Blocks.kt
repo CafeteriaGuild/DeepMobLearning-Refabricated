@@ -20,10 +20,11 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.settings
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.BlockItem
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.util.Rarity
-import net.minecraft.util.registry.Registry
 
 val BLOCK_TRIAL_KEYSTONE = BlockTrialKeystone()
 val BLOCK_LOOT_FABRICATOR = BlockLootFabricator()
@@ -36,7 +37,7 @@ fun registerBlocks() {
         BLOCK_CAFETERIA to "cafeteria"
     ).forEach { (block, id) ->
         val identifier = identifier(id)
-        Registry.register(Registry.BLOCK, identifier, block)
-        Registry.register(Registry.ITEM, identifier, BlockItem(block, settings().rarity(if(block == BLOCK_CAFETERIA) Rarity.EPIC else Rarity.UNCOMMON))) // This is a bad way to do it, but it's fine for now
+        Registry.register(Registries.BLOCK, identifier, block)
+        Registry.register(Registries.ITEM, identifier, BlockItem(block, FabricItemSettings().rarity(if(block == BLOCK_CAFETERIA) Rarity.EPIC else Rarity.UNCOMMON))) // This is a bad way to do it, but it's fine for now
     }
 }

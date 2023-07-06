@@ -24,12 +24,13 @@ import net.minecraft.item.ArmorItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import java.util.EnumMap;
 import java.util.UUID;
 
 @Mixin(ArmorItem.class)
 public interface IArmorItemMixin {
     @Accessor("MODIFIERS")
-    static UUID[] dmlRefGetModifierUUIDs() {
+    static EnumMap<ArmorItem.Type, UUID> dmlRefGetModifierUUIDs() {
         return null;
     }
 }

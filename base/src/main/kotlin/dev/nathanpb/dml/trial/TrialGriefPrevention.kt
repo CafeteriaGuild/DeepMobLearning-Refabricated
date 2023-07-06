@@ -31,13 +31,13 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.EndermanEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.Registries
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
 import net.minecraft.world.explosion.ExplosionBehavior
@@ -68,7 +68,7 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
             && world.getBlockState(pos)?.run {
                 block !== Blocks.CHEST
                 && block !== Blocks.TRAPPED_CHEST
-                && "grave" !in Registry.BLOCK.getId(block).path
+                && "grave" !in Registries.BLOCK.getId(block).path
             } != false
         ) {
             ActionResult.FAIL
@@ -93,15 +93,15 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
         pos: BlockPos,
         power: Float,
         createFire: Boolean,
-        destructionType: Explosion.DestructionType?
+        destructionType: World.ExplosionSourceType
     ): ActionResult {
         if (
             !world.isClient
             && config.trial.explosionGriefPrevention
-            && destructionType != Explosion.DestructionType.NONE
+            && destructionType != World.ExplosionSourceType.NONE
             && isBlockProtected(world, pos)
         ) {
-            world.createExplosion(entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), power, createFire, Explosion.DestructionType.NONE)
+            world.createExplosion(entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), power, createFire, World.ExplosionSourceType.NONE)
             return ActionResult.FAIL
         }
         return ActionResult.PASS

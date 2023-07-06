@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.item
 
 import dev.nathanpb.dml.screen.handler.DeepLearnerScreenHandlerFactory
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -28,7 +29,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class ItemDeepLearner : Item(settings().maxCount(1).fireproof()) {
+class ItemDeepLearner : Item(FabricItemSettings().maxCount(1).fireproof()) {
 
     override fun use(world: World?, player: PlayerEntity?, hand: Hand): TypedActionResult<ItemStack> {
         (player as? ServerPlayerEntity)?.let {

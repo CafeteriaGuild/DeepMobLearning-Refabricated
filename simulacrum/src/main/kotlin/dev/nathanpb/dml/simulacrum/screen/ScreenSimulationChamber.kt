@@ -9,7 +9,7 @@ import dev.nathanpb.dml.simulacrum.util.Animation
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
@@ -41,22 +41,21 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
     }
 
 
-    override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
+    override fun drawBackground(ctx: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
         val f = DecimalFormat("0.#")
         val x: Int = this.x + 8
         val spacing = 12
         val yStart: Int = y - 3
 
         //Main Chamber GUI
-        RenderSystem.setShaderTexture(0, gui)
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        drawTexture(matrices, x, y, 0, 0, 216, 141)
-        drawTexture(matrices, x, y + 145, 0, 141, 18, 18)
+        ctx.drawTexture(gui, x, y, 0, 0, 216, 141)
+        ctx.drawTexture(gui, x, y + 145, 0, 141, 18, 18)
 
         //Energy Bar Rendering
         val energyBarHeight: Int = (handler!!.syncedEnergy / (maxEnergy - 64) * 87).toInt().coerceAtLeast(0).coerceAtMost(87)
         val energyBarOffset: Int = 87 - energyBarHeight
-        drawTexture(matrices, x + 203, (y + 48) + energyBarOffset, 25, 141, 7, energyBarHeight)
+        ctx.drawTexture(gui, x + 203, (y + 48) + energyBarOffset, 25, 141, 7, energyBarHeight)
 
 
         val lines: Array<String>
@@ -64,20 +63,20 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
             lines = arrayOf("text.dml-refabricated.simulation_chamber.insert_data_model.1", "text.dml-refabricated.simulation_chamber.insert_data_model.2")
             val a1 = getAnimation("pleaseInsert1")
             val a2 = getAnimation("pleaseInsert2")
-            animateString(matrices, lines[0], a1, null, 1, false, x + 10, yStart + spacing, 0xFFFFFF)
-            animateString(matrices, lines[1], a2, a1, 1, false, x + 10, yStart + spacing * 2, 0xFFFFFF)
+            animateString(ctx, lines[0], a1, null, 1, false, x + 10, yStart + spacing, 0xFFFFFF)
+            animateString(ctx, lines[1], a2, a1, 1, false, x + 10, yStart + spacing * 2, 0xFFFFFF)
         } else if (DataModelUtil.getTier(blockEntity.dataModel) == DataModelTier.FAULTY) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.insuficiente_data.1", "text.dml-refabricated.simulation_chamber.insuficiente_data.2", "text.dml-refabricated.simulation_chamber.insuficiente_data.3")
             val insufData = getAnimation("insufData1")
             val insufData2 = getAnimation("insufData2")
             val insufData3 = getAnimation("insufData3")
-            animateString(matrices, lines[0], insufData, null, 1, false, x + 10, yStart + spacing, 0xFFFFFF)
-            animateString(matrices, lines[1], insufData2, insufData, 1, false, x + 10, yStart + spacing * 2, 0xFFFFFF)
-            animateString(matrices, lines[2], insufData3, insufData2, 1, false, x + 10, yStart + spacing * 3, 0xFFFFFF)
+            animateString(ctx, lines[0], insufData, null, 1, false, x + 10, yStart + spacing, 0xFFFFFF)
+            animateString(ctx, lines[1], insufData2, insufData, 1, false, x + 10, yStart + spacing * 2, 0xFFFFFF)
+            animateString(ctx, lines[2], insufData3, insufData2, 1, false, x + 10, yStart + spacing * 3, 0xFFFFFF)
         } else {
             // Draw current data model data
             if (DataModelUtil.getTier(blockEntity.dataModel) == DataModelTier.SELF_AWARE) {
-                drawTexture(matrices, x + 6, y + 48, 18, 141, 7, 87)
+                ctx.drawTexture(gui, x + 6, y + 48, 18, 141, 7, 87)
             } else {
                 val collectedData = DataModelUtil.getTierCount(blockEntity.dataModel) -
                     (DataModelUtil.getTier(blockEntity.dataModel)?.dataAmount ?: 0)
@@ -85,29 +84,28 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
                     (DataModelUtil.getTier(blockEntity.dataModel)?.dataAmount ?: 0)
                 val experienceBarHeight = (collectedData.toFloat() / tierRoof * 87).toInt()
                 val experienceBarOffset = 87 - experienceBarHeight
-                drawTexture(matrices, x + 6, y + 48 + experienceBarOffset, 18, 141, 7, experienceBarHeight)
+                ctx.drawTexture(gui, x + 6, y + 48 + experienceBarOffset, 18, 141, 7, experienceBarHeight)
             }
-            DrawableHelper.drawTextWithShadow(
-                matrices, renderer, Text.translatable("tooltip.dml-refabricated.data_model.3").copy().append(
+            ctx.drawText(
+                renderer, Text.translatable("tooltip.dml-refabricated.data_model.3").copy().append(
                     DataModelUtil.textTier(blockEntity.dataModel)
-                ), x + 10, yStart + spacing, 0xFFFFFF
+                ), x + 10, yStart + spacing, 0xFFFFFF, true
             )
-            DrawableHelper.drawTextWithShadow(
-                matrices, renderer, Text.translatable("text.dml-refabricated.simulation_chamber.iterations", f.format(
+            ctx.drawText(
+                renderer, Text.translatable("text.dml-refabricated.simulation_chamber.iterations", f.format(
                     DataModelUtil.getSimulationCount(blockEntity.dataModel).toLong())
-                ), x + 10, yStart + spacing * 2, 0xFFFFFF
+                ), x + 10, yStart + spacing * 2, 0xFFFFFF, true
             )
-            DrawableHelper.drawTextWithShadow(
-                matrices, renderer, Text.translatable("text.dml-refabricated.simulation_chamber.pristine_chance",
+            ctx.drawText(
+                renderer, Text.translatable("text.dml-refabricated.simulation_chamber.pristine_chance",
                         PRISTINE_CHANCE[DataModelUtil.getTier(blockEntity.dataModel).toString()]
-                ).append("%"), x + 10, yStart + spacing * 3, 0xFFFFFF
+                ).append("%"), x + 10, yStart + spacing * 3, 0xFFFFFF, true
             )
         }
-        RenderSystem.setShaderTexture(0, defaultGui)
-        drawTexture(matrices, x + 20, y + 145, 0, 0, 176, 90)
+        ctx.drawTexture(defaultGui, x + 20, y + 145, 0, 0, 176, 90)
 
 
-        drawConsoleText(matrices, x, y, spacing)
+        drawConsoleText(ctx, x, y, spacing)
         if(blockEntity.isCrafting) updateSimulationText()
         if((!blockEntity.isCrafting && blockEntity.canStartSimulation()) || hasDataModelChanged() || blockEntity.percentDone == 100) {
             resetAnimations()
@@ -119,7 +117,7 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         simulationText = HashMap<String, String>()
     }
 
-    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
+    override fun drawForeground(ctx: DrawContext, mouseX: Int, mouseY: Int) {
         val x: Int = mouseX - this.x
         val y: Int = mouseY - this.y
         val f = NumberFormat.getNumberInstance(Locale.ENGLISH)
@@ -146,19 +144,19 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
                 } else {
                     tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.missing_data_model"))
                 }
-                renderTooltip(matrices, tooltip, x + 2, y + 2)
+                ctx.drawTooltip(textRenderer, tooltip, x + 2, y + 2)
             } else if (x in 211..219) {
                 // Tooltip for energy
                 tooltip.add(Text.of(f.format(handler!!.syncedEnergy.toLong()) + "/" + f.format(maxEnergy) + " E"))
-                renderTooltip(matrices, tooltip, x - 90, y - 16)
+                ctx.drawTooltip(textRenderer, tooltip, x - 90, y - 16)
             }
         }
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        renderBackground(matrices)
-        super.render(matrices, mouseX, mouseY, delta)
-        drawMouseoverTooltip(matrices, mouseX, mouseY)
+    override fun render(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        renderBackground(ctx)
+        super.render(ctx, mouseX, mouseY, delta)
+        drawMouseoverTooltip(ctx, mouseX, mouseY)
     }
 
     private fun getAnimation(key: String): Animation? {
@@ -168,17 +166,27 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         return simulationAnimations[key]
     }
 
-    private fun animateString(matrices: MatrixStack, string: String, anim: Animation?, precedingAnim: Animation?, delay: Int, loop: Boolean, x: Int, y: Int, color: Int) {
+    private fun animateString(ctx: DrawContext, string: String, anim: Animation?, precedingAnim: Animation?, delay: Int, loop: Boolean, x: Int, y: Int, color: Int) {
         if (precedingAnim != null) {
             if (precedingAnim.hasFinished()) {
                 val result = anim!!.animate(string, delay, world!!.levelProperties.time, loop)
-                DrawableHelper.drawStringWithShadow(matrices, renderer, result, x, y, color)
+                ctx.drawText(
+                    renderer,
+                    result,
+                    x, y,
+                    color, true
+                )
             } else {
                 return
             }
         }
         val result = anim!!.animate(string, delay, world!!.levelProperties.time, loop)
-        DrawableHelper.drawStringWithShadow(matrices, renderer, result, x, y, color)
+        ctx.drawText(
+            renderer,
+            result,
+            x, y,
+            color, true
+        )
     }
 
     private fun animate(string: String, anim: Animation?, precedingAnim: Animation?, delayInTicks: Int, loop: Boolean): String {
@@ -195,97 +203,97 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         } else anim!!.animate(string, delayInTicks, world!!.levelProperties.time, loop, intArg)
     }
 
-    private fun drawConsoleText(matrices: MatrixStack, x: Int, y: Int, spacing: Int) {
+    private fun drawConsoleText(ctx: DrawContext, x: Int, y: Int, spacing: Int) {
         val lines: Array<String>
         if (!blockEntity.hasDataModel() || DataModelUtil.getTier(blockEntity.dataModel) == DataModelTier.FAULTY) {
-            animateString(matrices, "_", getAnimation("blinkingUnderline"), null, 16, true, x + 21, y + 49, 0xFFFFFF)
+            animateString(ctx, "_", getAnimation("blinkingUnderline"), null, 16, true, x + 21, y + 49, 0xFFFFFF)
         } else if (!blockEntity.hasPolymerClay() && !blockEntity.isCrafting) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.missing_polymer", "_")
             val a1 = getAnimation("inputSlotEmpty1")
             val a2 = getAnimation("inputSlotEmpty2")
             val a3 = getAnimation("blinkingUnderline1")
-            animateString(matrices, lines[0], a1, null, 1, false, x + 21, y + 51, 0xFFFFFF)
-            animateString(matrices, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
-            animateString(matrices, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
+            animateString(ctx, lines[0], a1, null, 1, false, x + 21, y + 51, 0xFFFFFF)
+            animateString(ctx, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
+            animateString(ctx, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
         } else if (!hasEnergy() && !blockEntity.isCrafting) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.missing_energy", "_")
             val a1 = getAnimation("lowEnergy1")
             val a2 = getAnimation("lowEnergy2")
             val a3 = getAnimation("blinkingUnderline2")
-            animateString(matrices, lines[0], a1, null, 1, false, x + 21, y + 51, 0xFFFFFF)
-            animateString(matrices, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
-            animateString(matrices, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
+            animateString(ctx, lines[0], a1, null, 1, false, x + 21, y + 51, 0xFFFFFF)
+            animateString(ctx, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
+            animateString(ctx, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
         } else if (blockEntity.outputIsFull() || blockEntity.pristineIsFull()) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.output_full", "_")
             val a1 = getAnimation("outputSlotFilled1")
             val a2 = getAnimation("outputSlotFilled2")
             val a3 = getAnimation("blinkingUnderline3")
-            animateString(matrices, lines[0], a1, null, 1, false, x + 21, y + 51, 0xFFFFFF)
-            animateString(matrices, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
-            animateString(matrices, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
+            animateString(ctx, lines[0], a1, null, 1, false, x + 21, y + 51, 0xFFFFFF)
+            animateString(ctx, lines[1], a2, a1, 1, false, x + 21, y + 51 + spacing, 0xFFFFFF)
+            animateString(ctx, lines[2], a3, a2, 16, true, x + 21, y + 51 + spacing * 2, 0xFFFFFF)
         } else if (blockEntity.isCrafting) {
-            DrawableHelper.drawStringWithShadow(
-                matrices,
+            ctx.drawText(
                 renderer,
                 blockEntity.percentDone.toString() + "%",
                 x + 176,
                 y + 123,
-                0x62D8FF
+                0x62D8FF,
+                true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices,
+            ctx.drawText(
                 renderer,
                 getSimulationText("simulationProgressLine1"),
                 x + 21,
                 y + 51,
-                0xFFFFFF
+                0xFFFFFF,
+                true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices,
+            ctx.drawText(
                 renderer,
                 getSimulationText("simulationProgressLine1Version"),
                 x + 124,
                 y + 51,
-                0xFFFFFF
+                0xFFFFFF,
+                true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices,
+            ctx.drawText(
                 renderer,
                 getSimulationText("simulationProgressLine2"),
                 x + 21,
                 y + 51 + spacing,
-                0xFFFFFF
+                0xFFFFFF,
+                true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("simulationProgressLine3"), x + 21,
-                y + 51 + spacing * 2, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("simulationProgressLine3"), x + 21,
+                y + 51 + spacing * 2, 0xFFFFFF, true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("simulationProgressLine4"), x + 21,
-                y + 51 + spacing * 3, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("simulationProgressLine4"), x + 21,
+                y + 51 + spacing * 3, 0xFFFFFF, true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("simulationProgressLine5"), x + 21,
-                y + 51 + spacing * 4, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("simulationProgressLine5"), x + 21,
+                y + 51 + spacing * 4, 0xFFFFFF, true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("simulationProgressLine6"), x + 21,
-                y + 51 + spacing * 5, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("simulationProgressLine6"), x + 21,
+                y + 51 + spacing * 5, 0xFFFFFF, true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("simulationProgressLine6Result"), x + 140,
-                y + 51 + spacing * 5, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("simulationProgressLine6Result"), x + 140,
+                y + 51 + spacing * 5, 0xFFFFFF, true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("simulationProgressLine7"), x + 21,
-                y + 51 + spacing * 6, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("simulationProgressLine7"), x + 21,
+                y + 51 + spacing * 6, 0xFFFFFF, true
             )
-            DrawableHelper.drawStringWithShadow(
-                matrices, renderer, getSimulationText("blinkingDots1"), x + 128,
-                y + 51 + spacing * 6, 0xFFFFFF
+            ctx.drawText(
+                renderer, getSimulationText("blinkingDots1"), x + 128,
+                y + 51 + spacing * 6, 0xFFFFFF, true
             )
         } else {
-            animateString(matrices, "_", getAnimation("blinkingUnderline"), null, 16, true, x + 21, y + 49, 0xFFFFFF)
+            animateString(ctx, "_", getAnimation("blinkingUnderline"), null, 16, true, x + 21, y + 49, 0xFFFFFF)
         }
     }
 

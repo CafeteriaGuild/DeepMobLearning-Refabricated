@@ -24,6 +24,7 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
 import dev.nathanpb.dml.utils.lerp
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.item.ArmorItem
 import net.minecraft.item.ArmorMaterial
 import net.minecraft.recipe.Ingredient
 import net.minecraft.sound.SoundEvent
@@ -40,7 +41,7 @@ class GlitchArmorMaterial : ArmorMaterial {
 
     override fun getEquipSound(): SoundEvent = SoundEvents.ITEM_ARMOR_EQUIP_GENERIC
 
-    override fun getDurability(slot: EquipmentSlot?) = 1
+    override fun getDurability(type: ArmorItem.Type) = 1
 
     override fun getName() = "glitch"
 
@@ -48,7 +49,7 @@ class GlitchArmorMaterial : ArmorMaterial {
 
     override fun getKnockbackResistance() = 0F
 
-    override fun getProtectionAmount(slot: EquipmentSlot?) = 0
+    override fun getProtection(type: ArmorItem.Type) = 0
 
     override fun getToughness() = 0F
 

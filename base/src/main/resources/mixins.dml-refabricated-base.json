@@ -9,8 +9,10 @@
     "HungerManagerMixin",
     "ICraftingResultSlotMixin",
     "LivingEntityMixin",
+    "LootTableInvoker",
     "PlayerEntityMixin",
     "ServerWorldMixin",
+    "ShapelessRecipeAccessor",
     "SlotMixin",
     "WorldMixin"
   ],

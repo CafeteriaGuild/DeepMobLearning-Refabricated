@@ -32,6 +32,7 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
+import net.minecraft.world.World
 
 abstract class ProtectionLikeEffect(
     id: Identifier,
@@ -60,10 +61,10 @@ abstract class ProtectionLikeEffect(
         return DamageUtil.getInflictedDamage(event.damage, armorValues.toFloat())
     }
 
-    abstract fun protectsAgainst(source: DamageSource): Boolean
+    abstract fun protectsAgainst(world: World, source: DamageSource): Boolean
 
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>): Boolean {
-        return super.canApply(context, payload) && protectsAgainst(payload.value.source)
+        return super.canApply(context, payload) && protectsAgainst(context.player.world, payload.value.source)
     }
 
 }

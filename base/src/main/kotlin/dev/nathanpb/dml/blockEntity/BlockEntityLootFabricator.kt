@@ -21,7 +21,6 @@ package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
-import dev.nathanpb.dml.entity.FakePlayerEntity
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import dev.nathanpb.dml.recipe.RECIPE_LOOT_FABRICATOR
@@ -30,11 +29,12 @@ import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
 import dev.nathanpb.dml.utils.simulateLootDroppedStacks
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
+import net.fabricmc.fabric.api.entity.FakePlayer
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
-import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.damage.DamageSources
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
@@ -42,12 +42,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.recipe.RecipeInputProvider
 import net.minecraft.recipe.RecipeMatcher
+import net.minecraft.registry.Registries
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.collection.DefaultedList
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
-import net.minecraft.world.WorldAccess
+import net.minecraft.util.math.BlockPos import net.minecraft.world.WorldAccess
 
 class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     BlockEntity(BLOCKENTITY_LOOT_FABRICATOR, pos, state),
@@ -111,10 +110,10 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     }
     
     private fun generateLoot(world: ServerWorld, category: EntityCategory): List<ItemStack> {
-        val entityList = Registry.ENTITY_TYPE.iterateEntries(category.tagKey).filter{true}
+        val entityList = Registries.ENTITY_TYPE.iterateEntries(category.tagKey).filter{true}
         return (0 until category.exchangeRatio).map {
             entityList.random().value()
-                .simulateLootDroppedStacks(world, FakePlayerEntity(world, null), DamageSource.GENERIC)
+                .simulateLootDroppedStacks(world, FakePlayer.get(world), world.damageSources.generic())
         }.flatten().let { stacks ->
             SimpleInventory(stacks.size).also { tempInventory ->
                 stacks.forEach { tempInventory.addStack(it) }

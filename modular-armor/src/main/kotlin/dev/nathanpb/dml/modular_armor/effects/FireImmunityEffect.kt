@@ -27,6 +27,8 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.registry.tag.DamageTypeTags
+import net.minecraft.world.World
 
 class FireImmunityEffect : DamageImmunityLikeEffect(
     identifier("fire_immunity"),
@@ -34,7 +36,7 @@ class FireImmunityEffect : DamageImmunityLikeEffect(
     config.glitchArmor.costs::fireImmunity
 ) {
 
-    override fun protectsAgainst(source: DamageSource) = source.isFire
+    override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FIRE)
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)

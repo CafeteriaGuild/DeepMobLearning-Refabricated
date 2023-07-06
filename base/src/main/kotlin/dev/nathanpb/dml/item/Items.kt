@@ -22,20 +22,21 @@ package dev.nathanpb.dml.item
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.text.Text
 import net.minecraft.util.Rarity
-import net.minecraft.util.registry.Registry
 
-val ITEM_GROUP: ItemGroup = FabricItemGroupBuilder.build(identifier("tab_${MOD_ID}")) {
-    ItemStack(ITEM_DML)
-}
 
-fun settings(baseSettings: Item.Settings = Item.Settings()) = baseSettings.apply {
-    group(ITEM_GROUP)
-}
+val ITEM_GROUP_KEY: RegistryKey<ItemGroup> = RegistryKey.of(RegistryKeys.ITEM_GROUP, identifier("tab_${MOD_ID}"))
+
 
 //val ITEM_GUIDE_TABLET = ItemGuideTablet()
 val ITEM_DML = Item(Item.Settings())
@@ -63,15 +64,14 @@ val ITEM_PRISTINE_MATTER_GHOST = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_ILLAGER = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_OCEAN = ItemPristineMatter()
 
-val ITEM_SOOT_REDSTONE = Item(settings())
-val ITEM_SOOT_PLATE = Item(settings())
-val ITEM_SOOT_MACHINE_CASE = Item(settings())
+val ITEM_SOOT_REDSTONE = Item(FabricItemSettings())
+val ITEM_SOOT_PLATE = Item(FabricItemSettings())
+val ITEM_SOOT_MACHINE_CASE = Item(FabricItemSettings())
 
 val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 
-val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings().fireproof().rarity(Rarity.RARE))
-val ITEM_GLITCH_INGOT = Item(settings().fireproof().rarity(Rarity.RARE))
-
+val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(FabricItemSettings().fireproof().rarity(Rarity.RARE))
+val ITEM_GLITCH_INGOT = Item(FabricItemSettings().fireproof().rarity(Rarity.RARE))
 
 fun registerItems() {
     mapOf(
@@ -105,6 +105,13 @@ fun registerItems() {
         ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to "physically_condensed_matrix_fragment",
         ITEM_GLITCH_INGOT to "glitch_ingot"
     ).forEach { (item, id) ->
-        Registry.register(Registry.ITEM, identifier(id), item)
+        Registry.register(Registries.ITEM, identifier(id), item)
     }
+
+    Registry.register(Registries.ITEM_GROUP, ITEM_GROUP_KEY,
+        FabricItemGroup.builder()
+            .icon { ItemStack(ITEM_DML) }
+            .displayName(Text.translatable("itemGroup.${MOD_ID}.tab_${MOD_ID}"))
+            .build()
+    )
 }

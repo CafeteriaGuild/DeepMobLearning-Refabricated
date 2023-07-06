@@ -32,7 +32,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Style
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.Vec3f
+import net.minecraft.util.math.RotationAxis
 import net.minecraft.world.World
 
 class RenderUtils {
@@ -76,9 +76,9 @@ fun drawEntity(
     val matrixStack2 = MatrixStack()
     matrixStack2.translate(0.0, 0.0, 1000.0)
     matrixStack2.scale(size.toFloat(), size.toFloat(), size.toFloat())
-    val quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationZ)
-    val quaternion2 = Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationY)
-    quaternion.hamiltonProduct(quaternion2)
+    val quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(rotationZ)
+    val quaternion2 = RotationAxis.POSITIVE_Y.rotationDegrees(rotationY)
+    // FIXME quaternion.hamiltonProduct(quaternion2)
     matrixStack2.multiply(quaternion)
 
 

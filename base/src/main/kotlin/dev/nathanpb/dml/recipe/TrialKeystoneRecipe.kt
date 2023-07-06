@@ -30,6 +30,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
@@ -55,10 +56,10 @@ class TrialKeystoneRecipe (
     fun copyRewards() = rewards.map(ItemStack::copy)
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun craft(inv: SimpleInventory?): ItemStack = ItemStack.EMPTY
+    override fun craft(inv: SimpleInventory, registry: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun getOutput(): ItemStack = ItemStack.EMPTY
+    override fun getOutput(registry: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
     override fun getId() = id
 

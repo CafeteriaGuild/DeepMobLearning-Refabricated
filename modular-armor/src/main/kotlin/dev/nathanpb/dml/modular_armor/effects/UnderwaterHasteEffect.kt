@@ -30,7 +30,7 @@ import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.tag.FluidTags
+import net.minecraft.registry.tag.FluidTags
 import net.minecraft.text.Text
 
 class UnderwaterHasteEffect : StatusEffectLikeEffect(

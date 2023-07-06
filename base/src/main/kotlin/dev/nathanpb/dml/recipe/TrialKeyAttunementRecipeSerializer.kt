@@ -20,13 +20,14 @@
 package dev.nathanpb.dml.recipe
 
 import com.google.gson.JsonObject
+import dev.nathanpb.dml.mixin.ShapelessRecipeAccessor
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
-import net.minecraft.util.registry.Registry
 
 class TrialKeyAttunementRecipeSerializer : RecipeSerializer<TrialKeyAttuneRecipe> {
 
@@ -35,7 +36,7 @@ class TrialKeyAttunementRecipeSerializer : RecipeSerializer<TrialKeyAttuneRecipe
         recipe.ingredients.forEach {
             it.write(buf)
         }
-        buf.writeItemStack(recipe.output)
+        buf.writeItemStack((recipe as ShapelessRecipeAccessor).output)
     }
 
     override fun read(id: Identifier, json: JsonObject): TrialKeyAttuneRecipe {
@@ -48,7 +49,7 @@ class TrialKeyAttunementRecipeSerializer : RecipeSerializer<TrialKeyAttuneRecipe
         }
 
         val output = json.getAsJsonPrimitive("result").asString.let { itemId ->
-            val item = Registry.ITEM.getOrEmpty(Identifier(itemId))
+            val item = Registries.ITEM.getOrEmpty(Identifier(itemId))
             return@let if (item.isPresent) {
                 ItemStack(item.get())
             } else ItemStack.EMPTY

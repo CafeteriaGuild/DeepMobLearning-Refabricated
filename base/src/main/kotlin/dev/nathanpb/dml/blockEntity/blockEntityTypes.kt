@@ -25,15 +25,16 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
 
 lateinit var BLOCKENTITY_TRIAL_KEYSTONE: BlockEntityType<BlockEntityTrialKeystone>
 lateinit var BLOCKENTITY_LOOT_FABRICATOR: BlockEntityType<BlockEntityLootFabricator>
 
 private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, BlockState)->E) = Registry.register(
-    Registry.BLOCK_ENTITY_TYPE,
-    Registry.BLOCK.getId(block),
+    Registries.BLOCK_ENTITY_TYPE,
+    Registries.BLOCK.getId(block),
     BlockEntityType.Builder.create(builder, block).build(null)
 )
 

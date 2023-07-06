@@ -43,7 +43,7 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
 class BlockLootFabricator : HorizontalFacingBlock (
-    FabricBlockSettings.of(Material.STONE)
+    FabricBlockSettings.create()
         .hardness(4F)
         .resistance(3000F)
 ), InventoryProvider, BlockEntityProvider {
@@ -83,8 +83,16 @@ class BlockLootFabricator : HorizontalFacingBlock (
         builder?.add(Properties.HORIZONTAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext?): BlockState? {
-        return defaultState.with(FACING, ctx?.playerFacing?.opposite)
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
+        var blockState = defaultState
+
+        for(direction in ctx.placementDirections) {
+            if(direction.axis.isHorizontal) {
+                blockState = blockState.with(FACING, direction.opposite)
+                if(blockState.canPlaceAt(ctx.world, ctx.blockPos)) return blockState
+            }
+        }
+        return blockState.with(FACING, Direction.NORTH)
     }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = BlockEntityLootFabricator(pos, state)

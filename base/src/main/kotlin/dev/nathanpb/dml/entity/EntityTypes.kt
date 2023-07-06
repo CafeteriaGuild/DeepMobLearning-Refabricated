@@ -28,7 +28,8 @@ import net.minecraft.client.render.entity.model.EntityModelLayers
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.SpawnGroup
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 
 lateinit var SYSTEM_GLITCH_ENTITY_TYPE: EntityType<SystemGlitchEntity>
 
@@ -38,7 +39,7 @@ private fun registerAttributes() {
 
 fun registerEntityTypes() {
     SYSTEM_GLITCH_ENTITY_TYPE = Registry.register(
-        Registry.ENTITY_TYPE,
+        Registries.ENTITY_TYPE,
         identifier("system_glitch"),
         FabricEntityTypeBuilder
             .create(SpawnGroup.MISC, ::SystemGlitchEntity)
