@@ -34,17 +34,19 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 
     // FIXME
-    @ModifyVariable(
+    /*@ModifyVariable(
             method = "travel",
             at = @At(
                     target = "Lnet/minecraft/entity/LivingEntity;onGround:Z",
@@ -70,7 +72,7 @@ public class LivingEntityMixin {
             return value + dis.getStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
         }
         return value;
-    }
+    }*/
 
     // TODO use ModifyVar as smart guys do
     @Inject(at = @At("RETURN"), method = "tryUseTotem", cancellable = true)

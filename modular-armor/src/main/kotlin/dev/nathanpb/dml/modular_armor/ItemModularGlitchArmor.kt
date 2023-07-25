@@ -26,12 +26,15 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.mixin.IArmorItemMixin
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandlerFactory
 import dev.nathanpb.dml.utils.RenderUtils
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
@@ -53,6 +56,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.math.roundToInt
 
+
 class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
         GlitchArmorMaterial.INSTANCE,
         type,
@@ -60,16 +64,25 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
 ) {
 
     companion object {
-        val HELMET = ItemModularGlitchArmor(Type.HELMET, FabricItemSettings().fireproof())
-        val CHESTPLATE = ItemModularGlitchArmor(Type.CHESTPLATE, FabricItemSettings().fireproof())
-        val LEGGINGS = ItemModularGlitchArmor(Type.LEGGINGS, FabricItemSettings().fireproof())
-        val BOOTS = ItemModularGlitchArmor(Type.BOOTS, FabricItemSettings().fireproof())
+        val GLITCH_HELMET = ItemModularGlitchArmor(Type.HELMET, FabricItemSettings().fireproof())
+        val GLITCH_CHESTPLATE = ItemModularGlitchArmor(Type.CHESTPLATE, FabricItemSettings().fireproof())
+        val GLITCH_LEGGINGS = ItemModularGlitchArmor(Type.LEGGINGS, FabricItemSettings().fireproof())
+        val GLITCH_BOOTS = ItemModularGlitchArmor(Type.BOOTS, FabricItemSettings().fireproof())
 
         fun register() {
-            Registry.register(Registries.ITEM, identifier("glitch_helmet"), HELMET)
-            Registry.register(Registries.ITEM, identifier("glitch_chestplate"), CHESTPLATE)
-            Registry.register(Registries.ITEM, identifier("glitch_leggings"), LEGGINGS)
-            Registry.register(Registries.ITEM, identifier("glitch_boots"), BOOTS)
+            linkedMapOf(
+                "glitch_boots" to GLITCH_BOOTS,
+                "glitch_leggings" to GLITCH_LEGGINGS,
+                "glitch_chestplate" to GLITCH_CHESTPLATE,
+                "glitch_helmet" to GLITCH_HELMET,
+            ).forEach { (id, item) ->
+                Registry.register(Registries.ITEM, identifier(id), item)
+
+                ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+                    it.addAfter(ItemStack(ITEM_GLITCH_INGOT), item)
+                }
+            }
+
         }
 
     }

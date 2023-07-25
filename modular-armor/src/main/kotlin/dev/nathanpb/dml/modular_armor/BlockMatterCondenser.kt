@@ -20,10 +20,14 @@
 
 package dev.nathanpb.dml.modular_armor
 
+import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
+import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor.Companion.GLITCH_BOOTS
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandlerFactory
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
@@ -33,6 +37,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.screen.ScreenHandler
@@ -63,6 +68,10 @@ class BlockMatterCondenser : HorizontalFacingBlock(
         fun register() {
             Registry.register(Registries.BLOCK, IDENTIFIER, BLOCK)
             Registry.register(Registries.ITEM, IDENTIFIER, BlockItem(BLOCK, FabricItemSettings().rarity(Rarity.RARE)))
+
+            ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+                it.addAfter(ItemStack(GLITCH_BOOTS), BLOCK)
+            }
         }
     }
 
