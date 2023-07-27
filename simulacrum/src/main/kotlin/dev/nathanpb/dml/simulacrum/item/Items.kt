@@ -18,10 +18,10 @@ val POLYMER_CLAY = Item(FabricItemSettings())
 
 fun registerItems() {
     linkedMapOf(
-            OVERWORLD_MATTER to "overworld_matter",
-            HELLISH_MATTER to "hellish_matter",
-            EXTRATERRESTRIAL_MATTER to "extraterrestrial_matter",
-            POLYMER_CLAY to "polymer_clay"
+        EXTRATERRESTRIAL_MATTER to "extraterrestrial_matter",
+        HELLISH_MATTER to "hellish_matter",
+        OVERWORLD_MATTER to "overworld_matter",
+        POLYMER_CLAY to "polymer_clay"
     ).forEach { (item, id) ->
         Registry.register(Registries.ITEM, identifier(id), item)
         ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
