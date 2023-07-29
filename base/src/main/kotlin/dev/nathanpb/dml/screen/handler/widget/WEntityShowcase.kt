@@ -60,7 +60,6 @@ class WEntityShowcase(
 
     override fun paint(ctx: DrawContext, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         super.paint(ctx, x, y, mouseX, mouseY)
-        ctx.matrices.push()
 
         val entityType = entityType ?: return
         val world = MinecraftClient.getInstance().world ?: return
@@ -83,7 +82,6 @@ class WEntityShowcase(
             0, 180F,
             (tickCount % 360F) * 2F + 150F
         )
-        ctx.matrices.pop()
 
         // only update at the exact tick the mob changes
         if(tickCount % 3 == 0) {

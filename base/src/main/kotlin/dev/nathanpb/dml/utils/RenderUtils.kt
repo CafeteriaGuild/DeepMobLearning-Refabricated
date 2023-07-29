@@ -78,7 +78,7 @@ fun drawEntity(
     matrixStack2.scale(size.toFloat(), size.toFloat(), size.toFloat())
     val quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(rotationZ)
     val quaternion2 = RotationAxis.POSITIVE_Y.rotationDegrees(rotationY)
-    // FIXME quaternion.hamiltonProduct(quaternion2)
+    quaternion.mul(quaternion2)
     matrixStack2.multiply(quaternion)
 
 
