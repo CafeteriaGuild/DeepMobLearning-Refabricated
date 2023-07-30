@@ -22,6 +22,7 @@ package dev.nathanpb.dml.block
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
 import dev.nathanpb.dml.item.ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT
+import dev.nathanpb.dml.item.ITEM_PRISTINE_MATTER_OVERWORLD
 import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.itemgroup.ITEMS
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
@@ -54,6 +55,6 @@ fun registerBlocks() {
 
     ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
         it.addAfter(ItemStack(ITEM_TRIAL_KEY), BLOCK_TRIAL_KEYSTONE)
-        it.addBefore(ItemStack(ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT), BLOCK_LOOT_FABRICATOR)
+        it.addBefore(ItemStack(ITEM_PRISTINE_MATTER_OVERWORLD), BLOCK_LOOT_FABRICATOR)
     }
 }

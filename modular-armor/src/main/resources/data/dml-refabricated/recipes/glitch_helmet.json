@@ -1,10 +1,13 @@
 {
-  "type": "minecraft:smithing",
+  "type": "minecraft:smithing_transform",
   "base": {
     "item": "minecraft:netherite_helmet"
   },
   "addition": {
     "item": "dml-refabricated:glitch_ingot"
+  },
+  "template": {
+    "item": "dml-refabricated:glitch_upgrade_smithing_template"
   },
   "result": {
     "item": "dml-refabricated:glitch_helmet"
