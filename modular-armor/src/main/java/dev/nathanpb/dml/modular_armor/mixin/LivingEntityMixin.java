@@ -20,7 +20,6 @@ package dev.nathanpb.dml.modular_armor.mixin;
  */
 
 import dev.nathanpb.dml.item.ItemEmeritusHat;
-import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor;
 import dev.nathanpb.dml.modular_armor.effects.RotResistanceEffect;
 import dev.nathanpb.dml.modular_armor.effects.TargetCancellationEffect;
@@ -34,7 +33,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Pair;
+import com.mojang.datafixers.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -102,18 +101,17 @@ public class LivingEntityMixin {
         }
     }
 
-    // FIXME
-    /*@ModifyVariable(
+    @ModifyVariable(
         method = "applyFoodEffects",
         at = @At(
             target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;",
-            value = "INVOKE"
+            value = "STORE"
         )
     )
     public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
         return RotResistanceEffect.Companion
             .attemptToCancelHunger((LivingEntity) (Object) this, stack, effects);
-    }*/
+    }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
     public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float damage2) {
