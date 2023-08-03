@@ -49,7 +49,7 @@ enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->
     }
 
     val text = Text.translatable(textEntry)
-    val glitchUpgradeOddsText = Text.literal("${glitchUpgradeOdds.toInt() * 100}%")
+    val glitchUpgradeOddsText = Text.literal("${(glitchUpgradeOdds * 100).toInt()}%")
     fun isMaxTier() = this == values().last()
     fun nextTierOrCurrent() = if (isMaxTier()) SELF_AWARE else values()[ordinal+1]
     val defaultWaveEntityCount = ceil((ordinal + 1) * 1.5).toInt()
