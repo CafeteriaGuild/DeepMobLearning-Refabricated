@@ -4,7 +4,11 @@ val libguiVersion: String by project
 repositories {
     maven {
         name = "LadySnake"
-        url = uri("https://ladysnake.jfrog.io/artifactory/mods")
+        url = uri("https://maven.ladysnake.org/releases")
+        content {
+            includeGroup("io.github.ladysnake")
+            includeGroupByRegex("io\\.github\\.onyxstudios.*")
+        }
     }
     maven {
         name = "CottonMC"
