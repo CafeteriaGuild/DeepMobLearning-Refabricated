@@ -20,6 +20,7 @@ package dev.nathanpb.dml.modular_armor.mixin;
  */
 
 import dev.nathanpb.dml.item.ItemEmeritusHat;
+import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor;
 import dev.nathanpb.dml.modular_armor.effects.RotResistanceEffect;
 import dev.nathanpb.dml.modular_armor.effects.TargetCancellationEffect;
@@ -44,34 +45,29 @@ import java.util.stream.StreamSupport;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 
-    // FIXME
-    /*@ModifyVariable(
+
+    @ModifyVariable(
             method = "travel",
             at = @At(
-                    target = "Lnet/minecraft/entity/LivingEntity;onGround:Z",
-                    value = "FIELD"
+                    target = "Lnet/minecraft/entity/LivingEntity;isOnGround()Z",
+                    value = "INVOKE"
             ),
             slice = @Slice(
                     from = @At(
                             target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F",
                             value = "INVOKE",
                             ordinal = 0
-                    ),
-                    to = @At(
-                            target = "Lnet/minecraft/entity/LivingEntity;onGround:Z",
-                            value = "FIELD",
-                            ordinal = 0
                     )
             ),
-            ordinal = 2
+            ordinal = 0
     )
     public float depthStriderEffectTravelPath(float value) {
         LivingEntity dis = (LivingEntity) (Object) this;
         if (dis.hasStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT())) {
-            return value + dis.getStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
+            return value + (dis.getStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier() * 0.25F);
         }
         return value;
-    }*/
+    }
 
     // TODO use ModifyVar as smart guys do
     @Inject(at = @At("RETURN"), method = "tryUseTotem", cancellable = true)
