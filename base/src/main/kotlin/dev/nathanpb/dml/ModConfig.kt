@@ -55,6 +55,13 @@ class Trial {
 
     var trialKeyConsume = true
     var trialKeyReturnIfSucceed = true
+
+
+    var faultyGlitchUpgradeOdds = .0
+    var basicGlitchUpgradeOdds = .0
+    var advancedGlitchUpgradeOdds = .15
+    var superiorGlitchUpgradeOdds = .65
+    var selfAwareGlitchUpgradeOdds = 1.0
 }
 
 class TrialAffix {

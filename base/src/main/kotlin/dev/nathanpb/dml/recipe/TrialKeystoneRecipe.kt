@@ -25,9 +25,9 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.utils.takeOrNull
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
@@ -63,8 +63,11 @@ class TrialKeystoneRecipe (
     fun copyRewards(onREI: Boolean): MutableList<ItemStack> {
         val rewardsCopy = rewards.map(ItemStack::copy).toMutableList()
 
-        if(tier.glitchUpgradeOdds > 0 && (Random.nextDouble() < tier.glitchUpgradeOdds || onREI)) {
-            rewardsCopy.add(ItemStack(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE))
+        // Glitch Upgrade
+        if(FabricLoader.getInstance().isModLoaded("dml-refabricated-modular-armor")) { // require modular-armor module
+            if(tier.glitchUpgradeOdds > 0 && (Random.nextDouble() < tier.glitchUpgradeOdds || onREI)) {
+                rewardsCopy.add(ItemStack(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE))
+            }
         }
 
         // TODO System Glitch Head

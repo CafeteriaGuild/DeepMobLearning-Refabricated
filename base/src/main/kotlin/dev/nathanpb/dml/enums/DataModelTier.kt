@@ -27,11 +27,11 @@ import kotlin.math.ceil
 import kotlin.math.max
 
 enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->Int, val glitchUpgradeOdds: Double) {
-    FAULTY("tier.${MOD_ID}.faulty", { 0 }, 0.0),
-    BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired, 0.0),
-    ADVANCED("tier.${MOD_ID}.advanced", config.dataModel::advancedDataRequired, 0.0),
-    SUPERIOR("tier.${MOD_ID}.superior", config.dataModel::superiorDataRequired, 0.65),
-    SELF_AWARE("tier.${MOD_ID}.self_aware", config.dataModel::selfAwareDataRequired, 1.0);
+    FAULTY("tier.${MOD_ID}.faulty", { 0 }, config.trial.faultyGlitchUpgradeOdds),
+    BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired, config.trial.basicGlitchUpgradeOdds),
+    ADVANCED("tier.${MOD_ID}.advanced", config.dataModel::advancedDataRequired, config.trial.advancedGlitchUpgradeOdds),
+    SUPERIOR("tier.${MOD_ID}.superior", config.dataModel::superiorDataRequired, config.trial.superiorGlitchUpgradeOdds),
+    SELF_AWARE("tier.${MOD_ID}.self_aware", config.dataModel::selfAwareDataRequired, config.trial.selfAwareGlitchUpgradeOdds);
 
     val dataAmount: Int
         get() = dataAmountSupplier()
