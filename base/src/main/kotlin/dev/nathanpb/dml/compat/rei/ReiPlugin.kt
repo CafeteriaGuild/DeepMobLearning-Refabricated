@@ -30,6 +30,7 @@ import dev.nathanpb.dml.compat.rei.display.TrialRecipeDisplay
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ITEM_DML
 import dev.nathanpb.dml.item.ITEM_EMERITUS_HAT
+import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -41,6 +42,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.plugins.PluginManager
 import me.shedaniel.rei.api.common.registry.ReloadStage
 import me.shedaniel.rei.api.common.util.EntryStacks
+import net.fabricmc.loader.api.FabricLoader
 
 
 @Suppress("unused")
@@ -83,6 +85,11 @@ class ReiPlugin :  REIClientPlugin {
         val hiddenItems = listOf(ITEM_EMERITUS_HAT, ITEM_DML)
         EntryRegistry.getInstance().removeEntryIf {
             it.itemStack().item in hiddenItems
+        }
+
+        // Glitch Upgrade Smithing Template is only used for Glitch Armor - hide if not present
+        EntryRegistry.getInstance().removeEntryIf {
+            it.itemStack().isOf(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE) && !FabricLoader.getInstance().isModLoaded("dml-refabricated-modular-armor")
         }
     }
 
