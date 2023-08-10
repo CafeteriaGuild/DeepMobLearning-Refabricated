@@ -20,6 +20,7 @@
 
 package dev.nathanpb.dml.modular_armor.screen
 
+import com.sun.java.accessibility.util.SwingEventMonitor.addChangeListener
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
@@ -34,8 +35,10 @@ import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
+import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WListPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
+import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.entity.player.PlayerInventory
@@ -98,7 +101,7 @@ class ModularArmorScreenHandler(
             lastEffectsList!!.validate(this)
         }
 
-        val dataModelSlot = WTooltippedItemSlot.of(blockInventory, 0, Text.translatable("gui.${MOD_ID}.data_model_only")).apply {
+        val dataModelSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
             setFilter {
                 it.isEmpty || (
                         (it.item as? ItemDataModel)?.category != null
@@ -106,6 +109,8 @@ class ModularArmorScreenHandler(
                         )
             }
             addChangeListener { _, _, _, _ -> updateEffectsList()}
+
+            icon = TextureIcon(identifier("textures/gui/slot_background/data_model_slot_background.png"))
         }
 
         root.add(dataModelSlot, 0, 2)

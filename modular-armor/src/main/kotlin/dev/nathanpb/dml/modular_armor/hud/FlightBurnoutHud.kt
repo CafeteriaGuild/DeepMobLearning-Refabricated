@@ -22,8 +22,7 @@ package dev.nathanpb.dml.modular_armor.hud
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.lerp
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.DrawableHelper
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import kotlin.math.roundToInt
 
 class FlightBurnoutHud {
@@ -40,7 +39,7 @@ class FlightBurnoutHud {
     var maxBurnoutTicks = 0
     var canFly = true
 
-    fun render(matrices: MatrixStack) {
+    fun render(ctx: DrawContext) {
         val player = client.player ?: return
         if (maxBurnoutTicks <= 0 || (canFly && !player.abilities.flying)) {
             return
@@ -50,11 +49,10 @@ class FlightBurnoutHud {
 
         val levelAmount = ((maxBurnoutTicks - burnoutTicks) / maxBurnoutTicks.toDouble()).lerp(0.0, 10.0).roundToInt()
         if (levelAmount > 0) {
-            matrices.push()
-            client.textureManager.bindTexture(if(canFly) TEXTURE else TEXTURE_FIRE)
+            ctx.matrices.push()
             (0 until levelAmount).forEach { index ->
-                DrawableHelper.drawTexture(
-                    matrices,
+                ctx.drawTexture(
+                    if(canFly) TEXTURE else TEXTURE_FIRE,
                     centerX + 8 + index * 8,
                     client.window.scaledHeight - 48,
                     0F, 0F,
@@ -62,7 +60,7 @@ class FlightBurnoutHud {
                     8, 8
                 )
             }
-            matrices.pop()
+            ctx.matrices.pop()
         }
 
     }

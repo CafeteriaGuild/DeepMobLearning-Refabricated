@@ -20,10 +20,11 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.Packet
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
+import net.minecraft.registry.Registries
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
@@ -32,7 +33,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import team.reborn.energy.api.base.SimpleEnergyStorage
 import java.util.*
@@ -248,12 +248,12 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         private fun dataModelMatchesOutput(stack: ItemStack, output: ItemStack): Boolean {
             val livingMatter: Item? =
                 dataModel2MatterMap[DataModelUtil.getEntityCategory(stack).toString()]?.type?.matter
-            return Registry.ITEM.getId(livingMatter) == Registry.ITEM.getId(output.item)
+            return Registries.ITEM.getId(livingMatter) == Registries.ITEM.getId(output.item)
         }
 
         private fun dataModelMatchesPristine(stack: ItemStack, pristine: ItemStack): Boolean {
             val pristineMatter: ItemPristineMatter? = dataModel2MatterMap[DataModelUtil.getEntityCategory(stack).toString()]?.pristine
-            return Registry.ITEM.getId(pristineMatter) == Registry.ITEM.getId(pristine.item)
+            return Registries.ITEM.getId(pristineMatter) == Registries.ITEM.getId(pristine.item)
         }
 
         fun tick(world: World, pos: BlockPos?, state: BlockState?, blockEntity: BlockEntitySimulationChamber) {

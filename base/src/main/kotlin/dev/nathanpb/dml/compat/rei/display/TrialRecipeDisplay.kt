@@ -21,14 +21,17 @@ package dev.nathanpb.dml.compat.rei.display
 
 import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.data.TrialKeyData
+import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.utils.RenderUtils
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.Display
 import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.util.EntryIngredients
 import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.item.ItemStack
+import net.minecraft.text.Text
 
 class TrialRecipeDisplay (
     private val recipe: TrialKeystoneRecipe
@@ -47,8 +50,19 @@ class TrialRecipeDisplay (
         )
     )
 
-    override fun getOutputEntries() = recipe.copyRewards()
-        .map(EntryStacks::of)
-        .map(EntryIngredient::of)
+    override fun getOutputEntries(): List<EntryIngredient> {
+        val rewards = recipe.copyRewards(true).map(EntryStacks::of)
+
+        rewards.find {
+            stack -> stack.value.isOf(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE)
+        }?.tooltip((recipe.tier.glitchUpgradeOddsText).styled { RenderUtils.STYLE })
+
+        // TODO System Glitch Head
+        /*rewards.find {
+            stack -> stack.value.isOf(SYSTEM_GLITCH_HEAD.asItem())
+        }?.tooltip(Text.literal("15%").styled { RenderUtils.STYLE })*/
+
+        return rewards.map(EntryIngredient::of)
+    }
 
 }

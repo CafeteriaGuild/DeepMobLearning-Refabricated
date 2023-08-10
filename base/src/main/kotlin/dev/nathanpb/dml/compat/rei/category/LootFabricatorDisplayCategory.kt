@@ -36,10 +36,10 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 class LootFabricatorDisplayCategory: DisplayCategory<LootFabricatorRecipeDisplay> {
 
@@ -57,7 +57,7 @@ class LootFabricatorDisplayCategory: DisplayCategory<LootFabricatorRecipeDisplay
         val centerY = bounds.centerY - 8
 
         val entities: MutableList<EntityType<*>> = arrayListOf()
-        Registry.ENTITY_TYPE.iterateEntries(recipeDisplay.recipe.category.tagKey).forEach {
+        Registries.ENTITY_TYPE.iterateEntries(recipeDisplay.recipe.category.tagKey).forEach {
             entities.add(it.value())
         }
 

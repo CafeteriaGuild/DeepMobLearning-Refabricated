@@ -20,11 +20,20 @@
 
 package dev.nathanpb.dml.modular_armor
 
+import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.event.VanillaEvents
+import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
+import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.net.registerServerSidePackets
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 
 @Suppress("unused")
 fun init() {
@@ -40,5 +49,9 @@ fun init() {
 
     VanillaEvents.PlayerEntityTickEvent.register {
         it.flightBurnoutManager.tick()
+    }
+
+    ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+        it.addAfter(ItemStack(ITEM_GLITCH_INGOT), ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE)
     }
 }

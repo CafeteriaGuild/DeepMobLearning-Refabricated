@@ -39,8 +39,8 @@ package dev.nathanpb.dml.modular_armor.mixin;/*
 
 import dev.nathanpb.dml.modular_armor.hud.FlightBurnoutHud;
 import dev.nathanpb.dml.modular_armor.hud.UndyingCooldownHud;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -50,8 +50,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class InGameHudMixin {
 
     @Inject(at = @At("RETURN"), method = "renderStatusBars")
-    public void renderStatusBar(MatrixStack matrices, CallbackInfo ci){
-        FlightBurnoutHud.Companion.getINSTANCE().render(matrices);
-        UndyingCooldownHud.Companion.getINSTANCE().render(matrices);
+    public void renderStatusBar(DrawContext ctx, CallbackInfo ci){
+        FlightBurnoutHud.Companion.getINSTANCE().render(ctx);
+        UndyingCooldownHud.Companion.getINSTANCE().render(ctx);
     }
 }

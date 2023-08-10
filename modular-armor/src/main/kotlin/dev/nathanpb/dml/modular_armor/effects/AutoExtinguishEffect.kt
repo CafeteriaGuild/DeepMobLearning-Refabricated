@@ -32,8 +32,10 @@ import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
+import net.minecraft.world.World
 
 class AutoExtinguishEffect : ProtectionLikeEffect(
     identifier("auto_extinguish"),
@@ -56,7 +58,7 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
         }
     }
 
-    override fun protectsAgainst(source: DamageSource) = source.isFire
+    override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FIRE)
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.ordinal >= 2

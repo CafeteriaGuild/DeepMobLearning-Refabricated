@@ -26,18 +26,24 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BowItem;getPullProgress(I)F"), method = "onStoppedUsing")
-    public float proxyPullProgress(int useTicks, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    @Shadow
+    public abstract int getMaxUseTime(ItemStack stack);
+
+    @ModifyVariable(at = @At(value = "LOAD"), method = "onStoppedUsing")
+    private float loadFloat(float value, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        int useTicks = this.getMaxUseTime(stack) - remainingUseTicks;
+
         if (user instanceof PlayerEntity) {
             float modifier = ArcheryEffect.Companion.bowFastpullLevels((PlayerEntity) user) + 1;
             if (modifier > 1) {
-                float f = (float)useTicks / (20F / modifier);
+                float f = (float) useTicks / (20F / modifier);
                 f = (f * f + f * 2.0F) / 3.0F;
                 if (f > 1.0F) {
                     f = 1.0F;
@@ -46,6 +52,7 @@ public abstract class BowItemMixin {
                 return f;
             }
         }
-        return BowItem.getPullProgress(useTicks);
+
+        return value;
     }
 }

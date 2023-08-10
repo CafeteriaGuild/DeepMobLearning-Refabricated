@@ -21,6 +21,7 @@
 package dev.nathanpb.dml.modular_armor.screen
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.modular_armor.BlockMatterCondenser
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
@@ -30,8 +31,10 @@ import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
+import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
+import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
@@ -61,15 +64,21 @@ class MatterCondenserScreenHandler(
         root.insets = Insets.ROOT_PANEL
 
         val slots = WPlainPanel()
-        val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, Text.translatable("gui.${MOD_ID}.glitch_armor_only")).setFilter {
-            it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
+        val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, true, Text.translatable("gui.${MOD_ID}.glitch_armor_only")).apply {
+            setFilter {
+                it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
+            }
         }
 
         slots.add(armorSlot, 2*18, 2*18)
 
         val matterSlots = (1..6).map {
-            WTooltippedItemSlot.of(blockInventory, it, Text.translatable("gui.${MOD_ID}.pristine_matter_only")).setFilter { stack ->
-                stack.item is ItemPristineMatter
+            WItemSlot(blockInventory, it, 1, 1, false).apply {
+                setFilter { stack ->
+                    stack.item is ItemPristineMatter
+                }
+
+                icon = TextureIcon(identifier("textures/gui/slot_background/pristine_matter_slot_background.png"))
             }
         }
 

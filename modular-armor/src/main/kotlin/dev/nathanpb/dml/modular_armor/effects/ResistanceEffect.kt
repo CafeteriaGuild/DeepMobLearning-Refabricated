@@ -28,6 +28,8 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.registry.tag.DamageTypeTags
+import net.minecraft.world.World
 import kotlin.math.min
 
 class ResistanceEffect : ProtectionLikeEffect(
@@ -36,8 +38,8 @@ class ResistanceEffect : ProtectionLikeEffect(
     config.glitchArmor.costs::resistance
 ) {
 
-    override fun protectsAgainst(source: DamageSource): Boolean {
-        return !source.isUnblockable && !source.isMagic
+    override fun protectsAgainst(world: World, source: DamageSource): Boolean {
+        return !source.isIn(DamageTypeTags.BYPASSES_ARMOR) && !source.isIn(DamageTypeTags.WITCH_RESISTANT_TO)
     }
 
     override fun acceptTier(tier: DataModelTier) = true

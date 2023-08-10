@@ -20,31 +20,35 @@
 package dev.nathanpb.dml.utils
 
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.mixin.LootTableInvoker
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.server.world.ServerWorld
 
-fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEntity?, source: DamageSource): List<ItemStack> {
-    val lootTable = world.server.lootManager?.getTable(lootTableId)
+fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEntity, source: DamageSource): List<ItemStack> {
+    val lootTable = world.server.lootManager.getLootTable(lootTableId)
     val entity = create(world)
-    val lootContext = LootContext.Builder(world).apply {
-        random(player?.random)
-        parameter(LootContextParameters.ORIGIN, entity?.pos)
-        parameter(LootContextParameters.THIS_ENTITY, entity)
-        parameter(LootContextParameters.DAMAGE_SOURCE, source)
 
-        if (player != null) {
-            parameter(LootContextParameters.KILLER_ENTITY, player)
-            parameter(LootContextParameters.LAST_DAMAGE_PLAYER, player)
-        }
+    val parameters = LootContextParameterSet.Builder(world).apply {
+        add(LootContextParameters.ORIGIN, entity?.pos)
+        add(LootContextParameters.THIS_ENTITY, entity)
+        add(LootContextParameters.DAMAGE_SOURCE, source)
+
+        add(LootContextParameters.KILLER_ENTITY, player)
+        add(LootContextParameters.LAST_DAMAGE_PLAYER, player)
     }.build(LootContextTypes.ENTITY)
 
-    val lootList = lootTable?.generateLoot(lootContext)
+    val lootContext = LootContext.Builder(parameters).apply {
+        random(player.lootTableSeed)
+    }.build(null)
+
+    val lootList = (lootTable as LootTableInvoker).invokeGenerateLoot(lootContext)
     lootList?.removeIf { stack: ItemStack -> !stack.isStackable && world.random.nextDouble() < config.lootFabricator.unstackableNullificationChance }
 
     return lootList ?: emptyList()

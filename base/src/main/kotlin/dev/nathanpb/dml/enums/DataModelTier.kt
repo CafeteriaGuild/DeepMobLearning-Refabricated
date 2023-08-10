@@ -26,12 +26,12 @@ import net.minecraft.text.Text
 import kotlin.math.ceil
 import kotlin.math.max
 
-enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->Int) {
-    FAULTY("tier.${MOD_ID}.faulty", { 0 }),
-    BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired),
-    ADVANCED("tier.${MOD_ID}.advanced", config.dataModel::advancedDataRequired),
-    SUPERIOR("tier.${MOD_ID}.superior", config.dataModel::superiorDataRequired),
-    SELF_AWARE("tier.${MOD_ID}.self_aware", config.dataModel::selfAwareDataRequired);
+enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->Int, val glitchUpgradeOdds: Double) {
+    FAULTY("tier.${MOD_ID}.faulty", { 0 }, config.trial.faultyGlitchUpgradeOdds),
+    BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired, config.trial.basicGlitchUpgradeOdds),
+    ADVANCED("tier.${MOD_ID}.advanced", config.dataModel::advancedDataRequired, config.trial.advancedGlitchUpgradeOdds),
+    SUPERIOR("tier.${MOD_ID}.superior", config.dataModel::superiorDataRequired, config.trial.superiorGlitchUpgradeOdds),
+    SELF_AWARE("tier.${MOD_ID}.self_aware", config.dataModel::selfAwareDataRequired, config.trial.selfAwareGlitchUpgradeOdds);
 
     val dataAmount: Int
         get() = dataAmountSupplier()
@@ -49,6 +49,7 @@ enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->
     }
 
     val text = Text.translatable(textEntry)
+    val glitchUpgradeOddsText = Text.literal("${(glitchUpgradeOdds * 100).toInt()}%")
     fun isMaxTier() = this == values().last()
     fun nextTierOrCurrent() = if (isMaxTier()) SELF_AWARE else values()[ordinal+1]
     val defaultWaveEntityCount = ceil((ordinal + 1) * 1.5).toInt()

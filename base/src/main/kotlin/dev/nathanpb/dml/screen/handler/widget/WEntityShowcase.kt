@@ -25,7 +25,7 @@ import dev.nathanpb.dml.utils.drawEntity
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.village.VillagerData
@@ -58,9 +58,8 @@ class WEntityShowcase(
 
     override fun canResize() = true
 
-    override fun paint(matrices: MatrixStack, x: Int, y: Int, mouseX: Int, mouseY: Int) {
-        super.paint(matrices, x, y, mouseX, mouseY)
-        matrices.push()
+    override fun paint(ctx: DrawContext, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        super.paint(ctx, x, y, mouseX, mouseY)
 
         val entityType = entityType ?: return
         val world = MinecraftClient.getInstance().world ?: return
@@ -83,7 +82,6 @@ class WEntityShowcase(
             0, 180F,
             (tickCount % 360F) * 2F + 150F
         )
-        matrices.pop()
 
         // only update at the exact tick the mob changes
         if(tickCount % 3 == 0) {

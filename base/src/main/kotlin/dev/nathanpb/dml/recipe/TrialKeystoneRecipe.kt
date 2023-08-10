@@ -23,15 +23,19 @@ import com.google.gson.JsonObject
 import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.utils.takeOrNull
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.ShapedRecipe
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
+import kotlin.random.Random
 
 class TrialKeystoneRecipe (
     private val id: Identifier,
@@ -52,13 +56,36 @@ class TrialKeystoneRecipe (
             .firstOrNull { it.category == data.category && it.tier == data.tier() }
     }
 
-    fun copyRewards() = rewards.map(ItemStack::copy)
+    fun copyRewards(): MutableList<ItemStack> {
+        return copyRewards(false)
+    }
+
+    fun copyRewards(onREI: Boolean): MutableList<ItemStack> {
+        val rewardsCopy = rewards.map(ItemStack::copy).toMutableList()
+
+        // Glitch Upgrade
+        if(FabricLoader.getInstance().isModLoaded("dml-refabricated-modular-armor")) { // require modular-armor module
+            if(tier.glitchUpgradeOdds > 0 && (Random.nextDouble() < tier.glitchUpgradeOdds || onREI)) {
+                rewardsCopy.add(ItemStack(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE))
+            }
+        }
+
+        // TODO System Glitch Head
+        /*
+        if(tier == DataModelTier.SELF_AWARE) {
+            if((Random.nextDouble() < 0.15 || onREI)) {
+                //rewardsCopy.add(ItemStack(SYSTEM_GLITCH_HEAD))
+            }
+        }*/
+
+        return rewardsCopy
+    }
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun craft(inv: SimpleInventory?): ItemStack = ItemStack.EMPTY
+    override fun craft(inv: SimpleInventory, registry: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
     @Deprecated("", ReplaceWith("copyRewards", "dev.nathanpb.dml.recipe"))
-    override fun getOutput(): ItemStack = ItemStack.EMPTY
+    override fun getOutput(registry: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
     override fun getId() = id
 

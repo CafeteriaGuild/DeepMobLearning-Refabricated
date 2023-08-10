@@ -27,6 +27,8 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.registry.tag.DamageTypeTags
+import net.minecraft.world.World
 
 class FallImmunityEffect : DamageImmunityLikeEffect(
     identifier("fall_immunity"),
@@ -38,7 +40,7 @@ class FallImmunityEffect : DamageImmunityLikeEffect(
         return EntityAttributeModifier("dml_fall_immunity", 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
+    override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FALL)
 
     override fun acceptTier(tier: DataModelTier): Boolean {
         return tier.isMaxTier()

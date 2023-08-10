@@ -19,13 +19,32 @@
 
 package dev.nathanpb.dml.item
 
+import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Equipment
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Wearable
+import net.minecraft.sound.SoundEvent
+import net.minecraft.sound.SoundEvents
+import net.minecraft.util.Hand
 import net.minecraft.util.Rarity
+import net.minecraft.util.TypedActionResult
+import net.minecraft.world.World
 
-class ItemEmeritusHat : Item(Settings().maxCount(1).fireproof()), Wearable {
+class ItemEmeritusHat : Item(Settings().maxCount(1).fireproof()), Equipment {
 
-    override fun getRarity(stack: ItemStack?) = Rarity.EPIC
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        return equipAndSwap(this, world, user, hand)
+    }
+
+    override fun getSlotType(): EquipmentSlot {
+        return EquipmentSlot.HEAD
+    }
+
+    override fun getEquipSound(): SoundEvent {
+        return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER
+    }
+
+    override fun getRarity(stack: ItemStack) = Rarity.EPIC
 
 }

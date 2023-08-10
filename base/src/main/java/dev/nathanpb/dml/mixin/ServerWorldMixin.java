@@ -51,18 +51,18 @@ public class ServerWorldMixin {
             double z,
             float power,
             boolean createFire,
-            Explosion.DestructionType destructionType,
+            World.ExplosionSourceType explosionSource,
             CallbackInfoReturnable<Explosion> ci
     ) {
         if (power > 0F) {
             World world = (World) (Object) this;
-            BlockPos pos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
+            BlockPos pos = new BlockPos((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
             ActionResult result = VanillaEvents.INSTANCE.getWorldExplosionEvent()
                 .invoker()
-                .invoke(world, entity, damageSource, behavior, pos, power, createFire, destructionType);
+                .invoke(world, entity, damageSource, behavior, pos, power, createFire, explosionSource);
 
             if (result == ActionResult.FAIL) {
-                Explosion explosion = new Explosion(world, entity, damageSource, behavior, x, y, z, power, createFire, Explosion.DestructionType.NONE);
+                Explosion explosion = new Explosion(world, entity, damageSource, behavior, x, y, z, power, createFire, Explosion.DestructionType.KEEP);
                 ci.setReturnValue(explosion);
                 ci.cancel();
             }

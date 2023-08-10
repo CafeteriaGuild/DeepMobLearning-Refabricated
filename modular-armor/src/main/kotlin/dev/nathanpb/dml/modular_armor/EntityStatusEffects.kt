@@ -22,7 +22,8 @@ package dev.nathanpb.dml.modular_armor
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectCategory
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 
 class UnderwaterHasteEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x46D99C)
 class DepthStriderEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0x02A7D9)
@@ -33,7 +34,7 @@ val DEPTH_STRIDER_EFFECT = register("depth_strider", DepthStriderEffect())
 val SOUL_VISION_EFFECT = register("soul_vision", SoulVisionEffect())
 
 private fun register(idPath: String, entry: StatusEffect): StatusEffect {
-    return Registry.register(Registry.STATUS_EFFECT, Registry.STATUS_EFFECT.toList().size, identifier(idPath).toString(), entry)
+    return Registry.register(Registries.STATUS_EFFECT, Registries.STATUS_EFFECT.toList().size, identifier(idPath).toString(), entry)
 }
 
 fun registerStatusEffects() {

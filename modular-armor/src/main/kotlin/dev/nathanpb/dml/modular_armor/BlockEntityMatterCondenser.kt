@@ -35,10 +35,11 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.WorldAccess
 import kotlin.math.max
 import kotlin.math.min
@@ -93,7 +94,7 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
         }
 
         val BLOCK_ENTITY_TYPE = Registry.register(
-            Registry.BLOCK_ENTITY_TYPE,
+            Registries.BLOCK_ENTITY_TYPE,
             BlockMatterCondenser.IDENTIFIER,
             BlockEntityType.Builder.create(::BlockEntityMatterCondenser, BlockMatterCondenser.BLOCK).build(null)
         )

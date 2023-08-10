@@ -22,20 +22,18 @@ package dev.nathanpb.dml.item
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
+import dev.nathanpb.dml.itemgroup.ITEMS
+import dev.nathanpb.dml.mixin.SmithingTemplateItemAccessor
+import dev.nathanpb.dml.utils.ItemTuple
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.item.SmithingTemplateItem
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Rarity
-import net.minecraft.util.registry.Registry
-
-val ITEM_GROUP: ItemGroup = FabricItemGroupBuilder.build(identifier("tab_${MOD_ID}")) {
-    ItemStack(ITEM_DML)
-}
-
-fun settings(baseSettings: Item.Settings = Item.Settings()) = baseSettings.apply {
-    group(ITEM_GROUP)
-}
 
 //val ITEM_GUIDE_TABLET = ItemGuideTablet()
 val ITEM_DML = Item(Item.Settings())
@@ -63,48 +61,59 @@ val ITEM_PRISTINE_MATTER_GHOST = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_ILLAGER = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_OCEAN = ItemPristineMatter()
 
-val ITEM_SOOT_REDSTONE = Item(settings())
-val ITEM_SOOT_PLATE = Item(settings())
-val ITEM_SOOT_MACHINE_CASE = Item(settings())
+val ITEM_SOOT_REDSTONE = Item(FabricItemSettings())
+val ITEM_SOOT_PLATE = Item(FabricItemSettings())
+val ITEM_SOOT_MACHINE_CASE = Item(FabricItemSettings())
 
 val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 
-val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(settings().fireproof().rarity(Rarity.RARE))
-val ITEM_GLITCH_INGOT = Item(settings().fireproof().rarity(Rarity.RARE))
-
+val ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT = Item(FabricItemSettings().fireproof().rarity(Rarity.RARE))
+val ITEM_GLITCH_INGOT = Item(FabricItemSettings().fireproof().rarity(Rarity.RARE))
+val ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE = SmithingTemplateItem(
+    Text.translatable("item.${MOD_ID}.glitch_upgrade_smithing_template.applies_to").formatted(Formatting.BLUE),
+    Text.translatable("item.${MOD_ID}.glitch_upgrade_smithing_template.ingredients").formatted(Formatting.BLUE),
+    Text.translatable("upgrade.${MOD_ID}.glitch_upgrade").formatted(Formatting.GRAY),
+    Text.translatable("item.${MOD_ID}.glitch_upgrade_smithing_template.base_slot_description"),
+    Text.translatable("item.${MOD_ID}.glitch_upgrade_smithing_template.additions_slot_description"),
+    SmithingTemplateItemAccessor.dml_getArmorTrimEmptyBaseSlotTextures(),
+    SmithingTemplateItemAccessor.dml_getNetheriteUpgradeEmptyAdditionsSlotTextures()
+)
 
 fun registerItems() {
-    mapOf(
-        //ITEM_GUIDE_TABLET to "guide_tablet",
-        ITEM_DML to MOD_ID,
-        ITEM_DEEP_LEARNER to "deep_learner",
-        ITEM_TRIAL_KEY to "trial_key",
-        ITEM_DATA_MODEL to "data_model",
-        ITEM_DATA_MODEL_NETHER to "data_model_nether",
-        ITEM_DATA_MODEL_SLIMY to "data_model_slimy",
-        ITEM_DATA_MODEL_OVERWORLD to "data_model_overworld",
-        ITEM_DATA_MODEL_ZOMBIE to "data_model_zombie",
-        ITEM_DATA_MODEL_SKELETON to "data_model_skeleton",
-        ITEM_DATA_MODEL_END to "data_model_end",
-        ITEM_DATA_MODEL_GHOST to "data_model_ghost",
-        ITEM_DATA_MODEL_ILLAGER to "data_model_illager",
-        ITEM_DATA_MODEL_OCEAN to "data_model_ocean",
-        ITEM_SOOT_REDSTONE to "soot_redstone",
-        ITEM_SOOT_PLATE to "soot_plate",
-        ITEM_SOOT_MACHINE_CASE to "machine_casing",
-        ITEM_PRISTINE_MATTER_NETHER to "pristine_matter_nether",
-        ITEM_PRISTINE_MATTER_SLIMY to "pristine_matter_slimy",
-        ITEM_PRISTINE_MATTER_OVERWORLD to "pristine_matter_overworld",
-        ITEM_PRISTINE_MATTER_ZOMBIE to "pristine_matter_zombie",
-        ITEM_PRISTINE_MATTER_SKELETON to "pristine_matter_skeleton",
-        ITEM_PRISTINE_MATTER_END to "pristine_matter_end",
-        ITEM_PRISTINE_MATTER_GHOST to "pristine_matter_ghost",
-        ITEM_PRISTINE_MATTER_ILLAGER to "pristine_matter_illager",
-        ITEM_PRISTINE_MATTER_OCEAN to "pristine_matter_ocean",
-        ITEM_EMERITUS_HAT to "emeritus_hat",
-        ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to "physically_condensed_matrix_fragment",
-        ITEM_GLITCH_INGOT to "glitch_ingot"
-    ).forEach { (item, id) ->
-        Registry.register(Registry.ITEM, identifier(id), item)
+    linkedMapOf(
+        //ITEM_GUIDE_TABLET to ItemTuple("guide_tablet"),
+        ITEM_DML to ItemTuple(MOD_ID, false),
+        ITEM_DEEP_LEARNER to ItemTuple("deep_learner"),
+        ITEM_DATA_MODEL to ItemTuple("data_model"),
+        ITEM_DATA_MODEL_OVERWORLD to ItemTuple("data_model_overworld"),
+        ITEM_DATA_MODEL_ZOMBIE to ItemTuple("data_model_zombie"),
+        ITEM_DATA_MODEL_SKELETON to ItemTuple("data_model_skeleton"),
+        ITEM_DATA_MODEL_SLIMY to ItemTuple("data_model_slimy"),
+        ITEM_DATA_MODEL_ILLAGER to ItemTuple("data_model_illager"),
+        ITEM_DATA_MODEL_OCEAN to ItemTuple("data_model_ocean"),
+        ITEM_DATA_MODEL_GHOST to ItemTuple("data_model_ghost"),
+        ITEM_DATA_MODEL_NETHER to ItemTuple("data_model_nether"),
+        ITEM_DATA_MODEL_END to ItemTuple("data_model_end"),
+        ITEM_TRIAL_KEY to ItemTuple("trial_key"),
+        ITEM_PRISTINE_MATTER_OVERWORLD to ItemTuple("pristine_matter_overworld"),
+        ITEM_PRISTINE_MATTER_ZOMBIE to ItemTuple("pristine_matter_zombie"),
+        ITEM_PRISTINE_MATTER_SKELETON to ItemTuple("pristine_matter_skeleton"),
+        ITEM_PRISTINE_MATTER_SLIMY to ItemTuple("pristine_matter_slimy"),
+        ITEM_PRISTINE_MATTER_ILLAGER to ItemTuple("pristine_matter_illager"),
+        ITEM_PRISTINE_MATTER_OCEAN to ItemTuple("pristine_matter_ocean"),
+        ITEM_PRISTINE_MATTER_GHOST to ItemTuple("pristine_matter_ghost"),
+        ITEM_PRISTINE_MATTER_NETHER to ItemTuple("pristine_matter_nether"),
+        ITEM_PRISTINE_MATTER_END to ItemTuple("pristine_matter_end"),
+        ITEM_EMERITUS_HAT to ItemTuple("emeritus_hat", false),
+        ITEM_SOOT_REDSTONE to ItemTuple("soot_redstone"),
+        ITEM_SOOT_PLATE to ItemTuple("soot_plate"),
+        ITEM_SOOT_MACHINE_CASE to ItemTuple("machine_casing"),
+        ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to ItemTuple("physically_condensed_matrix_fragment"),
+        ITEM_GLITCH_INGOT to ItemTuple("glitch_ingot"),
+        ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE to ItemTuple("glitch_upgrade_smithing_template", false)
+    ).forEach { (item, tuple) ->
+        Registry.register(Registries.ITEM, identifier(tuple.identifier), item)
+        if(tuple.shown) ITEMS.add(ItemStack(item))
     }
+
 }

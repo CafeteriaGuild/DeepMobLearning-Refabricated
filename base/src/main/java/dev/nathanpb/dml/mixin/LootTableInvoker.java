@@ -1,3 +1,5 @@
+package dev.nathanpb.dml.mixin;
+
 /*
  * Copyright (C) 2020 Nathan P. Bombana, IterationFunk
  *
@@ -17,25 +19,16 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.entity
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContext;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
-import com.mojang.authlib.GameProfile
-import dev.nathanpb.dml.MOD_ID
-import net.minecraft.network.encryption.PlayerPublicKey
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import java.util.*
+@Mixin(LootTable.class)
+public interface LootTableInvoker {
 
-class FakePlayerEntity(world: ServerWorld, publicKey: PlayerPublicKey?) : ServerPlayerEntity(
-    world.server,
-    world,
-    GameProfile(UUID, "${MOD_ID}_fake_player"),
-    publicKey
-) {
-    companion object {
-        val UUID: UUID = java.util.UUID.randomUUID()
-    }
-
-    override fun isSpectator() = true
-    override fun isCreative() = true
+    @Invoker("generateLoot")
+    ObjectArrayList<ItemStack> invokeGenerateLoot(LootContext context);
 }

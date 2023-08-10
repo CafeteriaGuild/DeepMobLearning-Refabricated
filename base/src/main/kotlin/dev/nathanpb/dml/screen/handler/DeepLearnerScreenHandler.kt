@@ -26,7 +26,6 @@ import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.screen.handler.widget.WStylizedButton
 import dev.nathanpb.dml.utils.RenderUtils
@@ -36,18 +35,22 @@ import dev.nathanpb.dml.utils.setStacks
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.*
 import io.github.cottonmc.cotton.gui.widget.data.Insets
+import io.github.cottonmc.cotton.gui.widget.icon.Icon
+import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
-import net.minecraft.util.registry.Registry
 import kotlin.properties.Delegates
 
 
@@ -165,7 +168,7 @@ class DeepLearnerScreenHandler (
         }
 
         val showcaseEntities: MutableList<EntityType<*>> = arrayListOf()
-        Registry.ENTITY_TYPE.iterateEntries(currentDataModel?.category?.tagKey).forEach {
+        Registries.ENTITY_TYPE.iterateEntries(currentDataModel?.category?.tagKey).forEach {
             showcaseEntities.add(it.value())
         }
 
@@ -210,11 +213,7 @@ class DeepLearnerScreenHandler (
         root.add(showcase, 0, 1*18, 3*18, 4*18)
 
         root.add(
-            WTooltippedItemSlot.of(blockInventory, 0, 2, 2, Text.translatable("gui.${MOD_ID}.data_model_only")).apply {
-                setFilter { stack ->
-                    stack.item is ItemDataModel && stack.dataModel.category != null
-                }
-
+            DataModelSlots(blockInventory).apply {
                 addChangeListener { _, inventory, index, stack ->
                     if (stack.isEmpty && index == currentSlot) {
                         currentSlot = inventory.items().mapIndexedNotNull { slotIndex, itemStack ->
@@ -222,6 +221,7 @@ class DeepLearnerScreenHandler (
                         }.closestValue(currentSlot)
                     }
                 }
+
             }, 7*18, 1*18
         )
 
@@ -243,7 +243,7 @@ class DeepLearnerScreenHandler (
             update()
         }
 
-        root.add(this.createPlayerInventoryPanel(), 0, 5*18+6)
+        root.add(createPlayerInventoryPanel(), 0, 5*18+6)
         root.validate(this)
         update()
     }
@@ -257,4 +257,25 @@ class DeepLearnerScreenHandler (
         return RenderUtils.getDefaultTextColor(world)
     }
 
+
+    private class DataModelSlots(
+        inventory: Inventory
+    ): WItemSlot(inventory, 0, 2, 2, false) {
+
+        init {
+            setFilter { stack ->
+                stack.item is ItemDataModel && stack.dataModel.category != null
+            }
+
+            icon = TextureIcon(identifier("textures/gui/slot_background/2x2_data_model_slot_background.png"))
+        }
+
+        // Hacky way to render a TextureIcon on a 2x2 slot, ignore the on-screen warnings
+        override fun paint(context: DrawContext, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+            backgroundPainter?.paintBackground(context, x, y, this)
+
+            icon?.paint(context, x + 1, y + 1, 34)
+        }
+
+    }
 }

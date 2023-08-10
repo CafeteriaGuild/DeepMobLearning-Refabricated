@@ -27,6 +27,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
@@ -43,9 +44,9 @@ class LootFabricatorRecipe (
 
     override fun getType() = RECIPE_LOOT_FABRICATOR
 
-    override fun craft(inv: LootFabricatorInventory): ItemStack = ItemStack.EMPTY
+    override fun craft(inv: LootFabricatorInventory, registry: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
-    override fun getOutput(): ItemStack = ItemStack.EMPTY
+    override fun getOutput(registry: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
     override fun fits(width: Int, height: Int) = true
 

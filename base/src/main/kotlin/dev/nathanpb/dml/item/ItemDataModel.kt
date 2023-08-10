@@ -24,6 +24,7 @@ import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.utils.RenderUtils
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
@@ -35,7 +36,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class ItemDataModel(val category: EntityCategory? = null) : Item(settings().maxCount(1).fireproof()) {
+class ItemDataModel(val category: EntityCategory? = null) : Item(FabricItemSettings().maxCount(1).fireproof()) {
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
