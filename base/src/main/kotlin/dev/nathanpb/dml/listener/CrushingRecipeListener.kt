@@ -29,7 +29,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-class CrushingRecipeListener : AttackBlockCallback {
+class CrushingRecipeListener : AttackBlockCallback {  // FIXME
     override fun interact(
         player: PlayerEntity,
         world: World,
@@ -47,7 +47,7 @@ class CrushingRecipeListener : AttackBlockCallback {
                         .firstOrNull {
                             state.block == it.block && it.matches(inv, world)
                         }?.apply {
-                            player.inventory.offerOrDrop(craft(inv))
+                            player.inventory.offerOrDrop(craft(inv, world.registryManager))
                             return ActionResult.CONSUME
                         }
                 }

@@ -27,7 +27,9 @@ import dev.nathanpb.dml.command.DMLCommand
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.VanillaEvents
+import dev.nathanpb.dml.item.ITEM_DML
 import dev.nathanpb.dml.item.registerItems
+import dev.nathanpb.dml.itemgroup.registerItemGroup
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
@@ -40,7 +42,13 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -86,6 +94,7 @@ val config: ModConfig by lazy {
 fun init() {
     registerItems()
     registerBlocks()
+    registerItemGroup()
     registerBlockEntityTypes()
     registerRecipeSerializers()
     registerRecipeTypes()

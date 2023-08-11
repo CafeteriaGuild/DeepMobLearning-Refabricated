@@ -27,13 +27,15 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.utils.items
-import net.minecraft.inventory.CraftingInventory
 import net.minecraft.inventory.Inventory
+import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.CraftingRecipe
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeType
 import net.minecraft.recipe.ShapelessRecipe
+import net.minecraft.recipe.book.CraftingRecipeCategory
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
@@ -45,12 +47,13 @@ class TrialKeyAttuneRecipe (
 ) : ShapelessRecipe(
     id,
     identifier("trial_key_attune").toString(),
+    CraftingRecipeCategory.MISC,
     output,
     inputs
 ) {
 
-    override fun craft(craftingInventory: CraftingInventory): ItemStack = getOutput().copy().apply {
-        findDataModel(craftingInventory)?.let {
+    override fun craft(recipeInputInventory: RecipeInputInventory, dynamicRegistryManager: DynamicRegistryManager): ItemStack = output.copy().apply {
+        findDataModel(recipeInputInventory)?.let {
             trialKeyData = TrialKeyData.fromDataModelData(it)
         }
     }
@@ -63,9 +66,9 @@ class TrialKeyAttuneRecipe (
 
     override fun getSerializer() = TRIAL_KEY_ATTUNEMENT_SERIALIZER
 
-    override fun getOutput(): ItemStack = output.copy()
+    override fun getOutput(dynamicRegistryManager: DynamicRegistryManager): ItemStack = output.copy()
 
-    override fun matches(craftingInventory: CraftingInventory, world: World): Boolean {
+    override fun matches(craftingInventory: RecipeInputInventory, world: World): Boolean {
         val dataModel = findDataModel(craftingInventory)
         return super.matches(craftingInventory, world)
                 && dataModel != null

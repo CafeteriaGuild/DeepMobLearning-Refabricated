@@ -2,15 +2,16 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [96, 32],
 	"textures": {
-		"0": "dml-refabricated:armor/emeritus_mask",
-		"1": "dml-refabricated:armor/emeritus_hat",
-		"particle": "dml-refabricated:armor/emeritus_mask"
+		"0": "dml-refabricated:item/armor/emeritus_mask",
+		"1": "dml-refabricated:item/armor/emeritus_hat",
+		"particle": "dml-refabricated:item/armor/emeritus_mask"
 	},
 	"elements": [
 		{
 			"name": "mask",
 			"from": [0, 0, 0],
 			"to": [16, 16, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [5.66567, 0, 10.33133, 15.9985], "texture": "#0"},
 				"east": {"uv": [0, 0, 0, 0], "texture": "#0"},
@@ -94,6 +95,7 @@
 			"name": "mask_side",
 			"from": [0, 0, 0],
 			"to": [1, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"east": {"uv": [0, 0, 5.6665, 15.9985], "texture": "#0"},
 				"west": {"uv": [10.1665, 0, 15.9985, 15.9985], "texture": "#0"}
@@ -113,14 +115,12 @@
 	"gui_light": "front",
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [50, 0, -20],
-			"translation": [0, -2, 3.75],
-			"scale": [0.5, 0.5, 0.5]
+			"translation": [0, -2, 0.75],
+			"scale": [0.25, 0.25, 0.25]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [50, 0, -20],
-			"translation": [0, -2, 3.75],
-			"scale": [0.5, 0.5, 0.5]
+			"translation": [0, -2.75, 2],
+			"scale": [0.35, 0.35, 0.35]
 		},
 		"firstperson_righthand": {
 			"rotation": [0, 120, 0],
@@ -136,21 +136,28 @@
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [0, -30, 0],
-			"translation": [-1.5, -2.5, 0],
+			"rotation": [0, 180, 0],
+			"translation": [0, -3.25, 0],
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"head": {
 			"translation": [0, 0, 0.75]
 		},
 		"fixed": {
-			"translation": [0, 0, 4.5]
+			"translation": [0, 0, 4.5],
+			"scale": [0.5, 0.5, 0.5]
 		}
 	},
-	"groups": [0,
+	"groups": [
+		0,
 		{
 			"name": "hat",
 			"origin": [8, 8, 8],
+			"color": 0,
 			"children": [1, 2, 3, 4, 5]
-		}, 6, 7, 8]
+		},
+		6,
+		7,
+		8
+	]
 }

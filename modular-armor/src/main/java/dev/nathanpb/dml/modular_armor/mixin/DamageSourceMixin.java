@@ -27,6 +27,8 @@ import dev.nathanpb.dml.modular_armor.effects.PlentyEffect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,7 +42,8 @@ public class DamageSourceMixin {
 
     @Inject(at = @At("HEAD"), method = "getDeathMessage", cancellable = true)
     public void getDeathMessage(LivingEntity entity, CallbackInfoReturnable<Text> cir) {
-        if (entity instanceof PlayerEntity && this.equals(DamageSource.STARVE)) { // TODO Use class object, not mixin's class
+        DamageSource damageSource = ((DamageSource) (Object) this);
+        if (entity instanceof PlayerEntity && damageSource.isIn(DamageTypeTags.BYPASSES_EFFECTS)) { // this is the best way to check for starving atm, but could break on a later version
             Optional<ModularEffect<?>> effectOpt = ModularEffectRegistry.Companion
                 .getINSTANCE()
                 .getAll()

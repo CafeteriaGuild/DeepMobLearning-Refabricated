@@ -19,7 +19,6 @@ package dev.nathanpb.dml.modular_armor.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import com.mojang.datafixers.util.Pair;
 import dev.nathanpb.dml.item.ItemEmeritusHat;
 import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor;
@@ -35,6 +34,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import com.mojang.datafixers.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -45,19 +45,26 @@ import java.util.stream.StreamSupport;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 
+
     @ModifyVariable(
-            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z"),
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F", ordinal = 0),
-                    to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;onGround:Z", ordinal = 0)
-            ),
             method = "travel",
-            ordinal = 2
+            at = @At(
+                    target = "Lnet/minecraft/entity/LivingEntity;isOnGround()Z",
+                    value = "INVOKE"
+            ),
+            slice = @Slice(
+                    from = @At(
+                            target = "Lnet/minecraft/entity/LivingEntity;getBaseMovementSpeedMultiplier()F",
+                            value = "INVOKE",
+                            ordinal = 0
+                    )
+            ),
+            ordinal = 0
     )
     public float depthStriderEffectTravelPath(float value) {
         LivingEntity dis = (LivingEntity) (Object) this;
         if (dis.hasStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT())) {
-            return value + dis.getStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier();
+            return value + (dis.getStatusEffect(EntityStatusEffectsKt.getDEPTH_STRIDER_EFFECT()).getAmplifier() * 0.25F);
         }
         return value;
     }
@@ -91,8 +98,11 @@ public class LivingEntityMixin {
     }
 
     @ModifyVariable(
-        at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;"),
-        method = "applyFoodEffects"
+        method = "applyFoodEffects",
+        at = @At(
+            target = "Lnet/minecraft/item/FoodComponent;getStatusEffects()Ljava/util/List;",
+            value = "STORE"
+        )
     )
     public List<Pair<StatusEffectInstance, Float>> applyFoodEffects(List<Pair<StatusEffectInstance, Float>> effects, ItemStack stack) {
         return RotResistanceEffect.Companion

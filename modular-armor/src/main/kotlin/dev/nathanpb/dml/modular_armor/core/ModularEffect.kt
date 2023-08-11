@@ -29,11 +29,12 @@ import net.minecraft.entity.attribute.ClampedEntityAttribute
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
-import net.minecraft.util.registry.Registry
 import org.jetbrains.annotations.ApiStatus
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -94,7 +95,7 @@ abstract class ModularEffect<T: ModularEffectTriggerPayload>(
 
     @ApiStatus.Internal
     fun registerEntityAttribute() {
-        entityAttribute = Registry.register(Registry.ATTRIBUTE, id, createEntityAttribute())
+        entityAttribute = Registry.register(Registries.ATTRIBUTE, id, createEntityAttribute())
     }
 
     protected open fun canApply(context: ModularEffectContext, payload: T): Boolean {

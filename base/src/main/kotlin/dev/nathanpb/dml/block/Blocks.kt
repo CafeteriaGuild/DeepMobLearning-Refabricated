@@ -20,23 +20,52 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.settings
+import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
+import dev.nathanpb.dml.item.ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT
+import dev.nathanpb.dml.item.ITEM_PRISTINE_MATTER_OVERWORLD
+import dev.nathanpb.dml.item.ITEM_TRIAL_KEY
+import dev.nathanpb.dml.itemgroup.ITEMS
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
+import dev.nathanpb.dml.utils.RarityTuple
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.block.AbstractBlock
+import net.minecraft.block.Blocks
+import net.minecraft.block.SkullBlock
+import net.minecraft.block.WallSkullBlock
+import net.minecraft.block.enums.Instrument
+import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.item.BlockItem
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.util.Rarity
-import net.minecraft.util.registry.Registry
 
 val BLOCK_TRIAL_KEYSTONE = BlockTrialKeystone()
 val BLOCK_LOOT_FABRICATOR = BlockLootFabricator()
+/*val SYSTEM_GLITCH_HEAD = SkullBlock(SkullBlock.Type.CREEPER, FabricBlockSettings.create().instrument(Instrument.CREEPER).strength(1.0f).pistonBehavior(PistonBehavior.DESTROY))
+val SYSTEM_GLITCH_WALL_HEAD = WallSkullBlock(SkullBlock.Type.CREEPER, FabricBlockSettings.create().strength(1.0f).dropsLike(SYSTEM_GLITCH_HEAD).pistonBehavior(PistonBehavior.DESTROY))*/
 val BLOCK_CAFETERIA = BlockCafeteria()
 
 fun registerBlocks() {
-    hashMapOf(
-        BLOCK_TRIAL_KEYSTONE to "trial_keystone",
-        BLOCK_LOOT_FABRICATOR to "loot_fabricator",
-        BLOCK_CAFETERIA to "cafeteria"
-    ).forEach { (block, id) ->
-        val identifier = identifier(id)
-        Registry.register(Registry.BLOCK, identifier, block)
-        Registry.register(Registry.ITEM, identifier, BlockItem(block, settings().rarity(if(block == BLOCK_CAFETERIA) Rarity.EPIC else Rarity.UNCOMMON))) // This is a bad way to do it, but it's fine for now
+    linkedMapOf(
+        BLOCK_TRIAL_KEYSTONE to RarityTuple("trial_keystone", Rarity.UNCOMMON),
+        BLOCK_LOOT_FABRICATOR to RarityTuple("loot_fabricator", Rarity.UNCOMMON),
+        /*SYSTEM_GLITCH_HEAD to RarityTuple("system_glitch_head", Rarity.EPIC),
+        SYSTEM_GLITCH_WALL_HEAD to RarityTuple("system_glitch_wall_head", Rarity.EPIC),*/
+        BLOCK_CAFETERIA to RarityTuple("cafeteria", Rarity.EPIC)
+    ).forEach { (block, tuple) ->
+        val identifier = identifier(tuple.identifier)
+        Registry.register(Registries.BLOCK, identifier, block)
+        Registry.register(Registries.ITEM, identifier, BlockItem(block, FabricItemSettings().rarity(tuple.rarity)))
+    }
+
+
+    ITEMS.add(0, ItemStack(BLOCK_CAFETERIA))
+
+    ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+        it.addAfter(ItemStack(ITEM_TRIAL_KEY), BLOCK_TRIAL_KEYSTONE)
+        it.addBefore(ItemStack(ITEM_PRISTINE_MATTER_OVERWORLD), BLOCK_LOOT_FABRICATOR)
     }
 }

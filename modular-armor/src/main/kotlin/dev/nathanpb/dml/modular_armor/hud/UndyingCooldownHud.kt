@@ -21,10 +21,10 @@ package dev.nathanpb.dml.modular_armor.hud
 
 import dev.nathanpb.dml.identifier
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.math.MatrixStack
 
-class UndyingCooldownHud : DrawableHelper() {
+class UndyingCooldownHud {
 
     companion object {
         val INSTANCE = UndyingCooldownHud()
@@ -36,7 +36,7 @@ class UndyingCooldownHud : DrawableHelper() {
     var cooldownTime = 0
     var maxCooldownTime = 0
 
-    fun render(matrices: MatrixStack) {
+    fun render(ctx: DrawContext) {
         if (cooldownTime == 0 || maxCooldownTime == 0) {
             return
         }
@@ -46,17 +46,16 @@ class UndyingCooldownHud : DrawableHelper() {
         val width = client.window.scaledWidth
         val height = client.window.scaledHeight
 
-        matrices.push()
-        client.textureManager.bindTexture(TEXTURE)
-        drawTexture(
-            matrices,
+        ctx.matrices.push()
+        ctx.drawTexture(
+            TEXTURE,
             width - 64,
             height - 18,
             0F, 0F,
             16, 16,
             16, 16
         )
-        matrices.pop()
+        ctx.matrices.pop()
 
     }
 }

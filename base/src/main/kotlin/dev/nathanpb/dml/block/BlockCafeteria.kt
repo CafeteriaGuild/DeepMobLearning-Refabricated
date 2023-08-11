@@ -38,10 +38,11 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 class BlockCafeteria : HorizontalFacingBlock(
-    FabricBlockSettings.of(Material.STONE)
+    FabricBlockSettings.create()
         .hardness(1F)
         .resistance(.5F)
         .nonOpaque()
+        .mapColor(MapColor.YELLOW)
 ) {
     init {
         defaultState = stateManager.defaultState.with(Properties.HORIZONTAL_FACING, Direction.NORTH)
@@ -63,8 +64,16 @@ class BlockCafeteria : HorizontalFacingBlock(
         builder?.add(Properties.HORIZONTAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext?): BlockState? {
-        return defaultState.with(FACING, ctx?.playerFacing?.opposite)
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
+        var blockState = defaultState
+
+        for(direction in ctx.placementDirections) {
+            if(direction.axis.isHorizontal) {
+                blockState = blockState.with(FACING, direction.opposite)
+                if(blockState.canPlaceAt(ctx.world, ctx.blockPos)) return blockState
+            }
+        }
+        return blockState.with(FACING, Direction.NORTH)
     }
 
 

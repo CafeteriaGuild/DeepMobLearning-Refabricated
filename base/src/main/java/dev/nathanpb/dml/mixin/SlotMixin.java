@@ -44,7 +44,7 @@ public class SlotMixin {
 
         if ((Object) this instanceof CraftingResultSlot dis) {
             PlayerEntity player = ((ICraftingResultSlotMixin)dis).dmlRefGetPlayer();
-            if (!player.world.isClient) {
+            if (!player.getWorld().isClient) {
                 TrialKeyData oldData = TrialKeyDataKt.getTrialKeyData(stack);
                 if (oldData != null && oldData.getAffixes().isEmpty()) {
                     TrialKeyData newData = new TrialKeyData(stack);

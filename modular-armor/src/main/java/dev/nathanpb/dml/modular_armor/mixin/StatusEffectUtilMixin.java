@@ -23,7 +23,7 @@ package dev.nathanpb.dml.modular_armor.mixin;
 import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectUtil;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.registry.tag.FluidTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

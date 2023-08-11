@@ -2,23 +2,30 @@ package dev.nathanpb.dml.simulacrum.item
 
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.ITEM_GROUP
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
+import dev.nathanpb.dml.simulacrum.SIMULATION_CHAMBER
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.Item
-import net.minecraft.util.registry.Registry
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 
-val POLYMER_CLAY = Item(FabricItemSettings().maxCount(64).group(ITEM_GROUP))
-val OVERWORLD_MATTER = ItemMatter(FabricItemSettings().maxCount(64).group(ITEM_GROUP), config.matterXP.overworldMatterXP)
-val HELLISH_MATTER = ItemMatter(FabricItemSettings().maxCount(64).group(ITEM_GROUP),  config.matterXP.hellishMatterXP)
-val EXTRATERRESTRIAL_MATTER = ItemMatter(FabricItemSettings().maxCount(64).group(ITEM_GROUP),  config.matterXP.extraterrestrialMatterXP)
+val OVERWORLD_MATTER = ItemMatter(FabricItemSettings(), config.matterXP.overworldMatterXP)
+val HELLISH_MATTER = ItemMatter(FabricItemSettings(), config.matterXP.hellishMatterXP)
+val EXTRATERRESTRIAL_MATTER = ItemMatter(FabricItemSettings(), config.matterXP.extraterrestrialMatterXP)
+val POLYMER_CLAY = Item(FabricItemSettings())
 
 fun registerItems() {
-    mapOf(
-        POLYMER_CLAY to "polymer_clay",
-        OVERWORLD_MATTER to "overworld_matter",
+    linkedMapOf(
+        EXTRATERRESTRIAL_MATTER to "extraterrestrial_matter",
         HELLISH_MATTER to "hellish_matter",
-        EXTRATERRESTRIAL_MATTER to "extraterrestrial_matter"
+        OVERWORLD_MATTER to "overworld_matter",
+        POLYMER_CLAY to "polymer_clay"
     ).forEach { (item, id) ->
-        Registry.register(Registry.ITEM, identifier(id), item)
+        Registry.register(Registries.ITEM, identifier(id), item)
+        ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+            it.addAfter(ItemStack(SIMULATION_CHAMBER), item)
+        }
     }
 }

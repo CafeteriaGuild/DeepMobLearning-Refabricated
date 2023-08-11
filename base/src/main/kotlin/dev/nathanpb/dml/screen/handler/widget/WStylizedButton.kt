@@ -4,7 +4,7 @@ import io.github.cottonmc.cotton.gui.client.ScreenDrawing
 import io.github.cottonmc.cotton.gui.widget.WButton
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
@@ -19,7 +19,7 @@ class WStylizedButton(
      * Make sure to check it if anything breaks between versions!
      */
     @Environment(EnvType.CLIENT)
-    override fun paint(matrices: MatrixStack?, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+    override fun paint(ctx: DrawContext, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         val hovered = mouseX >= 0 && mouseY >= 0 && mouseX < getWidth() && mouseY < getHeight()
         var state = 1 // 1 = regular, 2 = hovered and 0 = disabled.
         if (!isEnabled) {
@@ -36,7 +36,7 @@ class WStylizedButton(
         val buttonHeight = 20 * px
         val buttonEndLeft = (200 - getWidth() / 2) * px
         ScreenDrawing.texturedRect(
-            matrices,
+            ctx,
             x,
             y,
             getWidth() / 2,
@@ -49,7 +49,7 @@ class WStylizedButton(
             -0x1
         )
         ScreenDrawing.texturedRect(
-            matrices,
+            ctx,
             x + getWidth() / 2,
             y,
             getWidth() / 2,
@@ -68,7 +68,7 @@ class WStylizedButton(
         }
 
         ScreenDrawing.drawStringWithShadow(
-            matrices,
+            ctx,
             textLabel.asOrderedText(),
             alignment,
             x,

@@ -1,31 +1,36 @@
 package dev.nathanpb.dml.simulacrum
 
+import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.ITEM_GROUP
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockSimulationChamber
 import dev.nathanpb.dml.simulacrum.item.registerItems
 import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
+import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
 import team.reborn.energy.api.EnergyStorage
 
 
 val SIMULATION_CHAMBER: Block = BlockSimulationChamber()
 
 val SIMULATION_CHAMBER_ENTITY: BlockEntityType<BlockEntitySimulationChamber> = Registry.register(
-    Registry.BLOCK_ENTITY_TYPE, identifier("simulation_chamber_entity"), FabricBlockEntityTypeBuilder.create(
+    Registries.BLOCK_ENTITY_TYPE, identifier("simulation_chamber_entity"), FabricBlockEntityTypeBuilder.create(
         { pos: BlockPos?, state: BlockState? ->
             BlockEntitySimulationChamber(pos, state)
         }, SIMULATION_CHAMBER).build())
@@ -56,8 +61,16 @@ var ENERGY_COST = hashMapOf(
 
 @Suppress("unused")
 fun init() {
-    Registry.register(Registry.BLOCK, identifier("simulation_chamber"), SIMULATION_CHAMBER)
-    Registry.register(Registry.ITEM, identifier("simulation_chamber"), BlockItem(SIMULATION_CHAMBER, FabricItemSettings().group(ITEM_GROUP)))
+    Registry.register(Registries.BLOCK, identifier("simulation_chamber"), SIMULATION_CHAMBER)
+    Registry.register(Registries.ITEM, identifier("simulation_chamber"), BlockItem(SIMULATION_CHAMBER, FabricItemSettings()))
+
+    ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+        if(FabricLoader.getInstance().isModLoaded("dml-refabricated-modular-armor")) {
+            it.addAfter(ItemStack(Registries.BLOCK.get(identifier("matter_condenser"))), SIMULATION_CHAMBER)
+        } else { // no modular-armor module:
+            it.addAfter(ItemStack(BLOCK_LOOT_FABRICATOR), SIMULATION_CHAMBER)
+        }
+    }
 
     registerItems()
 

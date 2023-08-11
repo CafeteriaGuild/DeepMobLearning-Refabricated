@@ -25,7 +25,9 @@ import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.text.Text
+import net.minecraft.world.World
 
 class FeatherFallingEffect : ProtectionLikeEffect(
     identifier("feather_falling"),
@@ -35,7 +37,7 @@ class FeatherFallingEffect : ProtectionLikeEffect(
 
     override val name = Text.translatable("enchantment.minecraft.feather_falling")
 
-    override fun protectsAgainst(source: DamageSource) = source == DamageSource.FALL
+    override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FALL)
 
     override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
 }

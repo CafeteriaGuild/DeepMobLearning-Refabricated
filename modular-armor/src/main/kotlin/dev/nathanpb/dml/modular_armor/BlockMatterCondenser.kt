@@ -20,10 +20,14 @@
 
 package dev.nathanpb.dml.modular_armor
 
+import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.settings
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
+import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor.Companion.GLITCH_BOOTS
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandlerFactory
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
@@ -33,6 +37,9 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
@@ -43,14 +50,13 @@ import net.minecraft.util.Rarity
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.util.registry.Registry
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
 class BlockMatterCondenser : HorizontalFacingBlock(
-    FabricBlockSettings.of(Material.STONE)
+    FabricBlockSettings.create()
         .hardness(4F)
         .resistance(3000F)
 ), InventoryProvider, BlockEntityProvider {
@@ -60,8 +66,12 @@ class BlockMatterCondenser : HorizontalFacingBlock(
         val IDENTIFIER = identifier("matter_condenser")
 
         fun register() {
-            Registry.register(Registry.BLOCK, IDENTIFIER, BLOCK)
-            Registry.register(Registry.ITEM, IDENTIFIER, BlockItem(BLOCK, settings().rarity(Rarity.RARE)))
+            Registry.register(Registries.BLOCK, IDENTIFIER, BLOCK)
+            Registry.register(Registries.ITEM, IDENTIFIER, BlockItem(BLOCK, FabricItemSettings().rarity(Rarity.RARE)))
+
+            ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+                it.addAfter(ItemStack(GLITCH_BOOTS), BLOCK)
+            }
         }
     }
 
@@ -74,8 +84,16 @@ class BlockMatterCondenser : HorizontalFacingBlock(
         builder?.add(Properties.HORIZONTAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext?): BlockState? {
-        return defaultState.with(FACING, ctx?.playerFacing?.opposite)
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
+        var blockState = defaultState
+
+        for(direction in ctx.placementDirections) {
+            if(direction.axis.isHorizontal) {
+                blockState = blockState.with(FACING, direction.opposite)
+                if(blockState.canPlaceAt(ctx.world, ctx.blockPos)) return blockState
+            }
+        }
+        return blockState.with(FACING, Direction.NORTH)
     }
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity?, hand: Hand, hit: BlockHitResult): ActionResult {

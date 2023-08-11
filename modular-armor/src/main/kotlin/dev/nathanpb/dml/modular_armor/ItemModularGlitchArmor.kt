@@ -26,12 +26,15 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.settings
+import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.mixin.IArmorItemMixin
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandlerFactory
 import dev.nathanpb.dml.utils.RenderUtils
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
@@ -43,32 +46,43 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import kotlin.math.roundToInt
 
-class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorItem(
+
+class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
         GlitchArmorMaterial.INSTANCE,
-        slot,
+        type,
         settings.fireproof()
 ) {
 
     companion object {
-        val HELMET = ItemModularGlitchArmor(EquipmentSlot.HEAD, settings().fireproof())
-        val CHESTPLATE = ItemModularGlitchArmor(EquipmentSlot.CHEST, settings().fireproof())
-        val LEGGINGS = ItemModularGlitchArmor(EquipmentSlot.LEGS, settings().fireproof())
-        val BOOTS = ItemModularGlitchArmor(EquipmentSlot.FEET, settings().fireproof())
+        val GLITCH_HELMET = ItemModularGlitchArmor(Type.HELMET, FabricItemSettings().fireproof())
+        val GLITCH_CHESTPLATE = ItemModularGlitchArmor(Type.CHESTPLATE, FabricItemSettings().fireproof())
+        val GLITCH_LEGGINGS = ItemModularGlitchArmor(Type.LEGGINGS, FabricItemSettings().fireproof())
+        val GLITCH_BOOTS = ItemModularGlitchArmor(Type.BOOTS, FabricItemSettings().fireproof())
 
         fun register() {
-            Registry.register(Registry.ITEM, identifier("glitch_helmet"), HELMET)
-            Registry.register(Registry.ITEM, identifier("glitch_chestplate"), CHESTPLATE)
-            Registry.register(Registry.ITEM, identifier("glitch_leggings"), LEGGINGS)
-            Registry.register(Registry.ITEM, identifier("glitch_boots"), BOOTS)
+            linkedMapOf(
+                "glitch_boots" to GLITCH_BOOTS,
+                "glitch_leggings" to GLITCH_LEGGINGS,
+                "glitch_chestplate" to GLITCH_CHESTPLATE,
+                "glitch_helmet" to GLITCH_HELMET,
+            ).forEach { (id, item) ->
+                Registry.register(Registries.ITEM, identifier(id), item)
+
+                ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+                    it.addAfter(ItemStack(ITEM_GLITCH_INGOT), item)
+                }
+            }
+
         }
 
     }
@@ -117,10 +131,10 @@ class ItemModularGlitchArmor(slot: EquipmentSlot, settings: Settings) : ArmorIte
                 .arrayListValues()
                 .build<EntityAttribute, EntityAttributeModifier>()
 
-            if (slot != null && slot == this.slot) {
+            if (slot != null && slot == type.equipmentSlot) {
                 (material as? GlitchArmorMaterial)?.let { material ->
                     val data = ModularArmorData(stack)
-                    val uuid = IArmorItemMixin.dmlRefGetModifierUUIDs()[slot.entitySlotId]
+                    val uuid = IArmorItemMixin.dmlRefGetModifierUUIDs()[type]
 
                     val protection = material.getProtectionAmount(slot, data.tier()).toDouble()
                     val toughness = material.getToughness(data.tier()).toDouble()

@@ -22,8 +22,9 @@ package dev.nathanpb.dml.recipe
 import dev.nathanpb.dml.identifier
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeType
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 lateinit var RECIPE_TRIAL_KEY_ATTUNE: RecipeType<TrialKeyAttuneRecipe>
 lateinit var RECIPE_TRIAL_KEYSTONE: RecipeType<TrialKeystoneRecipe>
@@ -31,7 +32,7 @@ lateinit var RECIPE_CRUSHING: RecipeType<CrushingRecipe>
 lateinit var RECIPE_LOOT_FABRICATOR: RecipeType<LootFabricatorRecipe>
 
 private fun <T : Recipe<*>?> register(id: Identifier) = Registry.register(
-    Registry.RECIPE_TYPE,
+    Registries.RECIPE_TYPE,
     id,
     object : RecipeType<T> {
         override fun toString() = id.toString()

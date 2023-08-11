@@ -21,6 +21,7 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.utils.RenderUtils
@@ -29,6 +30,7 @@ import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.data.Insets
+import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
@@ -50,9 +52,13 @@ class LootFabricatorHandler(
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-        val inputSlot = WTooltippedItemSlot.of(blockInventory, 0, Text.translatable("gui.${MOD_ID}.pristine_matter_only")).setFilter { stack ->
-            world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
-                .any { it.input.test(stack) }
+        val inputSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
+            setFilter { stack ->
+                world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
+                    .any { it.input.test(stack) }
+            }
+
+            icon = TextureIcon(identifier("textures/gui/slot_background/pristine_matter_slot_background.png"))
         }
         root.add(inputSlot, 1, 2)
 

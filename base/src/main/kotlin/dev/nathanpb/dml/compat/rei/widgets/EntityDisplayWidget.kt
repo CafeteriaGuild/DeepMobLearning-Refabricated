@@ -20,10 +20,10 @@
 package dev.nathanpb.dml.compat.rei.widgets
 
 import dev.nathanpb.dml.compat.rei.isInReiScreen
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Drawable
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
@@ -41,7 +41,7 @@ class EntityDisplayWidget(
 
     private var tickCount = 0
 
-    override fun render(matrices: MatrixStack?, mX: Int, mY: Int, delta: Float) {
+    override fun render(ctx: DrawContext, mX: Int, mY: Int, delta: Float) {
         tickCount++
         val entity = entities[(tickCount / 60) % entities.size]
         entity.isInReiScreen = true
@@ -52,12 +52,20 @@ class EntityDisplayWidget(
         }
 
         preRender.invoke(entity)
-        InventoryScreen.drawEntity(x, y, size, mouseX, mouseY, entity)
+        InventoryScreen.drawEntity(ctx, x, y, size, mouseX, mouseY, entity)
 
         if (stackInMainHand != null) {
             entity.setStackInHand(Hand.MAIN_HAND, initialStackMainHand)
         }
         entity.isInReiScreen = false
+    }
+
+    override fun setFocused(focused: Boolean) {
+        throw IllegalStateException("don't?")
+    }
+
+    override fun isFocused(): Boolean {
+        return true
     }
 
 }

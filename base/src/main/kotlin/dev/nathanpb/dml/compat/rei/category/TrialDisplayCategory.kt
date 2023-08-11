@@ -66,7 +66,7 @@ class TrialDisplayCategory: DisplayCategory<TrialRecipeDisplay> {
         val keySlot = Widgets.createSlot(Point(centerX, centerY - 24)).entries(input)
 
         val keystoneSlot = Widgets.createSlot(Point(centerX, centerY - 8))
-            .entries(mutableListOf(EntryStacks.of(BLOCK_TRIAL_KEYSTONE.asItem())))
+            .entries(listOf(EntryStacks.of(BLOCK_TRIAL_KEYSTONE.asItem())))
             .apply {
                 isBackgroundEnabled = false
             }

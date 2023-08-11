@@ -78,12 +78,4 @@ public class LivingEntityMixin implements ILivingEntityReiStateAccessor {
         dmlRefIsInREIScreen = flag;
     }
 
-
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;playEquipSound(Lnet/minecraft/item/ItemStack;)V"), method = "onEquipStack", cancellable = true)
-    public void onEquip(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo ci) {
-        if (isDmlRefIsInReiScreen()) {
-            ci.cancel();
-        }
-    }
-
 }

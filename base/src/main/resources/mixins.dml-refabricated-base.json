@@ -9,9 +9,12 @@
     "HungerManagerMixin",
     "ICraftingResultSlotMixin",
     "LivingEntityMixin",
+    "LootTableInvoker",
     "PlayerEntityMixin",
     "ServerWorldMixin",
+    "ShapelessRecipeAccessor",
     "SlotMixin",
+    "SmithingTemplateItemAccessor",
     "WorldMixin"
   ],
   "client": [],

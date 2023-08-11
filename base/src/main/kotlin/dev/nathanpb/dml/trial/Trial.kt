@@ -36,6 +36,7 @@ import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.ServerBossBar
 import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
@@ -44,7 +45,6 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import java.util.*
 import kotlin.random.Random
@@ -167,21 +167,21 @@ class Trial (
                             state = TrialState.RUNNING
                             ModEvents.TrialStateChanged.invoker().invoke(this)
                             spawnSystemGlitch()
-                            world.getPlayersByUUID(players).forEach {
-                                it.playSound(
-                                    SoundEvents.BLOCK_NOTE_BLOCK_BASS,
-                                    SoundCategory.BLOCKS,
-                                    1F, 1F
-                                )
-                            }
+                            world.playSound(
+                                null,
+                                pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                                SoundEvents.BLOCK_NOTE_BLOCK_BASS,
+                                SoundCategory.BLOCKS,
+                                1F, 1F, pos.asLong()
+                            )
                         } else if (tickCount % 20 == 0) {
-                            world.getPlayersByUUID(players).forEach {
-                                it.playSound(
-                                    SoundEvents.BLOCK_NOTE_BLOCK_BASS,
-                                    SoundCategory.BLOCKS,
-                                    1.5F, .75F
-                                )
-                            }
+                            world.playSound(
+                                null,
+                                pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                                SoundEvents.BLOCK_NOTE_BLOCK_BASS,
+                                SoundCategory.BLOCKS,
+                                1.5F, .75F, pos.asLong()
+                            )
                         }
                     }
                     else -> {} // Suppress non-exhaustive when
@@ -241,7 +241,7 @@ class Trial (
     private fun spawnSystemGlitch() {
         (world as? ServerWorld)?.let { world ->
             systemGlitch = SYSTEM_GLITCH_ENTITY_TYPE.spawn(
-                world, null, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
+                world, null, null, pos.add(0, 2, 0), SpawnReason.EVENT, false, false
             )?.also {
                 it.tier = recipe.tier
                 it.health = loadedSystemGlitchHealth ?: it.maxHealth
@@ -266,9 +266,9 @@ class Trial (
     private fun spawnWave() {
         (world as? ServerWorld)?.let { world ->
             (0 until recipe.waveEntityCount).map {
-                val distributionTable = Registry.ENTITY_TYPE.iterateEntries(recipe.category.tagKey)
+                val distributionTable = Registries.ENTITY_TYPE.iterateEntries(recipe.category.tagKey)
                     .associateWith {
-                        val id = Registry.ENTITY_TYPE.getId(it.value()).toString()
+                        val id = Registries.ENTITY_TYPE.getId(it.value()).toString()
                         recipe.spawnRate.entries
                             .last { (k) -> k.matches(id) }
                             .value
@@ -277,7 +277,7 @@ class Trial (
                 val entity = discreteDistribution(distributionTable).value()
                 entity.spawn(
                     world,
-                    null, null, null,
+                    null, null,
                     pos.add(Random.nextInt(-2, 2), 5, Random.nextInt(-2, 2)),
                     SpawnReason.SPAWNER,
                     false, false
