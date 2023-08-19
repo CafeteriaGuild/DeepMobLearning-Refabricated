@@ -21,12 +21,13 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.recipe.LootFabricatorRecipe
+import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.item.ItemPristineMatter
+import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
-import io.github.cottonmc.cotton.gui.widget.WBar
-import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
+import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.entity.player.PlayerEntity
@@ -34,44 +35,36 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
 
-class LootFabricatorHandler(
+class DataSynthesizerHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
     ctx: ScreenHandlerContext
 ) : SyncedGuiDescription(
-    HANDLER_LOOT_FABRICATOR,
+    HANDLER_DATA_SYNTHESIZER,
     syncId, playerInventory,
     getBlockInventory(ctx),
     getBlockPropertyDelegate(ctx)
 ) {
     init {
-        val root = WGridPanel()
-        root.insets = Insets.ROOT_PANEL
+        val root = WPlainPanel()
         setRootPanel(root)
+        root.insets = Insets.ROOT_PANEL
 
-        val inputSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
+
+        val dataModelSlot = WItemSlot.of(blockInventory, 0, 1, 1).apply {
             setFilter { stack ->
-                world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
-                    .any { it.input.test(stack) }
+                stack.item is ItemDataModel // FIXME: Replace with tag
             }
 
-            icon = TextureIcon(identifier("textures/gui/slot_background/pristine_matter_slot_background.png"))
+            icon = TextureIcon(identifier("textures/gui/slot_background/data_model_slot_background.png"))
         }
-        root.add(inputSlot, 1, 2)
+        root.add(dataModelSlot, 4*18, 2*18+6)
 
-        val progressBar = WBar(RenderUtils.PROGRESS_BAR_BACKGROUND, RenderUtils.PROGRESS_BAR, 0, 1, WBar.Direction.UP)
-        progressBar.setSize(1, 128)
-        root.add(progressBar, 3, 1, 1, 3)
+        val energyComponent = WEnergyComponent(0, 1, blockInventory, 1)
+        root.add(energyComponent, 0, 1*18-6)
 
 
-        (0 until 9).forEach {
-            val x = (it % 3)
-            val y = (it / 3)
-            val slot = WItemSlot.of(blockInventory, it + 1).setFilter { false }
-            root.add(slot, x  + 5, y + 1)
-        }
-
-        root.add(this.createPlayerInventoryPanel(), 0, 5)
+        root.add(createPlayerInventoryPanel(), 0, 5*18)
 
         root.validate(this)
 

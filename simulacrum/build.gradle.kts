@@ -1,4 +1,3 @@
-val energyVersion: String by project
 val modmenuVersion: String by project
 
 repositories {
@@ -19,9 +18,6 @@ repositories {
 }
 
 dependencies {
-    include("teamreborn:energy:${energyVersion}")
-    modApi("teamreborn:energy:${energyVersion}")
-
     modImplementation("com.terraformersmc:modmenu:${modmenuVersion}") {
         exclude(group = "net.fabricmc.fabric-api", module = "fabric-api")
     }

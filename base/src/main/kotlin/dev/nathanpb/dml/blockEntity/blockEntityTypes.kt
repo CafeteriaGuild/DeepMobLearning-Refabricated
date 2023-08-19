@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.blockEntity
 
+import dev.nathanpb.dml.block.BLOCK_DATA_SYNTHESIZER
 import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
 import net.minecraft.block.Block
@@ -28,8 +29,13 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
+import team.reborn.energy.api.EnergyStorage
+import java.util.function.BiFunction
+
 
 lateinit var BLOCKENTITY_TRIAL_KEYSTONE: BlockEntityType<BlockEntityTrialKeystone>
+lateinit var BLOCKENTITY_DATA_SYNTHESIZER: BlockEntityType<BlockEntityDataSynthesizer>
 lateinit var BLOCKENTITY_LOOT_FABRICATOR: BlockEntityType<BlockEntityLootFabricator>
 
 private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, BlockState)->E) = Registry.register(
@@ -40,5 +46,11 @@ private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, Blo
 
 fun registerBlockEntityTypes() {
     BLOCKENTITY_TRIAL_KEYSTONE = register(BLOCK_TRIAL_KEYSTONE, ::BlockEntityTrialKeystone)
+    BLOCKENTITY_DATA_SYNTHESIZER = register(BLOCK_DATA_SYNTHESIZER, ::BlockEntityDataSynthesizer)
     BLOCKENTITY_LOOT_FABRICATOR = register(BLOCK_LOOT_FABRICATOR, ::BlockEntityLootFabricator)
+
+    EnergyStorage.SIDED.registerForBlockEntity(
+        { blockEntity, _ -> blockEntity.energyStorage },
+        BLOCKENTITY_DATA_SYNTHESIZER
+    )
 }

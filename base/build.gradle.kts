@@ -1,4 +1,5 @@
 val libguiVersion: String by project
+val energyVersion: String by project
 val reiVersion: String by project
 //val patchouliVersion: String by project
 
@@ -24,6 +25,9 @@ repositories {
 dependencies {
     modApi("io.github.cottonmc:LibGui:${libguiVersion}")
     include("io.github.cottonmc:LibGui:${libguiVersion}")
+
+    modApi("teamreborn:energy:${energyVersion}")
+    include("teamreborn:energy:${energyVersion}")
 
     modApi("me.shedaniel:RoughlyEnoughItems-fabric:${reiVersion}")
 

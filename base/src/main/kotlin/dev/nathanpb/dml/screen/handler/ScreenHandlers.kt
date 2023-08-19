@@ -29,8 +29,9 @@ import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
-val HANDLER_LOOT_FABRICATOR = registerScreenHandlerForBlockEntity(identifier("loot_fabricator"), ::LootFabricatorHandler)
 val HANDLER_DEEP_LEARNER = registerScreenHandlerForItemStack(identifier("deep_learner"), ::DeepLearnerScreenHandler)
+val HANDLER_DATA_SYNTHESIZER = registerScreenHandlerForBlockEntity(identifier("data_synthesizer"), ::DataSynthesizerHandler)
+val HANDLER_LOOT_FABRICATOR = registerScreenHandlerForBlockEntity(identifier("loot_fabricator"), ::LootFabricatorHandler)
 
 // TODO: Replace with non-deprecated version
 fun <T: ScreenHandler>registerScreenHandlerForBlockEntity(
@@ -52,6 +53,7 @@ fun <T: ScreenHandler>registerScreenHandlerForItemStack(
 }
 
 fun registerScreenHandlers() {
-    HANDLER_LOOT_FABRICATOR
     HANDLER_DEEP_LEARNER
+    HANDLER_DATA_SYNTHESIZER
+    HANDLER_LOOT_FABRICATOR
 }

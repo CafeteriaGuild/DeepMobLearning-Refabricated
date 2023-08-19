@@ -43,6 +43,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.util.Rarity
 
 val BLOCK_TRIAL_KEYSTONE = BlockTrialKeystone()
+val BLOCK_DATA_SYNTHESIZER = BlockDataSynthesizer()
 val BLOCK_LOOT_FABRICATOR = BlockLootFabricator()
 /*val SYSTEM_GLITCH_HEAD = SkullBlock(SkullBlock.Type.CREEPER, FabricBlockSettings.create().instrument(Instrument.CREEPER).strength(1.0f).pistonBehavior(PistonBehavior.DESTROY))
 val SYSTEM_GLITCH_WALL_HEAD = WallSkullBlock(SkullBlock.Type.CREEPER, FabricBlockSettings.create().strength(1.0f).dropsLike(SYSTEM_GLITCH_HEAD).pistonBehavior(PistonBehavior.DESTROY))*/
@@ -51,6 +52,7 @@ val BLOCK_CAFETERIA = BlockCafeteria()
 fun registerBlocks() {
     linkedMapOf(
         BLOCK_TRIAL_KEYSTONE to RarityTuple("trial_keystone", Rarity.UNCOMMON),
+        BLOCK_DATA_SYNTHESIZER to RarityTuple("data_synthesizer", Rarity.UNCOMMON),
         BLOCK_LOOT_FABRICATOR to RarityTuple("loot_fabricator", Rarity.UNCOMMON),
         /*SYSTEM_GLITCH_HEAD to RarityTuple("system_glitch_head", Rarity.EPIC),
         SYSTEM_GLITCH_WALL_HEAD to RarityTuple("system_glitch_wall_head", Rarity.EPIC),*/
