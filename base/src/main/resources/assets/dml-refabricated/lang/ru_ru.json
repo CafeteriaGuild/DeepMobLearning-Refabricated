@@ -1,7 +1,7 @@
 {
   "itemGroup.dml-refabricated.tab_dml-refabricated": "Deep Mob Learning: Refabricated",
   "item.dml-refabricated.dml-refabricated": "Deep Mob Learning: Refabricated",
-  "item.dml-refabricated.guide_tablet": "Планшет с гайдом",
+  "item.dml-refabricated.guide_tablet": "Планшет-путеводитель",
   "item.dml-refabricated.deep_learner": "Тёмный путеводитель",
   "item.dml-refabricated.data_model": "Пустая модель данных",
   "item.dml-refabricated.data_model_nether": "Адская модель данных",
@@ -29,6 +29,14 @@
   "item.dml-refabricated.emeritus_hat": "Голова императора",
   "item.dml-refabricated.physically_condensed_matrix_fragment": "Физически-Сжатый Фрагмент Матрицы",
   "item.dml-refabricated.glitch_ingot": "Баганный слиток",
+
+  "item.dml-refabricated.glitch_upgrade_smithing_template": "Баганный кузнечный шаблон",
+  "upgrade.dml-refabricated.glitch_upgrade": "Баганное улучшение",
+  "item.dml-refabricated.glitch_upgrade_smithing_template.applies_to": "Незеритовое снаряжение",
+  "item.dml-refabricated.glitch_upgrade_smithing_template.ingredients": "Незеритовый слиток",
+  "item.dml-refabricated.glitch_upgrade_smithing_template.base_slot_description": "Добавьте незеритовую броню",
+  "item.dml-refabricated.glitch_upgrade_smithing_template.additions_slot_description": "Добавьте баганный слиток",
+  
   "tooltip.dml-refabricated.guide_tablet": "§3§oDeep Mob Learning: Refabricated's высокотехнологичный гайд!",
   "tooltip.dml-refabricated.data_model.bound_to.1": "Привязан к: ",
   "tooltip.dml-refabricated.data_model.bound_to.2": "%d",
@@ -65,6 +73,8 @@
   "chat.dml-refabricated.trial_wrong_terrain": "Местность не подходит для испытания",
   "chat.dml-refabricated.trial_no_recipe": "§4Этот пробный ключ, похоже, сломан...",
   "gui.dml-refabricated.pristine_matter_only": "Пожалуйста, поместите сюда Первозданную материю.",
+  "chat.dml-refabricated.trial_wrong_terrain.floor": "Недопустимый блок @",
+  "chat.dml-refabricated.trial_wrong_terrain.dome": "Недопустимый беспустотный блок @",
   "gui.dml-refabricated.data_model_only": "Пожалуйста, поместите сюда действительную Модель данных.",
   "bar.dml-refabricated.trial": "Системный баг",
   "bar.dml-refabricated.trial_success": "Испытание завершено",
