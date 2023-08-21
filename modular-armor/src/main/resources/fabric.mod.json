@@ -15,7 +15,8 @@
   "environment": "*",
   "entrypoints": {
     "main": ["dev.nathanpb.dml.modular_armor.InitKt::init"],
-    "client": ["dev.nathanpb.dml.modular_armor.InitClientKt::initClient"]
+    "client": ["dev.nathanpb.dml.modular_armor.InitClientKt::initClient"],
+    "preLaunch": ["dev.nathanpb.dml.modular_armor.InitPreLaunch"]
   },
   "mixins": ["mixins.dml-refabricated-modular-armor.json"],
   "depends": {

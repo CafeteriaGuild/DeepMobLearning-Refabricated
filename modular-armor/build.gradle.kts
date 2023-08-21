@@ -1,5 +1,6 @@
 val palVersion: String by project
 val libguiVersion: String by project
+val mixinextrasVersion: String by project
 
 repositories {
     maven {
@@ -14,6 +15,10 @@ repositories {
         name = "CottonMC"
         url = uri("https://server.bbkr.space/artifactory/libs-release")
     }
+    maven {
+        name = "JitPack"
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
@@ -24,4 +29,9 @@ dependencies {
 
     modApi("io.github.cottonmc:LibGui:${libguiVersion}")
     include("io.github.cottonmc:LibGui:${libguiVersion}")
+
+
+    modApi("com.github.LlamaLad7:MixinExtras:${mixinextrasVersion}")
+    include("com.github.LlamaLad7:MixinExtras:${mixinextrasVersion}")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:${mixinextrasVersion}")
 }
