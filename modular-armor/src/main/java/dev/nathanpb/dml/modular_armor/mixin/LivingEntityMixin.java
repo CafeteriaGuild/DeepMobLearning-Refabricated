@@ -19,13 +19,14 @@ package dev.nathanpb.dml.modular_armor.mixin;
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.nathanpb.dml.item.ItemEmeritusHat;
 import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor;
 import dev.nathanpb.dml.modular_armor.effects.RotResistanceEffect;
 import dev.nathanpb.dml.modular_armor.effects.TargetCancellationEffect;
 import dev.nathanpb.dml.modular_armor.effects.UndyingEffect;
-import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -109,8 +110,11 @@ public class LivingEntityMixin {
             .attemptToCancelHunger((LivingEntity) (Object) this, stack, effects);
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F"), method = "applyArmorToDamage")
-    public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, DamageSource source, float damage2) {
+    @WrapOperation(
+            method = "applyArmorToDamage",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getDamageLeft(FFF)F")
+    )
+    public float glitchArmorUncapProtection(float damage, float armor, float armorToughness, Operation<Float> original) {
         boolean shouldUncap = StreamSupport.stream(((LivingEntity) (Object) this).getArmorItems().spliterator(), false)
             .anyMatch(it -> it.getItem() instanceof ItemModularGlitchArmor);
 
@@ -119,7 +123,7 @@ public class LivingEntityMixin {
             float g = Math.max(armor - damage / f, armor * 0.2F);
             return damage * (1.0F - g / 25.0F);
         } else {
-            return DamageUtil.getDamageLeft(damage, armor, armorToughness);
+            return original.call(damage, armor, armorToughness);
         }
     }
 
