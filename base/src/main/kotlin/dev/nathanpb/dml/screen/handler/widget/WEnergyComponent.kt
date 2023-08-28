@@ -23,40 +23,64 @@ import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
-import me.shedaniel.rei.api.client.gui.widgets.Widgets
-import me.shedaniel.rei.api.client.gui.widgets.Widgets.withTooltip
+import net.minecraft.client.MinecraftClient
 import net.minecraft.inventory.Inventory
+import net.minecraft.text.Style
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 
-class WEnergyComponent( // TODO add PE energy support (along style changes)
+class WEnergyComponent(
     private val energyIndex: Int,
     private val maxEnergyIndex: Int,
     val inventory: Inventory,
     batterySlotIndex: Int,
-    energyBarHeight: Int = 3*18
+    val isPristineEnergy: Boolean = false // don't use outside modular-armor!
 ): WPlainPanel() {
 
-    private val energyBar = object : WBar(RenderUtils.PROGRESS_BAR_BACKGROUND, RenderUtils.PROGRESS_BAR, energyIndex, maxEnergyIndex, WBar.Direction.UP) {
+    private val energyBar = object : WBar(
+        RenderUtils.ENERGY_BAR_BACKGROUND,
+        if(isPristineEnergy) RenderUtils.PRISTINE_ENERGY_BAR else RenderUtils.ENERGY_BAR,
+        energyIndex,
+        maxEnergyIndex,
+        Direction.UP
+    ) {
 
         override fun tick() {
             updateEnergyText(getHost()?.propertyDelegate?.get(energyIndex))
         }
 
     }
-    private val batterySlot = WItemSlot.of(inventory, batterySlotIndex, 1, 1)
+    private val batterySlot = WItemSlot.of(
+        inventory,
+        batterySlotIndex,
+        1,
+        1
+    ) // TODO add texture icon
 
     init {
-        add(energyBar, 0, 0, 1*18, energyBarHeight)
-        add(batterySlot, 0, energyBarHeight+4)
+        add(energyBar, 0, 0, 1*18, 3*18)
+        add(batterySlot, 0, 3*18+4)
     }
 
 
 
     fun updateEnergyText(energy: Int?) {
         energyBar.apply {
-            withTooltip(Text.literal("$energy E").apply {// FIXME use translation here
-                style = RenderUtils.STYLE
-            })
+
+            val translationKey = if(isPristineEnergy) {
+                "text.dml-refabricated.pristine_energy.short"
+            } else {
+                "text.dml-refabricated.energy.short"
+            }
+
+            withTooltip(
+                Text.translatable(
+                    translationKey,
+                    RenderUtils.formatAccordingToLanguage().format(energy)
+                ).apply {
+                    style = if(isPristineEnergy) RenderUtils.STYLE else Style.EMPTY.withColor(0xFCD904)
+                }
+            )
         }
     }
 

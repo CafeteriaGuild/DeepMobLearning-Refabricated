@@ -92,8 +92,8 @@ class MatterCondenserScreenHandler(
         root.add(slots, 2*18, 1*18)
         root.add(this.createPlayerInventoryPanel(), 0*18, 6*18+6)
 
-        val progressBar1 = WBar(RenderUtils.PROGRESS_BAR_BACKGROUND, RenderUtils.PROGRESS_BAR, 0, 1, WBar.Direction.UP)
-        val progressBar2 = WBar(RenderUtils.PROGRESS_BAR_BACKGROUND, RenderUtils.PROGRESS_BAR, 0, 1, WBar.Direction.UP)
+        val progressBar1 = WBar(RenderUtils.BAR_BACKGROUND, RenderUtils.CYAN_BAR, 0, 1, WBar.Direction.UP)
+        val progressBar2 = WBar(RenderUtils.BAR_BACKGROUND, RenderUtils.CYAN_BAR, 0, 1, WBar.Direction.UP)
         root.add(progressBar1, 0*18, 1*18, 1*18, 5*18)
         root.add(progressBar2, 8*18, 1*18, 1*18, 5*18)
 

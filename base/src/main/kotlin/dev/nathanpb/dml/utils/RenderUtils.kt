@@ -34,6 +34,8 @@ import net.minecraft.text.Style
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.world.World
+import java.text.NumberFormat
+import java.util.*
 
 class RenderUtils {
 
@@ -46,8 +48,15 @@ class RenderUtils {
             BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
         }
         val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
-        val PROGRESS_BAR: Identifier = identifier("textures/gui/progress_bar.png")
-        val PROGRESS_BAR_BACKGROUND: Identifier = identifier("textures/gui/progress_bar_background.png")
+
+
+        val ENERGY_BAR: Identifier = identifier("textures/gui/energy_bar.png")
+        val PRISTINE_ENERGY_BAR: Identifier = identifier("textures/gui/pristine_energy_bar.png")
+        val ENERGY_BAR_BACKGROUND: Identifier = identifier("textures/gui/energy_bar_background.png")
+
+
+        val CYAN_BAR: Identifier = identifier("textures/gui/cyan_bar.png")
+        val BAR_BACKGROUND: Identifier = identifier("textures/gui/bar_background.png")
 
         fun getDefaultTextColor(world: World): Int {
             return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR
@@ -55,6 +64,17 @@ class RenderUtils {
 
         fun getTextWithDefaultTextColor(text: MutableText, world: World): MutableText {
             return text.setStyle(Style.EMPTY.withColor(getDefaultTextColor(world)))
+        }
+
+        fun formatAccordingToLanguage(): NumberFormat {
+            val locale: Locale = Locale.forLanguageTag(
+                MinecraftClient.getInstance().languageManager.language.replace(
+                    "_",
+                    "-"
+                )
+            )
+
+            return NumberFormat.getNumberInstance(locale)
         }
 
     }

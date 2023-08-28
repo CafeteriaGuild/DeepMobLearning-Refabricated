@@ -1,4 +1,6 @@
 {
+  "text.dml-refabricated.pristine_energy": "Pristine Energy",
+  "text.dml-refabricated.pristine_energy.short": "%s PE",
   "item.dml-refabricated.glitch_helmet": "Glitch Helmet",
   "item.dml-refabricated.glitch_chestplate": "Glitch Chestplate",
   "item.dml-refabricated.glitch_leggings": "Glitch Leggings",

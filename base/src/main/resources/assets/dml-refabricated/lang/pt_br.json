@@ -70,6 +70,7 @@
     "block.dml-refabricated.trial_keystone": "Pedestal de simulação",
     "block.dml-refabricated.loot_fabricator": "Gerador de saque",
     "block.dml-refabricated.cafeteria": "Cafeteria",
+    "text.dml-refabricated.energy": "Energia",
     "key.dml-refabricated.teleport": "Teleporte",
     "key.dml-refabricated.soul_vision": "Visão de Almas",
     "entity_type.dml-refabricated.system_glitch": "Pane no sistema",

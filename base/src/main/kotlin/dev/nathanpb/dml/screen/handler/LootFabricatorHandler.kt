@@ -59,7 +59,7 @@ class LootFabricatorHandler(
         }
         root.add(inputSlot, 1, 2)
 
-        val progressBar = WBar(RenderUtils.PROGRESS_BAR_BACKGROUND, RenderUtils.PROGRESS_BAR, 0, 1, WBar.Direction.UP)
+        val progressBar = WBar(RenderUtils.BAR_BACKGROUND, RenderUtils.CYAN_BAR, 0, 1, WBar.Direction.UP)
         progressBar.setSize(1, 128)
         root.add(progressBar, 3, 1, 1, 3)
 

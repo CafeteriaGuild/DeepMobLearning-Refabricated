@@ -2,6 +2,7 @@
   "itemGroup.dml-refabricated.tab_dml-refabricated": "Deep Mob Learning: Refabricated",
   "item.dml-refabricated.dml-refabricated": "Deep Mob Learning: Refabricated",
   "item.dml-refabricated.guide_tablet": "Guide Tablet",
+
   "item.dml-refabricated.deep_learner": "Deep Learner",
   "item.dml-refabricated.data_model": "Blank Data Model",
   "item.dml-refabricated.data_model_nether": "Nether Data Model",
@@ -13,10 +14,12 @@
   "item.dml-refabricated.data_model_ghost": "Ghost Data Model",
   "item.dml-refabricated.data_model_illager": "Illager Data Model",
   "item.dml-refabricated.data_model_ocean": "Ocean Data Model",
+
   "item.dml-refabricated.trial_key": "Trial Key",
   "item.dml-refabricated.soot_redstone": "Soot-covered Redstone",
   "item.dml-refabricated.soot_plate": "Soot Plate",
   "item.dml-refabricated.machine_casing": "Soot Machine Casing",
+
   "item.dml-refabricated.pristine_matter_nether": "Hades Pristine Matter",
   "item.dml-refabricated.pristine_matter_slimy": "Slimy Pristine Matter",
   "item.dml-refabricated.pristine_matter_overworld": "Overworld Pristine Matter",
@@ -26,6 +29,7 @@
   "item.dml-refabricated.pristine_matter_ghost": "Emeritu's Pristine Matter",
   "item.dml-refabricated.pristine_matter_illager": "Illager Pristine Matter",
   "item.dml-refabricated.pristine_matter_ocean": "Poseidon Pristine Matter",
+
   "item.dml-refabricated.emeritus_hat": "Emeritus Hat",
   "item.dml-refabricated.physically_condensed_matrix_fragment": "Physically-Condensed Matrix Fragment",
   "item.dml-refabricated.glitch_ingot": "Glitch Ingot",
@@ -36,6 +40,7 @@
   "item.dml-refabricated.glitch_upgrade_smithing_template.ingredients": "Netherite Ingot",
   "item.dml-refabricated.glitch_upgrade_smithing_template.base_slot_description": "Add netherite armor",
   "item.dml-refabricated.glitch_upgrade_smithing_template.additions_slot_description": "Add Glitch Ingot",
+
 
   "tooltip.dml-refabricated.guide_tablet": "§3§oDeep Mob Learning: Refabricated's high-tech guide!",
   "tooltip.dml-refabricated.data_model.bound_to.1": "Bound To: ",
@@ -83,6 +88,8 @@
   "block.dml-refabricated.trial_keystone": "Trial Keystone",
   "block.dml-refabricated.loot_fabricator": "Loot Fabricator",
   "block.dml-refabricated.cafeteria": "Cafeteria",
+  "text.dml-refabricated.energy": "Energy",
+  "text.dml-refabricated.energy.short": "%s E",
   "key.dml-refabricated.teleport": "Teleport",
   "key.dml-refabricated.soul_vision": "Soul Vision",
   "entity_type.dml-refabricated.system_glitch": "System Glitch",
