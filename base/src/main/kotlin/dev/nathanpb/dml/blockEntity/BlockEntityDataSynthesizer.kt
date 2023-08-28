@@ -103,7 +103,9 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
     override fun readNbt(tag: NbtCompound?) {
         super.readNbt(tag).also {
             if (tag != null) {
-                energyStorage.amount = tag.getLong("${MOD_ID}:energy")
+                energyStorage.amount = tag.getLong("${MOD_ID}:energy").also {
+                    propertyDelegate[0] = it.toInt()
+                }
 
                 val stacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
                 Inventories.readNbt(tag.getCompound("${MOD_ID}:inventory"), stacks)

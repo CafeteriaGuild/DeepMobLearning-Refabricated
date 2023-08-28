@@ -108,12 +108,16 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
         if (world?.isClient == true && stack != null && tooltip != null) {
             val data = ModularArmorData(stack)
             if (!data.tier().isMaxTier()) {
-                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.data_amount.1"), world)
-                    .append(Text.translatable("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, ModularArmorData.amountRequiredTo(data.tier().nextTierOrCurrent()))
-                        .formatted(Formatting.WHITE))?.let { tooltip.add(it) }
+                Text.translatable("tooltip.${MOD_ID}.data_amount.1").setStyle(RenderUtils.STYLE).append(
+                Text.translatable("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, ModularArmorData.amountRequiredTo(data.tier().nextTierOrCurrent()))
+                    .setStyle(RenderUtils.ALT_STYLE)).let {
+                        tooltip.add(it)
+                    }
             }
-            RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.tier.1"), world)
-                .append(Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text))?.let { tooltip.add(it) }
+            Text.translatable("tooltip.${MOD_ID}.tier.1").setStyle(RenderUtils.STYLE).append(
+            Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text)).let {
+                tooltip.add(it)
+            }
 
             MinecraftClient.getInstance().player?.let { player ->
                 if (player.isCreative) {

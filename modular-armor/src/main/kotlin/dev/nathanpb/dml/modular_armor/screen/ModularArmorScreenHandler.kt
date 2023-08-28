@@ -85,7 +85,7 @@ class ModularArmorScreenHandler(
             val disabledEffects = data.disabledEffects
             root.remove(lastEffectsList)
             lastEffectsList = WListPanel(getPossibleEffects(), {
-                WModularEffectToggle(world).apply {
+                WModularEffectToggle().apply {
                     setOnToggle { flag ->
                         effect?.id?.let {
                             sendToggleUpdate(it, flag)
@@ -146,7 +146,7 @@ class ModularArmorScreenHandler(
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.getDefaultTextColor(world)
+        return RenderUtils.TITLE_COLOR
     }
 
 }

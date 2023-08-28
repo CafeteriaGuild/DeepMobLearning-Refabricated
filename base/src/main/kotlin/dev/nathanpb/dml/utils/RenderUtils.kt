@@ -40,32 +40,32 @@ import java.util.*
 class RenderUtils {
 
     companion object {
-        private const val TITLE_COLOR: Int = 0x04FCC4
-        private const val ALT_TITLE_COLOR: Int = 0x62D8FF
-        val STYLE: Style = Style.EMPTY.withColor(TITLE_COLOR)
-        val ALT_STYLE: Style = Style.EMPTY.withColor(ALT_TITLE_COLOR)
+        /* Textures */
         val DEFAULT_BACKGROUND_PAINTER: NinePatchBackgroundPainter by lazy {
             BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
         }
         val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
 
-
         val ENERGY_BAR: Identifier = identifier("textures/gui/energy_bar.png")
         val PRISTINE_ENERGY_BAR: Identifier = identifier("textures/gui/pristine_energy_bar.png")
         val ENERGY_BAR_BACKGROUND: Identifier = identifier("textures/gui/energy_bar_background.png")
 
-
         val CYAN_BAR: Identifier = identifier("textures/gui/cyan_bar.png")
         val BAR_BACKGROUND: Identifier = identifier("textures/gui/bar_background.png")
 
-        fun getDefaultTextColor(world: World): Int {
-            return if(world.isClient()) TITLE_COLOR else WLabel.DEFAULT_TEXT_COLOR
-        }
+        /* Text Colors & Styles */
+        const val TITLE_COLOR: Int = 0x04FCC4
+        const val ALT_TITLE_COLOR: Int = 0x62D8FF
+        val STYLE: Style = Style.EMPTY.withColor(TITLE_COLOR)
+        val ALT_STYLE: Style = Style.EMPTY.withColor(ALT_TITLE_COLOR)
 
-        fun getTextWithDefaultTextColor(text: MutableText, world: World): MutableText {
-            return text.setStyle(Style.EMPTY.withColor(getDefaultTextColor(world)))
-        }
-
+        /*
+         * Used to apply commas and periods to numbers according to the client's language
+         *
+         * eg.:
+         * (en_us) = 10000 -> 10,000
+         * (pt_br) = 10000 -> 10.000
+         */
         fun formatAccordingToLanguage(): NumberFormat {
             val locale: Locale = Locale.forLanguageTag(
                 MinecraftClient.getInstance().languageManager.language.replace(

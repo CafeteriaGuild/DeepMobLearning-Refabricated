@@ -40,24 +40,30 @@ class ItemTrialKey : Item(FabricItemSettings().maxCount(1).fireproof()) {
         if (stack != null && tooltip != null && world != null) {
             stack.trialKeyData.also { data ->
                 if (data != null) {
-                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.data_model.bound_to.1"), world)
-                        .append(Text.translatable("tooltip.${MOD_ID}.data_model.bound_to.2", data.category.displayName).formatted(Formatting.WHITE))
-                        ?.let { tooltip.add(it) }
-                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.tier.1"), world)
-                        .append(Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text))
-                        ?.let { tooltip.add(it) }
+                    Text.translatable("tooltip.${MOD_ID}.data_model.bound_to.1").setStyle(RenderUtils.STYLE).append(
+                    Text.translatable("tooltip.${MOD_ID}.data_model.bound_to.2", data.category.displayName).setStyle(RenderUtils.ALT_STYLE)
+                    ).let {
+                        tooltip.add(it)
+                    }
+                    Text.translatable("tooltip.${MOD_ID}.tier.1").setStyle(RenderUtils.STYLE).append(
+                    Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text)
+                    ).let {
+                        tooltip.add(it)
+                    }
 
                     if (data.affixes.isNotEmpty()) {
-                        RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.trial_key.affixes"), world)
-                            .let { tooltip.add(it) }
+                        Text.translatable("tooltip.${MOD_ID}.trial_key.affixes").setStyle(RenderUtils.STYLE).let {
+                            tooltip.add(it)
+                        }
                         data.affixes.forEach {
                             tooltip.add(Text.of(" - ").copy().append(it.name))
                         }
                     }
                 } else {
                     tooltip.add(Text.translatable("tooltip.${MOD_ID}.data_model.unbound").formatted(Formatting.DARK_RED))
-                    RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.trial_key.unbound.tip"), world)
-                        .let { tooltip.add(it) }
+                    Text.translatable("tooltip.${MOD_ID}.trial_key.unbound.tip").setStyle(RenderUtils.STYLE).let {
+                        tooltip.add(it)
+                    }
                 }
             }
         }

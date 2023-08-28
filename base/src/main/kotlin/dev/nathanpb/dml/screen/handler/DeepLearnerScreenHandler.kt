@@ -178,27 +178,25 @@ class DeepLearnerScreenHandler (
             dataTier.text = Text.of("")
         } else if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             dataAmount.text =
-                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.data_amount.1"), world)
-                    .append(Text.translatable("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).formatted(Formatting.WHITE))
+                Text.translatable("tooltip.${MOD_ID}.data_amount.1").setStyle(RenderUtils.STYLE).append(
+                Text.translatable("tooltip.${MOD_ID}.data_amount.2", currentDataModel.dataAmount, currentDataModel.tier().nextTierOrCurrent().dataAmount).setStyle(RenderUtils.ALT_STYLE))
 
             dataTier.text =
-                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.tier.1"), world)
-                    .append(Text.translatable("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
+                Text.translatable("tooltip.${MOD_ID}.tier.1").setStyle(RenderUtils.STYLE).append(
+                Text.translatable("tooltip.${MOD_ID}.tier.2", currentDataModel.tier().text))
         }
     }
 
     fun updateEntityInformation() {
         if(showcase.entityType != null && FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             entityName.text =
-                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityName.1"), world)
-                    .append(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityName.2",
-                        showcase.entityType!!.name).formatted(Formatting.WHITE))
+                Text.translatable("tooltip.${MOD_ID}.deep_learner.entityName.1").setStyle(RenderUtils.STYLE).append(
+                Text.translatable("tooltip.${MOD_ID}.deep_learner.entityName.2", showcase.entityType!!.name).formatted(Formatting.WHITE))
 
             entityHealth.text =
-                RenderUtils.getTextWithDefaultTextColor(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityHealth.1"), world)
-                  .append(Text.of("❤").copy().formatted(Formatting.RED))
-                  .append(Text.translatable("tooltip.${MOD_ID}.deep_learner.entityHealth.2",
-                        (showcase.entityType!!.create(world) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
+                Text.translatable("tooltip.${MOD_ID}.deep_learner.entityHealth.1").setStyle(RenderUtils.STYLE).append(
+                Text.of("❤").copy().formatted(Formatting.RED)).append(
+                Text.translatable("tooltip.${MOD_ID}.deep_learner.entityHealth.2", (showcase.entityType!!.create(world) as LivingEntity).maxHealth).formatted(Formatting.WHITE))
         }
     }
 
@@ -254,7 +252,7 @@ class DeepLearnerScreenHandler (
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.getDefaultTextColor(world)
+        return RenderUtils.TITLE_COLOR
     }
 
 

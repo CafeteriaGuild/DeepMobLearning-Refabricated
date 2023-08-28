@@ -27,14 +27,10 @@ import net.minecraft.text.Text
 import net.minecraft.world.World
 import kotlin.properties.Delegates
 
-class WModularEffectToggle(
-    world: World
-) : WToggleButton() {
+class WModularEffectToggle : WToggleButton() {
     var effect by Delegates.observable<ModularEffect<*>?>(null) { _, _, value ->
         setLabel(
-            value?.name?.let {
-                RenderUtils.getTextWithDefaultTextColor(it, world)
-            } ?: Text.empty()
+            value?.name?.setStyle(RenderUtils.STYLE) ?: Text.empty()
         )
     }
 }

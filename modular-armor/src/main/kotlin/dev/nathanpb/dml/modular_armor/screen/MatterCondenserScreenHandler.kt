@@ -109,7 +109,7 @@ class MatterCondenserScreenHandler(
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.getDefaultTextColor(world)
+        return RenderUtils.TITLE_COLOR
     }
 
 }

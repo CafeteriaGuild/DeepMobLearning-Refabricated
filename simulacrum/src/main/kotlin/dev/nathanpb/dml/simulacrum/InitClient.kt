@@ -24,28 +24,12 @@ fun initClient() {
         if (item.item is ItemDataModel && DataModelUtil.getEntityCategory(item) != null) {
             world?.let {
                 lines.add(
-                    RenderUtils.getTextWithDefaultTextColor(
-                        Text.translatable(
-                            "tooltip.dml-refabricated.data_model.1"
-                        ),
-                        it
-                    )
-                        .append(
-                            Text.translatable(
-                            "tooltip.dml-refabricated.data_model.2",
-                            DataModelUtil.getEnergyCost(item)
-                        ).formatted(Formatting.WHITE))
+                    Text.translatable("tooltip.dml-refabricated.data_model.1").setStyle(RenderUtils.STYLE).append(
+                    Text.translatable("tooltip.dml-refabricated.data_model.2", DataModelUtil.getEnergyCost(item)).setStyle(RenderUtils.ALT_STYLE))
                 )
                 lines.add(
-                    RenderUtils.getTextWithDefaultTextColor(
-                        Text.translatable("tooltip.dml-refabricated.data_model.3"),
-                        it
-                    )
-                        .append(
-                            Text.translatable(
-                            "tooltip.dml-refabricated.data_model.4",
-                            DataModelUtil.textType(item)
-                        ).formatted(Formatting.WHITE))
+                    Text.translatable("tooltip.dml-refabricated.data_model.3").setStyle(RenderUtils.STYLE).append(
+                    Text.translatable("tooltip.dml-refabricated.data_model.4", DataModelUtil.textType(item)).setStyle(RenderUtils.ALT_STYLE))
                 )
             }
         }

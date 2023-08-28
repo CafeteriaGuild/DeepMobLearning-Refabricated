@@ -87,7 +87,7 @@ class LootFabricatorHandler(
     }
 
     override fun getTitleColor(): Int {
-        return RenderUtils.getDefaultTextColor(world)
+        return RenderUtils.TITLE_COLOR
     }
 
 }
