@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityLootFabricator
-import dev.nathanpb.dml.screen.handler.LootFabricatorHandler
+import dev.nathanpb.dml.screen.handler.LootFabricatorScreenHandler
 import dev.nathanpb.dml.screen.handler.LootFabricatorScreenHandlerFactory
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
@@ -53,14 +53,18 @@ class BlockLootFabricator : HorizontalFacingBlock (
             .with(Properties.HORIZONTAL_FACING, Direction.NORTH)
     }
 
-    override fun <T : BlockEntity> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T> {
-        return BlockEntityLootFabricator.ticker as BlockEntityTicker<T>
+    override fun <T : BlockEntity?> getTicker(
+        world: World,
+        state: BlockState?,
+        type: BlockEntityType<T>?
+    ): BlockEntityTicker<T>? {
+        return if(!world.isClient) BlockEntityLootFabricator.ticker as BlockEntityTicker<T> else null
     }
 
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos, player: PlayerEntity?, hand: Hand?, hit: BlockHitResult?): ActionResult {
         if (world?.isClient == false && pos != null) {
             player?.openHandledScreen(LootFabricatorScreenHandlerFactory(pos) { syncId, inventory, context ->
-                LootFabricatorHandler(syncId, inventory, context)
+                LootFabricatorScreenHandler(syncId, inventory, context)
             })
         }
         return ActionResult.SUCCESS
@@ -70,8 +74,8 @@ class BlockLootFabricator : HorizontalFacingBlock (
         if (state.block !== newState.block) {
             val blockEntity = world.getBlockEntity(pos)
             if (blockEntity is BlockEntityLootFabricator) {
-                ItemScatterer.spawn(world, pos, (blockEntity as BlockEntityLootFabricator?)!!.inventory)
-                ItemScatterer.spawn(world, pos, (blockEntity as BlockEntityLootFabricator?)!!.bufferedInternalInventory)
+                ItemScatterer.spawn(world, pos, blockEntity.inventory)
+                ItemScatterer.spawn(world, pos, blockEntity.bufferedInternalInventory)
 
                 world.updateComparators(pos, this)
             }

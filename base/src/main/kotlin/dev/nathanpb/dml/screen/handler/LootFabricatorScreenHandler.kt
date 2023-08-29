@@ -22,11 +22,12 @@ package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
+import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
-import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
+import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.entity.player.PlayerEntity
@@ -34,7 +35,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
 
-class LootFabricatorHandler(
+class LootFabricatorScreenHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
     ctx: ScreenHandlerContext
@@ -45,7 +46,7 @@ class LootFabricatorHandler(
     getBlockPropertyDelegate(ctx)
 ) {
     init {
-        val root = WGridPanel()
+        val root = WPlainPanel()
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
@@ -57,22 +58,23 @@ class LootFabricatorHandler(
 
             icon = TextureIcon(identifier("textures/gui/slot_background/pristine_matter_slot_background.png"))
         }
-        root.add(inputSlot, 1, 2)
+        root.add(inputSlot, (2 * 18) + 16, 2 * 18)
 
-        val progressBar = WBar(RenderUtils.BAR_BACKGROUND, RenderUtils.CYAN_BAR, 0, 1, WBar.Direction.UP)
-        progressBar.setSize(1, 128)
-        root.add(progressBar, 3, 1, 1, 3)
+        val progressBar = WBar(RenderUtils.ARROW_BACKGROUND, RenderUtils.ARROW, 0, 1, WBar.Direction.UP)
+        root.add(progressBar, (4 * 18) + 5, (2 * 18) + 1, 22, 16)
 
 
         (0 until 9).forEach {
             val x = (it % 3)
             val y = (it / 3)
             val slot = WItemSlot.of(blockInventory, it + 1).setFilter { false }
-            root.add(slot, x  + 5, y + 1)
+            root.add(slot, (x + 6) * 18, (y + 1) * 18)
         }
 
-        root.add(this.createPlayerInventoryPanel(), 0, 5)
+        val energyComponent = WEnergyComponent(2, 3, blockInventory, 1)
+        root.add(energyComponent, 0, (1 * 18) - 6)
 
+        root.add(createPlayerInventoryPanel(), 0, 5 * 18)
         root.validate(this)
 
         (blockInventory as? SimpleInventory)?.addListener {

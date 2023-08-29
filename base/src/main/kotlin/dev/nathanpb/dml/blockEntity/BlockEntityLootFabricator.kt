@@ -30,11 +30,12 @@ import dev.nathanpb.dml.utils.setStacks
 import dev.nathanpb.dml.utils.simulateLootDroppedStacks
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.fabricmc.fabric.api.entity.FakePlayer
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
-import net.minecraft.entity.damage.DamageSources
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
@@ -46,7 +47,9 @@ import net.minecraft.registry.Registries
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.collection.DefaultedList
-import net.minecraft.util.math.BlockPos import net.minecraft.world.WorldAccess
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.WorldAccess
+import team.reborn.energy.api.base.SimpleEnergyStorage
 
 class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     BlockEntity(BLOCKENTITY_LOOT_FABRICATOR, pos, state),
@@ -55,7 +58,7 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     RecipeInputProvider
 {
 
-    private val _propertyDelegate = ArrayPropertyDelegate(2)
+    private val _propertyDelegate = ArrayPropertyDelegate(4)
     private var isDumpingBufferedInventory = false
     val bufferedInternalInventory = SimpleInventory(64)
     val inventory = LootFabricatorInventory().apply {
@@ -65,12 +68,44 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     }
 
     private var progress = 0
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(propertyDelegate[3].toLong(), 8192, 0) {
+
+        init {
+            propertyDelegate[2] = amount.toInt()
+        }
+
+        override fun onFinalCommit() {
+            markDirty()
+            propertyDelegate[2] = amount.toInt()
+            println("onFinalCommit | $amount")
+        }
+
+        override fun insert(maxAmount: Long, transaction: TransactionContext?): Long {
+            StoragePreconditions.notNegative(maxAmount)
+
+            val inserted = Math.min(maxInsert, Math.min(maxAmount, capacity - amount))
+
+
+            if (inserted > 0) {
+                println("inserting $inserted")
+
+                updateSnapshots(transaction)
+                amount += inserted
+                return inserted
+            }
+
+            return 0
+        }
+
+    }
+
+    init {
+        propertyDelegate[1] = config.lootFabricator.processTime
+        propertyDelegate[3] = 16384 // TODO Add as config value
+    }
     
     companion object {
         val ticker = BlockEntityTicker<BlockEntityLootFabricator> { world, _, _, blockEntity ->
-            // Is it really needed to be there?
-            blockEntity.propertyDelegate[1] = config.lootFabricator.processTime
-
             (world as? ServerWorld)?.let { _ ->
                 if (blockEntity.bufferedInternalInventory.isEmpty) {
                     val stack = blockEntity.inventory.stackInInputSlot
@@ -79,28 +114,35 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
                     val recipe = world.recipeManager.getFirstMatch(RECIPE_LOOT_FABRICATOR, blockEntity.inventory, world).orElse(null)
                         ?: return@BlockEntityTicker blockEntity.resetProgress()
 
-                    if (blockEntity.progress >= config.lootFabricator.processTime) {
-                        val generatedLoot = blockEntity.generateLoot(world, recipe.category).also {
-                            // O(n²) goes brrrr
-                            it.forEach {  stackSource ->
-                                it.forEach { stackTarget ->
-                                    combineStacksIfPossible(
-                                        stackSource,
-                                        stackTarget,
-                                        blockEntity.bufferedInternalInventory.maxCountPerStack
-                                    )
+                    if(blockEntity.energyStorage.amount >= 256) {
+                        if (blockEntity.progress >= config.lootFabricator.processTime) {
+                            val generatedLoot = blockEntity.generateLoot(world, recipe.category).also {
+                                // O(n²) goes brrrr
+                                it.forEach { stackSource ->
+                                    it.forEach { stackTarget ->
+                                        combineStacksIfPossible(
+                                            stackSource,
+                                            stackTarget,
+                                            blockEntity.bufferedInternalInventory.maxCountPerStack
+                                        )
+                                    }
                                 }
-                            }
-                        }.filterNot(ItemStack::isEmpty)
-                        blockEntity.bufferedInternalInventory.setStacks(
-                            DefaultedList.copyOf(ItemStack.EMPTY, *generatedLoot.toTypedArray())
-                        )
-                        stack.decrement(1)
-                        blockEntity.dumpInternalInventory()
-                    } else {
-                        blockEntity.progress++
-                        blockEntity.propertyDelegate[0] = blockEntity.progress
-                        return@BlockEntityTicker
+                            }.filterNot(ItemStack::isEmpty)
+                            blockEntity.bufferedInternalInventory.setStacks(
+                                DefaultedList.copyOf(ItemStack.EMPTY, *generatedLoot.toTypedArray())
+                            )
+                            stack.decrement(1)
+                            blockEntity.dumpInternalInventory()
+
+                            blockEntity.energyStorage.amount -= 256
+                            blockEntity.propertyDelegate[2] = blockEntity.energyStorage.amount.toInt()
+                            blockEntity.markDirty()
+                        } else {
+                            blockEntity.progress++
+                            blockEntity.propertyDelegate[0] = blockEntity.progress
+                            blockEntity.markDirty()
+                            return@BlockEntityTicker
+                        }
                     }
 
                     blockEntity.resetProgress()
@@ -147,10 +189,10 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     }
 
     private fun resetProgress() {
-        if (progress != 0) {
-            progress = 0
-            propertyDelegate[0] = 0
-        }
+        if (progress == 0) return
+        progress = 0
+        propertyDelegate[0] = 0
+        markDirty()
     }
 
     override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
@@ -160,6 +202,9 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     override fun writeNbt(tag: NbtCompound?) {
         return super.writeNbt(tag).also {
             if (tag != null) {
+                tag.putLong("${MOD_ID}:energy", energyStorage.amount)
+                tag.putInt("${MOD_ID}:progress", progress)
+
                 NbtCompound().let { invTag ->
                     Inventories.writeNbt(invTag, inventory.items())
                     tag.put("${MOD_ID}:inventory", invTag)
@@ -169,8 +214,6 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
                     Inventories.writeNbt(invTag, bufferedInternalInventory.items())
                     tag.put("${MOD_ID}:bufferedInventory", invTag)
                 }
-
-                tag.putInt("${MOD_ID}:progress", progress)
             }
         }
     }
@@ -178,6 +221,9 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     override fun readNbt(tag: NbtCompound?) {
         super.readNbt(tag).also {
             if (tag != null) {
+                energyStorage.amount = tag.getLong("${MOD_ID}:energy")
+                progress = tag.getInt("${MOD_ID}:progress")
+
                 val stacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
                 Inventories.readNbt(tag.getCompound("${MOD_ID}:inventory"), stacks)
                 inventory.setStacks(stacks)
@@ -185,8 +231,6 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
                 val stacksBufferedInventory = DefaultedList.ofSize(bufferedInternalInventory.size(), ItemStack.EMPTY)
                 Inventories.readNbt(tag.getCompound("${MOD_ID}:bufferedInventory"), stacksBufferedInventory)
                 bufferedInternalInventory.setStacks(stacksBufferedInventory)
-
-                progress = tag.getInt("${MOD_ID}:progress")
             }
         }
     }

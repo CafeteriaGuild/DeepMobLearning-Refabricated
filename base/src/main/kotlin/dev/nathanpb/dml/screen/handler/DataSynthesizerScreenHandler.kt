@@ -22,7 +22,6 @@ package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
@@ -35,7 +34,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
 
-class DataSynthesizerHandler(
+class DataSynthesizerScreenHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
     ctx: ScreenHandlerContext
@@ -61,7 +60,7 @@ class DataSynthesizerHandler(
         root.add(dataModelSlot, 4*18, 2*18+6)
 
         val energyComponent = WEnergyComponent(0, 1, blockInventory, 1)
-        root.add(energyComponent, 0, 1*18-6)
+        root.add(energyComponent, 0, (1*18) - 6)
 
 
         root.add(createPlayerInventoryPanel(), 0, 5*18)

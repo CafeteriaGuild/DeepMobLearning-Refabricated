@@ -46,9 +46,13 @@ class RenderUtils {
         }
         val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
 
+        val ARROW: Identifier = identifier("textures/gui/arrow.png")
+        val ARROW_BACKGROUND: Identifier = identifier("textures/gui/arrow_background.png")
+
         val ENERGY_BAR: Identifier = identifier("textures/gui/energy_bar.png")
         val PRISTINE_ENERGY_BAR: Identifier = identifier("textures/gui/pristine_energy_bar.png")
         val ENERGY_BAR_BACKGROUND: Identifier = identifier("textures/gui/energy_bar_background.png")
+
 
         val CYAN_BAR: Identifier = identifier("textures/gui/cyan_bar.png")
         val BAR_BACKGROUND: Identifier = identifier("textures/gui/bar_background.png")

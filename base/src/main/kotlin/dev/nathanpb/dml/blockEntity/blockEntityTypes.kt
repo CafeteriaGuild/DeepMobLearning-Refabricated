@@ -46,11 +46,16 @@ private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, Blo
 
 fun registerBlockEntityTypes() {
     BLOCKENTITY_TRIAL_KEYSTONE = register(BLOCK_TRIAL_KEYSTONE, ::BlockEntityTrialKeystone)
-    BLOCKENTITY_DATA_SYNTHESIZER = register(BLOCK_DATA_SYNTHESIZER, ::BlockEntityDataSynthesizer)
-    BLOCKENTITY_LOOT_FABRICATOR = register(BLOCK_LOOT_FABRICATOR, ::BlockEntityLootFabricator)
-
-    EnergyStorage.SIDED.registerForBlockEntity(
-        { blockEntity, _ -> blockEntity.energyStorage },
-        BLOCKENTITY_DATA_SYNTHESIZER
-    )
+    BLOCKENTITY_DATA_SYNTHESIZER = register(BLOCK_DATA_SYNTHESIZER, ::BlockEntityDataSynthesizer).also {
+        EnergyStorage.SIDED.registerForBlockEntity(
+            { blockEntity, _ -> blockEntity.energyStorage },
+            it
+        )
+    }
+    BLOCKENTITY_LOOT_FABRICATOR = register(BLOCK_LOOT_FABRICATOR, ::BlockEntityLootFabricator).also {
+        EnergyStorage.SIDED.registerForBlockEntity(
+            { blockEntity, _ -> blockEntity.energyStorage },
+            it
+        )
+    }
 }

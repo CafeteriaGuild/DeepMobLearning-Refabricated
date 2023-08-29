@@ -1,7 +1,7 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.blockEntity.BlockEntityDataSynthesizer
-import dev.nathanpb.dml.screen.handler.DataSynthesizerHandler
+import dev.nathanpb.dml.screen.handler.DataSynthesizerScreenHandler
 import dev.nathanpb.dml.screen.handler.DataSynthesizerScreenHandlerFactory
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
@@ -46,7 +46,7 @@ class BlockDataSynthesizer  : HorizontalFacingBlock(
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos, player: PlayerEntity?, hand: Hand?, hit: BlockHitResult?): ActionResult {
         if (world?.isClient == false && pos != null) {
             player?.openHandledScreen(DataSynthesizerScreenHandlerFactory(pos) { syncId, inventory, context ->
-                DataSynthesizerHandler(syncId, inventory, context)
+                DataSynthesizerScreenHandler(syncId, inventory, context)
             })
         }
         return ActionResult.SUCCESS
