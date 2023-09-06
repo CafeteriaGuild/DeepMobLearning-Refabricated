@@ -20,24 +20,23 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.event.VanillaEvents
-import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
 import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
+import dev.nathanpb.dml.modular_armor.listener.GlitchSwordDataCollectListener
 import dev.nathanpb.dml.modular_armor.net.registerServerSidePackets
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
 
 @Suppress("unused")
 fun init() {
     ItemModularGlitchArmor.register()
+    ItemGlitchSword.register()
     BlockMatterCondenser.register()
     BlockEntityMatterCondenser.BLOCK_ENTITY_TYPE // force evaluate to register
     ModularEffectRegistry.registerDefaults()
@@ -47,6 +46,7 @@ fun init() {
     MatterCondenserScreenHandler.INSTANCE // force evaluate to register
     ModularArmorScreenHandler.INSTANCE // force evaluate to register
 
+    ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(GlitchSwordDataCollectListener())
     VanillaEvents.PlayerEntityTickEvent.register {
         it.flightBurnoutManager.tick()
     }

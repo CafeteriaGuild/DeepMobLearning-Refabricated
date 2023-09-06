@@ -24,6 +24,8 @@ import dev.nathanpb.dml.data.TrialKeyData
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
+import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
+import dev.nathanpb.dml.utils.isModLoaded
 import dev.nathanpb.dml.utils.takeOrNull
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.inventory.SimpleInventory
@@ -64,7 +66,7 @@ class TrialKeystoneRecipe (
         val rewardsCopy = rewards.map(ItemStack::copy).toMutableList()
 
         // Glitch Upgrade
-        if(FabricLoader.getInstance().isModLoaded("dml-refabricated-modular-armor")) { // require modular-armor module
+        if(isModLoaded(MODULAR_ARMOR_ID)) {
             if(tier.glitchUpgradeOdds > 0 && (Random.nextDouble() < tier.glitchUpgradeOdds || onREI)) {
                 rewardsCopy.add(ItemStack(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE))
             }

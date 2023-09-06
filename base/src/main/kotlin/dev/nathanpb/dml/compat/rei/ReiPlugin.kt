@@ -34,6 +34,8 @@ import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.recipe.CrushingRecipe
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
+import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
+import dev.nathanpb.dml.utils.isModLoaded
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
@@ -42,7 +44,6 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.plugins.PluginManager
 import me.shedaniel.rei.api.common.registry.ReloadStage
 import me.shedaniel.rei.api.common.util.EntryStacks
-import net.fabricmc.loader.api.FabricLoader
 
 
 @Suppress("unused")
@@ -89,7 +90,7 @@ class ReiPlugin :  REIClientPlugin {
 
         // Glitch Upgrade Smithing Template is only used for Glitch Armor - hide if not present
         EntryRegistry.getInstance().removeEntryIf {
-            it.itemStack().isOf(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE) && !FabricLoader.getInstance().isModLoaded("dml-refabricated-modular-armor")
+            it.itemStack().isOf(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE) && !isModLoaded(MODULAR_ARMOR_ID)
         }
     }
 

@@ -20,8 +20,10 @@
 package dev.nathanpb.dml.listener
 
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemDeepLearner
 import dev.nathanpb.dml.utils.firstOrNullMapping
@@ -29,13 +31,15 @@ import dev.nathanpb.dml.utils.hotbar
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 
-class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity {
+open class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity {
 
-    // TODO untested code, check if this even work
-    override fun afterKilledOtherEntity(world: ServerWorld, player: Entity, entity: LivingEntity) {
+     final override fun afterKilledOtherEntity(world: ServerWorld, player: Entity, entity: LivingEntity) {
         if (player !is ServerPlayerEntity) {
             return
         }
@@ -44,12 +48,21 @@ class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity {
             .filter { it.item is ItemDeepLearner }
             .map { DeepLearnerData(it).inventory }
             .flatten()
-            .filter { it.item is ItemDataModel }
+            .filter { onlyIf(player, it) }
             .firstOrNullMapping(
                 map = { it.dataModel },
                 accept = { entity.type.isIn(it.category?.tagKey) && !it.tier().isMaxTier() }
             )?.let {
-                it.dataAmount += config.dataCollection.baseDataGainPerKill
+                modifyDataAmount(it)
             }
     }
+
+    open fun modifyDataAmount(dataModelData: DataModelData) {
+        dataModelData.dataAmount += config.dataCollection.baseDataGainPerKill
+    }
+
+    open fun onlyIf(player: PlayerEntity, stack: ItemStack): Boolean {
+        return stack.item is ItemDataModel
+    }
+
 }

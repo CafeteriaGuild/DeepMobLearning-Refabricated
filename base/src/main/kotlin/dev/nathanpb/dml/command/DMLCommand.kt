@@ -1,9 +1,8 @@
 package dev.nathanpb.dml.command
 
 import com.mojang.brigadier.CommandDispatcher
-import dev.nathanpb.dml.utils.RenderUtils
+import dev.nathanpb.dml.utils.*
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.server.command.CommandManager.RegistrationEnvironment
 import net.minecraft.server.command.CommandManager.literal
@@ -15,17 +14,17 @@ import net.minecraft.util.Formatting
 class DMLCommand: CommandRegistrationCallback {
 
     override fun register(
-        dispatcher: CommandDispatcher<ServerCommandSource>?,
+        dispatcher: CommandDispatcher<ServerCommandSource>,
         registryAccess: CommandRegistryAccess?,
         environment: RegistrationEnvironment?
     ) {
-        dispatcher!!.register(literal("dml-refabricated")
+        dispatcher.register(literal("dml-refabricated")
             // Modules
             .then(literal("modules")
                 .executes {
-                    it.source.sendMessage(appendModuleText("dml-refabricated-base", "Base"))
-                    it.source.sendMessage(appendModuleText("dml-refabricated-modular-armor", "Glitch Armor"))
-                    it.source.sendMessage(appendModuleText("dmlsimulacrum", "Simulacrum"))
+                    it.source.sendMessage(appendModuleText(BASE_ID, "Base"))
+                    it.source.sendMessage(appendModuleText(MODULAR_ARMOR_ID, "Glitch Armor"))
+                    it.source.sendMessage(appendModuleText(SIMULACRUM_ID, "Simulacrum"))
                     return@executes 1
                 }
             )
@@ -33,7 +32,7 @@ class DMLCommand: CommandRegistrationCallback {
             // Main Command
             .executes {
                 val metadata by lazy {
-                    FabricLoader.getInstance().getModContainer("dml-refabricated").get().metadata
+                    getModContainer(CORE_ID).metadata
                 }
                 val authors by lazy {
                     metadata.authors.filter { person -> person.name != "IterationFunk" }.joinToString {
@@ -68,8 +67,8 @@ class DMLCommand: CommandRegistrationCallback {
 
 
     private fun appendModuleText(modId: String, fancyName: String): Text {
-        val isLoaded = FabricLoader.getInstance().isModLoaded(modId)
-        val version: String = FabricLoader.getInstance().getModContainer(modId).orElse(null).let {
+        val isLoaded = isModLoaded(modId)
+        val version: String = getModContainer(modId).let {
             if(it != null) "v${it.metadata.version}" else ""
         }
 
