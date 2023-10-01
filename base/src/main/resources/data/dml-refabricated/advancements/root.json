@@ -9,7 +9,7 @@
     "description": {
       "translate": "advancements.dml-refabricated.dml.description"
     },
-    "background": "dml-refabricated:textures/block/machine_casing_outer.png"
+    "background": "dml-refabricated:textures/block/disruptions_core_top.png"
   },
   "criteria": {
     "checkInv": {
