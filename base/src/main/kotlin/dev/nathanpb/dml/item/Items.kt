@@ -23,9 +23,14 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.itemgroup.ITEMS
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.mixin.SmithingTemplateItemAccessor
 import dev.nathanpb.dml.utils.ItemTuple
+import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
+import dev.nathanpb.dml.utils.getItemFromRegistry
+import dev.nathanpb.dml.utils.isModLoaded
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SmithingTemplateItem
@@ -78,6 +83,7 @@ val ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE = SmithingTemplateItem(
     SmithingTemplateItemAccessor.dml_getArmorTrimEmptyBaseSlotTextures(),
     SmithingTemplateItemAccessor.dml_getNetheriteUpgradeEmptyAdditionsSlotTextures()
 )
+val ITEM_GLITCH_SWORD = ItemGlitchSword()
 
 fun registerItems() {
     linkedMapOf(
@@ -110,10 +116,19 @@ fun registerItems() {
         ITEM_SOOT_MACHINE_CASE to ItemTuple("machine_casing"),
         ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to ItemTuple("physically_condensed_matrix_fragment"),
         ITEM_GLITCH_INGOT to ItemTuple("glitch_ingot"),
-        ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE to ItemTuple("glitch_upgrade_smithing_template", false)
+        ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE to ItemTuple("glitch_upgrade_smithing_template", false),
+        ITEM_GLITCH_SWORD to ItemTuple("glitch_sword", false)
     ).forEach { (item, tuple) ->
         Registry.register(Registries.ITEM, identifier(tuple.identifier), item)
         if(tuple.shown) ITEMS.add(ItemStack(item))
+    }
+
+    ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+        if(isModLoaded(MODULAR_ARMOR_ID)) {
+            it.addBefore(getItemFromRegistry("glitch_helmet"), ITEM_GLITCH_SWORD)
+        } else {
+            it.addAfter(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE, ITEM_GLITCH_SWORD)
+        }
     }
 
 }

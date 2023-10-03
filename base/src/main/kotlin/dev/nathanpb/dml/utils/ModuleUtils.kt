@@ -19,6 +19,7 @@
 
 package dev.nathanpb.dml.utils
 
+import dev.nathanpb.dml.identifier
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.minecraft.block.Block
@@ -44,17 +45,22 @@ fun getModContainer(modId: String): ModContainer {
 }
 
 
-@Nullable
 fun getBlockFromRegistry(id: Identifier): Block? {
     return getFromRegistry(id, Registries.BLOCK) as Block?
 }
 
-@Nullable
+fun getBlockFromRegistry(id: String): Block? {
+    return getFromRegistry(identifier(id), Registries.BLOCK) as Block?
+}
+
 fun getItemFromRegistry(id: Identifier): Item? {
     return getFromRegistry(id, Registries.ITEM) as Item?
 }
 
-@Nullable
+fun getItemFromRegistry(id: String): Item? {
+    return getFromRegistry(identifier(id), Registries.ITEM) as Item?
+}
+
 fun getFromRegistry(id: Identifier, registry: Registry<*>): Any? {
     return registry.get(id)
 }

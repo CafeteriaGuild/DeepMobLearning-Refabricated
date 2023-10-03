@@ -17,23 +17,23 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.modular_armor.listener
+package dev.nathanpb.dml.listener
 
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.DataModelData
-import dev.nathanpb.dml.listener.DataCollectListener
-import dev.nathanpb.dml.modular_armor.ItemGlitchSword.Companion.GLITCH_SWORD
+import dev.nathanpb.dml.item.ITEM_GLITCH_SWORD
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 
 class GlitchSwordDataCollectListener : DataCollectListener() {
 
+    // TODO add FX when triggered
     override fun modifyDataAmount(dataModelData: DataModelData) {
         dataModelData.dataAmount += config.dataCollection.glitchSwordDataBonus
     }
 
     override fun onlyIf(player: PlayerEntity, stack: ItemStack): Boolean {
-        return player.getStackInHand(player.activeHand).isOf(GLITCH_SWORD) && super.onlyIf(player, stack)
+        return player.getStackInHand(player.activeHand).isOf(ITEM_GLITCH_SWORD) && super.onlyIf(player, stack)
     }
 
 }
