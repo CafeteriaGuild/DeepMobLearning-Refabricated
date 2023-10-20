@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dml-refabricated:block/disruptions_core"
+    }
+  }
+}

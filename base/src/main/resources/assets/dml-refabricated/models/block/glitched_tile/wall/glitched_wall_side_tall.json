@@ -1,0 +1,21 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"side": "dml-refabricated:block/glitched_tall_wall_side",
+		"top": "dml-refabricated:block/glitched_wall_top",
+		"particle": "dml-refabricated:block/glitched_tile"
+	},
+	"elements": [
+		{
+			"from": [5, 0, 0],
+			"to": [11, 16, 8],
+			"faces": {
+				"north": {"uv": [0, 0, 6, 16], "texture": "#side", "cullface": "north"},
+				"east": {"uv": [5, 0, 13, 16], "texture": "#side"},
+				"west": {"uv": [5, 0, 13, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 6, 8], "texture": "#top", "cullface": "up"},
+				"down": {"uv": [0, 0, 6, 8], "texture": "#top", "cullface": "down"}
+			}
+		}
+	]
+}

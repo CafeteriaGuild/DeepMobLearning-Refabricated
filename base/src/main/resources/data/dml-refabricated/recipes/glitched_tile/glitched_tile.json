@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SPS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "P": {
+      "item": "dml-refabricated:polymer_clay"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:glitched_tile",
+    "count": 8
+  }
+}

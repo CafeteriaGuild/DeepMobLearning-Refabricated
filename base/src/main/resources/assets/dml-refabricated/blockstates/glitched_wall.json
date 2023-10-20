@@ -1,0 +1,82 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_post"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side"
+      },
+      "when": {
+        "north": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side",
+        "y": 90
+      },
+      "when": {
+        "east": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side",
+        "y": 180
+      },
+      "when": {
+        "south": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side",
+        "y": 270
+      },
+      "when": {
+        "west": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side_tall"
+      },
+      "when": {
+        "north": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side_tall",
+        "y": 90
+      },
+      "when": {
+        "east": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side_tall",
+        "y": 180
+      },
+      "when": {
+        "south": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "dml-refabricated:block/glitched_tile/wall/glitched_wall_side_tall",
+        "y": 270
+      },
+      "when": {
+        "west": "tall"
+      }
+    }
+  ]
+}

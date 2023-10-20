@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dml-refabricated:block/glitched_tile/glitched_tile"
+    }
+  }
+}

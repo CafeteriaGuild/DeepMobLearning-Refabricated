@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "dml-refabricated:block/glitched_tile/slab/glitched_slab"
+    },
+    "type=double": {
+      "model": "dml-refabricated:block/glitched_tile/slab/glitched_slab_double"
+    },
+    "type=top": {
+      "model": "dml-refabricated:block/glitched_tile/slab/glitched_slab_top"
+    }
+  }
+}

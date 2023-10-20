@@ -19,9 +19,7 @@
 
 package dev.nathanpb.dml.blockEntity
 
-import dev.nathanpb.dml.block.BLOCK_DATA_SYNTHESIZER
-import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
-import dev.nathanpb.dml.block.BLOCK_TRIAL_KEYSTONE
+import dev.nathanpb.dml.block.*
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -29,16 +27,16 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import team.reborn.energy.api.EnergyStorage
-import java.util.function.BiFunction
 
 
 lateinit var BLOCKENTITY_TRIAL_KEYSTONE: BlockEntityType<BlockEntityTrialKeystone>
 lateinit var BLOCKENTITY_DATA_SYNTHESIZER: BlockEntityType<BlockEntityDataSynthesizer>
 lateinit var BLOCKENTITY_LOOT_FABRICATOR: BlockEntityType<BlockEntityLootFabricator>
+lateinit var BLOCKENTITY_DISRUPTIONS_CORE: BlockEntityType<BlockEntityDisruptionsCore>
+lateinit var BLOCKENTITY_FADING_GLITCHED_TILE: BlockEntityType<BlockEntityFadingGlitchedTile>
 
-private fun <E: BlockEntity, B: Block>register(block: B, builder: (BlockPos, BlockState)->E) = Registry.register(
+private fun <E: BlockEntity, B: Block> register(block: B, builder: (BlockPos, BlockState)->E) = Registry.register(
     Registries.BLOCK_ENTITY_TYPE,
     Registries.BLOCK.getId(block),
     BlockEntityType.Builder.create(builder, block).build(null)
@@ -58,4 +56,7 @@ fun registerBlockEntityTypes() {
             it
         )
     }
+
+    BLOCKENTITY_DISRUPTIONS_CORE = register(BLOCK_DISRUPTIONS_CORE, ::BlockEntityDisruptionsCore)
+    BLOCKENTITY_FADING_GLITCHED_TILE = register(BLOCK_FADING_GLITCHED_TILE, ::BlockEntityFadingGlitchedTile)
 }

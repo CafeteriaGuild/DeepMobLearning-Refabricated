@@ -1,11 +1,11 @@
 package dev.nathanpb.dml.simulacrum.block.chamber
 
+import dev.nathanpb.dml.item.ITEM_POLYMER_CLAY
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.simulacrum.PRISTINE_CHANCE
 import dev.nathanpb.dml.simulacrum.SIMULATION_CHAMBER_ENTITY
 import dev.nathanpb.dml.simulacrum.item.ItemMatter
-import dev.nathanpb.dml.simulacrum.item.POLYMER_CLAY
 import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil.Companion.dataModel2MatterMap
@@ -174,7 +174,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
 
     fun hasPolymerClay(): Boolean {
         val stack = polymerClay
-        return stack.isOf(POLYMER_CLAY) && stack.count > 0
+        return stack.isOf(ITEM_POLYMER_CLAY) && stack.count > 0
     }
 
     fun outputIsFull(): Boolean {
@@ -229,7 +229,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         return if (dir == Direction.UP) {
             when (slot) {
                 0 -> stack.item is ItemDataModel && DataModelUtil.getEntityCategory(stack) != null
-                1 -> stack.isOf(POLYMER_CLAY)
+                1 -> stack.isOf(ITEM_POLYMER_CLAY)
                 else -> false
             }
         } else false

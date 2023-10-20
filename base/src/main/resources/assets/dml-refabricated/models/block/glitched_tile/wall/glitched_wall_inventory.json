@@ -1,0 +1,48 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"2": "dml-refabricated:block/glitched_stairs_4",
+		"4": "dml-refabricated:block/glitched_wall_side_inventory",
+		"6": "dml-refabricated:block/glitched_tall_wall_side",
+		"7": "dml-refabricated:block/glitched_wall_side_inventory2"
+	},
+	"elements": [
+		{
+			"name": "Center post",
+			"from": [4, 0, 4],
+			"to": [12, 16, 12],
+			"faces": {
+				"north": {"uv": [5, 0, 13, 16], "texture": "#6"},
+				"east": {"uv": [5, 0, 13, 16], "texture": "#6"},
+				"south": {"uv": [5, 0, 13, 16], "texture": "#6"},
+				"west": {"uv": [5, 0, 13, 16], "texture": "#6"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#2"},
+				"down": {"uv": [0, 0, 8, 8], "texture": "#2", "cullface": "down"}
+			}
+		},
+		{
+			"name": "Full wall",
+			"from": [5, 0, 0],
+			"to": [11, 13, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 6, 13], "texture": "#7", "cullface": "north"},
+				"east": {"uv": [0, 3, 16, 16], "texture": "#4"},
+				"south": {"uv": [0, 0, 6, 13], "texture": "#7", "cullface": "south"},
+				"west": {"uv": [0, 3, 16, 16], "texture": "#4"},
+				"up": {"uv": [0, 0, 6, 16], "texture": "#6"},
+				"down": {"uv": [0, 0, 6, 16], "texture": "#6", "cullface": "down"}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [30, 135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"side": "dml-refabricated:block/glitched_stairs_top",
+		"top": "dml-refabricated:block/glitched_stairs_4",
+		"particle": "dml-refabricated:block/glitched_tile"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 16, 12],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#side"},
+				"east": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#side"},
+				"south": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#side"},
+				"west": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#side"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#top", "cullface": "up"},
+				"down": {"uv": [0, 0, 8, 8], "texture": "#top", "cullface": "down"}
+			}
+		}
+	]
+}

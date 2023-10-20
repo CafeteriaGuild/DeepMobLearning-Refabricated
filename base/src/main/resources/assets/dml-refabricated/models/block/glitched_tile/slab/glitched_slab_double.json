@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "dml-refabricated:block/glitched_tile",
+    "side": "dml-refabricated:block/glitched_stairs_top"
+  }
+}

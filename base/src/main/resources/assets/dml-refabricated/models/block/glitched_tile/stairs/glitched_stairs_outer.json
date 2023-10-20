@@ -1,0 +1,36 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"bottom": "dml-refabricated:block/glitched_tile",
+		"top": "dml-refabricated:block/glitched_stairs_top",
+		"left_side": "dml-refabricated:block/glitched_stairs_left_side",
+		"right_side": "dml-refabricated:block/glitched_stairs_right_side",
+		"notch": "dml-refabricated:block/glitched_stairs_4",
+		"particle": "dml-refabricated:block/glitched_tile"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 8, 16, 16], "texture": "#top", "cullface": "north"},
+				"east": {"uv": [0, 8, 16, 16], "texture": "#left_side", "cullface": "east"},
+				"south": {"uv": [0, 8, 16, 16], "texture": "#right_side", "cullface": "south"},
+				"west": {"uv": [0, 8, 16, 16], "texture": "#top", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#right_side"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"}
+			}
+		},
+		{
+			"from": [8, 8, 8],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#notch"},
+				"east": {"uv": [0, 0, 8, 8], "texture": "#left_side", "cullface": "east"},
+				"south": {"uv": [8, 0, 16, 8], "texture": "#right_side", "cullface": "south"},
+				"west": {"uv": [8, 0, 16, 8], "texture": "#notch"},
+				"up": {"uv": [8, 8, 16, 16], "texture": "#notch", "cullface": "up"}
+			}
+		}
+	]
+}

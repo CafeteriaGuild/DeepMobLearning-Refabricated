@@ -23,14 +23,9 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.itemgroup.ITEMS
-import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.mixin.SmithingTemplateItemAccessor
 import dev.nathanpb.dml.utils.ItemTuple
-import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
-import dev.nathanpb.dml.utils.getItemFromRegistry
-import dev.nathanpb.dml.utils.isModLoaded
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SmithingTemplateItem
@@ -42,8 +37,13 @@ import net.minecraft.util.Rarity
 
 //val ITEM_GUIDE_TABLET = ItemGuideTablet()
 val ITEM_DML = Item(Item.Settings())
+
+val ITEM_SOOT_REDSTONE = Item(FabricItemSettings())
+val ITEM_SOOT_PLATE = Item(FabricItemSettings())
+val ITEM_POLYMER_CLAY = Item(FabricItemSettings())
+val ITEM_SOOT_MACHINE_CASE = Item(FabricItemSettings())
+
 val ITEM_DEEP_LEARNER = ItemDeepLearner()
-val ITEM_TRIAL_KEY = ItemTrialKey()
 
 val ITEM_DATA_MODEL = ItemDataModel()
 val ITEM_DATA_MODEL_NETHER = ItemDataModel(EntityCategory.NETHER)
@@ -56,6 +56,8 @@ val ITEM_DATA_MODEL_GHOST = ItemDataModel(EntityCategory.GHOST)
 val ITEM_DATA_MODEL_ILLAGER = ItemDataModel(EntityCategory.ILLAGER)
 val ITEM_DATA_MODEL_OCEAN = ItemDataModel(EntityCategory.OCEAN)
 
+val ITEM_TRIAL_KEY = ItemTrialKey()
+
 val ITEM_PRISTINE_MATTER_NETHER = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_SLIMY = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_OVERWORLD = ItemPristineMatter()
@@ -65,10 +67,6 @@ val ITEM_PRISTINE_MATTER_END = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_GHOST = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_ILLAGER = ItemPristineMatter()
 val ITEM_PRISTINE_MATTER_OCEAN = ItemPristineMatter()
-
-val ITEM_SOOT_REDSTONE = Item(FabricItemSettings())
-val ITEM_SOOT_PLATE = Item(FabricItemSettings())
-val ITEM_SOOT_MACHINE_CASE = Item(FabricItemSettings())
 
 val ITEM_EMERITUS_HAT = ItemEmeritusHat()
 
@@ -89,6 +87,10 @@ fun registerItems() {
     linkedMapOf(
         //ITEM_GUIDE_TABLET to ItemTuple("guide_tablet"),
         ITEM_DML to ItemTuple(MOD_ID, false),
+        ITEM_SOOT_REDSTONE to ItemTuple("soot_redstone"),
+        ITEM_SOOT_PLATE to ItemTuple("soot_plate"),
+        ITEM_SOOT_MACHINE_CASE to ItemTuple("machine_casing"),
+        ITEM_POLYMER_CLAY to ItemTuple("polymer_clay"),
         ITEM_DEEP_LEARNER to ItemTuple("deep_learner"),
         ITEM_DATA_MODEL to ItemTuple("data_model"),
         ITEM_DATA_MODEL_OVERWORLD to ItemTuple("data_model_overworld"),
@@ -111,9 +113,6 @@ fun registerItems() {
         ITEM_PRISTINE_MATTER_NETHER to ItemTuple("pristine_matter_nether"),
         ITEM_PRISTINE_MATTER_END to ItemTuple("pristine_matter_end"),
         ITEM_EMERITUS_HAT to ItemTuple("emeritus_hat", false),
-        ITEM_SOOT_REDSTONE to ItemTuple("soot_redstone"),
-        ITEM_SOOT_PLATE to ItemTuple("soot_plate"),
-        ITEM_SOOT_MACHINE_CASE to ItemTuple("machine_casing"),
         ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to ItemTuple("physically_condensed_matrix_fragment"),
         ITEM_GLITCH_INGOT to ItemTuple("glitch_ingot"),
         ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE to ItemTuple("glitch_upgrade_smithing_template", false),
@@ -121,14 +120,6 @@ fun registerItems() {
     ).forEach { (item, tuple) ->
         Registry.register(Registries.ITEM, identifier(tuple.identifier), item)
         if(tuple.shown) ITEMS.add(ItemStack(item))
-    }
-
-    ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
-        if(isModLoaded(MODULAR_ARMOR_ID)) {
-            it.addBefore(getItemFromRegistry("glitch_helmet"), ITEM_GLITCH_SWORD)
-        } else {
-            it.addAfter(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE, ITEM_GLITCH_SWORD)
-        }
     }
 
 }

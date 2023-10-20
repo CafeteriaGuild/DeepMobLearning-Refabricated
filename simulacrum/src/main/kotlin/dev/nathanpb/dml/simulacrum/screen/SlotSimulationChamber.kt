@@ -1,7 +1,7 @@
 package dev.nathanpb.dml.simulacrum.screen
 
+import dev.nathanpb.dml.item.ITEM_POLYMER_CLAY
 import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.simulacrum.item.POLYMER_CLAY
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
@@ -18,7 +18,7 @@ class SlotSimulationChamber(inventory: Inventory?, index: Int, x: Int, y: Int) :
             }
             1 -> {
                 !stack.isEmpty &&
-                stack.isOf(POLYMER_CLAY)
+                stack.isOf(ITEM_POLYMER_CLAY)
             }
             else -> false
         }

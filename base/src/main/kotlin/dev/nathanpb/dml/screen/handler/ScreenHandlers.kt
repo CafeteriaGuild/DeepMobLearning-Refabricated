@@ -33,6 +33,8 @@ val HANDLER_DEEP_LEARNER = registerScreenHandlerForItemStack(identifier("deep_le
 val HANDLER_DATA_SYNTHESIZER = registerScreenHandlerForBlockEntity(identifier("data_synthesizer"), ::DataSynthesizerScreenHandler)
 val HANDLER_LOOT_FABRICATOR = registerScreenHandlerForBlockEntity(identifier("loot_fabricator"), ::LootFabricatorScreenHandler)
 
+val HANDLER_DISRUPTIONS_CORE = registerScreenHandlerForBlockEntity(identifier("disruptions_core"), ::DisruptionsCoreScreenHandler)
+
 // TODO: Replace with non-deprecated version
 fun <T: ScreenHandler>registerScreenHandlerForBlockEntity(
     id: Identifier,
@@ -56,4 +58,6 @@ fun registerScreenHandlers() {
     HANDLER_DEEP_LEARNER
     HANDLER_DATA_SYNTHESIZER
     HANDLER_LOOT_FABRICATOR
+
+    HANDLER_DISRUPTIONS_CORE
 }

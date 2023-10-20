@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "dml-refabricated:trial_keystone",
+    "dml-refabricated:loot_fabricator",
+    "dml-refabricated:glitched_tile",
+    "dml-refabricated:glitched_stairs",
+    "dml-refabricated:glitched_slab",
+    "dml-refabricated:glitched_wall",
+    "dml-refabricated:fading_glitched_tile",
+    "dml-refabricated:cafeteria"
+  ]
+}
