@@ -20,10 +20,8 @@
 
 package dev.nathanpb.dml.screen.handler
 
-import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
-import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
@@ -35,7 +33,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.text.Text
 
 class LootFabricatorHandler(
     syncId: Int,
@@ -53,7 +50,7 @@ class LootFabricatorHandler(
         setRootPanel(root)
 
         val inputSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
-            setFilter { stack ->
+            setInputFilter { stack ->
                 world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
                     .any { it.input.test(stack) }
             }
@@ -70,7 +67,7 @@ class LootFabricatorHandler(
         (0 until 9).forEach {
             val x = (it % 3)
             val y = (it / 3)
-            val slot = WItemSlot.of(blockInventory, it + 1).setFilter { false }
+            val slot = WItemSlot.of(blockInventory, it + 1).setInputFilter { false }
             root.add(slot, x  + 5, y + 1)
         }
 
