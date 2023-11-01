@@ -51,7 +51,7 @@ class LootFabricatorScreenHandler(
         setRootPanel(root)
 
         val inputSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
-            setFilter { stack ->
+            setInputFilter { stack ->
                 world.recipeManager.values().filterIsInstance<LootFabricatorRecipe>()
                     .any { it.input.test(stack) }
             }
@@ -67,7 +67,7 @@ class LootFabricatorScreenHandler(
         (0 until 9).forEach {
             val x = (it % 3)
             val y = (it / 3)
-            val slot = WItemSlot.of(blockInventory, it + 1).setFilter { false }
+            val slot = WItemSlot.of(blockInventory, it + 1).setInputFilter { false }
             root.add(slot, (x + 6) * 18, (y + 1) * 18)
         }
 

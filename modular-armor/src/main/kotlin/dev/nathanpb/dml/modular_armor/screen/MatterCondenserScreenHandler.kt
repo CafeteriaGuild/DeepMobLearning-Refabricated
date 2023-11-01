@@ -65,7 +65,7 @@ class MatterCondenserScreenHandler(
 
         val slots = WPlainPanel()
         val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, true, Text.translatable("gui.${MOD_ID}.glitch_armor_only")).apply {
-            setFilter {
+            setInputFilter {
                 it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
             }
         }
@@ -74,7 +74,7 @@ class MatterCondenserScreenHandler(
 
         val matterSlots = (1..6).map {
             WItemSlot(blockInventory, it, 1, 1, false).apply {
-                setFilter { stack ->
+                setInputFilter { stack ->
                     stack.item is ItemPristineMatter
                 }
 
