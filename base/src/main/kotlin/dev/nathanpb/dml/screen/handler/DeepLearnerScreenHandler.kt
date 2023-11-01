@@ -25,6 +25,7 @@ import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.ITEM_DEEP_LEARNER
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.screen.handler.widget.WStylizedButton
@@ -35,7 +36,6 @@ import dev.nathanpb.dml.utils.setStacks
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.*
 import io.github.cottonmc.cotton.gui.widget.data.Insets
-import io.github.cottonmc.cotton.gui.widget.icon.Icon
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
@@ -243,7 +243,7 @@ class DeepLearnerScreenHandler (
             update()
         }
 
-        root.add(createPlayerInventoryPanel(), 0, 5*18+6)
+        root.add(DeepLearnerPlayerInv(playerInventory), 0, 5*18+6)
         root.validate(this)
         update()
     }
@@ -263,7 +263,7 @@ class DeepLearnerScreenHandler (
     ): WItemSlot(inventory, 0, 2, 2, false) {
 
         init {
-            setFilter { stack ->
+            setInputFilter { stack ->
                 stack.item is ItemDataModel && stack.dataModel.category != null
             }
 
@@ -275,6 +275,23 @@ class DeepLearnerScreenHandler (
             backgroundPainter?.paintBackground(context, x, y, this)
 
             icon?.paint(context, x + 1, y + 1, 34)
+        }
+
+    }
+
+
+    // Prevent dropping your Deep Learner while it's up, duping it and all data models inside
+    class DeepLearnerPlayerInv(
+        playerInventory: PlayerInventory
+    ): WPlayerInvPanel(playerInventory) {
+
+        init {
+            inventory.setOutputFilter {
+                !it.isOf(ITEM_DEEP_LEARNER)
+            }
+            hotbar.setOutputFilter {
+                !it.isOf(ITEM_DEEP_LEARNER)
+            }
         }
 
     }
