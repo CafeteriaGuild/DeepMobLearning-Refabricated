@@ -273,7 +273,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
                             val innerBlockPos = BlockPos(x, y, z)
                             if (
                                 innerBlockPos != pos
-                                && innerBlockPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()
+                                && innerBlockPos.getSquaredDistance(pos) < config.trial.arenaRadius.squared()
                                 && world?.getBlockState(innerBlockPos)?.isAir != true
                             ) {
                                 list += innerBlockPos
