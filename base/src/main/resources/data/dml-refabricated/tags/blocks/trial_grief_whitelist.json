@@ -1,0 +1,7 @@
+{
+  "values": [
+    "#c:chests",
+    {"id": "yigd:grave", "required": false},
+    {"id": "gravestones:gravestone", "required": false}
+  ]
+}
