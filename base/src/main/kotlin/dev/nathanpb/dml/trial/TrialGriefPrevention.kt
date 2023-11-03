@@ -20,13 +20,13 @@
 package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.config
+import dev.nathanpb.dml.misc.TRIAL_GRIEF_WHITELIST
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.squared
 import dev.nathanpb.dml.utils.toBlockPos
 import dev.nathanpb.dml.utils.toVec3i
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
-import net.minecraft.block.Blocks
 import net.minecraft.entity.Entity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.EndermanEntity
@@ -39,7 +39,6 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import net.minecraft.world.explosion.Explosion
 import net.minecraft.world.explosion.ExplosionBehavior
 
 class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
@@ -65,11 +64,8 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
             !world.isClient
             && config.trial.interactGriefPrevention
             && isBlockProtected(world, pos)
-            && world.getBlockState(pos)?.run {
-                block !== Blocks.CHEST
-                && block !== Blocks.TRAPPED_CHEST
-                && "grave" !in Registries.BLOCK.getId(block).path
-            } != false
+            && !world.getBlockState(pos).isIn(TRIAL_GRIEF_WHITELIST)
+            && "grave" !in Registries.BLOCK.getId(world.getBlockState(pos).block).path
         ) {
             ActionResult.FAIL
         } else ActionResult.PASS

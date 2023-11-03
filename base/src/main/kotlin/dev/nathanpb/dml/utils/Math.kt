@@ -24,6 +24,7 @@ import kotlin.random.Random
 fun Double.lerp(min: Double, max: Double) = (1 - this) * min + this * max
 fun Int.lerp(min: Double, max: Double) = (1 - this) * min + this * max
 
+fun Double.squared() = this * this
 fun Int.squared() = this * this
 
 // https://stackoverflow.com/a/35701777/9893963

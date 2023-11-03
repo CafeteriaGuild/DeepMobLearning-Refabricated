@@ -20,8 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor.screen
 
-import com.sun.java.accessibility.util.SwingEventMonitor.addChangeListener
-import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
@@ -30,7 +28,6 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.net.C2S_MODULAR_EFFECT_TOGGLE
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForItemStack
-import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
 import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
@@ -46,7 +43,6 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ArrayPropertyDelegate
-import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 
@@ -102,7 +98,7 @@ class ModularArmorScreenHandler(
         }
 
         val dataModelSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
-            setFilter {
+            setInputFilter {
                 it.isEmpty || (
                         (it.item as? ItemDataModel)?.category != null
                                 && data.tier().ordinal >= it.dataModel.tier().ordinal
