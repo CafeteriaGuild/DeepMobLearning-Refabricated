@@ -21,8 +21,10 @@ def RELEASE_TYPE =
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def getChangeLog() {
-    return "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated/releases/tag/${URLEncoder.encode(project.mod_version, "utf-8")}"
+    return ""
 }
+
+def ENV = System.getenv()
 
 
 repositories {
@@ -134,7 +136,10 @@ jar {
 }
 
 curseforge {
-    apiKey = project.property("curseforgeToken")
+    if(ENV.CURSEFORGE_API_KEY) {
+        apiKey = ENV.CURSEFORGE_API_KEY
+    }
+
     project {
         id = project.curseforge_id
         changelog = getChangeLog()
@@ -164,10 +169,12 @@ curseforge {
 }
 
 modrinth {
-    token = project.property("modrinthToken")
+    if(ENV.MODRINTH_TOKEN) {
+        token = ENV.MODRINTH_TOKEN
+    }
 
     projectId = project.modrinth_id
-    versionNumber = project.mod_version + "+" + project.minecraft_version
+    versionNumber = project.mod_version
     uploadFile = remapJar
     gameVersions = [project.minecraft_version]
     loaders = ['fabric']
