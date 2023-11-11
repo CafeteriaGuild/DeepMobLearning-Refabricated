@@ -50,9 +50,9 @@ class ScreenHandlerSimulationChamber(syncId: Int, playerInventory: PlayerInvento
 
     private fun addSlots() {
         addSlot(SlotSimulationChamber(inventory, 0, 9, 146))
-        addSlot(SlotSimulationChamber(inventory, 1, 176, 7))
+        addSlot(SlotSimulationChamber(inventory, 1, 176, 17))
         addSlot(SlotSimulationChamber(inventory, 2, 196, 7))
-        addSlot(SlotSimulationChamber(inventory, 3, 186, 27))
+        addSlot(SlotSimulationChamber(inventory, 3, 196, 27))
     }
 
     private fun addInventorySlots() {

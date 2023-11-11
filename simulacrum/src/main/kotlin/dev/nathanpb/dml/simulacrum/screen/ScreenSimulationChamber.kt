@@ -7,11 +7,11 @@ import dev.nathanpb.dml.simulacrum.PRISTINE_CHANCE
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
 import dev.nathanpb.dml.simulacrum.util.Animation
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
+import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_STYLE
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
@@ -50,12 +50,12 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         //Main Chamber GUI
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         ctx.drawTexture(gui, x, y, 0, 0, 216, 141)
-        ctx.drawTexture(gui, x, y + 145, 0, 141, 18, 18)
+        ctx.drawTexture(gui, x, y + 145, 216, 0, 18, 18)
 
         //Energy Bar Rendering
-        val energyBarHeight: Int = (handler!!.syncedEnergy / (maxEnergy - 64) * 87).toInt().coerceAtLeast(0).coerceAtMost(87)
-        val energyBarOffset: Int = 87 - energyBarHeight
-        ctx.drawTexture(gui, x + 203, (y + 48) + energyBarOffset, 25, 141, 7, energyBarHeight)
+        val energyBarHeight: Int = (handler!!.syncedEnergy / (maxEnergy - 64) * 89).toInt().coerceAtLeast(0).coerceAtMost(89)
+        val energyBarOffset: Int = 89 - energyBarHeight
+        ctx.drawTexture(gui, x + 202, (y + 47) + energyBarOffset, 243, 0, 9, energyBarHeight)
 
 
         val lines: Array<String>
@@ -82,9 +82,9 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
                     (DataModelUtil.getTier(blockEntity.dataModel)?.dataAmount ?: 0)
                 val tierRoof = DataModelUtil.getTierRoof(blockEntity.dataModel) -
                     (DataModelUtil.getTier(blockEntity.dataModel)?.dataAmount ?: 0)
-                val experienceBarHeight = (collectedData.toFloat() / tierRoof * 87).toInt()
-                val experienceBarOffset = 87 - experienceBarHeight
-                ctx.drawTexture(gui, x + 6, y + 48 + experienceBarOffset, 18, 141, 7, experienceBarHeight)
+                val experienceBarHeight = (collectedData.toFloat() / tierRoof * 89).toInt()
+                val experienceBarOffset = 89 - experienceBarHeight
+                ctx.drawTexture(gui, x + 5, y + 47 + experienceBarOffset, 234, 0, 9, experienceBarHeight)
             }
             ctx.drawText(
                 renderer, Text.translatable("tooltip.dml-refabricated.data_model.3").copy().append(
@@ -122,7 +122,7 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         val y: Int = mouseY - this.y
         val f = NumberFormat.getNumberInstance(Locale.ENGLISH)
         val tooltip: MutableList<Text> = ArrayList()
-        if (y in 47..134) {
+        if (y in 47..135) {
             if (x in 13..21) {
                 // Tooltip for data model data bar
                 if (blockEntity.hasDataModel()) {
@@ -145,9 +145,11 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
                     tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.missing_data_model"))
                 }
                 ctx.drawTooltip(textRenderer, tooltip, x + 2, y + 2)
-            } else if (x in 211..219) {
-                // Tooltip for energy
-                tooltip.add(Text.of(f.format(handler!!.syncedEnergy.toLong()) + "/" + f.format(maxEnergy) + " E"))
+            } else if (x in 210..219) {
+                val energyText = Text.literal(f.format(handler!!.syncedEnergy.toLong()) + "/" + f.format(maxEnergy) + " E").styled {
+                    ENERGY_STYLE
+                }
+                tooltip.add(energyText)
                 ctx.drawTooltip(textRenderer, tooltip, x - 90, y - 16)
             }
         }
