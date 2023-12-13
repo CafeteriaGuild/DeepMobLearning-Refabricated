@@ -32,9 +32,11 @@ class DataModelData(val stack: ItemStack, val category: EntityCategory?) : Mutab
 
     companion object {
         const val DATA_AMOUNT_TAG_KEY = "${MOD_ID}.datamodel.dataAmount"
+        const val SIMULATED_TAG_KEY = "${MOD_ID}.datamodel.simulated"
     }
 
     var dataAmount by persistentDefaulted(0, Serializers.INT, DATA_AMOUNT_TAG_KEY)
+    var simulated by persistentDefaulted(false, Serializers.BOOLEAN, SIMULATED_TAG_KEY)
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
 

@@ -22,9 +22,7 @@ package dev.nathanpb.dml.blockEntity
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.inventory.DataSynthesizerInventory
-import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.utils.items
-import dev.nathanpb.dml.utils.setStacks
+import dev.nathanpb.dml.utils.*
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
@@ -50,7 +48,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
     private val _propertyDelegate = ArrayPropertyDelegate(2)
     val inventory = DataSynthesizerInventory()
 
-    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(propertyDelegate[1].toLong(), 0, 8192) {
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(propertyDelegate[1].toLong(), 8192, 8192) {
 
         override fun onFinalCommit() {
             markDirty()
@@ -69,16 +67,25 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
         val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { _, _, _, blockEntity ->
 
             val dataModelStack = blockEntity.inventory.getStack(0)
-            if(blockEntity.energyStorage.amount <= (blockEntity.propertyDelegate[1] - dataEnergyValue) && !dataModelStack.isEmpty) {
-                if(dataModelStack.item is ItemDataModel && dataModelStack.dataModel.dataAmount > 0) {
-                    dataModelStack.dataModel.dataAmount--
-                    blockEntity.energyStorage.amount += dataEnergyValue
-                    blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
+            if(!dataModelStack.isEmpty) {
+                if(blockEntity.energyStorage.amount <= (blockEntity.propertyDelegate[1] - dataEnergyValue)) {
+                    if(dataModelStack.hasSimUnrestrictedData()) {
+                        dataModelStack.dataModel.dataAmount--
+                        blockEntity.energyStorage.amount += dataEnergyValue
+                        blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
+                        blockEntity.markDirty()
+                    }
+                }
+                if(dataModelStack.dataModel.simulated && dataModelStack.dataModel.dataAmount <= 0) {
+                    dataModelStack.dataModel.simulated = false
                     blockEntity.markDirty()
                 }
             }
 
             // TODO add energy slot support
+            attemptToInsert(blockEntity.energyStorage, blockEntity.inventory, 2)
+            attemptToExtract(blockEntity.energyStorage, blockEntity.inventory, 1)
+
         }
     }
 

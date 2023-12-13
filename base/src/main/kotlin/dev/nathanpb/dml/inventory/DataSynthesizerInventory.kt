@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Direction
 
 
-class DataSynthesizerInventory : SimpleInventory(2), SidedInventory {
+class DataSynthesizerInventory : SimpleInventory(3), SidedInventory {
 
 
     override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?) = false

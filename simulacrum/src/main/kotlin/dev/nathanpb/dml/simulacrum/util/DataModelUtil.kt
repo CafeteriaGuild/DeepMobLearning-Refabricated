@@ -4,8 +4,6 @@ import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
-import dev.nathanpb.dml.item.ItemDataModel
-import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.item.*
 import dev.nathanpb.dml.simulacrum.ENERGY_COST
 import net.minecraft.item.Item
@@ -48,11 +46,12 @@ class DataModelUtil {
             return if(stack.item is ItemDataModel) stack.dataModel.dataAmount else 0
         }
 
-        fun updateTierCount(stack: ItemStack) {
+        fun updateDataModel(stack: ItemStack) {
             val dataBonus = config.simulationChamber.dataBonus
             if(stack.item !is ItemDataModel || dataBonus == 0) return
 
             stack.dataModel.dataAmount = (getTierCount(stack) + dataBonus).coerceIn(0, config.dataModel.selfAwareDataRequired)
+            stack.dataModel.simulated = stack.dataModel.dataAmount > 0 // remove simulated tag if dataBonus is negative
         }
 
         fun getEnergyCost(stack: ItemStack): Int {

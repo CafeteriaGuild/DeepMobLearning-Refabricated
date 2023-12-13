@@ -122,7 +122,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         // Only decrease input and increase output if not aborted, and only if on the server's BE
         if (!abort && !world!!.isClient) {
             DataModelUtil.updateSimulationCount(dataModel)
-            DataModelUtil.updateTierCount(dataModel)
+            DataModelUtil.updateDataModel(dataModel)
             if (inventory[2].item is ItemMatter) {
                 inventory[2].count = living.count + 1
             } else {
