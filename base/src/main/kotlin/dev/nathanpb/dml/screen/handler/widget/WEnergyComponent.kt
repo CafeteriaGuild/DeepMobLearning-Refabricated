@@ -19,23 +19,25 @@
 
 package dev.nathanpb.dml.screen.handler.widget
 
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
-import net.minecraft.client.MinecraftClient
+import io.github.cottonmc.cotton.gui.widget.WSprite
 import net.minecraft.inventory.Inventory
-import net.minecraft.text.Style
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+
 
 class WEnergyComponent(
     private val energyIndex: Int,
     private val maxEnergyIndex: Int,
     val inventory: Inventory,
-    batterySlotIndex: Int,
+    inputIndex: Int,
+    outputIndex: Int,
     val isPristineEnergy: Boolean = false // don't use outside modular-armor!
 ): WPlainPanel() {
+
 
     private val energyBar = object : WBar(
         RenderUtils.ENERGY_BAR_BACKGROUND,
@@ -50,16 +52,29 @@ class WEnergyComponent(
         }
 
     }
-    private val batterySlot = WItemSlot.of(
+    private val outputSlot = WItemSlot.of(
         inventory,
-        batterySlotIndex,
+        outputIndex,
         1,
         1
-    ) // TODO add texture icon
+    )
+    private val inputSlot = WItemSlot.of(
+        inventory,
+        inputIndex,
+        1,
+        1
+    )
+
+    private val arrow = WSprite(identifier("textures/gui/energy_bar_arrow.png"))
+    private val arrow2 = WSprite(identifier("textures/gui/energy_bar_arrow.png"))
+
 
     init {
-        add(energyBar, 0, 0, 1*18, 3*18)
-        add(batterySlot, 0, 3*18+4)
+        add(outputSlot, 0, 0)
+        add(arrow, 0, 18, 18, 6)
+        add(energyBar, 0, 24, 1*18, 30)
+        add(arrow2, 0, 54, 18, 6)
+        add(inputSlot, 0, 3*18+6)
     }
 
 
@@ -78,7 +93,7 @@ class WEnergyComponent(
                     translationKey,
                     RenderUtils.formatAccordingToLanguage().format(energy)
                 ).apply {
-                    style = if(isPristineEnergy) RenderUtils.STYLE else Style.EMPTY.withColor(0xFCD904)
+                    style = if(isPristineEnergy) RenderUtils.STYLE else RenderUtils.ENERGY_STYLE
                 }
             )
         }

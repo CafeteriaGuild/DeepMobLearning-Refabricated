@@ -22,6 +22,7 @@ package dev.nathanpb.dml.blockEntity
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.inventory.DataSynthesizerInventory
+import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.utils.*
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
@@ -46,9 +47,10 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 {
 
     private val _propertyDelegate = ArrayPropertyDelegate(2)
+    private val energyCapacity = 196608L // TODO Add as config value
     val inventory = DataSynthesizerInventory()
 
-    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(propertyDelegate[1].toLong(), 8192, 8192) {
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, 8192, 8192) {
 
         override fun onFinalCommit() {
             markDirty()
@@ -58,7 +60,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
     }
 
     init {
-        propertyDelegate[1] = 196608 // TODO Add as config value
+        propertyDelegate[1] = energyCapacity.toInt()
     }
 
     companion object {
@@ -67,7 +69,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
         val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { _, _, _, blockEntity ->
 
             val dataModelStack = blockEntity.inventory.getStack(0)
-            if(!dataModelStack.isEmpty) {
+            if(!dataModelStack.isEmpty && dataModelStack.item is ItemDataModel) {
                 if(blockEntity.energyStorage.amount <= (blockEntity.propertyDelegate[1] - dataEnergyValue)) {
                     if(dataModelStack.hasSimUnrestrictedData()) {
                         dataModelStack.dataModel.dataAmount--
@@ -82,10 +84,8 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
                 }
             }
 
-            // TODO add energy slot support
-            attemptToInsert(blockEntity.energyStorage, blockEntity.inventory, 2)
-            attemptToExtract(blockEntity.energyStorage, blockEntity.inventory, 1)
-
+            moveToStorage(blockEntity.energyStorage, blockEntity.inventory, 1)
+            moveToStack(blockEntity.energyStorage, blockEntity.inventory, 2)
         }
     }
 

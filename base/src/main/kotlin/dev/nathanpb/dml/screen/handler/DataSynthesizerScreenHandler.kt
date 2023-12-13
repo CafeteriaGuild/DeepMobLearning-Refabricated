@@ -63,7 +63,7 @@ class DataSynthesizerScreenHandler(
             ),
             true,
         )
-        root.add(simulatedDataBubble, 5*18+1, 2*18+6, 8, 8)
+        root.add(simulatedDataBubble, (5 * 18) + 1, (2 * 18) + 6, 8, 8)
 
         val dataModelSlot = WItemSlot.of(blockInventory, 0, 1, 1).apply {
             setFilter { stack ->
@@ -81,12 +81,12 @@ class DataSynthesizerScreenHandler(
             }
         }
 
-        root.add(dataModelSlot, 4*18, 2*18+6)
+        root.add(dataModelSlot, 4 * 18, (2 * 18) + 6)
 
         val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2)
-        root.add(energyComponent, 0, (1*18) - 6)
+        root.add(energyComponent, 0, (1 * 18) - 6)
 
-        root.add(createPlayerInventoryPanel(), 0, 5*18)
+        root.add(createPlayerInventoryPanel(), 0, (5 * 18) + 2)
         root.validate(this)
 
         (blockInventory as? SimpleInventory)?.addListener {
