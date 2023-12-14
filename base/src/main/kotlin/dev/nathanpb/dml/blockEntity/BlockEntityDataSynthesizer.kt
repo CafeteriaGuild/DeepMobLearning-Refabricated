@@ -64,9 +64,9 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
     }
 
     companion object {
-        private val dataEnergyValue = 3072 // TODO Add as config value
+        private val dataEnergyValue = 3072 // TODO use simulation cost * 8-ish
 
-        val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { _, _, _, blockEntity ->
+        val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { world, pos, _, blockEntity ->
 
             val dataModelStack = blockEntity.inventory.getStack(0)
             if(!dataModelStack.isEmpty && dataModelStack.item is ItemDataModel) {
@@ -84,6 +84,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
                 }
             }
 
+            pushEnergyToAllSides(world, pos, blockEntity.energyStorage)
             moveToStorage(blockEntity.energyStorage, blockEntity.inventory, 1)
             moveToStack(blockEntity.energyStorage, blockEntity.inventory, 2)
         }

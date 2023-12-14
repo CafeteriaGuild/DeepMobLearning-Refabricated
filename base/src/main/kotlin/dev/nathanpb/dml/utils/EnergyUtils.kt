@@ -26,7 +26,9 @@ import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.inventory.Inventory
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.world.World
 import team.reborn.energy.api.EnergyStorage
 import team.reborn.energy.api.EnergyStorageUtil
 import team.reborn.energy.api.base.SimpleEnergyStorage
@@ -36,25 +38,44 @@ val SIDED_PRISTINE = BlockApiLookup.get(identifier("sided_pristine"), EnergyStor
 val ITEM_PRISTINE = ItemApiLookup.get(identifier("item_pristine"), EnergyStorage::class.java, ContainerItemContext::class.java)
 
 
-fun moveToStorage(energyStorage: EnergyStorage, inventory: Inventory, index: Int) {
+fun moveToStorage(
+    energyStorage: EnergyStorage,
+    inventory: Inventory,
+    index: Int
+) {
     moveToStorage(energyStorage, inventory, index, EnergyStorage.ITEM)
 }
 
-fun moveToStack(energyStorage: EnergyStorage, inventory: Inventory, index: Int) {
+fun moveToStack(
+    energyStorage: EnergyStorage,
+    inventory: Inventory,
+    index: Int
+) {
     moveToStack(energyStorage, inventory, index, EnergyStorage.ITEM)
 }
 
-fun moveToStoragePristine(energyStorage: EnergyStorage, inventory: Inventory, index: Int) {
+fun moveToStoragePristine(
+    energyStorage: EnergyStorage,
+    inventory: Inventory,
+    index: Int
+) {
     moveToStorage(energyStorage, inventory, index, ITEM_PRISTINE)
 }
 
-fun moveToStackPristine(energyStorage: EnergyStorage, inventory: Inventory, index: Int) {
+fun moveToStackPristine(
+    energyStorage: EnergyStorage,
+    inventory: Inventory,
+    index: Int
+) {
     moveToStack(energyStorage, inventory, index, ITEM_PRISTINE)
 }
 
-
-
-private fun moveToStorage(energyStorage: EnergyStorage, inventory: Inventory, index: Int, energyLookup: ItemApiLookup<EnergyStorage, ContainerItemContext>) {
+private fun moveToStorage(
+    energyStorage: EnergyStorage,
+    inventory: Inventory,
+    index: Int,
+    energyLookup: ItemApiLookup<EnergyStorage, ContainerItemContext>
+) {
     val stack = inventory.getStack(index)
     if(stack.isEmpty) return
 
@@ -64,7 +85,12 @@ private fun moveToStorage(energyStorage: EnergyStorage, inventory: Inventory, in
     }
 }
 
-private fun moveToStack(energyStorage: EnergyStorage, inventory: Inventory, index: Int, energyLookup: ItemApiLookup<EnergyStorage, ContainerItemContext>) {
+private fun moveToStack(
+    energyStorage: EnergyStorage,
+    inventory: Inventory,
+    index: Int,
+    energyLookup: ItemApiLookup<EnergyStorage, ContainerItemContext>
+) {
     val stack = inventory.getStack(index)
     if(stack.isEmpty) return
 
@@ -74,7 +100,85 @@ private fun moveToStack(energyStorage: EnergyStorage, inventory: Inventory, inde
     }
 }
 
-fun SimpleEnergyStorage.addEnergy(amount: Long): Boolean {
+fun pushEnergyToAllSides(
+    world: World,
+    pos: BlockPos,
+    originStorage: EnergyStorage
+) {
+    pushEnergyExcept(world, pos, setOf(), originStorage, EnergyStorage.SIDED)
+}
+
+fun pushPristineEnergyToAllSides(
+    world: World,
+    pos: BlockPos,
+    originStorage: EnergyStorage
+) {
+    pushEnergyExcept(world, pos, setOf(), originStorage, SIDED_PRISTINE)
+}
+
+private fun pushEnergyToAllSides(
+    world: World,
+    pos: BlockPos,
+    originStorage: EnergyStorage,
+    energyLookup: BlockApiLookup<EnergyStorage, Direction>
+) {
+    pushEnergyExcept(world, pos, setOf(), originStorage, energyLookup)
+}
+
+fun pushEnergyExcept(
+    world: World,
+    pos: BlockPos,
+    exceptDirections: Set<Direction>,
+    originStorage: EnergyStorage
+) {
+    val directions = mutableSetOf(*Direction.values())
+    directions.removeAll(exceptDirections)
+    for(direction in directions) {
+        pushEnergy(world, pos, direction, originStorage, EnergyStorage.SIDED)
+    }
+}
+
+fun pushPristineEnergyExcept(
+    world: World,
+    pos: BlockPos,
+    exceptDirections: Set<Direction>,
+    originStorage: EnergyStorage
+) {
+    val directions = mutableSetOf(*Direction.values())
+    directions.removeAll(exceptDirections)
+    for(direction in directions) {
+        pushEnergy(world, pos, direction, originStorage, SIDED_PRISTINE)
+    }
+}
+
+private fun pushEnergyExcept(
+    world: World,
+    pos: BlockPos,
+    exceptDirections: Set<Direction>,
+    originStorage: EnergyStorage,
+    energyLookup: BlockApiLookup<EnergyStorage, Direction>
+) {
+    val directions = mutableSetOf(*Direction.values())
+    directions.removeAll(exceptDirections)
+    for(direction in directions) {
+        pushEnergy(world, pos, direction, originStorage, energyLookup)
+    }
+}
+
+private fun pushEnergy(
+    world: World,
+    pos: BlockPos,
+    direction: Direction,
+    originStorage: EnergyStorage,
+    energyLookup: BlockApiLookup<EnergyStorage, Direction>
+): Long {
+    val externalStorage = energyLookup.find(world, pos.offset(direction), direction.opposite)
+    return EnergyStorageUtil.move(originStorage, externalStorage, Long.MAX_VALUE, null)
+}
+
+fun SimpleEnergyStorage.addEnergy(
+    amount: Long
+): Boolean {
     var commit: Boolean
     Transaction.openOuter().use { transaction ->
         commit = insert(amount, transaction) > 0
@@ -85,7 +189,9 @@ fun SimpleEnergyStorage.addEnergy(amount: Long): Boolean {
     return commit
 }
 
-fun SimpleEnergyStorage.removeEnergy(amount: Long): Boolean {
+fun SimpleEnergyStorage.removeEnergy(
+    amount: Long
+): Boolean {
     var commit: Boolean
     Transaction.openOuter().use { transaction ->
         commit = extract(amount, transaction) > 0
