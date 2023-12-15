@@ -30,6 +30,9 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
+import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.damage.DamageTypes
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolMaterials
@@ -87,7 +90,7 @@ class ItemGlitchSword : SwordItem(
     override fun getRarity(stack: ItemStack) = Rarity.EPIC
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        val energyText = Text.literal("Energy: ")
+        val energyText = Text.translatable("text.dml-refabricated.energy").append(Text.of(" "))
         energyText.style = ENERGY_STYLE.withBold(true)
 
         val energyAmountText = Text.translatable(
@@ -96,9 +99,22 @@ class ItemGlitchSword : SwordItem(
             getEnergyCapacity(stack)
         ).formatted(Formatting.YELLOW)
 
-        tooltip.add(
-            energyText.append(energyAmountText)
-        )
+
+        tooltip.add(energyText.append(energyAmountText))
+    }
+
+    companion object {
+
+        fun getIncreasedDamage(source: DamageSource, amount: Float): Float {
+            var finalAmount = amount
+            if(source.typeRegistryEntry.key.get().value == DamageTypes.PLAYER_ATTACK.value && source.attacker is PlayerEntity) {
+                val attacker = source.attacker as PlayerEntity
+                if(attacker.getStackInHand(attacker.activeHand).isOf(ITEM_GLITCH_SWORD)) {
+                    finalAmount *= 2F
+                }
+            }
+            return finalAmount
+        }
     }
 
 }
