@@ -22,8 +22,10 @@ package dev.nathanpb.dml
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import dev.nathanpb.dml.block.registerBlocks
+import dev.nathanpb.dml.blockEntity.BLOCKENTITY_DATA_SYNTHESIZER
 import dev.nathanpb.dml.blockEntity.BLOCKENTITY_DISRUPTIONS_CORE
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
+import dev.nathanpb.dml.blockEntity.renderer.BlockEntityRendererDataSynthesizer
 import dev.nathanpb.dml.blockEntity.renderer.BlockEntityRendererDisruptionsCore
 import dev.nathanpb.dml.command.DMLCommand
 import dev.nathanpb.dml.entity.registerEntityRenderer
@@ -41,6 +43,7 @@ import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import dev.nathanpb.dml.worldgen.registerFeatures
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -118,7 +121,14 @@ fun initClient() {
     registerScreens()
     registerEntityRenderer()
 
+    BlockEntityRendererFactories.register(BLOCKENTITY_DATA_SYNTHESIZER, ::BlockEntityRendererDataSynthesizer)
     BlockEntityRendererFactories.register(BLOCKENTITY_DISRUPTIONS_CORE, ::BlockEntityRendererDisruptionsCore)
+
+    ModelLoadingPlugin.register{ ctx ->
+        ctx.addModels(
+            identifier("block/data_synthesizer_grid")
+        )
+    }
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)

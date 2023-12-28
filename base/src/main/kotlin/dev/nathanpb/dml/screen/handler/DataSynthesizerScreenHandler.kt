@@ -20,6 +20,7 @@
 
 package dev.nathanpb.dml.screen.handler
 
+import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
@@ -28,18 +29,23 @@ import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
 import dev.nathanpb.dml.screen.handler.widget.WInfoBubbleWidget
 import dev.nathanpb.dml.screen.handler.widget.WInfoBubbleWidget.Companion.WARNING_BUBBLE
 import dev.nathanpb.dml.utils.RenderUtils
-import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
+import io.github.cottonmc.cotton.gui.widget.WSprite
 import io.github.cottonmc.cotton.gui.widget.data.Insets
+import io.github.cottonmc.cotton.gui.widget.data.Texture
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
+import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.render.*
+import net.minecraft.client.render.GameRenderer.getPositionTexProgram
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.math.MathHelper
 
 class DataSynthesizerScreenHandler(
     syncId: Int,
@@ -67,7 +73,7 @@ class DataSynthesizerScreenHandler(
 
         val dataModelSlot = WItemSlot.of(blockInventory, 0, 1, 1).apply {
             setFilter { stack ->
-                stack.item is ItemDataModel // FIXME: Replace with tag
+                stack.item is ItemDataModel
             }
 
             icon = TextureIcon(identifier("textures/gui/slot_background/data_model_slot_background.png"))
@@ -80,8 +86,10 @@ class DataSynthesizerScreenHandler(
                 }
             }
         }
-
         root.add(dataModelSlot, 4 * 18, (2 * 18) + 6)
+
+        val progressThingy = WProgressLine((2 * 18) + 7)
+        root.add(progressThingy, (4 * 18) + 1, progressThingy.initialY, 16, 1)
 
         val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2)
         root.add(energyComponent, 0, (1 * 18) - 6)
@@ -102,6 +110,62 @@ class DataSynthesizerScreenHandler(
 
     override fun getTitleColor(): Int {
         return RenderUtils.TITLE_COLOR
+    }
+
+    inner class WProgressLine(
+        var initialY: Int
+    ): WSprite(
+        Texture(identifier("textures/block/palette.png"), 0.0625F, 0F, 0.125F, 0.0625F)
+    ) {
+
+        private var hidden = true
+        private val areaSize = 15F
+
+        init {
+            initialY += 7
+        }
+
+        override fun tick() {
+            if(host!!.propertyDelegate!!.get(4) == 0) { // canProgress
+                hidden = true
+                return
+            }
+            hidden = false
+
+
+            val percentage = MathHelper.clamp(
+                host!!.propertyDelegate!!.get(2).toFloat() / host!!.propertyDelegate!!.get(3).toFloat(),
+                0F,
+                1F
+            )
+
+            y = if(percentage <= 0.5F) { // First half, downward
+                initialY + Math.round(areaSize * percentage * 2F)
+            } else { // Second half, upward
+                initialY + Math.round(areaSize * 2F * (1F - percentage))
+            }
+
+        }
+
+        override fun paint(context: DrawContext?, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+            if(hidden) return
+
+            val texture = frames[0]
+            val tessellator = Tessellator.getInstance()
+            val buffer = tessellator.buffer
+            val model = context!!.matrices.peek().positionMatrix
+            RenderSystem.enableBlend()
+            RenderSystem.setShaderTexture(0, texture.image)
+            RenderSystem.setShaderColor(1F, 1F, 1F, 0.8F)
+            RenderSystem.setShader(::getPositionTexProgram)
+            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE)
+            buffer.vertex(model, x.toFloat(), (y + height).toFloat(), 1000F).texture(texture.u1, texture.v2).next()
+            buffer.vertex(model, (x + width).toFloat(), (y + height).toFloat(), 1000F).texture(texture.u2, texture.v2).next()
+            buffer.vertex(model, (x + width).toFloat(), y.toFloat(), 1000F).texture(texture.u2, texture.v1).next()
+            buffer.vertex(model, x.toFloat(), y.toFloat(), 1000F).texture(texture.u1, texture.v1).next()
+            BufferRenderer.drawWithGlobalProgram(buffer.end())
+            RenderSystem.disableBlend()
+        }
     }
 
 }

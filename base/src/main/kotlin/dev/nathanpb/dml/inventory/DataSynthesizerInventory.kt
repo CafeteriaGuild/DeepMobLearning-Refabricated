@@ -27,10 +27,16 @@ import net.minecraft.util.math.Direction
 
 class DataSynthesizerInventory : SimpleInventory(3), SidedInventory {
 
+    companion object {
+        const val INPUT_SLOT = 0
+    }
 
-    override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?) = false
+    val dataModelStack: ItemStack
+        get() = getStack(INPUT_SLOT)
 
-    override fun canInsert(slot: Int, stack: ItemStack?, dir: Direction?) = false
+    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = false
 
-    override fun getAvailableSlots(side: Direction?) = intArrayOf()
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) = false
+
+    override fun getAvailableSlots(side: Direction) = intArrayOf()
 }
