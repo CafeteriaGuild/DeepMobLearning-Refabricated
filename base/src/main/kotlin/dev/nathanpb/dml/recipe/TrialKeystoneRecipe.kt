@@ -58,19 +58,14 @@ class TrialKeystoneRecipe (
             .firstOrNull { it.category == data.category && it.tier == data.tier() }
     }
 
-    fun copyRewards(): MutableList<ItemStack> {
-        return copyRewards(false)
-    }
-
-    fun copyRewards(onREI: Boolean): MutableList<ItemStack> {
+    fun copyRewards(onREI: Boolean = false): MutableList<ItemStack> {
         val rewardsCopy = rewards.map(ItemStack::copy).toMutableList()
 
         // Glitch Upgrade
-        if(isModLoaded(MODULAR_ARMOR_ID)) {
-            if(tier.glitchUpgradeOdds > 0 && (Random.nextDouble() < tier.glitchUpgradeOdds || onREI)) {
-                rewardsCopy.add(ItemStack(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE))
-            }
+        if(tier.glitchUpgradeOdds > 0 && (Random.nextDouble() < tier.glitchUpgradeOdds || onREI)) {
+            rewardsCopy.add(ItemStack(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE))
         }
+
 
         // TODO System Glitch Head
         /*
