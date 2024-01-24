@@ -36,6 +36,7 @@ import dev.nathanpb.dml.itemgroup.registerItemGroup
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
 import dev.nathanpb.dml.listener.GlitchSwordDataCollectListener
+import dev.nathanpb.dml.misc.registerSounds
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
 import dev.nathanpb.dml.screen.handler.registerScreenHandlers
@@ -112,6 +113,7 @@ fun init() {
     }
     TrialAffixRegistry.registerDefaultAffixes()
     registerFeatures()
+    registerSounds()
     CommandRegistrationCallback.EVENT.register(DMLCommand())
     LOGGER.info("Deep Mob Learning: Refabricated" + quirkyStartupMessages[Random.nextInt(quirkyStartupMessages.size)])
 }

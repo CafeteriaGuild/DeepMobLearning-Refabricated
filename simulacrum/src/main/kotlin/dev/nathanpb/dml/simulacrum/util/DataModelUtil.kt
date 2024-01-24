@@ -51,7 +51,7 @@ class DataModelUtil {
             if(stack.item !is ItemDataModel || dataBonus == 0) return
 
             stack.dataModel.dataAmount = (getTierCount(stack) + dataBonus).coerceIn(0, config.dataModel.selfAwareDataRequired)
-            stack.dataModel.simulated = stack.dataModel.dataAmount > 0 // remove simulated tag if dataBonus is negative
+            stack.dataModel.simulated = true
         }
 
         fun getEnergyCost(stack: ItemStack): Int {

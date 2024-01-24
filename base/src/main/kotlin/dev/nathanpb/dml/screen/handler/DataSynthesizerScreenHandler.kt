@@ -21,6 +21,7 @@
 package dev.nathanpb.dml.screen.handler
 
 import com.mojang.blaze3d.systems.RenderSystem
+import dev.nathanpb.dml.blockEntity.BlockEntityDataSynthesizer
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
@@ -28,8 +29,11 @@ import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
 import dev.nathanpb.dml.screen.handler.widget.WInfoBubbleWidget
 import dev.nathanpb.dml.screen.handler.widget.WInfoBubbleWidget.Companion.WARNING_BUBBLE
+import dev.nathanpb.dml.screen.handler.widget.WMuteButton
 import dev.nathanpb.dml.utils.RenderUtils
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
+import io.github.cottonmc.cotton.gui.networking.NetworkSide
+import io.github.cottonmc.cotton.gui.networking.ScreenNetworking
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WSprite
@@ -42,15 +46,17 @@ import net.minecraft.client.render.GameRenderer.getPositionTexProgram
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 
+
 class DataSynthesizerScreenHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
-    ctx: ScreenHandlerContext
+    val ctx: ScreenHandlerContext
 ) : SyncedGuiDescription(
     HANDLER_DATA_SYNTHESIZER,
     syncId, playerInventory,
@@ -58,6 +64,21 @@ class DataSynthesizerScreenHandler(
     getBlockPropertyDelegate(ctx)
 ) {
     init {
+        val MUTE_TOGGLE_ID = identifier("data_synthesizer_mute_toggle")
+        val blockPos = ctx.get { _, u -> { u }}.get().invoke()
+
+        ScreenNetworking.of(
+            this,
+            NetworkSide.SERVER
+        ).receive(MUTE_TOGGLE_ID) { _ ->
+            val blockEntity = world.getBlockEntity(blockPos)
+            if(world.getBlockEntity(blockPos) is BlockEntityDataSynthesizer) {
+                (blockEntity as BlockEntityDataSynthesizer).mute = !blockEntity.mute
+                blockEntity.markDirty()
+                blockEntity.sync()
+            }
+        }
+
         val root = WPlainPanel()
         setRootPanel(root)
         root.insets = Insets.ROOT_PANEL
@@ -67,12 +88,12 @@ class DataSynthesizerScreenHandler(
             listOf(
                 Text.translatable("text.dml-refabricated.simulated_data.warning").formatted(Formatting.DARK_RED)
             ),
-            true,
+            true
         )
         root.add(simulatedDataBubble, (5 * 18) + 1, (2 * 18) + 6, 8, 8)
 
         val dataModelSlot = WItemSlot.of(blockInventory, 0, 1, 1).apply {
-            setFilter { stack ->
+            setInputFilter { stack ->
                 stack.item is ItemDataModel
             }
 
@@ -94,12 +115,25 @@ class DataSynthesizerScreenHandler(
         val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2)
         root.add(energyComponent, 0, (1 * 18) - 6)
 
+        val soundButton = object : WMuteButton(propertyDelegate[5]) {
+            override fun toggleMute() {
+                ScreenNetworking.of(
+                    this@DataSynthesizerScreenHandler,
+                    NetworkSide.CLIENT
+                ).send(MUTE_TOGGLE_ID) { _ -> }
+
+            }
+        }
+        root.add(soundButton, (8 * 18) - 2, (1 * 18) - 6, 20, 20)
+
         root.add(createPlayerInventoryPanel(), 0, (5 * 18) + 2)
         root.validate(this)
 
         (blockInventory as? SimpleInventory)?.addListener {
             sendContentUpdates()
         }
+
+
     }
 
     override fun canUse(entity: PlayerEntity?) = true

@@ -24,18 +24,18 @@ import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.client.NinePatchBackgroundPainter
-import io.github.cottonmc.cotton.gui.widget.WLabel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
-import net.minecraft.text.MutableText
+import net.minecraft.particle.DustParticleEffect
 import net.minecraft.text.Style
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
-import net.minecraft.world.World
+import org.joml.Vector3f
 import java.text.NumberFormat
 import java.util.*
+
 
 class RenderUtils {
 
@@ -62,6 +62,13 @@ class RenderUtils {
         const val ALT_TITLE_COLOR: Int = 0x62D8FF
         val STYLE: Style = Style.EMPTY.withColor(TITLE_COLOR)
         val ALT_STYLE: Style = Style.EMPTY.withColor(ALT_TITLE_COLOR)
+        val ENERGY_COLOR: Int = 0xFCD904
+        val ENERGY_STYLE: Style = Style.EMPTY.withColor(ENERGY_COLOR)
+
+        /* Particles */
+        val GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vector3f(4F, 252F, 196F), 1F)
+        val ALT_GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vector3f(98F, 216F, 255F), 1F)
+
 
         /*
          * Used to apply commas and periods to numbers according to the client's language

@@ -19,6 +19,9 @@
 
 package dev.nathanpb.dml.utils
 
+import dev.nathanpb.dml.config
+import dev.nathanpb.dml.data.dataModel
+import dev.nathanpb.dml.item.ItemDataModel
 import net.minecraft.item.ItemStack
 import kotlin.math.min
 
@@ -45,4 +48,9 @@ fun combineStacksIfPossible(source: ItemStack, target: ItemStack, maxInventoryCo
             transfer(source, target)
         }
     }
+}
+
+fun ItemStack.hasSimUnrestrictedData(): Boolean {
+    if(this.item !is ItemDataModel) return false
+    return this.dataModel.dataAmount > 0 && ((config.dataModel.hasSimulatedDataRestrictions && !this.dataModel.simulated) || !config.dataModel.hasSimulatedDataRestrictions)
 }

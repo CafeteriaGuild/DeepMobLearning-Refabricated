@@ -8,11 +8,18 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
-class WStylizedButton(
-    val textLabel: Text,
-    val texture: Identifier
+open class WStylizedButton private constructor(
+    val texture: Identifier,
+    val overlayTextures: List<Identifier>?, // textures must be 20x20
+    val textLabel: Text?
 ) : WButton(textLabel) {
 
+
+    constructor(texture: Identifier, textLabel: Text) : this(texture, null, textLabel)
+
+    constructor(texture: Identifier, overlayTextures: List<Identifier>) : this(texture, overlayTextures, null)
+
+    var overlayTextureIndex = 0
 
     /*
      * PORTING NOTICE: This is, at its core, a copy of WButton's paint method.
@@ -67,14 +74,30 @@ class WStylizedButton(
             color = 0xA0A0A0
         }
 
-        ScreenDrawing.drawStringWithShadow(
-            ctx,
-            textLabel.asOrderedText(),
-            alignment,
-            x,
-            y + (20 - 8) / 2,
-            width,
-            color
-        )
+        if(textLabel != null) {
+            ScreenDrawing.drawStringWithShadow(
+                ctx,
+                textLabel.asOrderedText(),
+                alignment,
+                x,
+                y + (20 - 8) / 2,
+                width,
+                color
+            )
+        } else { // Overlay Textures
+            ScreenDrawing.texturedRect(
+                ctx,
+                x,
+                y,
+                20,
+                20,
+                overlayTextures!![overlayTextureIndex],
+                0F,
+                0F,
+                1F,
+                1F,
+                0xFF_FFFFFF.toInt()
+            )
+        }
     }
 }

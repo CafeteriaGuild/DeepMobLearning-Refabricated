@@ -23,6 +23,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.inventory.DataSynthesizerInventory
 import dev.nathanpb.dml.item.ItemDataModel
+import dev.nathanpb.dml.misc.DATA_SYNTHESIZER_PROCESS
 import dev.nathanpb.dml.utils.*
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
@@ -33,10 +34,12 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.screen.ArrayPropertyDelegate
+import net.minecraft.sound.SoundEvent
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
 import team.reborn.energy.api.base.SimpleEnergyStorage
+import kotlin.properties.Delegates
 
 
 class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
@@ -51,8 +54,9 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
      * 2 - [progress]
      * 3 - [maxProgress] (const)
      * 4 - [canProgress]
+     * 5 - [mute]
      */
-    private val _propertyDelegate = ArrayPropertyDelegate(5)
+    private val _propertyDelegate = ArrayPropertyDelegate(6)
     val inventory = DataSynthesizerInventory()
     private val energyCapacity = 196608L // TODO Add as config value
     val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, 8192, 8192) {
@@ -70,6 +74,9 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 
     val maxProgress = 3 * 20
     var canProgress = false
+    var mute by Delegates.observable(false) { _, _, newValue ->
+        propertyDelegate[5] = if(newValue) 1 else 0
+    }
 
     init {
         propertyDelegate[1] = energyCapacity.toInt()
@@ -79,8 +86,8 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
     companion object {
         private val dataEnergyValue = 3072 // TODO use simulation cost * 8-ish
 
-        val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { world, pos, _, blockEntity ->
 
+        val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { world, pos, _, blockEntity ->
             val dataModelStack = blockEntity.inventory.getStack(0)
             if(!dataModelStack.isEmpty && dataModelStack.item is ItemDataModel) {
                 if(blockEntity.energyStorage.amount <= (blockEntity.energyCapacity - dataEnergyValue)) {
@@ -93,8 +100,13 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
                         removeCanProgressFlag(blockEntity)
                     }
                     if(blockEntity.canProgress) {
+                        if(blockEntity.progress == 0) {
+                            SoundPlayer(
+                                DATA_SYNTHESIZER_PROCESS,
+                                !blockEntity.mute
+                            ).playSound(world, pos)
+                        }
                         blockEntity.progress++
-                        blockEntity.propertyDelegate[2] = blockEntity.progress
                         blockEntity.sync()
 
                         if(blockEntity.progress >= blockEntity.maxProgress) {
@@ -124,6 +136,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
             moveToStack(blockEntity.energyStorage, blockEntity.inventory, 2)
         }
 
+
         private fun removeCanProgressFlag(blockEntity: BlockEntityDataSynthesizer) {
             blockEntity.canProgress = false
             blockEntity.propertyDelegate[4] = 0
@@ -134,14 +147,12 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 
         private fun resetProgress(blockEntity: BlockEntityDataSynthesizer) {
             blockEntity.progress = 0
-            blockEntity.propertyDelegate[2] = 0
         }
     }
 
     override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
         return (world.getBlockEntity(pos) as BlockEntityDataSynthesizer).inventory
     }
-
 
     override fun toTag(nbt: NbtCompound) {
         NbtCompound().let { invTag ->
@@ -152,6 +163,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
         nbt.putLong("${MOD_ID}:energy", energyStorage.amount)
         nbt.putBoolean("${MOD_ID}:can_progress", canProgress)
         nbt.putInt("${MOD_ID}:progress", progress)
+        nbt.putBoolean("${MOD_ID}:mute", mute)
     }
 
 
@@ -165,6 +177,9 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
         }
         canProgress = nbt.getBoolean("${MOD_ID}:can_progress")
         progress = nbt.getInt("${MOD_ID}:progress")
+        mute = nbt.getBoolean("${MOD_ID}:mute").also {
+            propertyDelegate[5] = if(it) 1 else 0
+        }
     }
 
     override fun toClientTag(nbt: NbtCompound) {
@@ -175,6 +190,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 
         canProgress = nbt.getBoolean("${MOD_ID}:can_progress")
         nbt.putInt("${MOD_ID}:progress", progress)
+        nbt.putBoolean("${MOD_ID}:mute", mute)
     }
 
     override fun fromClientTag(nbt: NbtCompound) {
@@ -184,6 +200,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 
         nbt.putBoolean("${MOD_ID}:can_progress", canProgress)
         progress = nbt.getInt("${MOD_ID}:progress")
+        mute = nbt.getBoolean("${MOD_ID}:mute")
     }
 
     override fun getPropertyDelegate() = _propertyDelegate
