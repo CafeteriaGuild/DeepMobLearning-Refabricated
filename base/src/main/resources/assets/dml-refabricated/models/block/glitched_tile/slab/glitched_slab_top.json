@@ -4,6 +4,6 @@
     "bottom": "dml-refabricated:block/glitched_tile",
     "side": "dml-refabricated:block/glitched_stairs_top",
     "top": "dml-refabricated:block/glitched_tile",
-    "particle": "dml-refabricated:block/glitched_stairs_tile"
+    "particle": "dml-refabricated:block/glitched_tile"
   }
 }
