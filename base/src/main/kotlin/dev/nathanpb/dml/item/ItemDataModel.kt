@@ -70,17 +70,18 @@ class ItemDataModel(val category: EntityCategory? = null) : Item(FabricItemSetti
         }
     }
 
-    // please do not remove me
-    override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
-        if (user?.isCreative == true && user.isSneaking && hand != null) {
-            val stack = user.getStackInHand(hand)
-            if (stack.item is ItemDataModel) {
-                val tier = stack.dataModel.tier()
-                stack.dataModel.dataAmount = if (tier.isMaxTier()) {
-                    DataModelTier.FAULTY.dataAmount
-                } else tier.nextTierOrCurrent().dataAmount
-            }
+    // cheat/debug
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        if(world.isClient) return TypedActionResult.pass(user.getStackInHand(hand))
+        if(!user.isCreative || !user.isSneaking) return TypedActionResult.pass(user.getStackInHand(hand))
+
+        val stack = user.getStackInHand(hand)
+        if(stack.item is ItemDataModel) {
+            val tier = stack.dataModel.tier()
+            stack.dataModel.dataAmount = if(!tier.isMaxTier()) tier.nextTierOrCurrent().dataAmount else DataModelTier.FAULTY.dataAmount
+            user.sendMessage(stack.dataModel.tier().text, true)
+            TypedActionResult.success(user.getStackInHand(hand), false)
         }
-        return super.use(world, user, hand)
+        return TypedActionResult.pass(user.getStackInHand(hand))
     }
 }
