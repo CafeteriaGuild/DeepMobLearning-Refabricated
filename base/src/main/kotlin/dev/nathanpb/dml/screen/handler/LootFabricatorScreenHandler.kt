@@ -21,6 +21,7 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.inventory.LootFabricatorInventory.Companion.ENERGY_INPUT
 import dev.nathanpb.dml.recipe.LootFabricatorRecipe
 import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
 import dev.nathanpb.dml.utils.RenderUtils
@@ -60,7 +61,7 @@ class LootFabricatorScreenHandler(
         }
         root.add(inputSlot, (2 * 18) + 16, 2 * 18)
 
-        val progressBar = WBar(RenderUtils.ARROW_BACKGROUND, RenderUtils.ARROW, 0, 1, WBar.Direction.UP)
+        val progressBar = WBar(RenderUtils.ARROW_BACKGROUND, RenderUtils.ARROW, 0, 1, WBar.Direction.RIGHT)
         root.add(progressBar, (4 * 18) + 5, (2 * 18) + 1, 22, 16)
 
 
@@ -71,7 +72,7 @@ class LootFabricatorScreenHandler(
             root.add(slot, (x + 6) * 18, (y + 1) * 18)
         }
 
-        val energyComponent = WEnergyComponent(2, 3, blockInventory, 1)
+        val energyComponent = WEnergyComponent(2, 3, blockInventory, ENERGY_INPUT)
         root.add(energyComponent, 0, (1 * 18) - 6)
 
         root.add(createPlayerInventoryPanel(), 0, 5 * 18)

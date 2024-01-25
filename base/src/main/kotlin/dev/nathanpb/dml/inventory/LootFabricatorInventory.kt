@@ -25,11 +25,12 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Direction
 
-class LootFabricatorInventory : SimpleInventory(10), SidedInventory {
+class LootFabricatorInventory : SimpleInventory(11), SidedInventory {
 
     companion object {
         const val INPUT_SLOT = 0
         val OUTPUT_SLOTS = (1..9).toIntArray()
+        const val ENERGY_INPUT = 10
     }
 
     val stackInInputSlot: ItemStack?

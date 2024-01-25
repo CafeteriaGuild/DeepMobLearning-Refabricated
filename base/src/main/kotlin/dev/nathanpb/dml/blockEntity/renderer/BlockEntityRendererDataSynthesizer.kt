@@ -91,7 +91,6 @@ class BlockEntityRendererDataSynthesizer(
 
 
     private val angleMap: HashMap<Direction, Angle> = hashMapOf(
-        Direction.NORTH to Angle(0F, 0F, 0F),
         Direction.SOUTH to Angle(180F, 0F, 180F),
         Direction.WEST to Angle(180F, 90F, 180F),
         Direction.EAST to Angle(90F, 270F, 90F)

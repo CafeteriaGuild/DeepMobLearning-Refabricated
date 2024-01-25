@@ -30,6 +30,7 @@ import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.screen.handler.widget.WEntityShowcase
 import dev.nathanpb.dml.screen.handler.widget.WStylizedButton
 import dev.nathanpb.dml.utils.RenderUtils
+import dev.nathanpb.dml.utils.RenderUtils.Companion.DML_WIDGETS
 import dev.nathanpb.dml.utils.closestValue
 import dev.nathanpb.dml.utils.items
 import dev.nathanpb.dml.utils.setStacks
@@ -121,7 +122,7 @@ class DeepLearnerScreenHandler (
         update()
     }
 
-    private val prevButton: WButton = WStylizedButton(Text.of("<"), RenderUtils.DML_WIDGETS).apply {
+    private val prevButton: WButton = WStylizedButton(DML_WIDGETS, Text.of("<")).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             addTooltip(TooltipBuilder().add(Text.translatable("gui.$MOD_ID.previous")))
         }
@@ -131,7 +132,7 @@ class DeepLearnerScreenHandler (
         }
     }
 
-    private val nextButton: WButton = WStylizedButton(Text.of(">"), RenderUtils.DML_WIDGETS).apply {
+    private val nextButton: WButton = WStylizedButton(DML_WIDGETS, Text.of(">")).apply {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             addTooltip(TooltipBuilder().add(Text.translatable("gui.${MOD_ID}.next")))
         }

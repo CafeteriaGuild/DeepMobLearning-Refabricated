@@ -49,13 +49,20 @@ class RenderUtils {
         val ARROW: Identifier = identifier("textures/gui/arrow.png")
         val ARROW_BACKGROUND: Identifier = identifier("textures/gui/arrow_background.png")
 
-        val ENERGY_BAR: Identifier = identifier("textures/gui/energy_bar.png")
-        val PRISTINE_ENERGY_BAR: Identifier = identifier("textures/gui/pristine_energy_bar.png")
-        val ENERGY_BAR_BACKGROUND: Identifier = identifier("textures/gui/energy_bar_background.png")
+
+        /* Energy Bars */
+        val ENERGY_BAR_ARROW: Identifier = identifier("textures/gui/energy_bar/energy_bar_arrow.png")
+
+        val ENERGY_BAR_BACKGROUND: Identifier = identifier("textures/gui/energy_bar/energy_bar_background.png")
+        val ENERGY_BAR_BACKGROUND_BIG: Identifier = identifier("textures/gui/energy_bar/energy_bar_background_big.png")
+
+        val ENERGY_BAR: Identifier = identifier("textures/gui/energy_bar/energy_bar.png")
+        val ENERGY_BAR_BIG: Identifier = identifier("textures/gui/energy_bar/energy_bar_big.png")
+
+        val PRISTINE_ENERGY_BAR: Identifier = identifier("textures/gui/energy_bar/pristine_energy_bar.png")
+        val PRISTINE_ENERGY_BAR_BIG: Identifier = identifier("textures/gui/energy_bar/pristine_energy_bar_big.png")
 
 
-        val CYAN_BAR: Identifier = identifier("textures/gui/cyan_bar.png")
-        val BAR_BACKGROUND: Identifier = identifier("textures/gui/bar_background.png")
 
         /* Text Colors & Styles */
         const val TITLE_COLOR: Int = 0x04FCC4
