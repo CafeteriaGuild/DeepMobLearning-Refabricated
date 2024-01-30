@@ -26,6 +26,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import net.minecraft.state.property.Properties
 import net.minecraft.util.math.BlockPos
 import team.reborn.energy.api.EnergyStorage
 
@@ -46,7 +47,12 @@ fun registerBlockEntityTypes() {
     BLOCKENTITY_TRIAL_KEYSTONE = register(BLOCK_TRIAL_KEYSTONE, ::BlockEntityTrialKeystone)
     BLOCKENTITY_DATA_SYNTHESIZER = register(BLOCK_DATA_SYNTHESIZER, ::BlockEntityDataSynthesizer).also {
         EnergyStorage.SIDED.registerForBlockEntity(
-            { blockEntity, _ -> blockEntity.energyStorage },
+            { blockEntity, direction ->
+                if(blockEntity.cachedState[Properties.HORIZONTAL_FACING] == direction) {
+                    return@registerForBlockEntity null
+                }
+                return@registerForBlockEntity blockEntity.energyStorage
+            },
             it
         )
     }

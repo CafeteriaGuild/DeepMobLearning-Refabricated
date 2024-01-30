@@ -34,7 +34,7 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.screen.ArrayPropertyDelegate
-import net.minecraft.sound.SoundEvent
+import net.minecraft.state.property.Properties
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
@@ -131,7 +131,7 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
                 removeCanProgressFlag(blockEntity)
             }
 
-            pushEnergyToAllSides(world, pos, blockEntity.energyStorage)
+            pushEnergyExcept(world, pos, setOf(world.getBlockState(pos)[Properties.HORIZONTAL_FACING]), blockEntity.energyStorage)
             moveToStorage(blockEntity.energyStorage, blockEntity.inventory, 1)
             moveToStack(blockEntity.energyStorage, blockEntity.inventory, 2)
         }
