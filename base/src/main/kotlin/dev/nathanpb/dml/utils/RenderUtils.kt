@@ -29,7 +29,10 @@ import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.LivingEntity
 import net.minecraft.particle.DustParticleEffect
+import net.minecraft.screen.ScreenTexts
+import net.minecraft.text.MutableText
 import net.minecraft.text.Style
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 import org.joml.Vector3f
@@ -96,6 +99,18 @@ class RenderUtils {
         }
 
     }
+}
+
+fun getBooleanInfoText(primaryText: MutableText, boolean: Boolean, primaryStyle: Style, secondaryStyle: Style): Text {
+    val onOffText = ScreenTexts.onOrOff(boolean).copy()
+    return getInfoText(primaryText, onOffText, primaryStyle, secondaryStyle)
+}
+
+fun getInfoText(primaryText: MutableText, secondaryText: MutableText, primaryStyle: Style, secondaryStyle: Style): Text {
+    primaryText.style = primaryStyle
+    secondaryText.style = secondaryStyle
+
+    return primaryText.append(secondaryText)
 }
 
 // not stolen from mojang, I promise

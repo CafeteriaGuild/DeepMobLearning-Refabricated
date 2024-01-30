@@ -20,12 +20,11 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.inventory.MatterCondenserInventory
-import dev.nathanpb.dml.utils.items
-import dev.nathanpb.dml.utils.setStacks
+import dev.nathanpb.dml.utils.*
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
@@ -41,9 +40,7 @@ import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.properties.Delegates
+import team.reborn.energy.api.base.SimpleEnergyStorage
 
 class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
     BlockEntity(BLOCK_ENTITY_TYPE, pos, state),
@@ -51,79 +48,86 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
     PropertyDelegateHolder
 {
 
-    val inventory = MatterCondenserInventory()
+    var inventory = MatterCondenserInventory()
     private val propertyDelegate = ArrayPropertyDelegate(2).also {
-        it[1] = config.matterCondenser.processTime
+        it[1] = 262144
     }
 
-    private var progress by Delegates.observable(0) { _, _, value ->
-        propertyDelegate[0] = value
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(propertyDelegate[1].toLong(), 8192, 8192) {
+
+        override fun onFinalCommit() {
+            markDirty()
+            propertyDelegate[0] = amount.toInt()
+        }
+
     }
 
     companion object {
-        val ticker = BlockEntityTicker<BlockEntityMatterCondenser> { world, _, _, blockEntity ->
-            if (world?.isClient == false) {
-                val armorStack = blockEntity.inventory.stackInArmorSlot
-                if (armorStack.item is ItemModularGlitchArmor) {
-                    val matterStacks = blockEntity.inventory.matterStacks.filterNot(ItemStack::isEmpty)
-                    if (matterStacks.isNotEmpty() && matterStacks.all { it.item is ItemPristineMatter }) {
-                        val data = ModularArmorData(armorStack)
-                        if (!data.tier().isMaxTier()) {
-                            val processTime = config.matterCondenser.processTime
-                            blockEntity.propertyDelegate[1] = processTime
+        private val pristineMatterEnergyValue = 1024L
 
-                            blockEntity.progress++
-                            if (blockEntity.progress >= processTime) {
-                                val pristineMattersAvailable = blockEntity.inventory.matterStacks.filter {
-                                    it.item is ItemPristineMatter
-                                }
+        val ticker = BlockEntityTicker<BlockEntityMatterCondenser> { _, _, _, blockEntity ->
+            val armorStack = blockEntity.inventory.armorStack
+            val inputStack = blockEntity.inventory.pristineInputStack
+            val outputStack = blockEntity.inventory.pristineOutputStack
 
-                                val toConsume = min(max(0, data.dataRemainingToNextTier()), pristineMattersAvailable.size)
-                                pristineMattersAvailable.take(toConsume).forEach {
-                                    it.decrement(1)
-                                }
-                                data.dataAmount += toConsume
-                                blockEntity.resetProgress()
-                            }
-                            return@BlockEntityTicker
-                        }
-                    }
+            if(armorStack.item is ItemModularGlitchArmor) {
+                val data = ModularArmorData(armorStack)
+
+                // TODO Remove in 1.21
+                if(data.dataAmount > 0) {
+                    data.pristineEnergy += (data.dataAmount * pristineMatterEnergyValue).coerceAtMost(64 * 1024)
+                    data.dataAmount = -1
                 }
-                blockEntity.resetProgress()
+                moveToStackPristine(blockEntity.energyStorage, blockEntity.inventory, 0)
             }
+
+            // Insert
+            if(inputStack.item is ItemPristineMatter) { // TODO replace similar checks to check with the tag
+                if(blockEntity.energyStorage.addEnergy(pristineMatterEnergyValue)) {
+                    blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
+                    inputStack.decrement(1)
+                    blockEntity.markDirty()
+                }
+            }
+
+
+            // FIXME pushEnergyToAllSides(world, pos, blockEntity.energyStorage)
+            moveToStoragePristine(blockEntity.energyStorage, blockEntity.inventory, 1)
+            moveToStackPristine(blockEntity.energyStorage, blockEntity.inventory, 2)
+
+
         }
 
         val BLOCK_ENTITY_TYPE = Registry.register(
             Registries.BLOCK_ENTITY_TYPE,
             BlockMatterCondenser.IDENTIFIER,
             BlockEntityType.Builder.create(::BlockEntityMatterCondenser, BlockMatterCondenser.BLOCK).build(null)
-        )
-    }
-
-    private fun resetProgress() {
-        if (progress != 0) {
-            progress = 0
+        ).also {
+            SIDED_PRISTINE.registerForBlockEntity(
+                { blockEntity, _ -> blockEntity.energyStorage },
+                it
+            )
         }
     }
+
 
     override fun getInventory(state: BlockState?, world: WorldAccess?, pos: BlockPos?) = inventory
 
     override fun getPropertyDelegate() = propertyDelegate
 
-    override fun writeNbt(tag: NbtCompound?) {
-        return super.writeNbt(tag).also {
-            if (tag != null) {
-                Inventories.writeNbt(tag, inventory.items())
-            }
-        }
+    override fun writeNbt(tag: NbtCompound) {
+        Inventories.writeNbt(tag, inventory.items())
+        tag.putLong("${MOD_ID}:energy", energyStorage.amount)
     }
 
-    override fun readNbt(tag: NbtCompound?) {
+    override fun readNbt(tag: NbtCompound) {
         super.readNbt(tag)
-        if (tag != null) {
-            val list = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
-            Inventories.readNbt(tag, list)
-            inventory.setStacks(list)
+        val list = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
+        Inventories.readNbt(tag, list)
+        inventory.setStacks(list)
+
+        energyStorage.amount = tag.getLong("$MOD_ID:energy").also {
+            propertyDelegate[0] = it.toInt()
         }
     }
 }

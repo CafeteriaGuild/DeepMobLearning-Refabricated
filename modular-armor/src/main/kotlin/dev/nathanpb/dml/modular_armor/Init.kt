@@ -33,8 +33,10 @@ import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemStack
 
+
 @Suppress("unused")
 fun init() {
+    ItemPristineEnergyCube.register()
     ItemModularGlitchArmor.register()
     BlockMatterCondenser.register()
     BlockEntityMatterCondenser.BLOCK_ENTITY_TYPE // force evaluate to register

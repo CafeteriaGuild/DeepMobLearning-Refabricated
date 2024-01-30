@@ -23,7 +23,7 @@ package dev.nathanpb.dml.item
 import com.google.common.collect.ImmutableMultimap
 import com.google.common.collect.Multimap
 import dev.nathanpb.dml.utils.RenderUtils
-import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_STYLE
+import dev.nathanpb.dml.utils.getEnergyTooltipText
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EquipmentSlot
@@ -37,7 +37,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolMaterials
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 import net.minecraft.util.Rarity
 import net.minecraft.world.World
 import team.reborn.energy.api.base.SimpleEnergyItem
@@ -90,17 +89,7 @@ class ItemGlitchSword : SwordItem(
     override fun getRarity(stack: ItemStack) = Rarity.EPIC
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        val energyText = Text.translatable("text.dml-refabricated.energy").append(Text.of(" "))
-        energyText.style = ENERGY_STYLE.withBold(true)
-
-        val energyAmountText = Text.translatable(
-            "tooltip.dml-refabricated.data_amount.2",
-            getStoredEnergy(stack),
-            getEnergyCapacity(stack)
-        ).formatted(Formatting.YELLOW)
-
-
-        tooltip.add(energyText.append(energyAmountText))
+        tooltip.add(getEnergyTooltipText(stack))
     }
 
     companion object {

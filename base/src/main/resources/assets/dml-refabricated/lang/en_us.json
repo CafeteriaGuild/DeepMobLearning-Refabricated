@@ -42,6 +42,7 @@
   "item.dml-refabricated.glitch_upgrade_smithing_template.base_slot_description": "Add netherite armor",
   "item.dml-refabricated.glitch_upgrade_smithing_template.additions_slot_description": "Add Glitch Ingot",
 
+  "tooltip.dml-refabricated.distribute_energy": "Distribute Energy: ",
 
   "tooltip.dml-refabricated.guide_tablet": "§3§oDeep Mob Learning: Refabricated's high-tech guide!",
   "tooltip.dml-refabricated.data_model.bound_to.1": "Bound To: ",
@@ -90,6 +91,7 @@
   "block.dml-refabricated.loot_fabricator": "Loot Fabricator",
   "block.dml-refabricated.cafeteria": "Cafeteria",
   "text.dml-refabricated.energy": "Energy",
+  "text.dml-refabricated.energy.prefix": "Energy: ",
   "text.dml-refabricated.energy.short": "%s E",
   "key.dml-refabricated.teleport": "Teleport",
   "key.dml-refabricated.soul_vision": "Soul Vision",

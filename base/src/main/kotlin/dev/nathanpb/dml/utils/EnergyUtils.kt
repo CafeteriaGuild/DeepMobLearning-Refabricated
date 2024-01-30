@@ -20,17 +20,25 @@
 package dev.nathanpb.dml.utils
 
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
+import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_STYLE
+import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.inventory.Inventory
+import net.minecraft.item.ItemStack
+import net.minecraft.text.Style
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 import team.reborn.energy.api.EnergyStorage
 import team.reborn.energy.api.EnergyStorageUtil
+import team.reborn.energy.api.base.SimpleEnergyItem
 import team.reborn.energy.api.base.SimpleEnergyStorage
 
 
@@ -200,4 +208,48 @@ fun SimpleEnergyStorage.removeEnergy(
         }
     }
     return commit
+}
+
+fun getEnergyStorage(stack: ItemStack, ctx: ContainerItemContext): EnergyStorage? {
+    val pristineItem = stack.item
+    if (pristineItem is SimpleEnergyItem) {
+        return SimpleEnergyItem.createStorage(
+            ctx,
+            pristineItem.getEnergyCapacity(stack),
+            pristineItem.getEnergyMaxInput(stack),
+            pristineItem.getEnergyMaxOutput(stack)
+        )
+    }
+    return null
+}
+
+fun getEnergyTooltipText(stack: ItemStack): Text {
+    return getEnergyTooltipText(stack, ENERGY_STYLE, Style.EMPTY.withFormatting(Formatting.YELLOW))
+}
+
+fun getPristineEnergyTooltipText(stack: ItemStack): Text {
+    return getEnergyTooltipText(stack, STYLE, ALT_STYLE, true)
+}
+
+fun getEnergyTooltipText(stack: ItemStack, primaryStyle: Style, secondaryStyle: Style, isPristine: Boolean = false): Text {
+    if(stack.item !is SimpleEnergyItem) throw IllegalStateException("Item must implement SimpleEnergyItem!")
+
+    val energyText = Text.translatable("text.dml-refabricated.energy.prefix")
+
+    val energyAmountText = Text.translatable(
+        "tooltip.dml-refabricated.data_amount.2",
+        (stack.item as SimpleEnergyItem).getStoredEnergy(stack),
+        (stack.item as SimpleEnergyItem).getEnergyCapacity(stack)
+    )
+    val b = Text.translatable(getShortEnergyKey(isPristine), energyAmountText)
+
+    return getInfoText(energyText, b, primaryStyle, secondaryStyle)
+}
+
+fun getShortEnergyKey(isPristine: Boolean): String {
+    return if(isPristine) {
+        "text.dml-refabricated.pristine_energy.short"
+    } else {
+        "text.dml-refabricated.energy.short"
+    }
 }

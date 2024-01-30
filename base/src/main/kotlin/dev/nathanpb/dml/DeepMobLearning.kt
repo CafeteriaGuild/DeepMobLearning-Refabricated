@@ -31,6 +31,7 @@ import dev.nathanpb.dml.command.DMLCommand
 import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.VanillaEvents
+import dev.nathanpb.dml.item.ITEM_ENERGY_OCTAHEDRON
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.itemgroup.registerItemGroup
 import dev.nathanpb.dml.listener.CrushingRecipeListener
@@ -45,6 +46,7 @@ import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import dev.nathanpb.dml.worldgen.registerFeatures
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -130,6 +132,10 @@ fun initClient() {
         ctx.addModels(
             identifier("block/data_synthesizer_grid")
         )
+    }
+
+    ITEM_ENERGY_OCTAHEDRON.let {
+        ColorProviderRegistry.ITEM.register({ stack, _ -> it.getScaledColor(stack) }, it)
     }
 }
 

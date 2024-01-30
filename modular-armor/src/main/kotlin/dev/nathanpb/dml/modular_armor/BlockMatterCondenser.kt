@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor.Companion.GLITCH_BOOTS
@@ -123,8 +122,8 @@ class BlockMatterCondenser : HorizontalFacingBlock(
         return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos))
     }
 
-    override fun <T : BlockEntity?> getTicker(world: World?, state: BlockState?, type: BlockEntityType<T>?): BlockEntityTicker<T> {
-        return BlockEntityMatterCondenser.ticker as BlockEntityTicker<T>
+    override fun <T : BlockEntity?> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return if(!world.isClient) BlockEntityMatterCondenser.ticker as BlockEntityTicker<T> else null
     }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {

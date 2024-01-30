@@ -29,6 +29,7 @@ import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_STYLE
 import dev.nathanpb.dml.utils.RenderUtils.Companion.PRISTINE_ENERGY_BAR
 import dev.nathanpb.dml.utils.RenderUtils.Companion.PRISTINE_ENERGY_BAR_BIG
 import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
+import dev.nathanpb.dml.utils.getShortEnergyKey
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
@@ -114,16 +115,9 @@ class WEnergyComponent(
 
         override fun tick() {
             this.apply {
-
-                val translationKey = if(isPristineEnergy) {
-                    "text.dml-refabricated.pristine_energy.short"
-                } else {
-                    "text.dml-refabricated.energy.short"
-                }
-
                 withTooltip(
                     Text.translatable(
-                        translationKey,
+                        getShortEnergyKey(isPristineEnergy),
                         RenderUtils.formatAccordingToLanguage().format(getHost()?.propertyDelegate?.get(energyIndex))
                     ).apply {
                         style = if(isPristineEnergy) STYLE else ENERGY_STYLE

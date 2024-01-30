@@ -22,6 +22,7 @@ package dev.nathanpb.dml.item
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.battery.ItemEnergyOctahedron
 import dev.nathanpb.dml.itemgroup.ITEMS
 import dev.nathanpb.dml.mixin.SmithingTemplateItemAccessor
 import dev.nathanpb.dml.utils.ItemTuple
@@ -82,6 +83,7 @@ val ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE = SmithingTemplateItem(
     SmithingTemplateItemAccessor.dml_getNetheriteUpgradeEmptyAdditionsSlotTextures()
 )
 val ITEM_GLITCH_SWORD = ItemGlitchSword()
+val ITEM_ENERGY_OCTAHEDRON = ItemEnergyOctahedron()
 
 fun registerItems() {
     linkedMapOf(
@@ -116,7 +118,8 @@ fun registerItems() {
         ITEM_PHYSICALLY_CONDENSED_MATRIX_FRAGMENT to ItemTuple("physically_condensed_matrix_fragment"),
         ITEM_GLITCH_INGOT to ItemTuple("glitch_ingot"),
         ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE to ItemTuple("glitch_upgrade_smithing_template", false),
-        ITEM_GLITCH_SWORD to ItemTuple("glitch_sword", false)
+        ITEM_GLITCH_SWORD to ItemTuple("glitch_sword", false),
+        ITEM_ENERGY_OCTAHEDRON to ItemTuple("energy_octahedron")
     ).forEach { (item, tuple) ->
         Registry.register(Registries.ITEM, identifier(tuple.identifier), item)
         if(tuple.shown) ITEMS.add(ItemStack(item))
