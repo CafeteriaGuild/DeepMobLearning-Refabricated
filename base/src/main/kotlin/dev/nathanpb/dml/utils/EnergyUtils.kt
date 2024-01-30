@@ -27,7 +27,11 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
+import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Style
@@ -40,6 +44,7 @@ import team.reborn.energy.api.EnergyStorage
 import team.reborn.energy.api.EnergyStorageUtil
 import team.reborn.energy.api.base.SimpleEnergyItem
 import team.reborn.energy.api.base.SimpleEnergyStorage
+import java.util.function.Predicate
 
 
 val SIDED_PRISTINE = BlockApiLookup.get(identifier("sided_pristine"), EnergyStorage::class.java, Direction::class.java)
@@ -208,6 +213,40 @@ fun SimpleEnergyStorage.removeEnergy(
         }
     }
     return commit
+}
+
+fun distributeEnergyToInventory(
+    player: PlayerEntity,
+    itemStack: ItemStack,
+    maxOutput: Long,
+    filter: Predicate<ItemStack>,
+    isPristine: Boolean = false
+) {
+    val playerInv = PlayerInventoryStorage.of(player)
+    var sourceSlot: SingleSlotStorage<ItemVariant>? = null
+
+    for(i in 0 until player.inventory.size()) {
+        if(player.inventory.getStack(i) == itemStack) {
+            sourceSlot = playerInv.slots[i]
+            break
+        }
+    }
+
+    if(sourceSlot == null) throw IllegalArgumentException("Failed to locate current stack in the player inventory.")
+    val energyType = if(isPristine) ITEM_PRISTINE else EnergyStorage.ITEM
+    val sourceStorage = ContainerItemContext.ofPlayerSlot(player, sourceSlot).find(energyType) ?: return
+
+    for(i in 0 until player.inventory.size()) {
+        val invStack = player.inventory.getStack(i)
+
+        if(invStack.isEmpty || !filter.test(invStack)) continue
+        EnergyStorageUtil.move(
+            sourceStorage,
+            ContainerItemContext.ofPlayerSlot(player, playerInv.slots[i]).find(energyType),
+            maxOutput,
+            null
+        )
+    }
 }
 
 fun getEnergyStorage(stack: ItemStack, ctx: ContainerItemContext): EnergyStorage? {

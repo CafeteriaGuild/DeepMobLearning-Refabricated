@@ -1,6 +1,7 @@
 package dev.nathanpb.dml.item.battery
 
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_STYLE
+import dev.nathanpb.dml.utils.distributeEnergyToInventory
 import dev.nathanpb.dml.utils.getBooleanInfoText
 import dev.nathanpb.dml.utils.getEnergyTooltipText
 import net.minecraft.entity.Entity
@@ -32,13 +33,13 @@ abstract class AbstractItemBattery: Item(Settings().maxCount(1)), SimpleEnergyIt
         if(world.isClient()) return TypedActionResult.pass(user.getStackInHand(hand))
         if(user.isSneaking) {
             val stack = user.getStackInHand(hand)
-            val isEnabled = hasDistributeEnergy(stack)
+            val hasDistributeEnergy = hasDistributeEnergy(stack)
 
-            stack.getOrCreateNbt().putBoolean(distributeEnergyKey, !isEnabled)
+            stack.getOrCreateNbt().putBoolean(distributeEnergyKey, !hasDistributeEnergy)
             (user as ServerPlayerEntity).networkHandler.sendPacket(
                 PlaySoundS2CPacket(
                     Registries.SOUND_EVENT.getEntry(
-                        if(isEnabled) SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE else SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN
+                        if(hasDistributeEnergy) SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE else SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN
                     ),
                     SoundCategory.PLAYERS,
                     user.getX(), user.getY(), user.getZ(),
@@ -56,7 +57,13 @@ abstract class AbstractItemBattery: Item(Settings().maxCount(1)), SimpleEnergyIt
         if(world.isClient() || entity !is PlayerEntity) return
         if(!hasDistributeEnergy(stack)) return
 
-        // TODO add distribute energy logic
+        distributeEnergyToInventory(
+            entity,
+            stack,
+            getEnergyMaxOutput(stack),
+            { predicateStack -> predicateStack.item !is AbstractItemBattery },
+            isPristineEnergy()
+        )
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: net.minecraft.client.item.TooltipContext) {
