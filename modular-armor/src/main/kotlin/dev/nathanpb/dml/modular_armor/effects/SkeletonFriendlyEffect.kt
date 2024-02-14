@@ -36,6 +36,7 @@ class SkeletonFriendlyEffect : TargetCancellationEffect(
 ) {
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
 
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntity>): Boolean {
         return payload.value.type == EntityType.SKELETON && super.canApply(context, payload)

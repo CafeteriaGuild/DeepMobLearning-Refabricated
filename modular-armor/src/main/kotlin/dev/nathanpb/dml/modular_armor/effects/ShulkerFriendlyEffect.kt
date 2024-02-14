@@ -36,6 +36,7 @@ class ShulkerFriendlyEffect : TargetCancellationEffect(
 ) {
 
     override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 3
+    override fun minimumTier(): DataModelTier = DataModelTier.SUPERIOR
 
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<LivingEntity>): Boolean {
         return payload.value.type == EntityType.SHULKER && super.canApply(context, payload)

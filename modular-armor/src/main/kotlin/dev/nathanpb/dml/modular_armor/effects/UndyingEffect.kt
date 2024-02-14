@@ -28,8 +28,8 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.*
 import dev.nathanpb.dml.modular_armor.net.S2C_UNDYING_COOLDOWN_UPDATE
 import dev.nathanpb.dml.modular_armor.undyingLastUsage
-import dev.nathanpb.dml.utils.`if`
 import dev.nathanpb.dml.utils.firstInstanceOrNull
+import dev.nathanpb.dml.utils.`if`
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.advancement.criterion.Criteria
@@ -92,6 +92,8 @@ class UndyingEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
+    override fun getEnergyConsumptionType() = EffectInfo.EnergyConsumptionType.USE
 
     private fun remainingCooldownTime(player: PlayerEntity): Int = player.undyingLastUsage?.let {
         max(config.glitchArmor.undyingCooldownTime - (player.world.time - it), 0).toInt()

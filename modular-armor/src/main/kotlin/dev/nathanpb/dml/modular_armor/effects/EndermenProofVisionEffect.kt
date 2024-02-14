@@ -71,6 +71,7 @@ class EndermenProofVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)

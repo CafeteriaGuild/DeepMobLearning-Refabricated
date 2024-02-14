@@ -23,6 +23,7 @@ package dev.nathanpb.dml.item
 import com.google.common.collect.ImmutableMultimap
 import com.google.common.collect.Multimap
 import dev.nathanpb.dml.utils.RenderUtils
+import dev.nathanpb.dml.utils.getEnergyBarStep
 import dev.nathanpb.dml.utils.getEnergyTooltipText
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
@@ -40,7 +41,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.Rarity
 import net.minecraft.world.World
 import team.reborn.energy.api.base.SimpleEnergyItem
-import kotlin.math.roundToInt
 
 
 class ItemGlitchSword : SwordItem(
@@ -75,12 +75,7 @@ class ItemGlitchSword : SwordItem(
 
     override fun isEnchantable(stack: ItemStack) = false
 
-    override fun getItemBarStep(stack: ItemStack): Int {
-        val max = getEnergyCapacity(stack)
-        val current = getStoredEnergy(stack)
-
-        return if(current > max) 13 else ((13f * current) / max).roundToInt()
-    }
+    override fun getItemBarStep(stack: ItemStack): Int = getEnergyBarStep(stack)
 
     override fun getItemBarColor(stack: ItemStack) = RenderUtils.ENERGY_COLOR
 

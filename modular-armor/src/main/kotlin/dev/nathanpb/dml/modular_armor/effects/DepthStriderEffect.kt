@@ -40,14 +40,14 @@ class DepthStriderEffect : StatusEffectLikeEffect(
 ) {
 
     override val name = Text.translatable("effect.${MOD_ID}.depth_strider")
+    override val description = Text.translatable("effect.${MOD_ID}.depth_strider.description")
 
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(DEPTH_STRIDER_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 2
-    }
+    override fun acceptTier(tier: DataModelTier): Boolean = tier.ordinal >= 2
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
         return super.canApply(context, payload) && context.player.isTouchingWater

@@ -22,6 +22,7 @@ package dev.nathanpb.dml.utils
 
 import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.client.NinePatchBackgroundPainter
 import net.minecraft.client.MinecraftClient
@@ -40,17 +41,21 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class RenderUtils {
+class RenderUtils { // also some text utils, hence why it's common
 
     companion object {
         /* Textures */
         val DEFAULT_BACKGROUND_PAINTER: NinePatchBackgroundPainter by lazy {
             BackgroundPainter.createNinePatch(identifier("textures/gui/dml_background_painter.png"))
         }
+        val INNER_BACKGROUND_PAINTER: NinePatchBackgroundPainter by lazy {
+            BackgroundPainter.createNinePatch(identifier("textures/gui/inner_background_painter.png"))
+        }
         val DML_WIDGETS: Identifier = identifier("textures/gui/dml_widgets.png")
 
         val ARROW: Identifier = identifier("textures/gui/arrow.png")
         val ARROW_BACKGROUND: Identifier = identifier("textures/gui/arrow_background.png")
+
 
 
         /* Energy Bars */
@@ -101,16 +106,40 @@ class RenderUtils {
     }
 }
 
-fun getBooleanInfoText(primaryText: MutableText, boolean: Boolean, primaryStyle: Style, secondaryStyle: Style): Text {
+fun getBooleanInfoText(primaryText: MutableText, boolean: Boolean, primaryStyle: Style, secondaryStyle: Style): MutableText {
     val onOffText = ScreenTexts.onOrOff(boolean).copy()
     return getInfoText(primaryText, onOffText, primaryStyle, secondaryStyle)
 }
 
-fun getInfoText(primaryText: MutableText, secondaryText: MutableText, primaryStyle: Style, secondaryStyle: Style): Text {
+fun getInfoText(primaryText: MutableText, secondaryText: MutableText, primaryStyle: Style, secondaryStyle: Style): MutableText {
     primaryText.style = primaryStyle
     secondaryText.style = secondaryStyle
 
     return primaryText.append(secondaryText)
+}
+
+// primaryText | secondaryText
+fun getPipeText(primaryText: MutableText, secondaryText: MutableText, parenthesisStyle: Style = ALT_STYLE): MutableText {
+    val pipeText = Text.translatable(
+        "tooltip.dml-refabricated.pipe",
+        primaryText,
+        secondaryText
+    )
+    pipeText.style = parenthesisStyle
+
+    return pipeText
+}
+
+// primaryText (value)
+fun getParenthesisText(primaryText: MutableText, value: Any, parenthesisStyle: Style = ALT_STYLE, addSpace: Boolean = true): MutableText {
+    val parenthesisText = if(addSpace) Text.literal(" ") else Text.empty()
+    parenthesisText.append(Text.translatable(
+        "tooltip.dml-refabricated.parenthesis",
+        value
+    ))
+    parenthesisText.style = parenthesisStyle
+
+    return primaryText.append(parenthesisText)
 }
 
 // not stolen from mojang, I promise

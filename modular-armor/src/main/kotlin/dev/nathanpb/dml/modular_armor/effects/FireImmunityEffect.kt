@@ -42,7 +42,6 @@ class FireImmunityEffect : DamageImmunityLikeEffect(
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.isMaxTier()
-    }
+    override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
 }

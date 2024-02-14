@@ -43,5 +43,5 @@ enum class EntityCategory(val tagKey: TagKey<EntityType<*>>, var exchangeRatio: 
     END(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("end_mobs")), config.lootFabricator.endExchangeRatio, ::ITEM_DATA_MODEL_END);
 
 
-    val displayName = Text.translatable("mobcategory.${MOD_ID}.${tagKey.id.path}")
+    val displayName: Text = Text.translatable("mobcategory.${MOD_ID}.${tagKey.id.path}")
 }

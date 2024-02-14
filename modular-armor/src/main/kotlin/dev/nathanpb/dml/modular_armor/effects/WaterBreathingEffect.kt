@@ -42,6 +42,7 @@ class WaterBreathingEffect : StatusEffectLikeEffect(
 ) {
 
     override val name = Text.translatable("effect.minecraft.water_breathing")
+    override val description = Text.translatable("effect.minecraft.water_breathing.module_description")
 
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(StatusEffects.WATER_BREATHING, 16 * 20, 0, true, false)
@@ -51,9 +52,8 @@ class WaterBreathingEffect : StatusEffectLikeEffect(
         return EntityAttributeModifier("dml_water_breathing", 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 3
-    }
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 3
+    override fun minimumTier() = DataModelTier.SUPERIOR
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
         return super.canApply(context, payload) && context.player.isSubmergedIn(FluidTags.WATER)

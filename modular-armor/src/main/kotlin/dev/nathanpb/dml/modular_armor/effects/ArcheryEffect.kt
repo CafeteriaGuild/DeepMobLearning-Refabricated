@@ -66,7 +66,7 @@ class ArcheryEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun registerEvents() {
-        fun trigger(player: LivingEntity, stack: ItemStack) {
+        fun trigger(player: LivingEntity, stack: ItemStack) { // FIXME not working
             if (player is PlayerEntity && !player.world.isClient) {
                 ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)
@@ -81,5 +81,8 @@ class ArcheryEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    override fun isScaled(): Boolean = true
+    override fun getEnergyConsumptionType(): EffectInfo.EnergyConsumptionType = EffectInfo.EnergyConsumptionType.USE
 
 }

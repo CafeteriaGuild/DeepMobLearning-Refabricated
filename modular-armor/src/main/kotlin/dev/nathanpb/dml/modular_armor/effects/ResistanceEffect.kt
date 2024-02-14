@@ -43,6 +43,8 @@ class ResistanceEffect : ProtectionLikeEffect(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    override fun isScaled() = true
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), armor.tier().ordinal.inc() / 20.0, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)

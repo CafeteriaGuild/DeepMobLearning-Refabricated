@@ -31,9 +31,8 @@ import dev.nathanpb.dml.screen.handler.registerScreenHandlerForItemStack
 import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
-import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
-import io.github.cottonmc.cotton.gui.widget.WListPanel
+import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import io.netty.buffer.Unpooled
@@ -72,15 +71,15 @@ class ModularArmorScreenHandler(
         get() = ModularArmorData(stack)
 
     init {
-        val root = WGridPanel()
+        val root = WPlainPanel()
         root.insets = Insets.ROOT_PANEL
         setRootPanel(root)
 
-        var lastEffectsList: WListPanel<ModularEffect<*>, WModularEffectToggle>? = null
+        var lastEffectsList: WModuleListPanel? = null
         fun updateEffectsList() {
             val disabledEffects = data.disabledEffects
             root.remove(lastEffectsList)
-            lastEffectsList = WListPanel(getPossibleEffects(), {
+            lastEffectsList = WModuleListPanel(getPossibleEffects(), {
                 WModularEffectToggle().apply {
                     setOnToggle { flag ->
                         effect?.id?.let {
@@ -93,25 +92,23 @@ class ModularArmorScreenHandler(
                 widget.toggle = effect.id !in disabledEffects
             }
 
-            root.add(lastEffectsList, 1, 1, 8, 4)
+            root.add(lastEffectsList, 1 * 18 + 1, 1 * 18, (8 * 18) - 1, 4 * 18)
             lastEffectsList!!.validate(this)
         }
 
+
         val dataModelSlot = WItemSlot(blockInventory, 0, 1, 1, false).apply {
             setInputFilter {
-                it.isEmpty || (
-                        (it.item as? ItemDataModel)?.category != null
-                                && data.tier().ordinal >= it.dataModel.tier().ordinal
-                        )
+                it.item is ItemDataModel && (it.item as ItemDataModel).category != null
             }
             addChangeListener { _, _, _, _ -> updateEffectsList()}
 
             icon = TextureIcon(identifier("textures/gui/slot_background/data_model_slot_background.png"))
         }
 
-        root.add(dataModelSlot, 0, 2)
+        root.add(dataModelSlot, 0, 2 * 18)
 
-        root.add(this.createPlayerInventoryPanel(), 0, 5)
+        root.add(createPlayerInventoryPanel(), 0, (5 * 18) + 2)
         root.validate(this)
 
         (blockInventory as? SimpleInventory)?.addListener {

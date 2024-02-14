@@ -20,6 +20,7 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
+import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
@@ -51,7 +52,8 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     config.glitchArmor.costs::soulVision
 ) {
 
-    override val name = Text.translatable("effect.dml-refabricated.soul_vision")
+    override val name = Text.translatable("effect.${MOD_ID}.soul_vision")
+    override val description = Text.translatable("effect.${MOD_ID}.soul_vision.description")
 
     override fun registerEvents() {
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
@@ -77,6 +79,8 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    // FIXME should be scaled
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)

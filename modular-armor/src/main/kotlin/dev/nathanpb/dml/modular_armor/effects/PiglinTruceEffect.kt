@@ -45,7 +45,7 @@ class PiglinTruceEffect : ModularEffect<ModularEffectTriggerPayload>(
                 val contexts = ModularEffectContext.from(player)
                     .run(EffectStackOption.PRIORITIZE_GREATER.apply)
 
-                if (player.world.time % 20 == 0L) {
+                if (player.world.time % 20 == 0L) { // FIXME works but doesn't consume energy
                     contexts.any { context ->
                         attemptToApply(context, ModularEffectTriggerPayload.EMPTY) { _, _ -> }
                             .result == ActionResult.SUCCESS
@@ -66,8 +66,7 @@ class PiglinTruceEffect : ModularEffect<ModularEffectTriggerPayload>(
 
     override fun registerEvents() { }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 2
-    }
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 2
+    override fun minimumTier(): DataModelTier = DataModelTier.ADVANCED
 
 }

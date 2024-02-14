@@ -36,7 +36,7 @@ import kotlin.math.sqrt
 abstract class TargetCancellationEffect(
     id: Identifier,
     category: EntityCategory,
-    applyCost: () -> Float
+    applyCost: () -> Long
 ) : ModularEffect<WrappedEffectTriggerPayload<LivingEntity>>(id, category, applyCost) {
 
     companion object {
@@ -79,8 +79,8 @@ abstract class TargetCancellationEffect(
     }
 
     // Data draining goes brrrrrr
-    override fun shouldConsumeData(context: ModularEffectContext): Boolean {
-        return super.shouldConsumeData(context) && context.player.world.time % 20 == 0L
+    override fun shouldConsumeEnergy(context: ModularEffectContext): Boolean {
+        return super.shouldConsumeEnergy(context) && context.player.world.time % 20 == 0L
     }
 
 }

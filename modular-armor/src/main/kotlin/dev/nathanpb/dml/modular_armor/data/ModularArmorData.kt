@@ -21,7 +21,6 @@
 package dev.nathanpb.dml.modular_armor.data
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
@@ -30,21 +29,11 @@ import dev.nathanpb.dml.utils.takeOrNull
 import dev.nathanpb.ktdatatag.data.MutableCompoundData
 import dev.nathanpb.ktdatatag.serializer.Serializers
 import net.minecraft.item.ItemStack
-import kotlin.math.max
+import team.reborn.energy.api.base.SimpleEnergyItem
 
 class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreateNbt) {
 
-    companion object {
-        fun amountRequiredTo(tier: DataModelTier) = when (tier) {
-            DataModelTier.FAULTY -> 0
-            DataModelTier.BASIC -> config.glitchArmor.dataAmountToBasic
-            DataModelTier.ADVANCED -> config.glitchArmor.dataAmountToAdvanced
-            DataModelTier.SUPERIOR -> config.glitchArmor.dataAmountToSuperior
-            DataModelTier.SELF_AWARE -> config.glitchArmor.dataAmountToSelfAware
-        }
-    }
-
-    var dataAmount by persistentDefaulted(0, Serializers.INT, "${MOD_ID}.dataAmount")
+    var pristineEnergy by persistentDefaulted(0, Serializers.LONG, SimpleEnergyItem.ENERGY_KEY)
 
     var disabledEffects by persistentDefaulted(emptyList(), Serializers.IDENTIFIER_LIST)
 
@@ -61,11 +50,10 @@ class ModularArmorData(val stack: ItemStack) : MutableCompoundData(stack.orCreat
             dataModelStack = value?.stack ?: ItemStack.EMPTY
         }
 
-    fun tier() = DataModelTier.values().last {
-        amountRequiredTo(it) <= max(dataAmount, 0)
-    }
+    fun tier() = dataModel?.tier() ?: DataModelTier.FAULTY
 
-    fun dataRemainingToNextTier(): Int {
-        return amountRequiredTo(tier().nextTierOrCurrent()) - dataAmount
-    }
+    // TODO Remove in 1.21
+    /** DEPRECATED - this is being kept for a while to allow worlds to be upgraded smoothly.*/
+    var dataAmount by persistentDefaulted(-1, Serializers.INT, "${MOD_ID}.dataAmount")
+
 }

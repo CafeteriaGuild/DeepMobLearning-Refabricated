@@ -42,7 +42,7 @@ class FallImmunityEffect : DamageImmunityLikeEffect(
 
     override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FALL)
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.isMaxTier()
-    }
+    override fun acceptTier(tier: DataModelTier): Boolean = tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
+
 }

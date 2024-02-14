@@ -41,12 +41,15 @@ class UnderwaterHasteEffect : StatusEffectLikeEffect(
 ) {
 
     override val name = Text.translatable("effect.${MOD_ID}.underwater_haste")
+    override val description = Text.translatable("effect.${MOD_ID}.underwater_haste.description")
 
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(UNDERWATER_HASTE_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    // TODO should be per block?
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
         return super.canApply(context, payload) && context.player.isSubmergedIn(FluidTags.WATER)

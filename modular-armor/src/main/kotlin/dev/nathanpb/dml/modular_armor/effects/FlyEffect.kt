@@ -64,6 +64,7 @@ class FlyEffect : AbilityBasedEffect(
     }
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
         return super.canApply(context, payload) && context.player.flightBurnoutManager.canFly

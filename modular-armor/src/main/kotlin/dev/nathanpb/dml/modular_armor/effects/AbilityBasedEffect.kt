@@ -34,7 +34,7 @@ import net.minecraft.util.Identifier
 abstract class AbilityBasedEffect(
     id: Identifier,
     category: EntityCategory,
-    applyCost: () -> Float,
+    applyCost: () -> Long,
     val ability: PlayerAbility
 ) : ModularEffect<ModularEffectTriggerPayload>(id, category, applyCost) {
 

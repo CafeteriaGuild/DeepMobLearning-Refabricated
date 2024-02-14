@@ -73,6 +73,9 @@ class RotResistanceEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    override fun isScaled() = true
+    override fun getEnergyConsumptionType() = EffectInfo.EnergyConsumptionType.USE
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         val value = if (armor.tier() == DataModelTier.FAULTY) 0.5 else 1.0

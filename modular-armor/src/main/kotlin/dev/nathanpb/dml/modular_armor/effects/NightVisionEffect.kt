@@ -40,6 +40,8 @@ class NightVisionEffect : StatusEffectLikeEffect(
 ) {
 
     override val name = Text.translatable("effect.minecraft.night_vision")
+    override val description = Text.translatable("effect.minecraft.night_vision.module_description")
+
 
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(StatusEffects.NIGHT_VISION, 16 * 20, 0, true, false)
@@ -49,8 +51,7 @@ class NightVisionEffect : StatusEffectLikeEffect(
         return EntityAttributeModifier("dml_night_vision", 1.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 1
-    }
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 1
+    override fun minimumTier(): DataModelTier = DataModelTier.BASIC
 
 }

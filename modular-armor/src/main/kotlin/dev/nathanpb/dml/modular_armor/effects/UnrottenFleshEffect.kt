@@ -78,5 +78,8 @@ class UnrottenFleshEffect : ModularEffect<ModularEffectTriggerPayload> (
         return EntityAttributeModifier(id.toString(), (armor.tier().ordinal.inc() / 100.0) * 20, EntityAttributeModifier.Operation.MULTIPLY_BASE)
     }
 
-    override fun acceptTier(tier: DataModelTier) = true
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 1
+    override fun minimumTier(): DataModelTier = DataModelTier.BASIC
+    override fun isScaled(): Boolean = true
+    override fun getEnergyConsumptionType(): EffectInfo.EnergyConsumptionType = EffectInfo.EnergyConsumptionType.USE
 }

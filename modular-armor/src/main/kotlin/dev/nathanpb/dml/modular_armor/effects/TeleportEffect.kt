@@ -111,9 +111,9 @@ class TeleportEffect : ModularEffect<TeleportEffectPayload>(
         }
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier >= DataModelTier.SUPERIOR
-    }
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 3
+    override fun minimumTier(): DataModelTier = DataModelTier.SUPERIOR
+    override fun getEnergyConsumptionType() = EffectInfo.EnergyConsumptionType.USE
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)

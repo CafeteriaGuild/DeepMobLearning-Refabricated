@@ -37,7 +37,7 @@ import net.minecraft.world.World
 abstract class ProtectionLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    applyCost: ()->Float
+    applyCost: ()->Long
 ) : ModularEffect<WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>>(id, category, applyCost) {
 
     override fun registerEvents() {

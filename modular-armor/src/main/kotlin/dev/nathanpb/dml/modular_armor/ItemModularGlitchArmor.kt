@@ -24,7 +24,6 @@ import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelData
-import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
@@ -32,10 +31,12 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.mixin.IArmorItemMixin
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandlerFactory
-import dev.nathanpb.dml.utils.RenderUtils
+import dev.nathanpb.dml.utils.*
+import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
+import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
+import dev.nathanpb.dml.utils.RenderUtils.Companion.TITLE_COLOR
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EquipmentSlot
@@ -54,14 +55,14 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import kotlin.math.roundToInt
+import team.reborn.energy.api.base.SimpleEnergyItem
 
 
 class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
         GlitchArmorMaterial.INSTANCE,
         type,
         settings.fireproof()
-) {
+), SimpleEnergyItem {
 
     companion object {
         val GLITCH_HELMET = ItemModularGlitchArmor(Type.HELMET, FabricItemSettings().fireproof())
@@ -78,6 +79,8 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
             ).forEach { (id, item) ->
                 Registry.register(Registries.ITEM, identifier(id), item)
 
+                ITEM_PRISTINE.registerForItems(::getEnergyStorage, item)
+
                 ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
                     it.addAfter(ItemStack(ITEM_GLITCH_INGOT), item)
                 }
@@ -87,45 +90,57 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
 
     }
 
-    override fun getRarity(stack: ItemStack?) = Rarity.EPIC
+    override fun getEnergyCapacity(stack: ItemStack): Long = getEnergyProperties()!!.capacity
 
-    override fun getItemBarColor(stack: ItemStack?) = 0x00FFC0
+    override fun getEnergyMaxInput(stack: ItemStack): Long = getEnergyProperties()!!.input
 
-    override fun isItemBarVisible(stack: ItemStack): Boolean {
+    override fun getEnergyMaxOutput(stack: ItemStack): Long = getEnergyProperties()!!.output
+
+    override fun getRarity(stack: ItemStack) = Rarity.EPIC
+
+    override fun getItemBarStep(stack: ItemStack): Int = getEnergyBarStep(stack)
+
+    override fun getItemBarColor(stack: ItemStack) = TITLE_COLOR
+
+    override fun isItemBarVisible(stack: ItemStack): Boolean = true
+
+
+
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        tooltip.add(getPristineEnergyTooltipText(stack))
+
         val data = ModularArmorData(stack)
-        return data.dataModel != null
-    }
 
-    override fun getItemBarStep(stack: ItemStack): Int {
-        val data = ModularArmorData(stack)
-        val max = data.tier().dataAmount
-        val current = data.dataModel?.dataAmount ?: 0
+        val dataModelText: Text
+        @Suppress("LiftReturnOrAssignment")
+        if(data.dataModel != null) {
+            val tierText = getParenthesisText(
+                Text.translatable("tooltip.${MOD_ID}.tier.2", data.dataModel!!.category!!.displayName),
+                data.dataModel!!.tier().text
 
-        return if (max == 0) 0 else if (current > max) 13 else ((13f * current) / max).roundToInt()
-    }
+            )
+            dataModelText = getInfoText(
+                Text.translatable("tooltip.${MOD_ID}.data_model_header"),
+                tierText,
+                STYLE,
+                ALT_STYLE
+            )
+        } else {
+            dataModelText = Text.translatable("tooltip.${MOD_ID}.no_data_model").formatted(Formatting.DARK_RED)
+        }
+        tooltip.add(dataModelText)
 
-    override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
-        if (world?.isClient == true && stack != null && tooltip != null) {
-            val data = ModularArmorData(stack)
-            if (!data.tier().isMaxTier()) {
-                Text.translatable("tooltip.${MOD_ID}.data_amount.1").setStyle(RenderUtils.STYLE).append(
-                Text.translatable("tooltip.${MOD_ID}.data_amount.2", data.dataAmount, ModularArmorData.amountRequiredTo(data.tier().nextTierOrCurrent()))
-                    .setStyle(RenderUtils.ALT_STYLE)).let {
-                        tooltip.add(it)
-                    }
-            }
-            Text.translatable("tooltip.${MOD_ID}.tier.1").setStyle(RenderUtils.STYLE).append(
-            Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text)).let {
-                tooltip.add(it)
-            }
+        /*Text.translatable("tooltip.${MOD_ID}.tier.1").setStyle(RenderUtils.STYLE).append(
+        Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text)).let {
+            tooltip.add(it)
+        }
 
-            MinecraftClient.getInstance().player?.let { player ->
-                if (player.isCreative) {
-                    tooltip.add(Text.translatable("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
-                }
+        MinecraftClient.getInstance().player?.let { player ->
+            if(player.isCreative) {
+                tooltip.add(Text.translatable("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
             }
         }
-        super.appendTooltip(stack, world, tooltip, context)
+        super.appendTooltip(stack, world, tooltip, context)*/
     }
 
     override fun getAttributeModifiers(stack: ItemStack, slot: EquipmentSlot?): Multimap<EntityAttribute, EntityAttributeModifier> {
@@ -160,27 +175,21 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
         }
     }
 
-    override fun use(world: World?, user: PlayerEntity?, hand: Hand): TypedActionResult<ItemStack> {
-        if (user != null) {
-            val stack = user.getStackInHand(hand)
-            if (user.isSneaking && user.isCreative) {
-                if (world?.isClient == false) {
-                    val data = ModularArmorData(stack)
-                    val tier = data.tier()
+    override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        val stack = user.getStackInHand(hand)
+        if(world.isClient()) return TypedActionResult.pass(stack)
 
-                    data.dataAmount = ModularArmorData.amountRequiredTo(
-                        if (tier.isMaxTier()) DataModelTier.FAULTY else tier.nextTierOrCurrent()
-                    )
-                }
-                return TypedActionResult.success(stack)
-            }
+        /*if(user.isCreative && user.isSneaking) { // TODO add energy cheat
+            val data = ModularArmorData(stack)
 
-            if (world?.isClient == false) {
-                user.openHandledScreen(ModularArmorScreenHandlerFactory(hand, this))
-            }
+            data.dataAmount = ModularArmorData.amountRequiredTo(
+                if(tier.isMaxTier()) DataModelTier.FAULTY else tier.nextTierOrCurrent()
+            )
             return TypedActionResult.success(stack)
-        }
-        return super.use(world, user, hand)
+        }*/
+
+        user.openHandledScreen(ModularArmorScreenHandlerFactory(hand, this))
+        return TypedActionResult.success(stack)
     }
 
     override fun isDamageable() = false
@@ -212,5 +221,17 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
             }?.let(stack.enchantments::remove)
         }
     }
+
+    fun getEnergyProperties() = energyProperties[type]
+
+    // TODO add config values
+    private val energyProperties: HashMap<Type, EnergyProperties> = hashMapOf(
+        Type.HELMET to EnergyProperties(625000L, 3125L, 0L),
+        Type.CHESTPLATE to EnergyProperties(1000000L, 5000L, 0L),
+        Type.LEGGINGS to EnergyProperties(875000L, 4375L, 0L),
+        Type.BOOTS to EnergyProperties(500000L, 2500L, 0L)
+    )
+
+    data class EnergyProperties(val capacity: Long, val input: Long, val output: Long)
 
 }

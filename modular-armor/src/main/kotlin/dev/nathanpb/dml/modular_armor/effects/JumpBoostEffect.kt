@@ -38,12 +38,14 @@ class JumpBoostEffect : StatusEffectLikeEffect(
 ) {
 
     override val name = Text.translatable("effect.minecraft.jump_boost")
+    override val description = Text.translatable("effect.minecraft.jump_boost.module_description")
 
     override fun createEffectInstance(context: ModularEffectContext): StatusEffectInstance {
         return StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 17, context.tier.ordinal / 2, false, false)
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean {
-        return tier.ordinal >= 2
-    }
+    override fun acceptTier(tier: DataModelTier) = tier.ordinal >= 2
+    override fun minimumTier(): DataModelTier = DataModelTier.ADVANCED
+    override fun isScaled(): Boolean = true
+
 }

@@ -36,9 +36,12 @@ class FireProtectionEffect : ProtectionLikeEffect(
 ) {
 
     override val name = Text.translatable("enchantment.minecraft.fire_protection")
+    override val description = Text.translatable("enchantment.minecraft.fire_protection.module_description")
+
 
     override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FIRE)
 
     override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
 
 }

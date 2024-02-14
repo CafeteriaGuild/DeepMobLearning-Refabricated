@@ -33,7 +33,7 @@ import net.minecraft.util.Identifier
 abstract class StatusEffectLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    applyCost: ()->Float,
+    applyCost: ()->Long,
     val stackingOption: EffectStackOption
 ) : ModularEffect<ModularEffectTriggerPayload>(id, category, applyCost) {
 
@@ -57,7 +57,7 @@ abstract class StatusEffectLikeEffect(
         val doesNotHasEffect by lazy {
             val statusEffectInstance = createEffectInstance(context)
             context.player.statusEffects.none {
-                it.duration < 15 * 20
+                it.duration < 15 * 20 // FIXME apply per effect trigger, not endlessly
                     && it.effectType == statusEffectInstance.effectType
                     && it.amplifier < statusEffectInstance.amplifier
             }

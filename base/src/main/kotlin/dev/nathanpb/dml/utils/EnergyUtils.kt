@@ -45,6 +45,7 @@ import team.reborn.energy.api.EnergyStorageUtil
 import team.reborn.energy.api.base.SimpleEnergyItem
 import team.reborn.energy.api.base.SimpleEnergyStorage
 import java.util.function.Predicate
+import kotlin.math.roundToInt
 
 
 val SIDED_PRISTINE = BlockApiLookup.get(identifier("sided_pristine"), EnergyStorage::class.java, Direction::class.java)
@@ -215,6 +216,14 @@ fun SimpleEnergyStorage.removeEnergy(
     return commit
 }
 
+fun getEnergyBarStep(stack: ItemStack): Int {
+    if(stack.item !is SimpleEnergyItem) throw IllegalStateException("Item must implement SimpleEnergyItem!")
+    val max = (stack.item as SimpleEnergyItem).getEnergyCapacity(stack)
+    val current = (stack.item as SimpleEnergyItem).getStoredEnergy(stack)
+
+    return if(current > max) 13 else ((13f * current) / max).roundToInt()
+}
+
 fun distributeEnergyToInventory(
     player: PlayerEntity,
     itemStack: ItemStack,
@@ -280,9 +289,9 @@ fun getEnergyTooltipText(stack: ItemStack, primaryStyle: Style, secondaryStyle: 
         (stack.item as SimpleEnergyItem).getStoredEnergy(stack),
         (stack.item as SimpleEnergyItem).getEnergyCapacity(stack)
     )
-    val b = Text.translatable(getShortEnergyKey(isPristine), energyAmountText)
+    val formattedEnergyAmountText = Text.translatable(getShortEnergyKey(isPristine), energyAmountText)
 
-    return getInfoText(energyText, b, primaryStyle, secondaryStyle)
+    return getInfoText(energyText, formattedEnergyAmountText, primaryStyle, secondaryStyle)
 }
 
 fun getShortEnergyKey(isPristine: Boolean): String {

@@ -59,6 +59,9 @@ class PlentyEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    override fun isScaled() = true
+
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), (armor.tier().ordinal.inc() / 100.0) * 15.0, EntityAttributeModifier.Operation.MULTIPLY_BASE)

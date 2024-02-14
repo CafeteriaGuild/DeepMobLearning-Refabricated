@@ -33,7 +33,7 @@ import net.minecraft.util.Identifier
 abstract class DamageImmunityLikeEffect(
     id: Identifier,
     category: EntityCategory,
-    applyCost: ()->Float
+    applyCost: ()->Long
 ) : ProtectionLikeEffect(id, category, applyCost) {
 
     override fun registerEvents() {

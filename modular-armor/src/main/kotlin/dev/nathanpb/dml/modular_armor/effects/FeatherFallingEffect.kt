@@ -36,8 +36,13 @@ class FeatherFallingEffect : ProtectionLikeEffect(
 ) {
 
     override val name = Text.translatable("enchantment.minecraft.feather_falling")
+    override val description = Text.translatable("enchantment.minecraft.feather_falling.module_description")
+
 
     override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FALL)
 
+    // FIXME scale protection
+
     override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
+    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
 }
