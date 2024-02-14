@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.screen.handler
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.blockEntity.BlockEntityDataSynthesizer
 import dev.nathanpb.dml.config
 import dev.nathanpb.dml.data.dataModel
@@ -41,12 +40,9 @@ import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.data.Texture
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.*
-import net.minecraft.client.render.GameRenderer.getPositionTexProgram
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -181,24 +177,13 @@ class DataSynthesizerScreenHandler(
 
         }
 
-        override fun paint(context: DrawContext?, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        override fun paint(context: DrawContext, x: Int, y: Int, mouseX: Int, mouseY: Int) {
             if(hidden) return
 
-            val texture = frames[0]
-            val tessellator = Tessellator.getInstance()
-            val buffer = tessellator.buffer
-            val model = context!!.matrices.peek().positionMatrix
-            RenderSystem.enableBlend()
-            RenderSystem.setShaderTexture(0, texture.image)
-            RenderSystem.setShaderColor(1F, 1F, 1F, 0.8F)
-            RenderSystem.setShader(::getPositionTexProgram)
-            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE)
-            buffer.vertex(model, x.toFloat(), (y + height).toFloat(), 1000F).texture(texture.u1, texture.v2).next()
-            buffer.vertex(model, (x + width).toFloat(), (y + height).toFloat(), 1000F).texture(texture.u2, texture.v2).next()
-            buffer.vertex(model, (x + width).toFloat(), y.toFloat(), 1000F).texture(texture.u2, texture.v1).next()
-            buffer.vertex(model, x.toFloat(), y.toFloat(), 1000F).texture(texture.u1, texture.v1).next()
-            BufferRenderer.drawWithGlobalProgram(buffer.end())
-            RenderSystem.disableBlend()
+            context.matrices.push()
+            context.matrices.translate(0F, 0F, 400F)
+            super.paint(context, x, y, mouseX, mouseY)
+            context.matrices.pop()
         }
     }
 
