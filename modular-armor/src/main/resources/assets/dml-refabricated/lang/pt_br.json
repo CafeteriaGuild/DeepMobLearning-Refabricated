@@ -71,6 +71,8 @@
     "tooltip.dml-refabricated.matter_condenser.9": "comum não são intercambiáveis.",
     "tooltip.dml-refabricated.matter_condenser.pristine_matter": "Matéria Pura",
     "tooltip.dml-refabricated.glitch_armor.title": "Armadura Corrompida",
+    "tooltip.dml-refabricated.glitch_armor_upgrade.1": "Energia interna de uma versão legado foi detectada na peça!",
+    "tooltip.dml-refabricated.glitch_armor_upgrade.2": "Coloque-a em um Condensador de matéria para converter.",
     "death.dml-refabricated.starvedWithPlenty": "%s morreu de fome em uma terra prospera",
     "advancements.dml-refabricated.glitch_armor": "Corrompido até o Osso",
     "advancements.dml-refabricated.glitch_armor.description": "Fabrique todas as peças de uma Armadura Corrompida.",

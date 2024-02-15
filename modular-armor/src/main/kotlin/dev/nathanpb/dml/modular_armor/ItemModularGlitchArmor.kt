@@ -107,9 +107,14 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
 
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
-        tooltip.add(getPristineEnergyTooltipText(stack))
-
         val data = ModularArmorData(stack)
+        if(data.dataAmount > 0) { // TODO remove in 1.21
+            tooltip.add(Text.translatable("tooltip.dml-refabricated.glitch_armor_upgrade.1").formatted(Formatting.RED, Formatting.BOLD))
+            tooltip.add(Text.translatable("tooltip.dml-refabricated.glitch_armor_upgrade.2").formatted(Formatting.RED, Formatting.BOLD))
+            return
+        }
+
+        tooltip.add(getPristineEnergyTooltipText(stack))
 
         val dataModelText: Text
         @Suppress("LiftReturnOrAssignment")

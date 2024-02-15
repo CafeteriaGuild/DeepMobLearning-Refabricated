@@ -71,6 +71,8 @@
   "tooltip.dml-refabricated.matter_condenser.9": "are not interchangeable.",
   "tooltip.dml-refabricated.matter_condenser.pristine_matter": "Pristine Matter",
   "tooltip.dml-refabricated.glitch_armor.title": "Glitch Armor",
+  "tooltip.dml-refabricated.glitch_armor_upgrade.1": "Legacy internal energy detected!",
+  "tooltip.dml-refabricated.glitch_armor_upgrade.2": "Place on a Matter Condenser to convert.",
   "death.dml-refabricated.starvedWithPlenty": "%s starved to death in a land of plenty",
   "advancements.dml-refabricated.glitch_armor": "Glitchy to the Bone",
   "advancements.dml-refabricated.glitch_armor.description": "Craft a full set of Glitch Armor.",
