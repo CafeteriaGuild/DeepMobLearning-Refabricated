@@ -105,7 +105,7 @@ class DataSynthesizerScreenHandler(
         }
         root.add(dataModelSlot, 4 * 18, (2 * 18) + 6)
 
-        val progressLine = WProgressLine((2 * 18) + 7)
+        val progressLine = WProgressLine((2 * 18) + 14)
         root.add(progressLine, (4 * 18) + 1, progressLine.initialY + 7, 16, 1)
 
         val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2)
