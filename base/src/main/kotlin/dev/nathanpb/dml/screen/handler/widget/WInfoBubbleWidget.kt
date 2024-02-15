@@ -19,17 +19,15 @@ class WInfoBubbleWidget(
     }
 
     override fun paint(context: DrawContext, x: Int, y: Int, mouseX: Int, mouseY: Int) {
-        if(!hidden) {
-            super.paint(context, x, y, mouseX, mouseY)
+        if(hidden) return
+        super.paint(context, x, y, mouseX, mouseY)
 
-            if(isHovered) {
-                context.drawTooltip(
-                    (context as DrawContextAccessor).client.textRenderer,
-                    text,
-                    x + mouseX, y + mouseY
-                )
-            }
-        }
+        if(!isHovered) return
+        context.drawTooltip(
+            (context as DrawContextAccessor).client.textRenderer,
+            text,
+            x + mouseX, y + mouseY
+        )
     }
 
 }

@@ -105,8 +105,8 @@ class DataSynthesizerScreenHandler(
         }
         root.add(dataModelSlot, 4 * 18, (2 * 18) + 6)
 
-        val progressThingy = WProgressLine((2 * 18) + 7)
-        root.add(progressThingy, (4 * 18) + 1, progressThingy.initialY, 16, 1)
+        val progressLine = WProgressLine((2 * 18) + 7)
+        root.add(progressLine, (4 * 18) + 1, progressLine.initialY + 7, 16, 1)
 
         val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2)
         root.add(energyComponent, 0, (1 * 18) - 6)
@@ -150,10 +150,6 @@ class DataSynthesizerScreenHandler(
 
         private var hidden = true
         private val areaSize = 15F
-
-        init {
-            initialY += 7
-        }
 
         override fun tick() {
             if(host!!.propertyDelegate!!.get(4) == 0) { // canProgress

@@ -22,19 +22,22 @@ package dev.nathanpb.dml.modular_armor.screen
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.modular_armor.BlockMatterCondenser
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
-import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForBlockEntity
-import dev.nathanpb.dml.screen.handler.slot.WTooltippedItemSlot
+import dev.nathanpb.dml.screen.handler.widget.CyclingTextureIcon
+import dev.nathanpb.dml.screen.handler.widget.WEnergyComponent
+import dev.nathanpb.dml.screen.handler.widget.WInfoBubbleWidget
+import dev.nathanpb.dml.screen.handler.widget.WInfoBubbleWidget.Companion.INFO_BUBBLE
 import dev.nathanpb.dml.utils.RenderUtils
+import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
+import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
-import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
+import io.github.cottonmc.cotton.gui.widget.WSprite
+import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment
 import io.github.cottonmc.cotton.gui.widget.data.Insets
-import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.ScreenHandlerContext
@@ -63,42 +66,63 @@ class MatterCondenserScreenHandler(
         setRootPanel(root)
         root.insets = Insets.ROOT_PANEL
 
-        val slots = WPlainPanel()
-        val armorSlot = WTooltippedItemSlot.of(blockInventory, 0, true, Text.translatable("gui.${MOD_ID}.glitch_armor_only")).apply {
+
+        val armorSlot = WItemSlot(blockInventory, 0, 1, 1, true).apply {
             setInputFilter {
-                it.item is ItemModularGlitchArmor && !ModularArmorData(it).tier().isMaxTier()
+                it.item is ItemModularGlitchArmor
             }
+
+            icon = CyclingTextureIcon(listOf(
+                identifier("textures/gui/slot_background/helmet_slot_background.png"),
+                identifier("textures/gui/slot_background/chestplate_slot_background.png"),
+                identifier("textures/gui/slot_background/leggings_slot_background.png"),
+                identifier("textures/gui/slot_background/boots_slot_background.png")
+            ))
         }
+        root.add(armorSlot, 4 * 18, (2 * 18) + 6)
 
-        slots.add(armorSlot, 2*18, 2*18)
+        val armorSlotFrame = WSprite(identifier("textures/gui/slot_background/big_fancy_frame.png"))
+        root.add(armorSlotFrame, (3 * 18) + 6, (2 * 18) - 6, 42, 42)
 
-        val matterSlots = (1..6).map {
-            WItemSlot(blockInventory, it, 1, 1, false).apply {
-                setInputFilter { stack ->
-                    stack.item is ItemPristineMatter
-                }
 
-                icon = TextureIcon(identifier("textures/gui/slot_background/pristine_matter_slot_background.png"))
-            }
-        }
+        val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2, true)
+        root.add(energyComponent, 0, (1*18) - 6)
 
-        slots.add(matterSlots[0], 2*18, 0*18)
-        slots.add(matterSlots[1], 0*18, 1*18)
-        slots.add(matterSlots[2], 4*18, 1*18)
-        slots.add(matterSlots[3], 0*18, 3*18)
-        slots.add(matterSlots[4], 4*18, 3*18)
-        slots.add(matterSlots[5], 2*18, 4*18)
+        val infoBubble = WInfoBubbleWidget(
+            INFO_BUBBLE,
+            listOf(
+                Text.translatable(
+                    "tooltip.${MOD_ID}.matter_condenser.1",
+                    Text.translatable("tooltip.${MOD_ID}.matter_condenser.pristine_matter").also { it.style = STYLE }
+                ).also { it.style = ALT_STYLE },
+                Text.translatable("tooltip.${MOD_ID}.matter_condenser.2").also { it.style = ALT_STYLE },
+                Text.translatable(
+                    "tooltip.${MOD_ID}.matter_condenser.3",
+                    Text.translatable("text.${MOD_ID}.pristine_energy").also { it.style = STYLE },
+                    Text.translatable("text.${MOD_ID}.pristine_energy.short.2").also { it.style = STYLE }
+                ).also { it.style = ALT_STYLE },
+                Text.empty(),
+                Text.translatable(
+                    "tooltip.${MOD_ID}.matter_condenser.4",
+                    Text.translatable("text.${MOD_ID}.pristine_energy").also { it.style = STYLE },
+                ).also { it.style = ALT_STYLE },
+                Text.translatable("tooltip.${MOD_ID}.matter_condenser.5").also { it.style = ALT_STYLE },
+                Text.translatable(
+                    "tooltip.${MOD_ID}.matter_condenser.6",
+                    Text.translatable("tooltip.${MOD_ID}.glitch_armor.title").also { it.style = STYLE }
+                ).also { it.style = ALT_STYLE },
+                Text.translatable("tooltip.${MOD_ID}.matter_condenser.7").also { it.style = ALT_STYLE },
+                Text.empty(),
+                Text.translatable("tooltip.${MOD_ID}.matter_condenser.8").also { it.style = ALT_STYLE },
+                Text.translatable("tooltip.${MOD_ID}.matter_condenser.9").also { it.style = ALT_STYLE },
+            )
+        )
+        root.add(infoBubble, (8 * 18) + 10, 0, 8, 8)
 
-        root.add(slots, 2*18, 1*18)
-        root.add(this.createPlayerInventoryPanel(), 0*18, 6*18+6)
+        root.add(createPlayerInventoryPanel(), 0, (5 * 18) + 2)
 
-        val progressBar1 = WBar(RenderUtils.BAR_BACKGROUND, RenderUtils.CYAN_BAR, 0, 1, WBar.Direction.UP)
-        val progressBar2 = WBar(RenderUtils.BAR_BACKGROUND, RenderUtils.CYAN_BAR, 0, 1, WBar.Direction.UP)
-        root.add(progressBar1, 0*18, 1*18, 1*18, 5*18)
-        root.add(progressBar2, 8*18, 1*18, 1*18, 5*18)
-
+        setTitleAlignment(HorizontalAlignment.CENTER)
         root.validate(this)
-
         (blockInventory as? SimpleInventory)?.addListener {
             sendContentUpdates()
         }

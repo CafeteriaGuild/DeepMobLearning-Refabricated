@@ -22,36 +22,42 @@ package dev.nathanpb.dml.modular_armor.inventory
 
 import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
-import dev.nathanpb.dml.utils.toIntArray
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.Direction
 
-class MatterCondenserInventory : SimpleInventory(7), SidedInventory {
+class MatterCondenserInventory : SimpleInventory(3), SidedInventory {
     companion object {
         const val ARMOR_SLOT = 0
-        val MATTER_SLOTS = (1..6).toIntArray()
+        const val PRISTINE_ENERGY_IN = 1
+        const val PRISTINE_ENERGY_OUT = 2
     }
 
-    override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?) = slot == ARMOR_SLOT
+    override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) = slot == ARMOR_SLOT
 
-    override fun canInsert(slot: Int, stack: ItemStack?, dir: Direction?): Boolean {
-        return when (stack?.item) {
-            is ItemPristineMatter -> slot in MATTER_SLOTS
+    override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?): Boolean {
+        return when(stack.item) {
+            is ItemPristineMatter -> slot == PRISTINE_ENERGY_IN
             is ItemModularGlitchArmor -> slot == ARMOR_SLOT
-            else -> false
+            else -> true
         }
     }
 
-    override fun getAvailableSlots(side: Direction?) = MATTER_SLOTS + ARMOR_SLOT
+    override fun getAvailableSlots(side: Direction?): IntArray {
+      return intArrayOf(ARMOR_SLOT, PRISTINE_ENERGY_IN, PRISTINE_ENERGY_OUT)
+    }
 
-    var stackInArmorSlot: ItemStack
+    var armorStack: ItemStack
         get() = getStack(ARMOR_SLOT)
         set(value) = setStack(ARMOR_SLOT, value)
 
-    var matterStacks: DefaultedList<ItemStack>
-        get() = DefaultedList.copyOf(ItemStack.EMPTY, *MATTER_SLOTS.map(this::getStack).toTypedArray())
-        set(value) = value.take(MATTER_SLOTS.size).forEachIndexed { index, stack -> setStack(index + 1, stack) }
+    var pristineInputStack: ItemStack
+        get() = getStack(PRISTINE_ENERGY_IN)
+        set(value) = setStack(PRISTINE_ENERGY_IN, value)
+
+    var pristineOutputStack: ItemStack
+        get() = getStack(PRISTINE_ENERGY_OUT)
+        set(value) = setStack(PRISTINE_ENERGY_OUT, value)
+
 }

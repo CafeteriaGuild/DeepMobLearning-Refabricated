@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractBlockAccessor",
+    "BakedModelManagerAccessor",
     "BowItemMixin",
     "CrossbowItemMixin",
     "EndermanEntityMixin",
@@ -16,9 +17,12 @@
     "ShapelessRecipeAccessor",
     "SlotMixin",
     "SmithingTemplateItemAccessor",
+    "WListPanelAccessor",
     "WorldMixin"
   ],
-  "client": [],
+  "client": [
+    "DrawContextAccessor"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
