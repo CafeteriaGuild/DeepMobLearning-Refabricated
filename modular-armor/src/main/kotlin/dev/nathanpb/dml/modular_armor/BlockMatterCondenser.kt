@@ -61,15 +61,15 @@ class BlockMatterCondenser : HorizontalFacingBlock(
 ), InventoryProvider, BlockEntityProvider {
 
     companion object {
-        val BLOCK = BlockMatterCondenser()
+        val BLOCK_MATTER_CONDENSER = BlockMatterCondenser()
         val IDENTIFIER = identifier("matter_condenser")
 
         fun register() {
-            Registry.register(Registries.BLOCK, IDENTIFIER, BLOCK)
-            Registry.register(Registries.ITEM, IDENTIFIER, BlockItem(BLOCK, FabricItemSettings().rarity(Rarity.RARE)))
+            Registry.register(Registries.BLOCK, IDENTIFIER, BLOCK_MATTER_CONDENSER)
+            Registry.register(Registries.ITEM, IDENTIFIER, BlockItem(BLOCK_MATTER_CONDENSER, FabricItemSettings().rarity(Rarity.RARE)))
 
             ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
-                it.addAfter(ItemStack(GLITCH_BOOTS), BLOCK)
+                it.addAfter(ItemStack(GLITCH_BOOTS), BLOCK_MATTER_CONDENSER)
             }
         }
     }

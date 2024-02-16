@@ -2,10 +2,13 @@ package dev.nathanpb.dml.modular_armor
 
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.battery.AbstractItemBattery
+import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
+import dev.nathanpb.dml.modular_armor.BlockMatterCondenser.Companion.BLOCK_MATTER_CONDENSER
 import dev.nathanpb.dml.utils.ITEM_PRISTINE
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
 import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
 import dev.nathanpb.dml.utils.getEnergyStorage
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -16,15 +19,19 @@ import java.awt.Color
 class ItemPristineEnergyCube : AbstractItemBattery() {
 
     companion object {
-        val PRISTINE_ENERGY_CUBE = ItemPristineEnergyCube()
+        val ITEM_PRISTINE_ENERGY_CUBE = ItemPristineEnergyCube()
 
         fun register() {
-            Registry.register(Registries.ITEM, identifier("pristine_energy_cube"), PRISTINE_ENERGY_CUBE)
+            Registry.register(Registries.ITEM, identifier("pristine_energy_cube"), ITEM_PRISTINE_ENERGY_CUBE)
 
-            ITEM_PRISTINE.registerForItems(::getEnergyStorage, PRISTINE_ENERGY_CUBE)
+            ITEM_PRISTINE.registerForItems(::getEnergyStorage, ITEM_PRISTINE_ENERGY_CUBE)
             EnergyStorage.ITEM.registerForItems({ _, _ ->
                 return@registerForItems EnergyStorage.EMPTY
-            }, PRISTINE_ENERGY_CUBE)
+            }, ITEM_PRISTINE_ENERGY_CUBE)
+            ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
+                it.addAfter(ItemStack(BLOCK_MATTER_CONDENSER), ITEM_PRISTINE_ENERGY_CUBE)
+            }
+
         }
     }
 

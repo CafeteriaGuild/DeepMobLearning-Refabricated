@@ -119,7 +119,7 @@ fun registerItems() {
         ITEM_GLITCH_INGOT to ItemTuple("glitch_ingot"),
         ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE to ItemTuple("glitch_upgrade_smithing_template", false),
         ITEM_GLITCH_SWORD to ItemTuple("glitch_sword", false),
-        ITEM_ENERGY_OCTAHEDRON to ItemTuple("energy_octahedron")
+        ITEM_ENERGY_OCTAHEDRON to ItemTuple("energy_octahedron", false)
     ).forEach { (item, tuple) ->
         Registry.register(Registries.ITEM, identifier(tuple.identifier), item)
         if(tuple.shown) ITEMS.add(ItemStack(item))

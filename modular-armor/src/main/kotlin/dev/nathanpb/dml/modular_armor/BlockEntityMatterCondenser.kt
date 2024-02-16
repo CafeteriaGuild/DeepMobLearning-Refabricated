@@ -101,7 +101,7 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
         val BLOCK_ENTITY_TYPE = Registry.register(
             Registries.BLOCK_ENTITY_TYPE,
             BlockMatterCondenser.IDENTIFIER,
-            BlockEntityType.Builder.create(::BlockEntityMatterCondenser, BlockMatterCondenser.BLOCK).build(null)
+            BlockEntityType.Builder.create(::BlockEntityMatterCondenser, BlockMatterCondenser.BLOCK_MATTER_CONDENSER).build(null)
         ).also {
             SIDED_PRISTINE.registerForBlockEntity(
                 { blockEntity, _ -> blockEntity.energyStorage },

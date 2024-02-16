@@ -45,6 +45,9 @@ fun registerItemGroup() {
             it.addAfter(BLOCK_CAFETERIA, block)
         }
 
+        it.addBefore(ITEM_TRIAL_KEY, BLOCK_DATA_SYNTHESIZER)
+        it.addAfter(BLOCK_DATA_SYNTHESIZER, ITEM_ENERGY_OCTAHEDRON)
+
         it.addAfter(ITEM_TRIAL_KEY, BLOCK_TRIAL_KEYSTONE)
         it.addBefore(ITEM_PRISTINE_MATTER_OVERWORLD, BLOCK_LOOT_FABRICATOR)
 

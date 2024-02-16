@@ -36,10 +36,10 @@ import net.minecraft.item.ItemStack
 
 @Suppress("unused")
 fun init() {
-    ItemPristineEnergyCube.register()
     ItemModularGlitchArmor.register()
     BlockMatterCondenser.register()
     BlockEntityMatterCondenser.BLOCK_ENTITY_TYPE // force evaluate to register
+    ItemPristineEnergyCube.register()
     ModularEffectRegistry.registerDefaults()
     registerServerSidePackets()
     registerStatusEffects()
@@ -53,7 +53,6 @@ fun init() {
 
     ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
         it.addAfter(ItemStack(ITEM_GLITCH_INGOT), ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE)
-
         it.addBefore(ItemStack(GLITCH_HELMET), ITEM_GLITCH_SWORD)
     }
 

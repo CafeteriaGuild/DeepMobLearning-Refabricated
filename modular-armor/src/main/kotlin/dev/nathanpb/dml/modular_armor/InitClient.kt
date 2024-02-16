@@ -20,27 +20,25 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.modular_armor.ItemPristineEnergyCube.Companion.PRISTINE_ENERGY_CUBE
 import dev.nathanpb.dml.modular_armor.net.registerClientSidePackets
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
+import net.minecraft.client.gui.screen.ingame.HandledScreens
 
-@Suppress("unused")
 fun initClient() {
-    PRISTINE_ENERGY_CUBE.let {
-        ColorProviderRegistry.ITEM.register({ stack, _ -> it.getScaledColor(stack) }, it)
-    }
     registerKeybindings()
     registerClientSidePackets()
 
-    ScreenRegistry.register(MatterCondenserScreenHandler.INSTANCE) { handler, inventory, title ->
+    HandledScreens.register(MatterCondenserScreenHandler.INSTANCE) { handler, inventory, title ->
+        CottonInventoryScreen(handler, inventory.player, title)
+    }
+    HandledScreens.register(ModularArmorScreenHandler.INSTANCE) { handler, inventory, title ->
         CottonInventoryScreen(handler, inventory.player, title)
     }
 
-    ScreenRegistry.register(ModularArmorScreenHandler.INSTANCE) { handler, inventory, title ->
-        CottonInventoryScreen(handler, inventory.player, title)
+    ItemPristineEnergyCube.ITEM_PRISTINE_ENERGY_CUBE.let {
+        ColorProviderRegistry.ITEM.register({ stack, _ -> it.getScaledColor(stack) }, it)
     }
 }
