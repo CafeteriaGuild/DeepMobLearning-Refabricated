@@ -20,18 +20,18 @@
 package dev.nathanpb.dml.enums
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.utils.takeOrNull
 import net.minecraft.text.Text
 import kotlin.math.ceil
 import kotlin.math.max
 
 enum class DataModelTier(textEntry: String, private val dataAmountSupplier: ()->Int, val glitchUpgradeOdds: Double) {
-    FAULTY("tier.${MOD_ID}.faulty", { 0 }, config.trial.faultyGlitchUpgradeOdds),
-    BASIC("tier.${MOD_ID}.basic", config.dataModel::basicDataRequired, config.trial.basicGlitchUpgradeOdds),
-    ADVANCED("tier.${MOD_ID}.advanced", config.dataModel::advancedDataRequired, config.trial.advancedGlitchUpgradeOdds),
-    SUPERIOR("tier.${MOD_ID}.superior", config.dataModel::superiorDataRequired, config.trial.superiorGlitchUpgradeOdds),
-    SELF_AWARE("tier.${MOD_ID}.self_aware", config.dataModel::selfAwareDataRequired, config.trial.selfAwareGlitchUpgradeOdds);
+    FAULTY("tier.${MOD_ID}.faulty", { 0 }, baseConfig.trial.faultyGlitchUpgradeOdds),
+    BASIC("tier.${MOD_ID}.basic", baseConfig.dataModel::basicDataRequired, baseConfig.trial.basicGlitchUpgradeOdds),
+    ADVANCED("tier.${MOD_ID}.advanced", baseConfig.dataModel::advancedDataRequired, baseConfig.trial.advancedGlitchUpgradeOdds),
+    SUPERIOR("tier.${MOD_ID}.superior", baseConfig.dataModel::superiorDataRequired, baseConfig.trial.superiorGlitchUpgradeOdds),
+    SELF_AWARE("tier.${MOD_ID}.self_aware", baseConfig.dataModel::selfAwareDataRequired, baseConfig.trial.selfAwareGlitchUpgradeOdds);
 
     val dataAmount: Int
         get() = dataAmountSupplier()

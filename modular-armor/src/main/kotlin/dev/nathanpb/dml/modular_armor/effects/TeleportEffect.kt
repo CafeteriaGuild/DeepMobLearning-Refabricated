@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
@@ -29,6 +28,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.event.ModularArmorEvents
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.modular_armor.net.C2S_TELEPORT_EFFECT_REQUESTED
 import dev.nathanpb.dml.modular_armor.payload.TeleportEffectPayload
 import dev.nathanpb.dml.utils.toVec3d
@@ -49,7 +49,7 @@ import net.minecraft.world.RaycastContext
 class TeleportEffect : ModularEffect<TeleportEffectPayload>(
     identifier("teleport"),
     EntityCategory.END,
-    config.glitchArmor.costs::teleports
+    modularArmorConfig.glitchArmor.costs::teleports
 ) {
 
     @Environment(EnvType.CLIENT)

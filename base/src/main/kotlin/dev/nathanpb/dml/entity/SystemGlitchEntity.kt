@@ -21,7 +21,7 @@ package dev.nathanpb.dml.entity
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ItemEmeritusHat
@@ -137,7 +137,7 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
         do {
             val pos = at.randomAround(radius, 0, radius)
             val canTeleport =
-            config.trial.allowPlayersLeavingArena || trial?.let { trial ->
+            baseConfig.trial.allowPlayersLeavingArena || trial?.let { trial ->
                 TrialGriefPrevention.isBlockProtected(pos, trial)
             } ?: true
 
@@ -182,8 +182,8 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
 
     override fun applyDamage(source: DamageSource, amount: Float) {
         val finalAmount = ItemGlitchSword.getIncreasedDamage(source, amount)
-        if(source != world.damageSources.outOfWorld() && config.systemGlitch.damageLimiter > 0) {
-            super.applyDamage(source, min(finalAmount, config.systemGlitch.damageLimiter))
+        if(source != world.damageSources.outOfWorld() && baseConfig.systemGlitch.damageLimiter > 0) {
+            super.applyDamage(source, min(finalAmount, baseConfig.systemGlitch.damageLimiter))
         } else {
             super.applyDamage(source, finalAmount)
         }

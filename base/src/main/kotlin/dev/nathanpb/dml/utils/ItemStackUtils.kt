@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.utils
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
 import net.minecraft.item.ItemStack
@@ -52,5 +52,5 @@ fun combineStacksIfPossible(source: ItemStack, target: ItemStack, maxInventoryCo
 
 fun ItemStack.hasSimUnrestrictedData(): Boolean {
     if(this.item !is ItemDataModel) return false
-    return this.dataModel.dataAmount > 0 && ((config.dataModel.hasSimulatedDataRestrictions && !this.dataModel.simulated) || !config.dataModel.hasSimulatedDataRestrictions)
+    return this.dataModel.dataAmount > 0 && ((baseConfig.dataModel.hasSimulatedDataRestrictions && !this.dataModel.simulated) || !baseConfig.dataModel.hasSimulatedDataRestrictions)
 }

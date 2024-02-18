@@ -1,18 +1,18 @@
 package dev.nathanpb.dml.simulacrum.item
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.simulacrum.SIMULATION_CHAMBER
+import dev.nathanpb.dml.simulacrum.simulacrumConfig
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 
-val OVERWORLD_MATTER = ItemMatter(FabricItemSettings(), config.matterXP.overworldMatterXP)
-val HELLISH_MATTER = ItemMatter(FabricItemSettings(), config.matterXP.hellishMatterXP)
-val EXTRATERRESTRIAL_MATTER = ItemMatter(FabricItemSettings(), config.matterXP.extraterrestrialMatterXP)
+val OVERWORLD_MATTER = ItemMatter(FabricItemSettings(), simulacrumConfig.matterXP.overworldMatterXP)
+val HELLISH_MATTER = ItemMatter(FabricItemSettings(), simulacrumConfig.matterXP.hellishMatterXP)
+val EXTRATERRESTRIAL_MATTER = ItemMatter(FabricItemSettings(), simulacrumConfig.matterXP.extraterrestrialMatterXP)
 
 fun registerItems() {
     linkedMapOf(

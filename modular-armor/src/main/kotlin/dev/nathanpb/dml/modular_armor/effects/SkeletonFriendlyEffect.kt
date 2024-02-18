@@ -20,19 +20,19 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.WrappedEffectTriggerPayload
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 
 class SkeletonFriendlyEffect : TargetCancellationEffect(
     identifier("skeleton_friendly"),
     EntityCategory.SKELETON,
-    config.glitchArmor.costs::skeletonFriendly
+    modularArmorConfig.glitchArmor.costs::skeletonFriendly
 ) {
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()

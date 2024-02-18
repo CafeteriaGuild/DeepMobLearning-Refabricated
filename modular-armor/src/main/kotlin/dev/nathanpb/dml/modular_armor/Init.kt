@@ -30,6 +30,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.net.registerServerSidePackets
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
+import dev.nathanpb.dml.utils.initConfig
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemStack
 
@@ -57,3 +58,5 @@ fun init() {
     }
 
 }
+
+val modularArmorConfig: ModularArmorConfig = initConfig("modular-armor", ModularArmorConfig(), ModularArmorConfig::class.java)

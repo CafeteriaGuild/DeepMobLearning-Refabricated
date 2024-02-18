@@ -20,11 +20,11 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.registry.tag.DamageTypeTags
@@ -33,7 +33,7 @@ import net.minecraft.world.World
 class FireImmunityEffect : DamageImmunityLikeEffect(
     identifier("fire_immunity"),
     EntityCategory.NETHER,
-    config.glitchArmor.costs::fireImmunity
+    modularArmorConfig.glitchArmor.costs::fireImmunity
 ) {
 
     override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FIRE)

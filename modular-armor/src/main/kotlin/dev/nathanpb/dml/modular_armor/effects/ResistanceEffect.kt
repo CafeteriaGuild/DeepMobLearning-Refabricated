@@ -20,12 +20,12 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.registry.tag.DamageTypeTags
@@ -35,7 +35,7 @@ import kotlin.math.min
 class ResistanceEffect : ProtectionLikeEffect(
     identifier("resistance"),
     EntityCategory.ILLAGER,
-    config.glitchArmor.costs::resistance
+    modularArmorConfig.glitchArmor.costs::resistance
 ) {
 
     override fun protectsAgainst(world: World, source: DamageSource): Boolean {

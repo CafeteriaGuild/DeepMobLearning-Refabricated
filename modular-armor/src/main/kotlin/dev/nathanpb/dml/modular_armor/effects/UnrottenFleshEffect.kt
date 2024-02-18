@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents
@@ -29,6 +28,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
@@ -40,7 +40,7 @@ import kotlin.random.Random
 class UnrottenFleshEffect : ModularEffect<ModularEffectTriggerPayload> (
     identifier("unrotten_flesh"),
     EntityCategory.ZOMBIE,
-    config.glitchArmor.costs::unrottenFlesh
+    modularArmorConfig.glitchArmor.costs::unrottenFlesh
 ) {
 
     companion object {

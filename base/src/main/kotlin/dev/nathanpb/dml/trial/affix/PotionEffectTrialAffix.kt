@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.trial.affix
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
@@ -42,7 +42,7 @@ abstract class PotionEffectTrialAffix(
             Random.nextFloat() <= chanceOfApplying
         }.forEach { entity ->
             effects.map { effect ->
-                StatusEffectInstance(effect, (config.trial.maxTime - trial.tickCount).coerceAtLeast(0))
+                StatusEffectInstance(effect, (baseConfig.trial.maxTime - trial.tickCount).coerceAtLeast(0))
             }.forEach {
                 entity.addStatusEffect(it)
             }
@@ -52,13 +52,13 @@ abstract class PotionEffectTrialAffix(
 }
 
 class MobStrengthTrialAffix : PotionEffectTrialAffix(identifier("mob_strength"), StatusEffects.STRENGTH) {
-    override fun isEnabled() = config.affix.enableMobStrength
+    override fun isEnabled() = baseConfig.trial.affixes.enableMobStrength
 }
 
 class MobSpeedTrialAffix : PotionEffectTrialAffix(identifier("mob_speed"), StatusEffects.SPEED) {
-    override fun isEnabled() = config.affix.enableMobSpeed
+    override fun isEnabled() = baseConfig.trial.affixes.enableMobSpeed
 }
 
 class MobResistanceTrialAffix : PotionEffectTrialAffix(identifier("mob_resistance"), StatusEffects.RESISTANCE) {
-    override fun isEnabled() = config.affix.enableMobResistance
+    override fun isEnabled() = baseConfig.trial.affixes.enableMobResistance
 }

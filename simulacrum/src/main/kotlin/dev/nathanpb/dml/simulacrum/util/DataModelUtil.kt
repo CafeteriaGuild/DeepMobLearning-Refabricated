@@ -1,11 +1,12 @@
 package dev.nathanpb.dml.simulacrum.util
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.*
 import dev.nathanpb.dml.simulacrum.ENERGY_COST
+import dev.nathanpb.dml.simulacrum.simulacrumConfig
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
@@ -47,10 +48,10 @@ class DataModelUtil {
         }
 
         fun updateDataModel(stack: ItemStack) {
-            val dataBonus = config.simulationChamber.dataBonus
+            val dataBonus = simulacrumConfig.simulationChamber.dataBonus
             if(stack.item !is ItemDataModel || dataBonus == 0) return
 
-            stack.dataModel.dataAmount = (getTierCount(stack) + dataBonus).coerceIn(0, config.dataModel.selfAwareDataRequired)
+            stack.dataModel.dataAmount = (getTierCount(stack) + dataBonus).coerceIn(0, baseConfig.dataModel.selfAwareDataRequired)
             stack.dataModel.simulated = true
         }
 
@@ -82,7 +83,7 @@ class DataModelUtil {
 
         fun getTierRoof(stack: ItemStack): Int {
             if (stack.item is ItemDataModel) {
-                val config = config
+                val config = baseConfig
                 when(getTier(stack)) {
                     DataModelTier.FAULTY -> {
                         return config.dataModel.basicDataRequired

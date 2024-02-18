@@ -19,29 +19,17 @@
 
 package dev.nathanpb.dml
 
-class ModConfig {
+class BaseConfig {
 
-    // Base
-    var trial = Trial()
-    var lootFabricator = LootFabricator()
     var dataModel = DataModel()
+    var trial = Trial()
     var systemGlitch = SystemGlitch()
-    var dataCollection = DataCollection()
-    var affix = TrialAffix()
-
-    // Modular Armor
-    var matterCondenser = MatterCondenser()
-    var glitchArmor = GlitchArmor()
-
-    // Simulacrum
-    var simulationChamber = SimulationChamber()
-    var matterXP = MatterXP()
+    var lootFabricator = LootFabricator()
 
 }
 
 class Trial {
     var maxMobsInArena = 8
-    var postEndTimeout = 60
     var arenaRadius = 12
     var warmupTime = 60
     var maxTime = 24000
@@ -62,6 +50,8 @@ class Trial {
     var advancedGlitchUpgradeOdds = .15
     var superiorGlitchUpgradeOdds = .65
     var selfAwareGlitchUpgradeOdds = 1.0
+
+    var affixes = TrialAffix()
 }
 
 class TrialAffix {
@@ -98,19 +88,10 @@ class DataModel {
     var advancedDataRequired = 16
     var superiorDataRequired = 32
     var selfAwareDataRequired = 64
+    var hasSimulatedDataRestrictions = false
+
+    var dataCollection = DataCollection()
 }
-
-
-class SystemGlitch {
-
-    var teleportChance = 0.05F
-    var teleportMinDistance = 5
-    var teleportDelay = 100
-    var teleportAroundPlayerRadius = 2
-
-    var damageLimiter = 20F
-}
-
 
 class DataCollection {
     var baseDataGainPerKill = 1
@@ -118,72 +99,11 @@ class DataCollection {
 }
 
 
-class MatterCondenser {
-    var processTime = 40
-}
+class SystemGlitch {
+    var teleportChance = 0.05F
+    var teleportMinDistance = 5
+    var teleportDelay = 100
+    var teleportAroundPlayerRadius = 2
 
-
-class GlitchArmor {
-    var dataAmountToBasic = 32
-    var dataAmountToAdvanced = 96
-    var dataAmountToSuperior = 192
-    var dataAmountToSelfAware = 384
-    var soulVisionRange = 12
-    var maxFlightTicksPerLevel = 30 * 20
-    var undyingCooldownTime = 36000
-
-    val costs = GlitchArmorDataConsume()
-}
-
-class GlitchArmorDataConsume {
-    var fireProtection = 1F
-    var piglinTruce = 3.5F
-    var autoExtinguish = 4F
-    var featherFalling = 3F
-    var fireImmunity = 1F
-    var jumpBoost = .0075F
-    var plenty = 1F
-    var unrottenFlesh = .5F
-    var rotResistance = .5F
-    var zombieFriendly = .1F
-    var archery = .5F
-    var skeletonFriendly = .1F
-    var fallImmunity = 1F
-    var endermenProofVision = 1F
-    var shulkerFriendly = .2F
-    var teleports = 1.5F
-    var soulVision = 8F
-    var nightVision = .005F
-    var fly = 0.05F
-    var underwaterHaste = .01F
-    var depthStrider = .01F
-    var waterBreathing = .01F
-    var poseidonBless = .015F
-    var resistance = .3F
-    var undying = 8F
-}
-
-class SimulationChamber {
-    var basicTierPristineChance = 5
-    var advancedTierPristineChance = 11
-    var superiorTierPristineChance = 24
-    var selfAwareTierPristineChance = 42
-
-    var overworldEnergyCost = 100
-    var zombieEnergyCost = 300
-    var skeletonEnergyCost = 80
-    var slimyEnergyCost = 160
-    var illagerEnergyCost = 412
-    var oceanEnergyCost = 160
-    var ghostEnergyCost = 372
-    var netherEnergyCost = 300
-    var endEnergyCost = 512
-
-    var dataBonus = 1
-}
-
-class MatterXP {
-    var overworldMatterXP = 10
-    var hellishMatterXP = 14
-    var extraterrestrialMatterXP = 20
+    var damageLimiter = 20F
 }

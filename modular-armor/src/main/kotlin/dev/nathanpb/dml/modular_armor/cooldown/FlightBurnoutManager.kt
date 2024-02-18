@@ -20,11 +20,11 @@
 
 package dev.nathanpb.dml.modular_armor.cooldown
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.modular_armor.core.EffectNotFoundException
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.effects.FlyEffect
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.modular_armor.net.S2C_FLIGHT_BURNOUT_MANAGER_UPDATE
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import io.netty.buffer.Unpooled
@@ -56,12 +56,12 @@ class FlightBurnoutManager(private val player: net.minecraft.entity.player.Playe
         if (
             world != null
             && !world.isClient
-            && config.glitchArmor.maxFlightTicksPerLevel > 0
+            && modularArmorConfig.glitchArmor.maxFlightTicksPerLevel > 0
             && !(player.isCreative || player.isSpectator)
         ) {
 
             if (world.time % 20 == 0L) {
-                maxFlightTicks = config.glitchArmor.maxFlightTicksPerLevel * effect.sumLevelsOf(
+                maxFlightTicks = modularArmorConfig.glitchArmor.maxFlightTicksPerLevel * effect.sumLevelsOf(
                     ModularEffectContext.from(player).map { it.armor.stack }
                 ).toInt()
             }

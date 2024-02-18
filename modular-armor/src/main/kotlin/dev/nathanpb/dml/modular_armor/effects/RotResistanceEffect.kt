@@ -21,12 +21,12 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import com.mojang.datafixers.util.Pair
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.*
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -41,7 +41,7 @@ import kotlin.random.Random
 class RotResistanceEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("rot_resistance"),
     EntityCategory.ZOMBIE,
-    config.glitchArmor.costs::rotResistance
+    modularArmorConfig.glitchArmor.costs::rotResistance
 ) {
 
     companion object {

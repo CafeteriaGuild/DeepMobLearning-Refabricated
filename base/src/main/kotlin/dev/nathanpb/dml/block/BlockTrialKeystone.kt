@@ -21,7 +21,7 @@ package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -68,12 +68,12 @@ class BlockTrialKeystone : Block(
                                     trial,
                                     takeOrNull(
                                         !player.isCreative
-                                        && config.trial.trialKeyConsume
-                                        && config.trial.trialKeyReturnIfSucceed
+                                        && baseConfig.trial.trialKeyConsume
+                                        && baseConfig.trial.trialKeyReturnIfSucceed
                                     ) { stackInHand }
                                 )
 
-                                if (!player.isCreative && config.trial.trialKeyConsume)
+                                if (!player.isCreative && baseConfig.trial.trialKeyConsume)
                                     stackInHand.decrement(1)
 
                                 return ActionResult.CONSUME

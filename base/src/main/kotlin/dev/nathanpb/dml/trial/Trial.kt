@@ -21,7 +21,7 @@ package dev.nathanpb.dml.trial
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.entity.SYSTEM_GLITCH_ENTITY_TYPE
 import dev.nathanpb.dml.entity.SystemGlitchEntity
@@ -132,13 +132,13 @@ class Trial (
                 when (state) {
                     TrialState.RUNNING -> {
                         if (tickCount % recipe.waveRespawnTimeout == 0) {
-                            if (getMonstersInArena().size < config.trial.maxMobsInArena) {
+                            if (getMonstersInArena().size < baseConfig.trial.maxMobsInArena) {
                                 spawnWave()
                             }
                         }
 
                         systemGlitch?.let { systemGlitch ->
-                            if (!config.trial.allowPlayersLeavingArena) {
+                            if (!baseConfig.trial.allowPlayersLeavingArena) {
                                 val glitchPos = systemGlitch.pos.toBlockPos()
                                 if (glitchPos.y < pos.y || !TrialGriefPrevention.isInArea(pos, glitchPos)) {
                                     pos.toVec3d().apply {
@@ -153,7 +153,7 @@ class Trial (
                             end(TrialEndReason.SUCCESS)
                         }
 
-                        if (tickCount > config.trial.maxTime) {
+                        if (tickCount > baseConfig.trial.maxTime) {
                             end(TrialEndReason.TIMED_OUT)
                         }
 
@@ -163,7 +163,7 @@ class Trial (
                     }
 
                     TrialState.WARMUP -> {
-                        if (tickCount >= config.trial.warmupTime) {
+                        if (tickCount >= baseConfig.trial.warmupTime) {
                             state = TrialState.RUNNING
                             ModEvents.TrialStateChanged.invoker().invoke(this)
                             spawnSystemGlitch()
@@ -295,7 +295,7 @@ class Trial (
         return world.getEntitiesAroundCircle(
             TypeFilter.instanceOf(HostileEntity::class.java),
             pos,
-            config.trial.arenaRadius.toDouble()
+            baseConfig.trial.arenaRadius.toDouble()
         )
     }
 }

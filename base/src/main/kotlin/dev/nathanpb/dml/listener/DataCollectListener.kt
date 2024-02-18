@@ -19,11 +19,10 @@
 
 package dev.nathanpb.dml.listener
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.data.DeepLearnerData
 import dev.nathanpb.dml.data.dataModel
-import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemDeepLearner
 import dev.nathanpb.dml.utils.firstOrNullMapping
@@ -33,7 +32,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 
@@ -58,7 +56,7 @@ open class DataCollectListener : ServerEntityCombatEvents.AfterKilledOtherEntity
     }
 
     open fun modifyDataAmount(dataModelData: DataModelData) {
-        dataModelData.dataAmount += config.dataCollection.baseDataGainPerKill
+        dataModelData.dataAmount += baseConfig.dataModel.dataCollection.baseDataGainPerKill
     }
 
     open fun onlyIf(player: PlayerEntity, stack: ItemStack): Boolean {

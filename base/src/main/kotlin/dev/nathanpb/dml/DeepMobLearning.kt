@@ -19,8 +19,6 @@
 
 package dev.nathanpb.dml
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
 import dev.nathanpb.dml.block.registerBlocks
 import dev.nathanpb.dml.blockEntity.BLOCKENTITY_DATA_SYNTHESIZER
 import dev.nathanpb.dml.blockEntity.BLOCKENTITY_DISRUPTIONS_CORE
@@ -44,6 +42,7 @@ import dev.nathanpb.dml.screen.handler.registerScreenHandlers
 import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
+import dev.nathanpb.dml.utils.initConfig
 import dev.nathanpb.dml.worldgen.registerFeatures
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
@@ -51,48 +50,16 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.io.PrintWriter
-import java.nio.file.Files
 import kotlin.random.Random
 
 const val MOD_ID = "dml-refabricated"
 
 val LOGGER = LoggerFactory.getLogger(MOD_ID)
 
-val config: ModConfig by lazy {
-    val parser = JsonParser()
-    val gson = GsonBuilder().setPrettyPrinting().create()
-    val configFile = File("${FabricLoader.getInstance().configDir}${File.separator}$MOD_ID.json")
-    var finalConfig: ModConfig
-    LOGGER.info("Trying to read config file...")
-    try {
-        if (configFile.createNewFile()) {
-            LOGGER.info("No config file found, creating a new one...")
-            val json: String = gson.toJson(parser.parse(gson.toJson(ModConfig())))
-            PrintWriter(configFile).use { out -> out.println(json) }
-            finalConfig = ModConfig()
-            LOGGER.info("Successfully created default config file.")
-        } else {
-            LOGGER.info("A config file was found, loading it..")
-            finalConfig = gson.fromJson(String(Files.readAllBytes(configFile.toPath())), ModConfig::class.java)
-            if (finalConfig == null) {
-                throw NullPointerException("The config file was empty.")
-            } else {
-                LOGGER.info("Successfully loaded config file.")
-            }
-        }
-    } catch (exception: Exception) {
-        LOGGER.error("There was an error creating/loading the config file!", exception)
-        finalConfig = ModConfig()
-        LOGGER.warn("Defaulting to original config.")
-    }
-    finalConfig
-}
+val baseConfig: BaseConfig = initConfig("base", BaseConfig(), BaseConfig::class.java)
 
 @Suppress("unused")
 fun init() {

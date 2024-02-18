@@ -1,7 +1,6 @@
 package dev.nathanpb.dml.simulacrum
 
 import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
@@ -9,6 +8,7 @@ import dev.nathanpb.dml.simulacrum.block.chamber.BlockSimulationChamber
 import dev.nathanpb.dml.simulacrum.item.registerItems
 import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber
 import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
+import dev.nathanpb.dml.utils.initConfig
 import dev.nathanpb.dml.utils.isModLoaded
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
@@ -41,23 +41,25 @@ val SCS_HANDLER_TYPE: ScreenHandlerType<ScreenHandlerSimulationChamber> = Screen
     ScreenHandlerSimulationChamber(syncId, playerInventory, packetByteBuf)
 }
 
+val simulacrumConfig: SimulacrumConfig = initConfig("simulacrum", SimulacrumConfig(), SimulacrumConfig::class.java)
+
 var PRISTINE_CHANCE = hashMapOf(
-    "BASIC" to config.simulationChamber.basicTierPristineChance,
-    "ADVANCED" to config.simulationChamber.advancedTierPristineChance,
-    "SUPERIOR" to config.simulationChamber.superiorTierPristineChance,
-    "SELF_AWARE" to config.simulationChamber.selfAwareTierPristineChance
+    "BASIC" to simulacrumConfig.simulationChamber.basicTierPristineChance,
+    "ADVANCED" to simulacrumConfig.simulationChamber.advancedTierPristineChance,
+    "SUPERIOR" to simulacrumConfig.simulationChamber.superiorTierPristineChance,
+    "SELF_AWARE" to simulacrumConfig.simulationChamber.selfAwareTierPristineChance
 )
 
 var ENERGY_COST = hashMapOf(
-    "NETHER" to config.simulationChamber.netherEnergyCost,
-    "SLIMY" to config.simulationChamber.slimyEnergyCost,
-    "OVERWORLD" to config.simulationChamber.overworldEnergyCost,
-    "ZOMBIE" to config.simulationChamber.zombieEnergyCost,
-    "SKELETON" to config.simulationChamber.skeletonEnergyCost,
-    "END" to config.simulationChamber.endEnergyCost,
-    "GHOST" to config.simulationChamber.ghostEnergyCost,
-    "ILLAGER" to config.simulationChamber.illagerEnergyCost,
-    "OCEAN" to config.simulationChamber.oceanEnergyCost
+    "NETHER" to simulacrumConfig.simulationChamber.netherEnergyCost,
+    "SLIMY" to simulacrumConfig.simulationChamber.slimyEnergyCost,
+    "OVERWORLD" to simulacrumConfig.simulationChamber.overworldEnergyCost,
+    "ZOMBIE" to simulacrumConfig.simulationChamber.zombieEnergyCost,
+    "SKELETON" to simulacrumConfig.simulationChamber.skeletonEnergyCost,
+    "END" to simulacrumConfig.simulationChamber.endEnergyCost,
+    "GHOST" to simulacrumConfig.simulationChamber.ghostEnergyCost,
+    "ILLAGER" to simulacrumConfig.simulationChamber.illagerEnergyCost,
+    "OCEAN" to simulacrumConfig.simulationChamber.oceanEnergyCost
 )
 
 @Suppress("unused")

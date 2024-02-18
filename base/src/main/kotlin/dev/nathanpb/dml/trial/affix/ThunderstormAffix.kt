@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.trial.affix
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.TrialState
@@ -31,11 +31,11 @@ import kotlin.random.Random
 
 class ThunderstormAffix : TrialAffix(identifier("thunderstorm")), TrialAffix.TickableAffix {
 
-    override fun isEnabled() = config.affix.enableThunderstorm
+    override fun isEnabled() = baseConfig.trial.affixes.enableThunderstorm
 
     override fun tick(trial: Trial) {
-        if (trial.state == TrialState.RUNNING && Random.nextFloat() < config.affix.thunderstormBoltChance) {
-            val pos = trial.pos.randomAround(config.trial.arenaRadius, 0, config.trial.arenaRadius)
+        if (trial.state == TrialState.RUNNING && Random.nextFloat() < baseConfig.trial.affixes.thunderstormBoltChance) {
+            val pos = trial.pos.randomAround(baseConfig.trial.arenaRadius, 0, baseConfig.trial.arenaRadius)
 
             // code copied from ServerWorld
             EntityType.LIGHTNING_BOLT.create(trial.world)?.let { lightningEntity ->

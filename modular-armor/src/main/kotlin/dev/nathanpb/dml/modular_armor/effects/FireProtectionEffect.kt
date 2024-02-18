@@ -20,10 +20,10 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.text.Text
@@ -32,7 +32,7 @@ import net.minecraft.world.World
 class FireProtectionEffect : ProtectionLikeEffect(
     identifier("fire_protection"),
     EntityCategory.NETHER,
-    config.glitchArmor.costs::fireProtection
+    modularArmorConfig.glitchArmor.costs::fireProtection
 ) {
 
     override val name = Text.translatable("enchantment.minecraft.fire_protection")

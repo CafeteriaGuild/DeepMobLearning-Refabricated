@@ -17,18 +17,35 @@
  * along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nathanpb.dml.utils
+package dev.nathanpb.dml.simulacrum
 
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.slot.Slot
+class SimulacrumConfig {
 
-open class InputRestrictedSlot(
-    inventory: Inventory,
-    slot: Int,
-    x: Int,
-    y: Int,
-    private val accept: (ItemStack?)->Boolean
-) : Slot(inventory, slot, x, y) {
-    override fun canInsert(stack: ItemStack?) = accept(stack)
+    var simulationChamber = SimulationChamber()
+    var matterXP = MatterXP()
+}
+
+class SimulationChamber {
+    var basicTierPristineChance = 5
+    var advancedTierPristineChance = 11
+    var superiorTierPristineChance = 24
+    var selfAwareTierPristineChance = 42
+
+    var overworldEnergyCost = 100
+    var zombieEnergyCost = 300
+    var skeletonEnergyCost = 80
+    var slimyEnergyCost = 160
+    var illagerEnergyCost = 412
+    var oceanEnergyCost = 160
+    var ghostEnergyCost = 372
+    var netherEnergyCost = 300
+    var endEnergyCost = 512
+
+    var dataBonus = 1
+}
+
+class MatterXP {
+    var overworldMatterXP = 10
+    var hellishMatterXP = 14
+    var extraterrestrialMatterXP = 20
 }

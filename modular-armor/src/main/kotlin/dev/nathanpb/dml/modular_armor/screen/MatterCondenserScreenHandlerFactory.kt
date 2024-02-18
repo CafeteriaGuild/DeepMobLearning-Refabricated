@@ -36,7 +36,7 @@ class MatterCondenserScreenHandlerFactory (
     private val handlerFactory: (Int, PlayerInventory, ScreenHandlerContext)-> ScreenHandler
 ) : ExtendedScreenHandlerFactory {
 
-    override fun getDisplayName() = Text.translatable(BlockMatterCondenser.BLOCK.translationKey)
+    override fun getDisplayName() = Text.translatable(BlockMatterCondenser.BLOCK_MATTER_CONDENSER.translationKey)
 
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
         return handlerFactory(syncId, inv, ScreenHandlerContext.create(inv.player.world, pos))

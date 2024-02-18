@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents
@@ -30,6 +29,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffect
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.utils.firstOrNullMapping
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.util.ActionResult
@@ -39,7 +39,7 @@ import kotlin.random.Random
 class PlentyEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("plenty"),
     EntityCategory.OVERWORLD,
-    config.glitchArmor.costs::plenty
+    modularArmorConfig.glitchArmor.costs::plenty
 ) {
     override fun registerEvents() {
         VanillaEvents.PlayerTakeHungerEvent.register { player, amount ->

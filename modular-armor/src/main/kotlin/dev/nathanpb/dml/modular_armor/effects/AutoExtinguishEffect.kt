@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents
@@ -29,6 +28,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.core.WrappedEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
@@ -40,7 +40,7 @@ import net.minecraft.world.World
 class AutoExtinguishEffect : ProtectionLikeEffect(
     identifier("auto_extinguish"),
     EntityCategory.NETHER,
-    config.glitchArmor.costs::autoExtinguish
+    modularArmorConfig.glitchArmor.costs::autoExtinguish
 ) {
     override fun registerEvents() {
         VanillaEvents.LivingEntityDamageEvent.register { eventContext ->
