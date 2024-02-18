@@ -94,8 +94,8 @@ class DataModel {
 }
 
 class DataCollection {
-    var baseDataGainPerKill = 1
-    var glitchSwordDataBonus = 1 // baseDataGainPerKill + glitchSwordDataBonus = Glitch Sword's data per kill
+    var dataGainPerKill = 1
+    var glitchSwordDataGainPerKill = 2
 }
 
 

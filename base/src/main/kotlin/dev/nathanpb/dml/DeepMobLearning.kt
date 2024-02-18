@@ -34,7 +34,6 @@ import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.itemgroup.registerItemGroup
 import dev.nathanpb.dml.listener.CrushingRecipeListener
 import dev.nathanpb.dml.listener.DataCollectListener
-import dev.nathanpb.dml.listener.GlitchSwordDataCollectListener
 import dev.nathanpb.dml.misc.registerSounds
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
@@ -72,7 +71,6 @@ fun init() {
     registerScreenHandlers()
     registerEntityTypes()
     ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(DataCollectListener())
-    ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(GlitchSwordDataCollectListener())
     AttackBlockCallback.EVENT.register(CrushingRecipeListener())
     TrialGriefPrevention().apply {
         AttackBlockCallback.EVENT.register(this)
