@@ -20,12 +20,12 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.*
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -36,7 +36,7 @@ import kotlin.math.roundToInt
 class ArcheryEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("archery"),
     EntityCategory.SKELETON,
-    config.glitchArmor.costs::archery
+    modularArmorConfig.glitchArmor.costs::archery
 ) {
 
     companion object {

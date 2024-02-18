@@ -20,10 +20,10 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.text.Text
@@ -32,7 +32,7 @@ import net.minecraft.world.World
 class FeatherFallingEffect : ProtectionLikeEffect(
     identifier("feather_falling"),
     EntityCategory.SLIMY,
-    config.glitchArmor.costs::featherFalling
+    modularArmorConfig.glitchArmor.costs::featherFalling
 ) {
 
     override val name = Text.translatable("enchantment.minecraft.feather_falling")

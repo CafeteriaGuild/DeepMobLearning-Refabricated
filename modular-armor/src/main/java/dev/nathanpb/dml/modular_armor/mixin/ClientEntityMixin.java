@@ -20,8 +20,8 @@ package dev.nathanpb.dml.modular_armor.mixin;
  *  along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.DeepMobLearningKt;
 import dev.nathanpb.dml.modular_armor.EntityStatusEffectsKt;
+import dev.nathanpb.dml.modular_armor.InitKt;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -44,7 +44,7 @@ public class ClientEntityMixin {
             if ((Object) this instanceof LivingEntity dis) {
                 PlayerEntity player = MinecraftClient.getInstance().player;
                 if (player != null && dis != player && player.hasStatusEffect(EntityStatusEffectsKt.getSOUL_VISION_EFFECT())) {
-                    if (player.distanceTo(dis) <= DeepMobLearningKt.getConfig().getGlitchArmor().getSoulVisionRange()) {
+                    if (player.distanceTo(dis) <= InitKt.getModularArmorConfig().getGlitchArmor().getSoulVisionRange()) {
                         cir.setReturnValue(true);
                         cir.cancel();
                     }

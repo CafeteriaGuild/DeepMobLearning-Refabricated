@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.event.VanillaEvents
@@ -30,6 +29,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.flightBurnoutManager
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import io.github.ladysnake.pal.VanillaAbilities
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.util.ActionResult
@@ -37,7 +37,7 @@ import net.minecraft.util.ActionResult
 class FlyEffect : AbilityBasedEffect(
     identifier("fly"),
     EntityCategory.GHOST,
-    config.glitchArmor.costs::fly,
+    modularArmorConfig.glitchArmor.costs::fly,
     VanillaAbilities.ALLOW_FLYING
 ) {
     override fun registerEvents() {

@@ -21,7 +21,6 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
@@ -29,13 +28,14 @@ import dev.nathanpb.dml.modular_armor.DEPTH_STRIDER_EFFECT
 import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.text.Text
 
 class DepthStriderEffect : StatusEffectLikeEffect(
     identifier("depth_strider"),
     EntityCategory.OCEAN,
-    config.glitchArmor.costs::depthStrider,
+    modularArmorConfig.glitchArmor.costs::depthStrider,
     EffectStackOption.PRIORITIZE_GREATER
 ) {
 

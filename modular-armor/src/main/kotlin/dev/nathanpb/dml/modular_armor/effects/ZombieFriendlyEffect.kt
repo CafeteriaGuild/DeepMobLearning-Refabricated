@@ -20,19 +20,19 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.WrappedEffectTriggerPayload
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 
 class ZombieFriendlyEffect : TargetCancellationEffect(
     identifier("zombie_friendly"),
     EntityCategory.ZOMBIE,
-    config.glitchArmor.costs::zombieFriendly
+    modularArmorConfig.glitchArmor.costs::zombieFriendly
 ) {
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()

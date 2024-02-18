@@ -21,7 +21,7 @@ package dev.nathanpb.dml.blockEntity
 
 import com.google.common.base.Preconditions
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.TrialData
 import dev.nathanpb.dml.data.serializers.TrialDataSerializer
 import dev.nathanpb.dml.entity.SystemGlitchEntity
@@ -61,15 +61,15 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
 
     companion object {
         val BORDERS_RANGE
-            get() = (config.trial.arenaRadius.squared() - 9).toDouble() .. (config.trial.arenaRadius.squared() + 9).toDouble()
+            get() = (baseConfig.trial.arenaRadius.squared() - 9).toDouble() .. (baseConfig.trial.arenaRadius.squared() + 9).toDouble()
 
         val ticker = BlockEntityTicker<BlockEntityTrialKeystone> { world, pos, _, blockEntity ->
             if (world?.isClient == true) {
                 when (blockEntity.clientTrialState) {
                     TrialState.NOT_STARTED -> {
-                        if (!config.trial.allowStartInWrongTerrain) {
+                        if (!baseConfig.trial.allowStartInWrongTerrain) {
                             MinecraftClient.getInstance().player?.let { clientPlayer ->
-                                if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= config.trial.arenaRadius.squared()) {
+                                if (clientPlayer.squaredDistanceTo(pos.toVec3d()) <= baseConfig.trial.arenaRadius.squared()) {
                                     blockEntity.spawnParticlesInWrongTerrain()
                                 }
                             }
@@ -77,7 +77,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
                     }
 
                     TrialState.RUNNING -> {
-                        if (!config.trial.allowPlayersLeavingArena) {
+                        if (!baseConfig.trial.allowPlayersLeavingArena) {
                             blockEntity.pullMobsInBorders(listOf(MinecraftClient.getInstance().player as LivingEntity))
                         }
                     }
@@ -109,10 +109,10 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
                 val state = blockEntity.currentTrial?.state ?: TrialState.NOT_STARTED
                 if (state != TrialState.NOT_STARTED && state != TrialState.FINISHED) {
                     if (state == TrialState.RUNNING) {
-                        if (!config.trial.allowMobsLeavingArena) {
+                        if (!baseConfig.trial.allowMobsLeavingArena) {
                             blockEntity.pullMobsInBorders(trial.getMonstersInArena())
                         }
-                        if (!config.trial.allowPlayersLeavingArena) {
+                        if (!baseConfig.trial.allowPlayersLeavingArena) {
 
                             // Attempt to get the PlayerEntities of all the Players UUIDs participating the trial.
                             // If the entity list is empty but the list of Players UUIDs participating is not empty
@@ -172,7 +172,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
     fun createTrial(recipe: TrialKeystoneRecipe, affixes: List<TrialAffix>): Trial {
         val players = world?.getEntitiesAroundCircle(
             EntityType.PLAYER,
-            pos, config.trial.arenaRadius.toDouble()
+            pos, baseConfig.trial.arenaRadius.toDouble()
         ).orEmpty()
 
         if (players.isNotEmpty()) {
@@ -228,7 +228,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
         val posVector = pos.toVec3d()
         mobs.filter(LivingEntity::isAlive)
             .filterNot {
-                config.trial.allowPlayersLeavingArena
+                baseConfig.trial.allowPlayersLeavingArena
                         && currentTrial != null
                         && (it as? SystemGlitchEntity)?.trial == currentTrial
             }.filter {
@@ -242,7 +242,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
 
     private fun arePlayersAround(players: List<PlayerEntity>) = pos.toVec3d().let { posVec ->
         players.any {
-            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= config.trial.arenaRadius.squared()
+            it.squaredDistanceTo(posVec.x, posVec.y, posVec.z) <= baseConfig.trial.arenaRadius.squared()
         }
     }
 
@@ -252,15 +252,15 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
      * @return the list of erroneous blocks
      */
     fun checkTerrain(): List<BlockPos> {
-        return if (!config.trial.allowStartInWrongTerrain) {
+        return if (!baseConfig.trial.allowStartInWrongTerrain) {
             mutableListOf<BlockPos>().also { list ->
-                val radInt = config.trial.arenaRadius
+                val radInt = baseConfig.trial.arenaRadius
                 (pos.x - radInt .. pos.x + radInt).forEach { x ->
                     (pos.z - radInt .. pos.z + radInt).forEach { z ->
 
                         // Searching for non-solid blocks bellow the circle
                         val floorPos = BlockPos(x, pos.y - 1, z)
-                        if (floorPos.getSquaredDistance(pos) <= config.trial.arenaRadius.squared()) {
+                        if (floorPos.getSquaredDistance(pos) <= baseConfig.trial.arenaRadius.squared()) {
                             world?.getBlockState(floorPos)?.let { floorBlock ->
                                 if (!floorBlock.isSideSolidFullSquare(world, floorPos, Direction.UP)) {
                                     list += floorPos
@@ -273,7 +273,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
                             val innerBlockPos = BlockPos(x, y, z)
                             if (
                                 innerBlockPos != pos
-                                && innerBlockPos.getSquaredDistance(pos) < config.trial.arenaRadius.squared()
+                                && innerBlockPos.getSquaredDistance(pos) < baseConfig.trial.arenaRadius.squared()
                                 && world?.getBlockState(innerBlockPos)?.isAir != true
                             ) {
                                 list += innerBlockPos

@@ -21,7 +21,7 @@
 package dev.nathanpb.dml.screen.handler
 
 import dev.nathanpb.dml.blockEntity.BlockEntityDataSynthesizer
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
@@ -96,7 +96,7 @@ class DataSynthesizerScreenHandler(
             icon = TextureIcon(identifier("textures/gui/slot_background/data_model_slot_background.png"))
             @Suppress("RedundantIf")
             addChangeListener { _, _, _, stack ->
-                if(!stack.isEmpty && (config.dataModel.hasSimulatedDataRestrictions && stack.dataModel.simulated)) {
+                if(!stack.isEmpty && (baseConfig.dataModel.hasSimulatedDataRestrictions && stack.dataModel.simulated)) {
                     simulatedDataBubble.hidden = false
                 } else {
                     simulatedDataBubble.hidden = true

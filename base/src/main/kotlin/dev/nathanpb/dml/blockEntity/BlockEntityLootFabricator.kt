@@ -20,7 +20,7 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
 import dev.nathanpb.dml.recipe.RECIPE_LOOT_FABRICATOR
@@ -72,7 +72,7 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     private var progress by Delegates.observable(0) { _, _, newValue ->
         propertyDelegate[0] = newValue
     }
-    private val maxProgress = config.lootFabricator.processTime
+    private val maxProgress = baseConfig.lootFabricator.processTime
     private val energyCapacity = 16384L // TODO Add as config value
     val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, 8192, 0) {
 

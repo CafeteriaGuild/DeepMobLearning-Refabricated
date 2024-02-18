@@ -20,12 +20,12 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.text.Text
@@ -33,7 +33,7 @@ import net.minecraft.text.Text
 class JumpBoostEffect : StatusEffectLikeEffect(
     identifier("jump_boost"),
     EntityCategory.SLIMY,
-    config.glitchArmor.costs::jumpBoost,
+    modularArmorConfig.glitchArmor.costs::jumpBoost,
     EffectStackOption.PRIORITIZE_GREATER
 ) {
 

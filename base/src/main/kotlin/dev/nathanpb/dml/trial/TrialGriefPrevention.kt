@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.trial
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.misc.TRIAL_GRIEF_WHITELIST
 import dev.nathanpb.dml.utils.runningTrials
 import dev.nathanpb.dml.utils.squared
@@ -45,7 +45,7 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
 
     companion object {
         fun isInArea(trialPos: BlockPos, pos: BlockPos): Boolean {
-            return trialPos.getSquaredDistance(pos.toVec3i()) <= config.trial.arenaRadius.squared()
+            return trialPos.getSquaredDistance(pos.toVec3i()) <= baseConfig.trial.arenaRadius.squared()
         }
 
         fun isBlockProtected(world: World, pos: BlockPos): Boolean {
@@ -62,7 +62,7 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
     override fun interact(player: PlayerEntity, world: World, hand: Hand, pos: BlockPos, direction: Direction): ActionResult {
         return if (
             !world.isClient
-            && config.trial.interactGriefPrevention
+            && baseConfig.trial.interactGriefPrevention
             && isBlockProtected(world, pos)
             && !world.getBlockState(pos).isIn(TRIAL_GRIEF_WHITELIST)
             && "grave" !in Registries.BLOCK.getId(world.getBlockState(pos).block).path
@@ -72,7 +72,7 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
     }
 
     override fun interact(player: PlayerEntity, world: World, hand: Hand, hitResult: BlockHitResult): ActionResult {
-        if (config.trial.buildGriefPrevention) {
+        if (baseConfig.trial.buildGriefPrevention) {
             val posOfPlacedBlock = hitResult.blockPos.offset(hitResult.side)
             if (!world.isClient && isBlockProtected(world, posOfPlacedBlock)) {
                 return ActionResult.FAIL
@@ -93,7 +93,7 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
     ): ActionResult {
         if (
             !world.isClient
-            && config.trial.explosionGriefPrevention
+            && baseConfig.trial.explosionGriefPrevention
             && destructionType != World.ExplosionSourceType.NONE
             && isBlockProtected(world, pos)
         ) {
@@ -104,7 +104,7 @@ class TrialGriefPrevention : AttackBlockCallback, UseBlockCallback {
     }
 
     fun onEndermanTeleport(entity: EndermanEntity, pos: Vec3d): ActionResult {
-        if (!config.trial.allowMobsLeavingArena) {
+        if (!baseConfig.trial.allowMobsLeavingArena) {
             val isInProtectedArea = isBlockProtected(entity.world, entity.pos.toBlockPos())
             val toProtectedArea = isBlockProtected(entity.world, pos.toBlockPos())
 

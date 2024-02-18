@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.trial.affix
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.trial.Trial
 import dev.nathanpb.dml.trial.TrialState
@@ -36,10 +36,10 @@ import kotlin.random.Random
 
 class PartyPoisonAffix : TrialAffix(identifier("party_poison")), TrialAffix.TickableAffix {
 
-    override fun isEnabled() = config.affix.enablePartyPoison
+    override fun isEnabled() = baseConfig.trial.affixes.enablePartyPoison
 
     override fun tick(trial: Trial) {
-        if (trial.state == TrialState.RUNNING && Random.nextFloat() < config.affix.partyPoisonChance) {
+        if (trial.state == TrialState.RUNNING && Random.nextFloat() < baseConfig.trial.affixes.partyPoisonChance) {
 
             (0..360).step(16).forEach { angle ->
                 val potionEntity = PotionEntity(trial.world, trial.systemGlitch)

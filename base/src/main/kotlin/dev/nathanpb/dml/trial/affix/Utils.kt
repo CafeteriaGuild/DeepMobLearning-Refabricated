@@ -19,13 +19,13 @@
 
 package dev.nathanpb.dml.trial.affix
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.trial.affix.core.TrialAffix
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import kotlin.random.Random
 
 fun pickRandomAffixes(): List<TrialAffix> {
-    return (0..Random.nextInt(config.affix.maxAffixesInKey.inc()))
+    return (0..Random.nextInt(baseConfig.trial.affixes.maxAffixesInKey.inc()))
         .filter { it > 0 }
         .mapNotNull {
             TrialAffixRegistry.INSTANCE.pickRandomEnabled()

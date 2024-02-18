@@ -21,7 +21,8 @@
     "WorldMixin"
   ],
   "client": [
-    "DrawContextAccessor"
+    "DrawContextAccessor",
+    "HandledScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

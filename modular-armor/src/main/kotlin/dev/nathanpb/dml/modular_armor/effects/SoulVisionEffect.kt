@@ -21,7 +21,6 @@
 package dev.nathanpb.dml.modular_armor.effects
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
@@ -33,6 +32,7 @@ import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.event.ModularArmorEvents
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.modular_armor.net.C2S_SOUL_VISION_REQUESTED
 import io.netty.buffer.Unpooled
 import net.fabricmc.api.EnvType
@@ -49,7 +49,7 @@ import net.minecraft.util.ActionResult
 class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("soul_vision"),
     EntityCategory.GHOST,
-    config.glitchArmor.costs::soulVision
+    modularArmorConfig.glitchArmor.costs::soulVision
 ) {
 
     override val name = Text.translatable("effect.${MOD_ID}.soul_vision")

@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.entity.goal
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.entity.SystemGlitchEntity
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.utils.getPlayersByUUID
@@ -48,13 +48,13 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
     private var ticksToTeleportCountdown = 0
 
     override fun canStart(): Boolean {
-        if (config.systemGlitch.teleportChance <= 0) {
+        if (baseConfig.systemGlitch.teleportChance <= 0) {
             return false
         }
 
         glitch.trial.let { trial ->
             targetEntity = trial?.world?.getPlayersByUUID(trial.players)?.filter {
-                config.trial.allowPlayersLeavingArena || TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
+                baseConfig.trial.allowPlayersLeavingArena || TrialGriefPrevention.isInArea(trial.pos, it.blockPos)
             }?.randomOrNull() ?: glitch.world.getClosestPlayer(TargetPredicate.DEFAULT, glitch)
         }
 
@@ -71,10 +71,10 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
         if (ticksToTeleportCountdown > 0) {
             ticksToTeleportCountdown--
         }
-        if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= config.systemGlitch.teleportChance) {
-            if (targetEntity!!.squaredDistanceTo(glitch) >= config.systemGlitch.teleportMinDistance.squared()) {
-                if (glitch.tryTeleportRandomly(targetEntity!!.blockPos, config.systemGlitch.teleportAroundPlayerRadius)) {
-                    ticksToTeleportCountdown = config.systemGlitch.teleportDelay
+        if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= baseConfig.systemGlitch.teleportChance) {
+            if (targetEntity!!.squaredDistanceTo(glitch) >= baseConfig.systemGlitch.teleportMinDistance.squared()) {
+                if (glitch.tryTeleportRandomly(targetEntity!!.blockPos, baseConfig.systemGlitch.teleportAroundPlayerRadius)) {
+                    ticksToTeleportCountdown = baseConfig.systemGlitch.teleportDelay
                     glitch.target = targetEntity
                     return
                 }

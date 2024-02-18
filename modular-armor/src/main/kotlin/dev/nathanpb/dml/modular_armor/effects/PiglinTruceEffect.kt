@@ -20,11 +20,11 @@
 
 package dev.nathanpb.dml.modular_armor.effects
 
-import dev.nathanpb.dml.config
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.core.*
+import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import dev.nathanpb.dml.utils.firstInstanceOrNull
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
@@ -32,7 +32,7 @@ import net.minecraft.util.ActionResult
 class PiglinTruceEffect : ModularEffect<ModularEffectTriggerPayload>(
     identifier("piglin_truce"),
     EntityCategory.NETHER,
-    config.glitchArmor.costs::piglinTruce
+    modularArmorConfig.glitchArmor.costs::piglinTruce
 ) {
 
     companion object {

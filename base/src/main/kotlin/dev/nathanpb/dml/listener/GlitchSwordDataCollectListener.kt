@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.listener
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.item.ITEM_GLITCH_SWORD
 import net.minecraft.entity.player.PlayerEntity
@@ -29,7 +29,7 @@ class GlitchSwordDataCollectListener : DataCollectListener() {
 
     // TODO add FX when triggered
     override fun modifyDataAmount(dataModelData: DataModelData) {
-        dataModelData.dataAmount += config.dataCollection.glitchSwordDataBonus
+        dataModelData.dataAmount += baseConfig.dataModel.dataCollection.glitchSwordDataBonus
     }
 
     override fun onlyIf(player: PlayerEntity, stack: ItemStack): Boolean {

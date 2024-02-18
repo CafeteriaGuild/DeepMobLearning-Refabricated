@@ -19,7 +19,7 @@
 
 package dev.nathanpb.dml.utils
 
-import dev.nathanpb.dml.config
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.mixin.LootTableInvoker
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageSource
@@ -49,7 +49,7 @@ fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEn
     }.build(null)
 
     val lootList = (lootTable as LootTableInvoker).invokeGenerateLoot(lootContext)
-    lootList?.removeIf { stack: ItemStack -> !stack.isStackable && world.random.nextDouble() < config.lootFabricator.unstackableNullificationChance }
+    lootList?.removeIf { stack: ItemStack -> !stack.isStackable && world.random.nextDouble() < baseConfig.lootFabricator.unstackableNullificationChance }
 
     return lootList ?: emptyList()
 }
