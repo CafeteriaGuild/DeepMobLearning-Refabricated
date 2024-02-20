@@ -20,12 +20,16 @@
 
 package dev.nathanpb.dml.modular_armor
 
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.modular_armor.net.registerClientSidePackets
+import dev.nathanpb.dml.modular_armor.renderer.BlockEntityRendererMatterCondenser
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.ModularArmorScreenHandler
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.minecraft.client.gui.screen.ingame.HandledScreens
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
 
 fun initClient() {
     registerKeybindings()
@@ -36,6 +40,17 @@ fun initClient() {
     }
     HandledScreens.register(ModularArmorScreenHandler.INSTANCE) { handler, inventory, title ->
         CottonInventoryScreen(handler, inventory.player, title)
+    }
+
+    BlockEntityRendererFactories.register(
+        BlockEntityMatterCondenser.BLOCK_ENTITY_TYPE,
+        ::BlockEntityRendererMatterCondenser
+    )
+
+    ModelLoadingPlugin.register{ ctx ->
+        ctx.addModels(
+            identifier("block/matter_condenser_core")
+        )
     }
 
     ItemPristineEnergyCube.ITEM_PRISTINE_ENERGY_CUBE.let {
