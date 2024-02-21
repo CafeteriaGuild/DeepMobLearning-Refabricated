@@ -1,13 +1,14 @@
 package dev.nathanpb.dml.simulacrum
 
-import dev.nathanpb.dml.block.BLOCK_LOOT_FABRICATOR
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.ITEM_GLITCH_SWORD
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockSimulationChamber
 import dev.nathanpb.dml.simulacrum.item.registerItems
 import dev.nathanpb.dml.simulacrum.screen.ScreenHandlerSimulationChamber
 import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
+import dev.nathanpb.dml.utils.getItemFromRegistry
 import dev.nathanpb.dml.utils.initConfig
 import dev.nathanpb.dml.utils.isModLoaded
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
@@ -69,9 +70,9 @@ fun init() {
 
     ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
         if(isModLoaded(MODULAR_ARMOR_ID)) {
-            it.addAfter(ItemStack(Registries.BLOCK.get(identifier("matter_condenser"))), SIMULATION_CHAMBER)
+            it.addAfter(ItemStack(getItemFromRegistry("energy_cube")), SIMULATION_CHAMBER)
         } else {
-            it.addAfter(ItemStack(BLOCK_LOOT_FABRICATOR), SIMULATION_CHAMBER)
+            it.addAfter(ItemStack(ITEM_GLITCH_SWORD), SIMULATION_CHAMBER)
         }
     }
 

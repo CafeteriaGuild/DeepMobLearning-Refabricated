@@ -21,11 +21,9 @@
 package dev.nathanpb.dml.modular_armor
 
 import dev.nathanpb.dml.event.VanillaEvents
-import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
-import dev.nathanpb.dml.item.ITEM_GLITCH_SWORD
-import dev.nathanpb.dml.item.ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
-import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor.Companion.GLITCH_HELMET
+import dev.nathanpb.dml.modular_armor.BlockMatterCondenser.Companion.BLOCK_MATTER_CONDENSER
+import dev.nathanpb.dml.modular_armor.ItemPristineEnergyCube.Companion.ITEM_PRISTINE_ENERGY_CUBE
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.net.registerServerSidePackets
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
@@ -53,8 +51,7 @@ fun init() {
     }
 
     ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
-        it.addAfter(ItemStack(ITEM_GLITCH_INGOT), ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE)
-        it.addBefore(ItemStack(GLITCH_HELMET), ITEM_GLITCH_SWORD)
+        it.addAfter(ItemStack(BLOCK_MATTER_CONDENSER), ITEM_PRISTINE_ENERGY_CUBE)
     }
 
 }

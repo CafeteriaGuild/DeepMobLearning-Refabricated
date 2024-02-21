@@ -4,9 +4,6 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.block.*
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.*
-import dev.nathanpb.dml.utils.MODULAR_ARMOR_ID
-import dev.nathanpb.dml.utils.getItemFromRegistry
-import dev.nathanpb.dml.utils.isModLoaded
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemGroup
@@ -52,12 +49,8 @@ fun registerItemGroup() {
         it.addBefore(ITEM_PRISTINE_MATTER_OVERWORLD, BLOCK_LOOT_FABRICATOR)
 
 
-        if(isModLoaded(MODULAR_ARMOR_ID)) {
-            it.addBefore(getItemFromRegistry("glitch_helmet"), ITEM_GLITCH_SWORD)
-        } else {
-            it.addAfter(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE, ITEM_GLITCH_SWORD)
-        }
-
+        it.addAfter(ItemStack(ITEM_GLITCH_INGOT), ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE)
+        it.addAfter(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE, ITEM_GLITCH_SWORD)
     }
 
 }
