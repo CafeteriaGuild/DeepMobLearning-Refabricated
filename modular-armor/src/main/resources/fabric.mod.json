@@ -6,6 +6,7 @@
   "description": "DML: Refabricated's Glitch Armor'",
   "icon": "assets/dml-refabricated/textures/item/glitch_chestplate.png",
   "authors": ["NathanPB", "Luligabi"],
+  "contributors": ["malcolmriley"],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated",
     "repo": "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated",

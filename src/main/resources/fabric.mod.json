@@ -5,7 +5,7 @@
   "name": "Deep Mob Learning: Refabricated",
   "description": "A revitalized version of IterationFunk's server friendly mob loot acquisition mod, now on Fabric!",
   "authors": ["NathanPB", "Luligabi", "IterationFunk"],
-  "contributors": ["ProjectET"],
+  "contributors": ["ProjectET", "malcolmriley", "AlaskaRobotics"],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated",
     "repo": "https://github.com/CafeteriaGuild/DeepMobLearning-Refabricated",

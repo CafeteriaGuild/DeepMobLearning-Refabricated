@@ -2,26 +2,14 @@
 
 [![Fabric API](https://images2.imgbox.com/8e/38/bfInI5qv_o.png)](https://www.curseforge.com/minecraft/mc-mods/fabric-api) [![Fabric Language Kotlin](https://images2.imgbox.com/e6/72/9pHQB5ZC_o.png)](https://www.curseforge.com/minecraft/mc-mods/fabric-language-kotlin)
 
-Deep Mob Learning: Refabricated is a parallel version of Deep Mob Learning Minecraft Mod (originally authored by [xt9](https://github.com/xt9/DeepMobLearning)) made to Fabric Mod Loader.
+Deep Mob Learning: Refabricated is a parallel version of Deep Mob Learning Minecraft Mod (originally authored by [IterationFunk](https://github.com/xt9/DeepMobLearning)) made to Fabric Mod Loader.
 
-The main theme of this mod (by "this" I mean the version you can find in this repository) is providing cool ways to acquire mob loot. I also have a lot of other plans to implement here and give the mod other purposes too, but since the current stage of the mod is beta thats all I have to offer for now :/
+While IterationFunk's Deep Mob Learning focused much more on acquiring mob loot, our rendition takes liberties to expand and modernize the mod, while retaining its essence intact.
 
-## Xt9's Version
-This project is a rework of the original Deep Mob Learning mod, authored by [xt9](https://github.com/xt9/DeepMobLearning).
+## Will there ever be a (Neo)Forge version?
+**Well yes but actually no.** If you want a Forge version of this mod you should check out either [IterationFunk's version (1.12)](https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning) or Shadows_of_Fire's [Hostile Neural Networks (1.16+)](https://www.curseforge.com/minecraft/mc-mods/hostile-neural-networks), another IterationFunk-sanctioned rendition of the original mod's concepts.
 
-His version of the mod is focused in providing a better way to acquire mob loot in servers, because creating big mobtraps and things like that doesn't always works well or can have huge performance impacts. If you don't know his version, you should definitively check it out first, he is a pretty cool guy and does a lot of nice things in the Minecraft community.
-
-- [Original Deep Mob Learning on Curseforge](https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning)
-- [Original Deep Mob Learning on GitHub](https://github.com/xt9/DeepMobLearning)
-- [Xt9's Discord Guild](https://discord.com/invite/gj9kVup)
-
-## Can I add it to a modpack?
-Absolutely! You can download the mod on [Curseforge](https://www.curseforge.com/minecraft/mc-mods/deep-mob-learning-refabricated), just pick the latest release for your game version, make sure you installed the dependencies too.
-
-## Will there ever be a Forge version?
-**Well yes but actually no.** If you want a Forge version of this mod you should check out the [xt9's version](#xt9s-version)
-
-About Deep Mob Learning: **Refabricated**, unfortunately I don't plan to support Forge by myself. But if you want to, take some words with [Cafeteria](https://discord.com/invite/G4PjhEf) and [the original author of the mod](#xt9s-version) and you should be fine.
+About Deep Mob Learning: **Refabricated**, unfortunately we don't plan to support (Neo)Forge. But if you want to, take some words with us at [Cafeteria](https://discord.com/invite/G4PjhEf) and [the original author of the mod](#IterationFunks-version) and you should be fine.
 
 ## Setting up dev env
 The only special thing that differs from a gradle project is that you will need to have this section in your ``~/.gradle/gradle.properties`` file:
@@ -43,9 +31,13 @@ If you want to **report bugs**, give ideas, **feedbacks** or discuss the mod at 
 
 ## License
 
-Most of the textures and models are All Rights Reserved, owned by [IterationFunk](https://github.com/xt9/).
+- Textures and models of content ported over from the original DML are All Rights Reserved, owned by [IterationFunk](https://github.com/IterationFunk/).
 
-All the files that contains the LGPL-v3 header are licensed over LGPL-v3, this includes all the source code.
+- Textures for **Energy Octahedron** and **Pristine Energy Cube** made by Malcolm Riley and is publicly available at their [unused textures repository](https://github.com/malcolmriley/unused-textures), licensed under CC-BY-4.0.
+
+- "Sci-fi alien UFO warble", used as Data Synthesizer's process sound, was made by AlaskaRobotics and is publicly available at [freesound.org](https://freesound.org/people/AlaskaRobotics/sounds/221517/), licensed under Creative Commons 0.
+
+- All the files that contains the LGPL-v3 header are licensed over LGPL-v3, this includes all the source code.
 
 ```
 Copyright (C) 2020 Nathan P. Bombana, IterationFunk
