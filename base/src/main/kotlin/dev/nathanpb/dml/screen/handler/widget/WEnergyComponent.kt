@@ -19,7 +19,6 @@
 
 package dev.nathanpb.dml.screen.handler.widget
 
-import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_BAR
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_BAR_ARROW
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_BAR_BACKGROUND
@@ -29,6 +28,7 @@ import dev.nathanpb.dml.utils.RenderUtils.Companion.ENERGY_STYLE
 import dev.nathanpb.dml.utils.RenderUtils.Companion.PRISTINE_ENERGY_BAR
 import dev.nathanpb.dml.utils.RenderUtils.Companion.PRISTINE_ENERGY_BAR_BIG
 import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
+import dev.nathanpb.dml.utils.formatAccordingToLanguage
 import dev.nathanpb.dml.utils.getShortEnergyKey
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
@@ -118,7 +118,7 @@ class WEnergyComponent(
                 withTooltip(
                     Text.translatable(
                         getShortEnergyKey(isPristineEnergy),
-                        RenderUtils.formatAccordingToLanguage().format(getHost()?.propertyDelegate?.get(energyIndex))
+                        formatAccordingToLanguage().format(getHost()?.propertyDelegate?.get(energyIndex))
                     ).apply {
                         style = if(isPristineEnergy) STYLE else ENERGY_STYLE
                     }

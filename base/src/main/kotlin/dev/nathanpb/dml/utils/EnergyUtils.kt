@@ -284,10 +284,11 @@ fun getEnergyTooltipText(stack: ItemStack, primaryStyle: Style, secondaryStyle: 
 
     val energyText = Text.translatable("text.dml-refabricated.energy.prefix")
 
+    val numberFormatter = formatAccordingToLanguage() // TODO check if this crashes on server
     val energyAmountText = Text.translatable(
         "tooltip.dml-refabricated.data_amount.2",
-        (stack.item as SimpleEnergyItem).getStoredEnergy(stack),
-        (stack.item as SimpleEnergyItem).getEnergyCapacity(stack)
+        numberFormatter.format((stack.item as SimpleEnergyItem).getStoredEnergy(stack)),
+        numberFormatter.format((stack.item as SimpleEnergyItem).getEnergyCapacity(stack))
     )
     val formattedEnergyAmountText = Text.translatable(getShortEnergyKey(isPristine), energyAmountText)
 

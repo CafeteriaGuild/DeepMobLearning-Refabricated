@@ -25,6 +25,8 @@ import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.client.NinePatchBackgroundPainter
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.util.math.MatrixStack
@@ -40,8 +42,8 @@ import org.joml.Vector3f
 import java.text.NumberFormat
 import java.util.*
 
-
-class RenderUtils { // also some text utils, hence why it's common
+// FIXME rename to something less client-sidey??
+class RenderUtils {
 
     companion object {
         /* Textures */
@@ -84,25 +86,6 @@ class RenderUtils { // also some text utils, hence why it's common
         val GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vector3f(4F, 252F, 196F), 1F)
         val ALT_GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vector3f(98F, 216F, 255F), 1F)
 
-
-        /*
-         * Used to apply commas and periods to numbers according to the client's language
-         *
-         * eg.:
-         * (en_us) = 10000 -> 10,000
-         * (pt_br) = 10000 -> 10.000
-         */
-        fun formatAccordingToLanguage(): NumberFormat {
-            val locale: Locale = Locale.forLanguageTag(
-                MinecraftClient.getInstance().languageManager.language.replace(
-                    "_",
-                    "-"
-                )
-            )
-
-            return NumberFormat.getNumberInstance(locale)
-        }
-
     }
 }
 
@@ -142,7 +125,26 @@ fun getParenthesisText(primaryText: MutableText, value: Any, parenthesisStyle: S
     return primaryText.append(parenthesisText)
 }
 
+/*
+ * Used to apply commas and periods to numbers according to the client's language
+ *
+ * en_us: 10000 -> 10,000
+ * pt_br: 10000 -> 10.000
+ */
+@Environment(EnvType.CLIENT)
+fun formatAccordingToLanguage(): NumberFormat {
+    val locale: Locale = Locale.forLanguageTag(
+        MinecraftClient.getInstance().languageManager.language.replace(
+            "_",
+            "-"
+        )
+    )
+
+    return NumberFormat.getNumberInstance(locale)
+}
+
 // not stolen from mojang, I promise
+@Environment(EnvType.CLIENT)
 fun drawEntity(
     entity: LivingEntity,
     x: Int, y: Int, size: Int,
