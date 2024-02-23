@@ -1,15 +1,16 @@
 package dev.nathanpb.dml.item.battery
 
+import dev.nathanpb.dml.baseConfig
 import net.minecraft.item.ItemStack
 import java.awt.Color
 
 class ItemEnergyOctahedron: AbstractItemBattery() {
 
-    override fun getEnergyCapacity(stack: ItemStack): Long = 32768L
+    override fun getEnergyCapacity(stack: ItemStack) = baseConfig.misc.energyOctahedron.energyCapacity
 
-    override fun getEnergyMaxInput(stack: ItemStack): Long = 4096L
+    override fun getEnergyMaxInput(stack: ItemStack) = baseConfig.misc.energyOctahedron.energyIO
 
-    override fun getEnergyMaxOutput(stack: ItemStack): Long = 4096L
+    override fun getEnergyMaxOutput(stack: ItemStack) = baseConfig.misc.energyOctahedron.energyIO
 
     override fun isPristineEnergy(): Boolean = false
 

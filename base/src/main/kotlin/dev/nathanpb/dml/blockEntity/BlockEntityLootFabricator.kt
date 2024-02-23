@@ -72,9 +72,10 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     private var progress by Delegates.observable(0) { _, _, newValue ->
         propertyDelegate[0] = newValue
     }
-    private val maxProgress = baseConfig.lootFabricator.processTime
-    private val energyCapacity = 16384L // TODO Add as config value
-    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, 8192, 0) {
+    private val maxProgress = baseConfig.machines.lootFabricator.processTime
+    private val energyCapacity = baseConfig.machines.lootFabricator.energyCapacity
+    private val energyInput = baseConfig.machines.lootFabricator.energyInput
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, energyInput, 0) {
 
         override fun onFinalCommit() {
             markDirty()

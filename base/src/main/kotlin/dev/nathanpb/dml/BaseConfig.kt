@@ -23,12 +23,31 @@ class BaseConfig {
 
     var dataModel = DataModel()
     var trial = Trial()
-    var systemGlitch = SystemGlitch()
-    var lootFabricator = LootFabricator()
+    var machines = Machines()
+    var misc = Misc()
 
 }
 
+/** Data Model */
+class DataModel {
+    var basicDataRequired = 8
+    var advancedDataRequired = 16
+    var superiorDataRequired = 32
+    var selfAwareDataRequired = 64
+    var hasSimulatedDataRestrictions = false
+
+    var dataCollection = DataCollection()
+}
+
+class DataCollection {
+    var dataGainPerKill = 1
+    var glitchSwordDataGainPerKill = 2
+}
+
+/** Trial */
 class Trial {
+    var systemGlitch = SystemGlitch()
+
     var maxMobsInArena = 8
     var arenaRadius = 12
     var warmupTime = 60
@@ -43,7 +62,6 @@ class Trial {
 
     var trialKeyConsume = true
     var trialKeyReturnIfSucceed = true
-
 
     var faultyGlitchUpgradeOdds = .0
     var basicGlitchUpgradeOdds = .0
@@ -66,6 +84,27 @@ class TrialAffix {
     var partyPoisonChance = .005F
 }
 
+class SystemGlitch {
+    var teleportChance = 0.05F
+    var teleportMinDistance = 5
+    var teleportDelay = 100
+    var teleportAroundPlayerRadius = 2
+
+    var damageLimiter = 20F
+}
+
+/** Machines */
+class Machines {
+
+    var dataSynthesizer = DataSynthesizer()
+    var lootFabricator = LootFabricator()
+
+}
+
+class DataSynthesizer { // FIXME needs rebalancing
+    var energyCapacity = 196608L
+    var energyIO = 8192L
+}
 
 class LootFabricator {
     var overworldExchangeRatio = 16
@@ -77,33 +116,32 @@ class LootFabricator {
     var ghostExchangeRatio = 16
     var netherExchangeRatio = 10
     var endExchangeRatio = 14
+    var unstackableNullificationChance = .75F
 
     var processTime = 200
-    var unstackableNullificationChance = .75F
+    var energyCapacity = 16384L
+    var energyInput = 8192L
 }
 
 
-class DataModel {
-    var basicDataRequired = 8
-    var advancedDataRequired = 16
-    var superiorDataRequired = 32
-    var selfAwareDataRequired = 64
-    var hasSimulatedDataRestrictions = false
+/** Misc */
+class Misc {
 
-    var dataCollection = DataCollection()
+    var glitchSword = GlitchSword()
+    var energyOctahedron = EnergyOctahedron()
 }
 
-class DataCollection {
-    var dataGainPerKill = 1
-    var glitchSwordDataGainPerKill = 2
+class GlitchSword { // FIXME balance accordingly to Data Synthesizer
+
+    var energyCapacity = 12500L
+    var energyInput = 2048L
+    var usageCost = 200L
+
 }
 
+class EnergyOctahedron { // FIXME balance accordingly to Data Synthesizer
 
-class SystemGlitch {
-    var teleportChance = 0.05F
-    var teleportMinDistance = 5
-    var teleportDelay = 100
-    var teleportAroundPlayerRadius = 2
+    var energyCapacity = 32768L
+    var energyIO = 4096L
 
-    var damageLimiter = 20F
 }

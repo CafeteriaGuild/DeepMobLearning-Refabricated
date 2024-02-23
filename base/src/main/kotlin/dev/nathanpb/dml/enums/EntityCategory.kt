@@ -32,15 +32,15 @@ import net.minecraft.text.Text
 
 enum class EntityCategory(val tagKey: TagKey<EntityType<*>>, var exchangeRatio: Int, private val itemForRendering: ()->Item = ::ITEM_DATA_MODEL) {
 
-    OVERWORLD(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("overworld_mobs")), baseConfig.lootFabricator.overworldExchangeRatio, ::ITEM_DATA_MODEL_OVERWORLD),
-    ZOMBIE(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("zombie_mobs")), baseConfig.lootFabricator.zombieExchangeRatio, ::ITEM_DATA_MODEL_ZOMBIE),
-    SKELETON(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("skeleton_mobs")), baseConfig.lootFabricator.skeletonExchangeRatio, ::ITEM_DATA_MODEL_SKELETON),
-    SLIMY(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("slimy_mobs")), baseConfig.lootFabricator.slimyExchangeRatio, ::ITEM_DATA_MODEL_SLIMY),
-    ILLAGER(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("illager_mobs")), baseConfig.lootFabricator.illagerExchangeRatio, ::ITEM_DATA_MODEL_ILLAGER),
-    OCEAN(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("ocean_mobs")), baseConfig.lootFabricator.oceanExchangeRatio, ::ITEM_DATA_MODEL_OCEAN),
-    GHOST(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("ghost_mobs")), baseConfig.lootFabricator.ghostExchangeRatio, ::ITEM_DATA_MODEL_GHOST),
-    NETHER(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("nether_mobs")), baseConfig.lootFabricator.netherExchangeRatio, ::ITEM_DATA_MODEL_NETHER),
-    END(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("end_mobs")), baseConfig.lootFabricator.endExchangeRatio, ::ITEM_DATA_MODEL_END);
+    OVERWORLD(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("overworld_mobs")), baseConfig.machines.lootFabricator.overworldExchangeRatio, ::ITEM_DATA_MODEL_OVERWORLD),
+    ZOMBIE(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("zombie_mobs")), baseConfig.machines.lootFabricator.zombieExchangeRatio, ::ITEM_DATA_MODEL_ZOMBIE),
+    SKELETON(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("skeleton_mobs")), baseConfig.machines.lootFabricator.skeletonExchangeRatio, ::ITEM_DATA_MODEL_SKELETON),
+    SLIMY(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("slimy_mobs")), baseConfig.machines.lootFabricator.slimyExchangeRatio, ::ITEM_DATA_MODEL_SLIMY),
+    ILLAGER(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("illager_mobs")), baseConfig.machines.lootFabricator.illagerExchangeRatio, ::ITEM_DATA_MODEL_ILLAGER),
+    OCEAN(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("ocean_mobs")), baseConfig.machines.lootFabricator.oceanExchangeRatio, ::ITEM_DATA_MODEL_OCEAN),
+    GHOST(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("ghost_mobs")), baseConfig.machines.lootFabricator.ghostExchangeRatio, ::ITEM_DATA_MODEL_GHOST),
+    NETHER(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("nether_mobs")), baseConfig.machines.lootFabricator.netherExchangeRatio, ::ITEM_DATA_MODEL_NETHER),
+    END(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("end_mobs")), baseConfig.machines.lootFabricator.endExchangeRatio, ::ITEM_DATA_MODEL_END);
 
 
     val displayName: Text = Text.translatable("mobcategory.${MOD_ID}.${tagKey.id.path}")

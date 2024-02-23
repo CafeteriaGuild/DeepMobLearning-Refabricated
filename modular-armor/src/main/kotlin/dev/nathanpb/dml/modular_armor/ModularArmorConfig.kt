@@ -21,10 +21,26 @@ package dev.nathanpb.dml.modular_armor
 
 class ModularArmorConfig {
 
+    var machines = Machines()
     var glitchArmor = GlitchArmor()
+    var misc = Misc()
 
 }
 
+/** Machines */
+class Machines {
+
+    var matterCondenser = MatterCondenser()
+
+}
+
+class MatterCondenser {
+
+    var energyCapacity = 262144L
+    var energyIO = 8192L
+}
+
+/** Glitch Armor */
 class GlitchArmor {
     var soulVisionRange = 12
     var maxFlightTicksPerLevel = 30 * 20
@@ -59,4 +75,17 @@ class GlitchArmorDataConsume {
     var poseidonBless = 30L
     var resistance = 20L
     var undying = 1000L
+}
+
+/** Misc */
+class Misc {
+
+    var pristineEnergyCube = PristineEnergyCube()
+}
+
+
+class PristineEnergyCube { // FIXME balance accordingly to Matter Condenser
+
+    var energyCapacity = 32768L
+    var energyIO = 4096L
 }

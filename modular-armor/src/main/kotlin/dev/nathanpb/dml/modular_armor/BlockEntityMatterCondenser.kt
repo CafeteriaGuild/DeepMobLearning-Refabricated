@@ -48,12 +48,11 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
     PropertyDelegateHolder
 {
 
+    val energyCapacity = modularArmorConfig.machines.matterCondenser.energyCapacity
+    val energyIO = modularArmorConfig.machines.matterCondenser.energyIO
     var inventory = MatterCondenserInventory()
-    private val propertyDelegate = ArrayPropertyDelegate(2).also {
-        it[1] = 262144
-    }
-
-    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(propertyDelegate[1].toLong(), 8192, 8192) {
+    private val propertyDelegate = ArrayPropertyDelegate(2)
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, energyIO, energyIO) {
 
         override fun onFinalCommit() {
             markDirty()
@@ -62,13 +61,16 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
 
     }
 
-    companion object {
-        private val pristineMatterEnergyValue = 1024L
+    init {
+        propertyDelegate[1] = energyCapacity.toInt()
+    }
 
-        val ticker = BlockEntityTicker<BlockEntityMatterCondenser> { _, _, _, blockEntity ->
+    companion object {
+        private val pristineMatterEnergyValue = 1024L // TODO scale to matter
+
+        val ticker = BlockEntityTicker<BlockEntityMatterCondenser> { world, pos, _, blockEntity ->
             val armorStack = blockEntity.inventory.armorStack
             val inputStack = blockEntity.inventory.pristineInputStack
-            val outputStack = blockEntity.inventory.pristineOutputStack
 
             if(armorStack.item is ItemModularGlitchArmor) {
                 val data = ModularArmorData(armorStack)
@@ -82,7 +84,7 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
             }
 
             // Insert
-            if(inputStack.item is ItemPristineMatter) { // TODO replace similar checks to check with the tag
+            if(inputStack.item is ItemPristineMatter) {
                 if(blockEntity.energyStorage.addEnergy(pristineMatterEnergyValue)) {
                     blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
                     inputStack.decrement(1)
@@ -91,7 +93,7 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
             }
 
 
-            // FIXME pushEnergyToAllSides(world, pos, blockEntity.energyStorage)
+            pushPristineEnergyToAllSides(world, pos, blockEntity.energyStorage)
             moveToStoragePristine(blockEntity.energyStorage, blockEntity.inventory, 1)
             moveToStackPristine(blockEntity.energyStorage, blockEntity.inventory, 2)
 

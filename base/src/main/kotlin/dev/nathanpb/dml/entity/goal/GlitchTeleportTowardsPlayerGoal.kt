@@ -48,7 +48,7 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
     private var ticksToTeleportCountdown = 0
 
     override fun canStart(): Boolean {
-        if (baseConfig.systemGlitch.teleportChance <= 0) {
+        if (baseConfig.trial.systemGlitch.teleportChance <= 0) {
             return false
         }
 
@@ -71,10 +71,10 @@ class GlitchTeleportTowardsPlayerGoal(private val glitch: SystemGlitchEntity) : 
         if (ticksToTeleportCountdown > 0) {
             ticksToTeleportCountdown--
         }
-        if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= baseConfig.systemGlitch.teleportChance) {
-            if (targetEntity!!.squaredDistanceTo(glitch) >= baseConfig.systemGlitch.teleportMinDistance.squared()) {
-                if (glitch.tryTeleportRandomly(targetEntity!!.blockPos, baseConfig.systemGlitch.teleportAroundPlayerRadius)) {
-                    ticksToTeleportCountdown = baseConfig.systemGlitch.teleportDelay
+        if (targetEntity != null && ticksToTeleportCountdown <= 0 && Random.nextFloat() <= baseConfig.trial.systemGlitch.teleportChance) {
+            if (targetEntity!!.squaredDistanceTo(glitch) >= baseConfig.trial.systemGlitch.teleportMinDistance.squared()) {
+                if (glitch.tryTeleportRandomly(targetEntity!!.blockPos, baseConfig.trial.systemGlitch.teleportAroundPlayerRadius)) {
+                    ticksToTeleportCountdown = baseConfig.trial.systemGlitch.teleportDelay
                     glitch.target = targetEntity
                     return
                 }

@@ -20,8 +20,8 @@
 package dev.nathanpb.dml.entity
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.baseConfig
+import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.entity.goal.GlitchTeleportTowardsPlayerGoal
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.item.ItemEmeritusHat
@@ -182,8 +182,8 @@ class SystemGlitchEntity(type: EntityType<out HostileEntity>, world: World) : Ho
 
     override fun applyDamage(source: DamageSource, amount: Float) {
         val finalAmount = ItemGlitchSword.getIncreasedDamage(source, amount)
-        if(source != world.damageSources.outOfWorld() && baseConfig.systemGlitch.damageLimiter > 0) {
-            super.applyDamage(source, min(finalAmount, baseConfig.systemGlitch.damageLimiter))
+        if(source != world.damageSources.outOfWorld() && baseConfig.trial.systemGlitch.damageLimiter > 0) {
+            super.applyDamage(source, min(finalAmount, baseConfig.trial.systemGlitch.damageLimiter))
         } else {
             super.applyDamage(source, finalAmount)
         }

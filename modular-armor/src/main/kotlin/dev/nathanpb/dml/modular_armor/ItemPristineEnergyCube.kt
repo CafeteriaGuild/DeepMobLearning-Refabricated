@@ -35,11 +35,11 @@ class ItemPristineEnergyCube : AbstractItemBattery() {
         }
     }
 
-    override fun getEnergyCapacity(stack: ItemStack): Long = 32768L
+    override fun getEnergyCapacity(stack: ItemStack) = modularArmorConfig.misc.pristineEnergyCube.energyCapacity
 
-    override fun getEnergyMaxInput(stack: ItemStack): Long = 4096L
+    override fun getEnergyMaxInput(stack: ItemStack) = modularArmorConfig.misc.pristineEnergyCube.energyIO
 
-    override fun getEnergyMaxOutput(stack: ItemStack): Long = 4096L
+    override fun getEnergyMaxOutput(stack: ItemStack) = modularArmorConfig.misc.pristineEnergyCube.energyIO
 
     override fun isPristineEnergy(): Boolean = true
 

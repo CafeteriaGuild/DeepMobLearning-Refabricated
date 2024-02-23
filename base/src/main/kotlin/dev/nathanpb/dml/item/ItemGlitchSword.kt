@@ -22,6 +22,7 @@ package dev.nathanpb.dml.item
 
 import com.google.common.collect.ImmutableMultimap
 import com.google.common.collect.Multimap
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.getEnergyBarStep
 import dev.nathanpb.dml.utils.getEnergyTooltipText
@@ -50,26 +51,25 @@ class ItemGlitchSword : SwordItem(
         FabricItemSettings().fireproof()
 ), SimpleEnergyItem {
 
-    private val energyCost = 200L // TODO add config
-
+    private val usageCost = baseConfig.misc.glitchSword.usageCost
 
     override fun getAttributeModifiers(stack: ItemStack, slot: EquipmentSlot): Multimap<EntityAttribute, EntityAttributeModifier> {
-        if(getStoredEnergy(stack) >= energyCost) {
+        if(getStoredEnergy(stack) >= usageCost) {
             return super.getAttributeModifiers(stack, slot)
         }
         return ImmutableMultimap.of()
     }
 
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
-        if(getStoredEnergy(stack) >= energyCost) {
-            tryUseEnergy(stack, energyCost)
+        if(getStoredEnergy(stack) >= usageCost) {
+            tryUseEnergy(stack, usageCost)
         }
         return true
     }
 
-    override fun getEnergyCapacity(stack: ItemStack) = 12500L
+    override fun getEnergyCapacity(stack: ItemStack) = baseConfig.misc.glitchSword.energyCapacity
 
-    override fun getEnergyMaxInput(stack: ItemStack) = 2048L
+    override fun getEnergyMaxInput(stack: ItemStack) = baseConfig.misc.glitchSword.energyInput
 
     override fun getEnergyMaxOutput(stack: ItemStack) = 0L
 

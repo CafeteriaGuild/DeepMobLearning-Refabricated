@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.blockEntity
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.inventory.DataSynthesizerInventory
 import dev.nathanpb.dml.item.ItemDataModel
@@ -58,8 +59,9 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
      */
     private val _propertyDelegate = ArrayPropertyDelegate(6)
     val inventory = DataSynthesizerInventory()
-    private val energyCapacity = 196608L // TODO Add as config value
-    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, 8192, 8192) {
+    private val energyCapacity = baseConfig.machines.dataSynthesizer.energyCapacity
+    private val energyIO = baseConfig.machines.dataSynthesizer.energyIO
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, energyIO, energyIO) {
 
         override fun onFinalCommit() {
             markDirty()
