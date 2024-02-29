@@ -36,12 +36,19 @@ class Machines {
 
 class MatterCondenser {
 
+    var normalToPristineEnergyMultiplier = 8L // multiply model's energy value
+
     var energyCapacity = 262144L
     var energyIO = 8192L
 }
 
 /** Glitch Armor */
 class GlitchArmor {
+
+    var energyCapacityMultiplier = 125000L
+    var energyIOMultiplier = 625L
+    var allowEnergyOutput = false
+
     var soulVisionRange = 12
     var maxFlightTicksPerLevel = 30 * 20
     var undyingCooldownTime = 36000

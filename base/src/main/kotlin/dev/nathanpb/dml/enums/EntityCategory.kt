@@ -21,27 +21,89 @@ package dev.nathanpb.dml.enums
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.baseConfig
-import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.*
+import dev.nathanpb.dml.utils.initTag
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
-import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.Text
 
 
-enum class EntityCategory(val tagKey: TagKey<EntityType<*>>, var exchangeRatio: Int, private val itemForRendering: ()->Item = ::ITEM_DATA_MODEL) {
+enum class EntityCategory(
+    val tagKey: TagKey<EntityType<*>>,
+    val energyValue: Int,
+    val exchangeRatio: Int,
+    val matterType: MatterType, /** simulacrum only! */
+    private val itemForRendering: ()->Item = ::ITEM_DATA_MODEL // TODO show category stuff on REI?
+) {
 
-    OVERWORLD(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("overworld_mobs")), baseConfig.machines.lootFabricator.overworldExchangeRatio, ::ITEM_DATA_MODEL_OVERWORLD),
-    ZOMBIE(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("zombie_mobs")), baseConfig.machines.lootFabricator.zombieExchangeRatio, ::ITEM_DATA_MODEL_ZOMBIE),
-    SKELETON(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("skeleton_mobs")), baseConfig.machines.lootFabricator.skeletonExchangeRatio, ::ITEM_DATA_MODEL_SKELETON),
-    SLIMY(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("slimy_mobs")), baseConfig.machines.lootFabricator.slimyExchangeRatio, ::ITEM_DATA_MODEL_SLIMY),
-    ILLAGER(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("illager_mobs")), baseConfig.machines.lootFabricator.illagerExchangeRatio, ::ITEM_DATA_MODEL_ILLAGER),
-    OCEAN(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("ocean_mobs")), baseConfig.machines.lootFabricator.oceanExchangeRatio, ::ITEM_DATA_MODEL_OCEAN),
-    GHOST(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("ghost_mobs")), baseConfig.machines.lootFabricator.ghostExchangeRatio, ::ITEM_DATA_MODEL_GHOST),
-    NETHER(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("nether_mobs")), baseConfig.machines.lootFabricator.netherExchangeRatio, ::ITEM_DATA_MODEL_NETHER),
-    END(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier("end_mobs")), baseConfig.machines.lootFabricator.endExchangeRatio, ::ITEM_DATA_MODEL_END);
+    OVERWORLD(
+        initTag("overworld_mobs"),
+        baseConfig.machines.dataSynthesizer.overworldDataEnergyValue,
+        baseConfig.machines.lootFabricator.overworldExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_OVERWORLD
+    ),
+    ZOMBIE(
+        initTag("zombie_mobs"),
+        baseConfig.machines.dataSynthesizer.zombieDataEnergyValue,
+        baseConfig.machines.lootFabricator.zombieExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_ZOMBIE
+    ),
+    SKELETON(
+        initTag("skeleton_mobs"),
+        baseConfig.machines.dataSynthesizer.skeletonDataEnergyValue,
+        baseConfig.machines.lootFabricator.skeletonExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_SKELETON
+    ),
+    SLIMY(
+        initTag("slimy_mobs"),
+        baseConfig.machines.dataSynthesizer.slimyDataEnergyValue,
+        baseConfig.machines.lootFabricator.slimyExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_SLIMY
+    ),
+    ILLAGER(
+        initTag("illager_mobs"),
+        baseConfig.machines.dataSynthesizer.illagerDataEnergyValue,
+        baseConfig.machines.lootFabricator.illagerExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_ILLAGER
+    ),
+    OCEAN(
+        initTag("ocean_mobs"),
+        baseConfig.machines.dataSynthesizer.oceanDataEnergyValue,
+        baseConfig.machines.lootFabricator.oceanExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_OCEAN
+    ),
+    GHOST(
+        initTag("ghost_mobs"),
+        baseConfig.machines.dataSynthesizer.ghostDataEnergyValue,
+        baseConfig.machines.lootFabricator.ghostExchangeRatio,
+        MatterType.OVERWORLD,
+        ::ITEM_DATA_MODEL_GHOST
+    ),
+    NETHER(
+        initTag("nether_mobs"),
+        baseConfig.machines.dataSynthesizer.netherDataEnergyValue,
+        baseConfig.machines.lootFabricator.netherExchangeRatio,
+        MatterType.HELLISH,
+        ::ITEM_DATA_MODEL_NETHER
+    ),
+    END(
+        initTag("end_mobs"),
+        baseConfig.machines.dataSynthesizer.endDataEnergyValue,
+        baseConfig.machines.lootFabricator.endExchangeRatio,
+        MatterType.EXTRATERRESTRIAL,
+        ::ITEM_DATA_MODEL_END
+    );
 
 
     val displayName: Text = Text.translatable("mobcategory.${MOD_ID}.${tagKey.id.path}")
+
+
+
 }

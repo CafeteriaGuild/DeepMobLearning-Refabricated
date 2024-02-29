@@ -33,10 +33,15 @@ class DataModelData(val stack: ItemStack, val category: EntityCategory?) : Mutab
     companion object {
         const val DATA_AMOUNT_TAG_KEY = "${MOD_ID}.datamodel.dataAmount"
         const val SIMULATED_TAG_KEY = "${MOD_ID}.datamodel.simulated"
+        const val SIMULATION_COUNT_TAG_KEY = "simulationCount" // TODO update on 1.21
     }
 
     var dataAmount by persistentDefaulted(0, Serializers.INT, DATA_AMOUNT_TAG_KEY)
+
+    /** write on simulacrum only, might be read by any module */
     var simulated by persistentDefaulted(false, Serializers.BOOLEAN, SIMULATED_TAG_KEY)
+    var simulationCount by persistentDefaulted(0, Serializers.INT, SIMULATION_COUNT_TAG_KEY)
+
 
     fun tier() = DataModelTier.fromDataAmount(dataAmount)
 

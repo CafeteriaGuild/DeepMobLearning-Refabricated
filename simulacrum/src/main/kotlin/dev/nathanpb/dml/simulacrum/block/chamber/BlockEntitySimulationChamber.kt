@@ -1,5 +1,8 @@
 package dev.nathanpb.dml.simulacrum.block.chamber
 
+import dev.nathanpb.dml.data.dataModel
+import dev.nathanpb.dml.enums.DataModelTier
+import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.item.ITEM_POLYMER_CLAY
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.item.ItemPristineMatter
@@ -46,7 +49,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     var isCrafting = false
         private set
     var byproductSuccess = false
-    private var currentDataModelType = ""
+    private var currentDataModelType: EntityCategory? = null
     var energyStorage = SimpleEnergyStorage(2000000, 25600, 0)
 
     var propertyDelegate: PropertyDelegate = object : PropertyDelegate {
@@ -69,7 +72,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     }
 
     fun dataModelTypeChanged(): Boolean {
-        return currentDataModelType != DataModelUtil.getEntityCategory(dataModel).toString()
+        return currentDataModelType != dataModelStack.dataModel.category
     }
 
     override fun readNbt(compound: NbtCompound) {
@@ -78,7 +81,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         byproductSuccess = compound.getBoolean("byproductSuccess")
         isCrafting = compound.getBoolean("isCrafting")
         percentDone = compound.getInt("percentDone")
-        currentDataModelType = compound.getString("currentDataModelType")
+        currentDataModelType = enumValueOf<EntityCategory>(compound.getString("currentDataModelType"))
         Inventories.readNbt(compound, inventory)
     }
 
@@ -88,7 +91,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         compound.putBoolean("byproductSuccess", byproductSuccess)
         compound.putBoolean("isCrafting", isCrafting)
         compound.putInt("percentDone", percentDone)
-        compound.putString("currentDataModelType", currentDataModelType)
+        compound.putString("currentDataModelType", currentDataModelType?.toString()?.uppercase())
         Inventories.writeNbt(compound, inventory)
     }
 
@@ -112,7 +115,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
 
     private fun startSimulation() {
         isCrafting = true
-        currentDataModelType = DataModelUtil.getEntityCategory(dataModel).toString()
+        currentDataModelType = dataModelStack.dataModel.category
         inventory[1].count = polymerClay.count - 1
     }
 
@@ -121,8 +124,9 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         isCrafting = false
         // Only decrease input and increase output if not aborted, and only if on the server's BE
         if (!abort && !world!!.isClient) {
-            DataModelUtil.updateSimulationCount(dataModel)
-            DataModelUtil.updateDataModel(dataModel)
+            energyStorage.amount -= DataModelUtil.getEnergyCost(dataModelStack)
+            dataModelStack.dataModel.simulationCount++
+            DataModelUtil.updateDataModel(dataModelStack)
             if (inventory[2].item is ItemMatter) {
                 inventory[2].count = living.count + 1
             } else {
@@ -145,21 +149,17 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     }
 
     fun canContinueSimulation(): Boolean {
-        return hasDataModel() && !DataModelUtil.getTier(dataModel).toString().equals("faulty", ignoreCase = true)
+        return hasDataModel() && dataModelStack.dataModel.tier() != DataModelTier.FAULTY
     }
 
     fun hasEnergyForSimulation(): Boolean {
-        return if (hasDataModel()) {
-            val ticksPerSimulation = 300
-            energyStorage.amount > ticksPerSimulation.toLong() * DataModelUtil.getEnergyCost(dataModel)
-        } else {
-            false
-        }
+        if(!hasDataModel()) return false
+        return energyStorage.amount > DataModelUtil.getEnergyCost(dataModelStack)
     }
 
 
 
-    val dataModel: ItemStack
+    val dataModelStack: ItemStack
         get() = getStack(0)
     private val polymerClay: ItemStack
         get() = getStack(1)
@@ -169,7 +169,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         get() = getStack(3)
 
     fun hasDataModel(): Boolean {
-        return dataModel.item is ItemDataModel
+        return dataModelStack.item is ItemDataModel
     }
 
     fun hasPolymerClay(): Boolean {
@@ -184,7 +184,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         }
         val stackLimitReached = stack.count == living.maxCount
         val outputMatches = dataModelMatchesOutput(
-            dataModel,
+            dataModelStack,
             living
         )
         return stackLimitReached || !outputMatches
@@ -197,7 +197,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         }
         val stackLimitReached = stack.count == inventory[3].maxCount
         val outputMatches = dataModelMatchesPristine(
-            dataModel,
+            dataModelStack,
             pristine
         )
         return stackLimitReached || !outputMatches
@@ -228,7 +228,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
     override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?): Boolean {
         return if (dir == Direction.UP) {
             when (slot) {
-                0 -> stack.item is ItemDataModel && DataModelUtil.getEntityCategory(stack) != null
+                0 -> stack.item is ItemDataModel && stack.dataModel.category != null
                 1 -> stack.isOf(ITEM_POLYMER_CLAY)
                 else -> false
             }
@@ -246,13 +246,12 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
 
     companion object {
         private fun dataModelMatchesOutput(stack: ItemStack, output: ItemStack): Boolean {
-            val livingMatter: Item? =
-                dataModel2MatterMap[DataModelUtil.getEntityCategory(stack).toString()]?.type?.matter
+            val livingMatter: Item? = stack.dataModel.category?.matterType?.matter
             return Registries.ITEM.getId(livingMatter) == Registries.ITEM.getId(output.item)
         }
 
         private fun dataModelMatchesPristine(stack: ItemStack, pristine: ItemStack): Boolean {
-            val pristineMatter: ItemPristineMatter? = dataModel2MatterMap[DataModelUtil.getEntityCategory(stack).toString()]?.pristine
+            val pristineMatter: ItemPristineMatter? = dataModel2MatterMap[stack.dataModel.category]?.pristine
             return Registries.ITEM.getId(pristineMatter) == Registries.ITEM.getId(pristine.item)
         }
 
@@ -271,11 +270,9 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
                     if (blockEntity.percentDone == 0) {
                         val rand = Random()
                         val num = rand.nextInt(100)
-                        val chance: Int? = PRISTINE_CHANCE[(DataModelUtil.getTier(blockEntity.dataModel).toString())]
+                        val chance: Int? = PRISTINE_CHANCE[blockEntity.dataModelStack.dataModel.tier()]
                         blockEntity.byproductSuccess = num <= ((chance)?.coerceAtLeast(1)?.coerceAtMost(100) ?: 0)
                     }
-                    val energyTickCost = DataModelUtil.getEnergyCost(blockEntity.dataModel)
-                    blockEntity.energyStorage.amount -= energyTickCost
                     if (blockEntity.ticks % (20 * 15 / 100) == 0) {
                         blockEntity.percentDone++
                     }

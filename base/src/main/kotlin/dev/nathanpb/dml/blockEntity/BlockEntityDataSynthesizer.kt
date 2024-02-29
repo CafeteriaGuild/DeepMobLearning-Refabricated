@@ -23,6 +23,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.inventory.DataSynthesizerInventory
+import dev.nathanpb.dml.item.ITEM_DATA_MODEL
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.misc.DATA_SYNTHESIZER_PROCESS
 import dev.nathanpb.dml.utils.*
@@ -86,12 +87,10 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
     }
 
     companion object {
-        private val dataEnergyValue = 3072 // TODO use simulation cost * 8-ish
-
-
         val ticker = BlockEntityTicker<BlockEntityDataSynthesizer> { world, pos, _, blockEntity ->
             val dataModelStack = blockEntity.inventory.getStack(0)
-            if(!dataModelStack.isEmpty && dataModelStack.item is ItemDataModel) {
+            if(!dataModelStack.isEmpty && dataModelStack.item is ItemDataModel && !dataModelStack.isOf(ITEM_DATA_MODEL)) {
+                val dataEnergyValue = dataModelStack.dataModel.category!!.energyValue
                 if(blockEntity.energyStorage.amount <= (blockEntity.energyCapacity - dataEnergyValue)) {
                     if(dataModelStack.hasSimUnrestrictedData()) {
                         blockEntity.canProgress = true

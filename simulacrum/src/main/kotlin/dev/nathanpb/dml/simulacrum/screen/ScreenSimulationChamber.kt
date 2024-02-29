@@ -1,6 +1,7 @@
 package dev.nathanpb.dml.simulacrum.screen
 
 import com.mojang.blaze3d.systems.RenderSystem
+import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.simulacrum.PRISTINE_CHANCE
@@ -59,13 +60,13 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
 
 
         val lines: Array<String>
-        if (!blockEntity.hasDataModel()) {
+        if(!blockEntity.hasDataModel()) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.insert_data_model.1", "text.dml-refabricated.simulation_chamber.insert_data_model.2")
             val a1 = getAnimation("pleaseInsert1")
             val a2 = getAnimation("pleaseInsert2")
             animateString(ctx, lines[0], a1, null, 1, false, x + 10, yStart + spacing, 0xFFFFFF)
             animateString(ctx, lines[1], a2, a1, 1, false, x + 10, yStart + spacing * 2, 0xFFFFFF)
-        } else if (DataModelUtil.getTier(blockEntity.dataModel) == DataModelTier.FAULTY) {
+        } else if(blockEntity.dataModelStack.dataModel.tier() == DataModelTier.FAULTY) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.insuficiente_data.1", "text.dml-refabricated.simulation_chamber.insuficiente_data.2", "text.dml-refabricated.simulation_chamber.insuficiente_data.3")
             val insufData = getAnimation("insufData1")
             val insufData2 = getAnimation("insufData2")
@@ -75,30 +76,28 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
             animateString(ctx, lines[2], insufData3, insufData2, 1, false, x + 10, yStart + spacing * 3, 0xFFFFFF)
         } else {
             // Draw current data model data
-            if (DataModelUtil.getTier(blockEntity.dataModel) == DataModelTier.SELF_AWARE) {
+            if (blockEntity.dataModelStack.dataModel.tier() == DataModelTier.SELF_AWARE) {
                 ctx.drawTexture(gui, x + 6, y + 48, 18, 141, 7, 87)
             } else {
-                val collectedData = DataModelUtil.getTierCount(blockEntity.dataModel) -
-                    (DataModelUtil.getTier(blockEntity.dataModel)?.dataAmount ?: 0)
-                val tierRoof = DataModelUtil.getTierRoof(blockEntity.dataModel) -
-                    (DataModelUtil.getTier(blockEntity.dataModel)?.dataAmount ?: 0)
+                val collectedData = blockEntity.dataModelStack.dataModel.tier().dataAmount - blockEntity.dataModelStack.dataModel.tier().dataAmount
+                val tierRoof = DataModelUtil.getTierRoof(blockEntity.dataModelStack) - blockEntity.dataModelStack.dataModel.tier().dataAmount
                 val experienceBarHeight = (collectedData.toFloat() / tierRoof * 89).toInt()
                 val experienceBarOffset = 89 - experienceBarHeight
                 ctx.drawTexture(gui, x + 5, y + 47 + experienceBarOffset, 234, 0, 9, experienceBarHeight)
             }
             ctx.drawText(
                 renderer, Text.translatable("tooltip.dml-refabricated.data_model.3").copy().append(
-                    DataModelUtil.textTier(blockEntity.dataModel)
+                    blockEntity.dataModelStack.dataModel.tier().text
                 ), x + 10, yStart + spacing, 0xFFFFFF, true
             )
             ctx.drawText(
                 renderer, Text.translatable("text.dml-refabricated.simulation_chamber.iterations", f.format(
-                    DataModelUtil.getSimulationCount(blockEntity.dataModel).toLong())
+                    blockEntity.dataModelStack.dataModel.simulationCount)
                 ), x + 10, yStart + spacing * 2, 0xFFFFFF, true
             )
             ctx.drawText(
                 renderer, Text.translatable("text.dml-refabricated.simulation_chamber.pristine_chance",
-                        PRISTINE_CHANCE[DataModelUtil.getTier(blockEntity.dataModel).toString()]
+                        PRISTINE_CHANCE[blockEntity.dataModelStack.dataModel.tier()]
                 ).append("%"), x + 10, yStart + spacing * 3, 0xFFFFFF, true
             )
         }
@@ -126,17 +125,9 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
             if (x in 13..21) {
                 // Tooltip for data model data bar
                 if (blockEntity.hasDataModel()) {
-                    if (DataModelUtil.getTier(blockEntity.dataModel) != DataModelTier.SELF_AWARE) {
-                        val currentTierCount = DataModelUtil.getTierCount(
-                            blockEntity.dataModel
-                        ) - (DataModelUtil.getTier(
-                            blockEntity.dataModel
-                        )?.dataAmount ?: 0)
-                        val currentTierRoof = DataModelUtil.getTierRoof(
-                            blockEntity.dataModel
-                        ) - (DataModelUtil.getTier(
-                            blockEntity.dataModel
-                        )?.dataAmount ?: 0)
+                    if (blockEntity.dataModelStack.dataModel.tier() != DataModelTier.SELF_AWARE) {
+                        val currentTierCount = blockEntity.dataModelStack.dataModel.tier().dataAmount - blockEntity.dataModelStack.dataModel.tier().dataAmount
+                        val currentTierRoof = (DataModelUtil.getTierRoof(blockEntity.dataModelStack) - blockEntity.dataModelStack.dataModel.tier().dataAmount)
                         tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.data_collected", currentTierCount, currentTierRoof))
                     } else {
                         tooltip.add(Text.translatable("text.dml-refabricated.simulation_chamber.max_tier"))
@@ -207,7 +198,7 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
 
     private fun drawConsoleText(ctx: DrawContext, x: Int, y: Int, spacing: Int) {
         val lines: Array<String>
-        if (!blockEntity.hasDataModel() || DataModelUtil.getTier(blockEntity.dataModel) == DataModelTier.FAULTY) {
+        if (!blockEntity.hasDataModel() || blockEntity.dataModelStack.dataModel.tier() == DataModelTier.FAULTY) {
             animateString(ctx, "_", getAnimation("blinkingUnderline"), null, 16, true, x + 21, y + 49, 0xFFFFFF)
         } else if (!blockEntity.hasPolymerClay() && !blockEntity.isCrafting) {
             lines = arrayOf("text.dml-refabricated.simulation_chamber.cant_begin", "text.dml-refabricated.simulation_chamber.missing_polymer", "_")
@@ -326,7 +317,7 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         simulationText["simulationProgressLine1"] = animate(lines[0], aLine1, null, 1, false)
         simulationText["simulationProgressLine1Version"] = "§6" + animate(lines[1], aLine1Version, aLine1, 1, false) + "§r"
         hasDataModelChanged() // resync data model from BE
-        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false, (DataModelUtil.getSimulationCount(currentDataModel) + 1))
+        simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false, (currentDataModel.dataModel.simulationCount + 1))
         simulationText["simulationProgressLine3"] = animate(lines[3], aLine3, aLine2, 2, false)
         simulationText["simulationProgressLine4"] = animate(lines[4], aLine4, aLine3, 1, false)
         simulationText["simulationProgressLine5"] = animate(lines[5], aLine5, aLine4, 2, false)
@@ -349,9 +340,9 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
     }
 
     private fun hasDataModelChanged(): Boolean {
-        if(ItemStack.areEqual(currentDataModel, blockEntity.dataModel)) return false
+        if(ItemStack.areEqual(currentDataModel, blockEntity.dataModelStack)) return false
 
-        currentDataModel = blockEntity.dataModel
+        currentDataModel = blockEntity.dataModelStack
         return true
     }
 }

@@ -1,5 +1,6 @@
 package dev.nathanpb.dml.simulacrum
 
+import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ITEM_GLITCH_SWORD
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
@@ -45,23 +46,12 @@ val SCS_HANDLER_TYPE: ScreenHandlerType<ScreenHandlerSimulationChamber> = Screen
 val simulacrumConfig: SimulacrumConfig = initConfig("simulacrum", SimulacrumConfig(), SimulacrumConfig::class.java)
 
 var PRISTINE_CHANCE = hashMapOf(
-    "BASIC" to simulacrumConfig.simulationChamber.basicTierPristineChance,
-    "ADVANCED" to simulacrumConfig.simulationChamber.advancedTierPristineChance,
-    "SUPERIOR" to simulacrumConfig.simulationChamber.superiorTierPristineChance,
-    "SELF_AWARE" to simulacrumConfig.simulationChamber.selfAwareTierPristineChance
+    DataModelTier.BASIC to simulacrumConfig.simulationChamber.basicTierPristineChance,
+    DataModelTier.ADVANCED to simulacrumConfig.simulationChamber.advancedTierPristineChance,
+    DataModelTier.SUPERIOR to simulacrumConfig.simulationChamber.superiorTierPristineChance,
+    DataModelTier.SELF_AWARE to simulacrumConfig.simulationChamber.selfAwareTierPristineChance
 )
 
-var ENERGY_COST = hashMapOf(
-    "NETHER" to simulacrumConfig.simulationChamber.netherEnergyCost,
-    "SLIMY" to simulacrumConfig.simulationChamber.slimyEnergyCost,
-    "OVERWORLD" to simulacrumConfig.simulationChamber.overworldEnergyCost,
-    "ZOMBIE" to simulacrumConfig.simulationChamber.zombieEnergyCost,
-    "SKELETON" to simulacrumConfig.simulationChamber.skeletonEnergyCost,
-    "END" to simulacrumConfig.simulationChamber.endEnergyCost,
-    "GHOST" to simulacrumConfig.simulationChamber.ghostEnergyCost,
-    "ILLAGER" to simulacrumConfig.simulationChamber.illagerEnergyCost,
-    "OCEAN" to simulacrumConfig.simulationChamber.oceanEnergyCost
-)
 
 @Suppress("unused")
 fun init() {

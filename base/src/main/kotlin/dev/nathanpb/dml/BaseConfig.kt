@@ -20,12 +20,10 @@
 package dev.nathanpb.dml
 
 class BaseConfig {
-
     var dataModel = DataModel()
     var trial = Trial()
     var machines = Machines()
     var misc = Misc()
-
 }
 
 /** Data Model */
@@ -95,13 +93,22 @@ class SystemGlitch {
 
 /** Machines */
 class Machines {
-
     var dataSynthesizer = DataSynthesizer()
     var lootFabricator = LootFabricator()
 
 }
 
-class DataSynthesizer { // FIXME needs rebalancing
+class DataSynthesizer {
+    var overworldDataEnergyValue = 400
+    var zombieDataEnergyValue = 1200
+    var skeletonDataEnergyValue = 320
+    var slimyDataEnergyValue = 640
+    var illagerDataEnergyValue = 1648
+    var oceanDataEnergyValue = 640
+    var ghostDataEnergyValue = 1488
+    var netherDataEnergyValue = 1200
+    var endDataEnergyValue = 2048
+
     var energyCapacity = 196608L
     var energyIO = 8192L
 }
@@ -126,22 +133,17 @@ class LootFabricator {
 
 /** Misc */
 class Misc {
-
     var glitchSword = GlitchSword()
     var energyOctahedron = EnergyOctahedron()
 }
 
 class GlitchSword { // FIXME balance accordingly to Data Synthesizer
-
     var energyCapacity = 12500L
     var energyInput = 2048L
     var usageCost = 200L
-
 }
 
 class EnergyOctahedron { // FIXME balance accordingly to Data Synthesizer
-
     var energyCapacity = 32768L
     var energyIO = 4096L
-
 }

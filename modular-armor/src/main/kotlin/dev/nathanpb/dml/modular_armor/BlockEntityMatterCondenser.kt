@@ -66,7 +66,6 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
     }
 
     companion object {
-        private val pristineMatterEnergyValue = 1024L // TODO scale to matter
 
         val ticker = BlockEntityTicker<BlockEntityMatterCondenser> { world, pos, _, blockEntity ->
             val armorStack = blockEntity.inventory.armorStack
@@ -77,7 +76,7 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
 
                 // TODO Remove in 1.21
                 if(data.dataAmount > 0) {
-                    data.pristineEnergy += (data.dataAmount * pristineMatterEnergyValue).coerceAtMost(64 * 1024)
+                    data.pristineEnergy += (data.dataAmount * 1024).coerceAtMost(64 * 1024)
                     data.dataAmount = -1
                 }
                 moveToStackPristine(blockEntity.energyStorage, blockEntity.inventory, 0)
@@ -85,7 +84,8 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
 
             // Insert
             if(inputStack.item is ItemPristineMatter) {
-                if(blockEntity.energyStorage.addEnergy(pristineMatterEnergyValue)) {
+                val pristineEnergyValue = (inputStack.item as ItemPristineMatter).entityCategory.energyValue * modularArmorConfig.machines.matterCondenser.normalToPristineEnergyMultiplier
+                if(blockEntity.energyStorage.addEnergy(pristineEnergyValue)) {
                     blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
                     inputStack.decrement(1)
                     blockEntity.markDirty()

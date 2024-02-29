@@ -134,18 +134,6 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
             dataModelText = Text.translatable("tooltip.${MOD_ID}.no_data_model").formatted(Formatting.DARK_RED)
         }
         tooltip.add(dataModelText)
-
-        /*Text.translatable("tooltip.${MOD_ID}.tier.1").setStyle(RenderUtils.STYLE).append(
-        Text.translatable("tooltip.${MOD_ID}.tier.2", data.tier().text)).let {
-            tooltip.add(it)
-        }
-
-        MinecraftClient.getInstance().player?.let { player ->
-            if(player.isCreative) {
-                tooltip.add(Text.translatable("tooltip.${MOD_ID}.cheat").formatted(Formatting.GRAY, Formatting.ITALIC))
-            }
-        }
-        super.appendTooltip(stack, world, tooltip, context)*/
     }
 
     override fun getAttributeModifiers(stack: ItemStack, slot: EquipmentSlot?): Multimap<EntityAttribute, EntityAttributeModifier> {
@@ -227,15 +215,24 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
         }
     }
 
-    fun getEnergyProperties() = energyProperties[type]
+    private fun getEnergyProperties() = energyProperties[type]
 
-    // TODO add config values
     private val energyProperties: HashMap<Type, EnergyProperties> = hashMapOf(
-        Type.HELMET to EnergyProperties(625000L, 3125L, 0L),
-        Type.CHESTPLATE to EnergyProperties(1000000L, 5000L, 0L),
-        Type.LEGGINGS to EnergyProperties(875000L, 4375L, 0L),
-        Type.BOOTS to EnergyProperties(500000L, 2500L, 0L)
+        Type.HELMET to scaleEnergyProperties(5),
+        Type.CHESTPLATE to scaleEnergyProperties(8),
+        Type.LEGGINGS to scaleEnergyProperties(7),
+        Type.BOOTS to scaleEnergyProperties(4)
     )
+
+    private fun scaleEnergyProperties(ingotsOnCrafting: Int): EnergyProperties {
+        val energyIO = ingotsOnCrafting * modularArmorConfig.glitchArmor.energyIOMultiplier
+
+        return EnergyProperties(
+            ingotsOnCrafting * modularArmorConfig.glitchArmor.energyCapacityMultiplier,
+            energyIO,
+            if(modularArmorConfig.glitchArmor.allowEnergyOutput) energyIO else 0L
+        )
+    }
 
     data class EnergyProperties(val capacity: Long, val input: Long, val output: Long)
 

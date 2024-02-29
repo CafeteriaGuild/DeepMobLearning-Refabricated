@@ -23,6 +23,7 @@ package dev.nathanpb.dml.utils
 import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
+import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.client.NinePatchBackgroundPainter
 import net.fabricmc.api.EnvType
@@ -94,7 +95,7 @@ fun getBooleanInfoText(primaryText: MutableText, boolean: Boolean, primaryStyle:
     return getInfoText(primaryText, onOffText, primaryStyle, secondaryStyle)
 }
 
-fun getInfoText(primaryText: MutableText, secondaryText: MutableText, primaryStyle: Style, secondaryStyle: Style): MutableText {
+fun getInfoText(primaryText: MutableText, secondaryText: MutableText, primaryStyle: Style = STYLE, secondaryStyle: Style = ALT_STYLE): MutableText {
     primaryText.style = primaryStyle
     secondaryText.style = secondaryStyle
 

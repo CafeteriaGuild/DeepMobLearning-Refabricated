@@ -43,6 +43,8 @@
   "item.dml-refabricated.glitch_upgrade_smithing_template.additions_slot_description": "Add Glitch Ingot",
 
   "tooltip.dml-refabricated.distribute_energy": "Distribute Energy: ",
+  "tooltip.dml-refabricated.parenthesis": "(%s)",
+  "tooltip.dml-refabricated.pipe": "%s | %s",
 
   "tooltip.dml-refabricated.guide_tablet": "§3§oDeep Mob Learning: Refabricated's high-tech guide!",
   "tooltip.dml-refabricated.data_model.bound_to.1": "Bound To: ",
@@ -58,6 +60,8 @@
   "tooltip.dml-refabricated.data_amount.2.variant": "%d (%d to next tier)",
   "tooltip.dml-refabricated.tier.1": "Tier: ",
   "tooltip.dml-refabricated.tier.2": "%s",
+  "tooltip.dml-refabricated.data_model_header": "Model: ",
+  "tooltip.dml-refabricated.no_data_model": "Missing Data Model",
   "tooltip.dml-refabricated.trial_key.unbound.tip": "Combine this with a bounded Data Model in the crafting grid",
   "tooltip.dml-refabricated.trial_key.affixes": "Affixes:",
   "tooltip.dml-refabricated.cafeteria.joinus": "Come join us: ",

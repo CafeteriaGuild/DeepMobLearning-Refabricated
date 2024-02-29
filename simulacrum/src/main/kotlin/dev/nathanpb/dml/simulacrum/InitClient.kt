@@ -1,17 +1,15 @@
 package dev.nathanpb.dml.simulacrum
 
+import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.simulacrum.screen.ScreenSimulationChamber
 import dev.nathanpb.dml.simulacrum.util.DataModelUtil
-import dev.nathanpb.dml.utils.RenderUtils
+import dev.nathanpb.dml.utils.getInfoText
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
-import net.minecraft.world.World
 
 @Suppress("unused")
 fun initClient() {
@@ -19,19 +17,26 @@ fun initClient() {
         ScreenSimulationChamber(handler, inventory, title)
     }
 
-    ItemTooltipCallback.EVENT.register(ItemTooltipCallback { item: ItemStack, _: TooltipContext?, lines: MutableList<Text?> ->
-        val world: World? = MinecraftClient.getInstance().world
-        if (item.item is ItemDataModel && DataModelUtil.getEntityCategory(item) != null) {
-            world?.let {
-                lines.add(
-                    Text.translatable("tooltip.dml-refabricated.data_model.1").setStyle(RenderUtils.STYLE).append(
-                    Text.translatable("tooltip.dml-refabricated.data_model.2", DataModelUtil.getEnergyCost(item)).setStyle(RenderUtils.ALT_STYLE))
+    ItemTooltipCallback.EVENT.register(ItemTooltipCallback { stack: ItemStack, _, tooltip: MutableList<Text> ->
+        if (stack.item is ItemDataModel && stack.dataModel.category != null) {
+            tooltip.add(getInfoText(
+                Text.translatable(
+                    "tooltip.$MOD_ID.data_model.1"
+                ),
+                Text.translatable(
+                    "tooltip.$MOD_ID.data_model.2",
+                    DataModelUtil.getEnergyCost(stack)
                 )
-                lines.add(
-                    Text.translatable("tooltip.dml-refabricated.data_model.3").setStyle(RenderUtils.STYLE).append(
-                    Text.translatable("tooltip.dml-refabricated.data_model.4", DataModelUtil.textType(item)).setStyle(RenderUtils.ALT_STYLE))
+            ))
+            tooltip.add(getInfoText(
+                Text.translatable(
+                    "tooltip.$MOD_ID.data_model.3"
+                ),
+                Text.translatable(
+                    "tooltip.$MOD_ID.data_model.4",
+                    stack.dataModel.category?.matterType?.text
                 )
-            }
+            ))
         }
     })
 }

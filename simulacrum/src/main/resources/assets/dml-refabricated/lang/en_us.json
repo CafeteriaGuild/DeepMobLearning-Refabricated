@@ -1,5 +1,6 @@
 {
   "block.dml-refabricated.simulation_chamber": "Simulation Chamber",
+  "item.dml-refabricated.polymer_clay": "Polymer Clay",
   "item.dml-refabricated.overworld_matter": "Overworld Matter",
   "item.dml-refabricated.hellish_matter": "Hellish Matter",
   "item.dml-refabricated.extraterrestrial_matter": "Extraterrestrial Matter",
@@ -13,9 +14,10 @@
   "tooltip.dml-refabricated.matter.4": " to consume entire stack.",
   "tooltip.dml-refabricated.matter.5": "Experience per item: ",
   "tooltip.dml-refabricated.data_model.1": "Simulation Cost: ",
-  "tooltip.dml-refabricated.data_model.2": "%d E/t",
+  "tooltip.dml-refabricated.data_model.2": "%d E",
   "tooltip.dml-refabricated.data_model.3": "Type: ",
   "tooltip.dml-refabricated.data_model.4": "%d",
+  "tooltip.dml-refabricated.data_model.5": "Contains simulated data",
   "text.dml-refabricated.simulation_chamber.iterations": "Iterations: %s",
   "text.dml-refabricated.simulation_chamber.pristine_chance": "Pristine chance: %d",
   "text.dml-refabricated.simulation_chamber.insert_data_model.1": "Please insert a data model",

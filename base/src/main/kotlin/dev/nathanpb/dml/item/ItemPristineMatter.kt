@@ -19,12 +19,13 @@
 
 package dev.nathanpb.dml.item
 
+import dev.nathanpb.dml.enums.EntityCategory
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Rarity
 
-class ItemPristineMatter : Item(FabricItemSettings().fireproof()) {
+class ItemPristineMatter(val entityCategory: EntityCategory): Item(FabricItemSettings().fireproof()) {
     override fun hasGlint(stack: ItemStack?) = true
 
     override fun getRarity(stack: ItemStack?) = Rarity.UNCOMMON

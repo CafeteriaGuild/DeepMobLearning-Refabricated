@@ -4,140 +4,66 @@ import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.enums.EntityCategory
+import dev.nathanpb.dml.enums.MatterType
 import dev.nathanpb.dml.item.*
-import dev.nathanpb.dml.simulacrum.ENERGY_COST
 import dev.nathanpb.dml.simulacrum.simulacrumConfig
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 class DataModelUtil {
 
     companion object {
 
         val dataModel2MatterMap = hashMapOf(
-            "NETHER" to DataModel2Matter(ITEM_PRISTINE_MATTER_NETHER, MatterType.HELLISH),
-            "SLIMY" to DataModel2Matter(ITEM_PRISTINE_MATTER_SLIMY, MatterType.OVERWORLD),
-            "OVERWORLD" to DataModel2Matter(ITEM_PRISTINE_MATTER_OVERWORLD, MatterType.OVERWORLD),
-            "ZOMBIE" to DataModel2Matter(ITEM_PRISTINE_MATTER_ZOMBIE, MatterType.OVERWORLD),
-            "SKELETON" to DataModel2Matter(ITEM_PRISTINE_MATTER_SKELETON, MatterType.OVERWORLD),
-            "END" to DataModel2Matter(ITEM_PRISTINE_MATTER_END, MatterType.EXTRATERRESTRIAL),
-            "GHOST" to DataModel2Matter(ITEM_PRISTINE_MATTER_GHOST, MatterType.HELLISH),
-            "ILLAGER" to DataModel2Matter(ITEM_PRISTINE_MATTER_ILLAGER, MatterType.OVERWORLD),
-            "OCEAN" to DataModel2Matter(ITEM_PRISTINE_MATTER_OCEAN, MatterType.OVERWORLD)
+            EntityCategory.NETHER to DataModel2Matter(ITEM_PRISTINE_MATTER_NETHER, MatterType.HELLISH),
+            EntityCategory.SLIMY to DataModel2Matter(ITEM_PRISTINE_MATTER_SLIMY, MatterType.OVERWORLD),
+            EntityCategory.OVERWORLD to DataModel2Matter(ITEM_PRISTINE_MATTER_OVERWORLD, MatterType.OVERWORLD),
+            EntityCategory.ZOMBIE to DataModel2Matter(ITEM_PRISTINE_MATTER_ZOMBIE, MatterType.OVERWORLD),
+            EntityCategory.SKELETON to DataModel2Matter(ITEM_PRISTINE_MATTER_SKELETON, MatterType.OVERWORLD),
+            EntityCategory.END to DataModel2Matter(ITEM_PRISTINE_MATTER_END, MatterType.EXTRATERRESTRIAL),
+            EntityCategory.GHOST to DataModel2Matter(ITEM_PRISTINE_MATTER_GHOST, MatterType.HELLISH),
+            EntityCategory.ILLAGER to DataModel2Matter(ITEM_PRISTINE_MATTER_ILLAGER, MatterType.OVERWORLD),
+            EntityCategory.OCEAN to DataModel2Matter(ITEM_PRISTINE_MATTER_OCEAN, MatterType.OVERWORLD)
         )
 
 
-        fun updateSimulationCount(stack: ItemStack) {
-            if(stack.item !is ItemDataModel) return
-            val i = getSimulationCount(stack) + 1
-            stack.dataModel.tag.putInt("simulationCount", i)
-        }
-
-        fun getSimulationCount(stack: ItemStack): Int {
-            return if(stack.item is ItemDataModel) stack.dataModel.tag.getInt("simulationCount") else 0
-        }
-
-        fun getEntityCategory(stack: ItemStack): EntityCategory? {
-            return if(stack.item is ItemDataModel) stack.dataModel.category else null
-        }
-
-        fun getTierCount(stack: ItemStack): Int {
-            return if(stack.item is ItemDataModel) stack.dataModel.dataAmount else 0
-        }
-
         fun updateDataModel(stack: ItemStack) {
             val dataBonus = simulacrumConfig.simulationChamber.dataBonus
-            if(stack.item !is ItemDataModel || dataBonus == 0) return
+            if (stack.item !is ItemDataModel || dataBonus == 0) return
 
-            stack.dataModel.dataAmount = (getTierCount(stack) + dataBonus).coerceIn(0, baseConfig.dataModel.selfAwareDataRequired)
+            stack.dataModel.dataAmount =
+                (stack.dataModel.dataAmount + dataBonus).coerceIn(0, baseConfig.dataModel.selfAwareDataRequired)
             stack.dataModel.simulated = true
         }
 
         fun getEnergyCost(stack: ItemStack): Int {
-            return if (getEntityCategory(stack) != null) ENERGY_COST[getEntityCategory(stack).toString()]!! else 0
-        }
-
-        fun textType(stack: ItemStack): Text? {
-            return when(dataModel2MatterMap[getEntityCategory(stack).toString()]!!.type) {
-                MatterType.OVERWORLD -> {
-                    Text.translatable("modelType.dml-refabricated.overworld").formatted(Formatting.GREEN)
-                }
-                MatterType.HELLISH -> {
-                    Text.translatable("modelType.dml-refabricated.hellish").formatted(Formatting.RED)
-                }
-                MatterType.EXTRATERRESTRIAL -> {
-                    Text.translatable("modelType.dml-refabricated.extraterrestrial").formatted(Formatting.LIGHT_PURPLE)
-                }
-            }
-        }
-
-        fun getTier(stack: ItemStack): DataModelTier? {
-            return if (stack.item is ItemDataModel) {
-                stack.dataModel.tier()
-            } else {
-                null
-            }
+            if (stack.item !is ItemDataModel) return 0
+            val entityCategory = stack.dataModel.category ?: return 0
+            return (entityCategory.energyValue.toFloat() * simulacrumConfig.simulationChamber.energyCostMultiplier).toInt()
         }
 
         fun getTierRoof(stack: ItemStack): Int {
             if (stack.item is ItemDataModel) {
-                val config = baseConfig
-                when(getTier(stack)) {
-                    DataModelTier.FAULTY -> {
-                        return config.dataModel.basicDataRequired
-                    }
-
-                    DataModelTier.BASIC -> {
-                        return config.dataModel.advancedDataRequired
-                    }
-
-                    DataModelTier.ADVANCED -> {
-                        return config.dataModel.superiorDataRequired
-                    }
-
-                    DataModelTier.SUPERIOR -> {
-                        return config.dataModel.selfAwareDataRequired
-                    }
-
-                    else -> {}
+                return when (stack.dataModel.tier()) {
+                    DataModelTier.FAULTY -> baseConfig.dataModel.basicDataRequired
+                    DataModelTier.BASIC -> baseConfig.dataModel.advancedDataRequired
+                    DataModelTier.ADVANCED -> baseConfig.dataModel.superiorDataRequired
+                    DataModelTier.SUPERIOR -> baseConfig.dataModel.selfAwareDataRequired
+                    DataModelTier.SELF_AWARE -> 0
                 }
             }
             return 0
         }
 
-        fun textTier(stack: ItemStack): Text? {
-            return when(getTier(stack)) {
-                DataModelTier.FAULTY -> {
-                    Text.translatable("tier.dml-refabricated.faulty")
-                }
-                DataModelTier.BASIC -> {
-                    Text.translatable("tier.dml-refabricated.basic")
-                }
-                DataModelTier.ADVANCED -> {
-                    Text.translatable("tier.dml-refabricated.advanced")
-                }
-                DataModelTier.SUPERIOR -> {
-                    Text.translatable("tier.dml-refabricated.superior")
-                }
-                DataModelTier.SELF_AWARE -> {
-                    Text.translatable("tier.dml-refabricated.self_aware")
-                }
-                else -> {
-                    Text.of("Invalid Item")
-                }
+
+        class DataModel2Matter internal constructor(pristine: Item?, matter: MatterType) {
+            val pristine: ItemPristineMatter?
+            val type: MatterType
+
+            init {
+                this.pristine = pristine as ItemPristineMatter?
+                type = matter
             }
-        }
-    }
-
-    class DataModel2Matter internal constructor(pristine: Item?, matter: MatterType) {
-        val pristine: ItemPristineMatter?
-        val type: MatterType
-
-        init {
-            this.pristine = pristine as ItemPristineMatter?
-            type = matter
         }
     }
 }

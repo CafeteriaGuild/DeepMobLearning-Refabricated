@@ -1,5 +1,6 @@
 {
   "block.dml-refabricated.simulation_chamber": "Câmara de Simulação",
+  "item.dml-refabricated.polymer_clay": "Argila de Polímero",
   "item.dml-refabricated.overworld_matter": "Matéria Mundana",
   "item.dml-refabricated.hellish_matter": "Matéria Infernal",
   "item.dml-refabricated.extraterrestrial_matter": "Matéria Extraterrestre",
@@ -12,6 +13,7 @@
   "tooltip.dml-refabricated.matter.5": "Experiência por item: ",
   "tooltip.dml-refabricated.data_model.1": "Custo de Simulação: ",
   "tooltip.dml-refabricated.data_model.3": "Tipo: ",
+  "tooltip.dml-refabricated.data_model.5": "Contém dados simulados",
   "text.dml-refabricated.simulation_chamber.iterations": "Iterações: %s",
   "text.dml-refabricated.simulation_chamber.pristine_chance": "Chances de Matéria Pura: %d",
   "text.dml-refabricated.simulation_chamber.insert_data_model.1": "Insira um Modelo de Dados",

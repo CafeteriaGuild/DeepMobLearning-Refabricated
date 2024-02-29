@@ -31,15 +31,7 @@ class SimulationChamber {
     var superiorTierPristineChance = 24
     var selfAwareTierPristineChance = 42
 
-    var overworldEnergyCost = 100
-    var zombieEnergyCost = 300
-    var skeletonEnergyCost = 80
-    var slimyEnergyCost = 160
-    var illagerEnergyCost = 412
-    var oceanEnergyCost = 160
-    var ghostEnergyCost = 372
-    var netherEnergyCost = 300
-    var endEnergyCost = 512
+    var energyCostMultiplier = 0.25F // divide model's energy value by 4
 
     var dataBonus = 1
 }

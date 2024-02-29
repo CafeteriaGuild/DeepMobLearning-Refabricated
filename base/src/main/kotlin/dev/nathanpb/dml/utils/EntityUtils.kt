@@ -20,6 +20,7 @@
 package dev.nathanpb.dml.utils
 
 import dev.nathanpb.dml.baseConfig
+import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.mixin.LootTableInvoker
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.damage.DamageSource
@@ -29,6 +30,8 @@ import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.loot.context.LootContextTypes
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.world.ServerWorld
 
 fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEntity, source: DamageSource): List<ItemStack> {
@@ -52,4 +55,8 @@ fun EntityType<*>.simulateLootDroppedStacks(world: ServerWorld, player: PlayerEn
     lootList?.removeIf { stack: ItemStack -> !stack.isStackable && world.random.nextDouble() < baseConfig.machines.lootFabricator.unstackableNullificationChance }
 
     return lootList ?: emptyList()
+}
+
+fun initTag(id: String): TagKey<EntityType<*>> {
+    return TagKey.of(RegistryKeys.ENTITY_TYPE, identifier(id))
 }
