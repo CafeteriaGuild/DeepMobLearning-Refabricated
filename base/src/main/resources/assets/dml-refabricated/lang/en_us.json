@@ -32,6 +32,7 @@
   "item.dml-refabricated.pristine_matter_ocean": "Poseidon Pristine Matter",
 
   "item.dml-refabricated.emeritus_hat": "Emeritus Hat",
+  "item.dml-refabricated.energy_octahedron": "Energy Octahedron",
   "item.dml-refabricated.physically_condensed_matrix_fragment": "Physically-Condensed Matrix Fragment",
   "item.dml-refabricated.glitch_ingot": "Glitch Ingot",
 
@@ -41,6 +42,7 @@
   "item.dml-refabricated.glitch_upgrade_smithing_template.ingredients": "Netherite Ingot",
   "item.dml-refabricated.glitch_upgrade_smithing_template.base_slot_description": "Add netherite armor",
   "item.dml-refabricated.glitch_upgrade_smithing_template.additions_slot_description": "Add Glitch Ingot",
+  "item.dml-refabricated.glitch_sword": "Glitch Sword",
 
   "tooltip.dml-refabricated.distribute_energy": "Distribute Energy: ",
   "tooltip.dml-refabricated.parenthesis": "(%s)",
@@ -91,7 +93,19 @@
   "bar.dml-refabricated.trial_success": "Trial Succeeded",
   "bar.dml-refabricated.trial_fail": "Trial Failed",
   "bar.dml-refabricated.trial_fail.timeout": "Trial Failed: Time is Out!",
+
+  "block.dml-refabricated.glitched_tile": "Glitched Tile",
+  "block.dml-refabricated.fading_glitched_tile": "Fading Glitched Tile",
+  "block.dml-refabricated.glitched_stairs": "Glitched Stairs",
+  "block.dml-refabricated.glitched_slab": "Glitched Slab",
+  "block.dml-refabricated.glitched_wall": "Glitched Wall",
+  "block.dml-refabricated.disruptions_core": "Disruption's Core",
+
   "block.dml-refabricated.trial_keystone": "Trial Keystone",
+
+  "block.dml-refabricated.data_synthesizer": "Data Synthesizer",
+  "text.dml-refabricated.simulated_data.warning": "Simulated data cannot be synthesized!",
+
   "block.dml-refabricated.loot_fabricator": "Loot Fabricator",
   "block.dml-refabricated.cafeteria": "Cafeteria",
   "text.dml-refabricated.energy": "Energy",

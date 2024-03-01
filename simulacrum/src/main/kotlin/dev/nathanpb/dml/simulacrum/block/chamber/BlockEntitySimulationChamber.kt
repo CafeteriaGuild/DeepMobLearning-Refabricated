@@ -81,7 +81,11 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         byproductSuccess = compound.getBoolean("byproductSuccess")
         isCrafting = compound.getBoolean("isCrafting")
         percentDone = compound.getInt("percentDone")
-        currentDataModelType = enumValueOf<EntityCategory>(compound.getString("currentDataModelType"))
+
+        val currentDataModelType = compound.getString("currentDataModelType")
+        if(currentDataModelType != null) {
+            this.currentDataModelType = enumValueOf<EntityCategory>(currentDataModelType)
+        }
         Inventories.readNbt(compound, inventory)
     }
 
@@ -91,7 +95,9 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         compound.putBoolean("byproductSuccess", byproductSuccess)
         compound.putBoolean("isCrafting", isCrafting)
         compound.putInt("percentDone", percentDone)
-        compound.putString("currentDataModelType", currentDataModelType?.toString()?.uppercase())
+        if(currentDataModelType != null) {
+            compound.putString("currentDataModelType", currentDataModelType!!.toString().uppercase())
+        }
         Inventories.writeNbt(compound, inventory)
     }
 

@@ -20,8 +20,8 @@
 package dev.nathanpb.dml.block
 
 import dev.nathanpb.dml.MOD_ID
-import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.baseConfig
+import dev.nathanpb.dml.blockEntity.BlockEntityTrialKeystone
 import dev.nathanpb.dml.data.trialKeyData
 import dev.nathanpb.dml.item.ItemTrialKey
 import dev.nathanpb.dml.recipe.TrialKeystoneRecipe
@@ -30,7 +30,10 @@ import dev.nathanpb.dml.trial.TrialKeystoneWrongTerrainException
 import dev.nathanpb.dml.utils.RenderUtils
 import dev.nathanpb.dml.utils.takeOrNull
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
-import net.minecraft.block.*
+import net.minecraft.block.Block
+import net.minecraft.block.BlockEntityProvider
+import net.minecraft.block.BlockState
+import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
@@ -50,8 +53,7 @@ import net.minecraft.world.World
 
 class BlockTrialKeystone : Block(
     FabricBlockSettings.create()
-        .hardness(4F)
-        .resistance(3000F)
+        .strength(10F, 12F)
 ), BlockEntityProvider {
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {

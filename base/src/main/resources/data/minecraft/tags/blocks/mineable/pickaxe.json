@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "dml-refabricated:trial_keystone",
+    "dml-refabricated:data_synthesizer",
     "dml-refabricated:loot_fabricator",
     "dml-refabricated:glitched_tile",
     "dml-refabricated:glitched_stairs",

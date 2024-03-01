@@ -44,8 +44,7 @@ import net.minecraft.world.WorldAccess
 
 class BlockLootFabricator : HorizontalFacingBlock (
     FabricBlockSettings.create()
-        .hardness(4F)
-        .resistance(3000F)
+        .strength(5F, 6F)
 ), InventoryProvider, BlockEntityProvider {
 
     init {

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#B#",
+    "#P#",
+    "#D#"
+  ],
+  "key": {
+    "#": {
+      "item": "dml-refabricated:soot_plate"
+    },
+    "B": {
+      "item": "dml-refabricated:data_model"
+    },
+    "P": {
+      "item": "dml-refabricated:machine_casing"
+    },
+    "D": {
+      "item": "dml-refabricated:energy_octahedron"
+    }
+  },
+  "result": {
+    "item": "dml-refabricated:data_synthesizer",
+    "count": 1
+  }
+}
