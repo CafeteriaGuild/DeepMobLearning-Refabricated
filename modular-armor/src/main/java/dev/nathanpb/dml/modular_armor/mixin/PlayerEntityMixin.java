@@ -20,9 +20,7 @@ package dev.nathanpb.dml.modular_armor.mixin;
  */
 
 import dev.nathanpb.dml.DeepMobLearningKt;
-import dev.nathanpb.dml.modular_armor.accessor.IFlightBurnoutManagerAccessor;
 import dev.nathanpb.dml.modular_armor.accessor.IUndyingCooldown;
-import dev.nathanpb.dml.modular_armor.cooldown.FlightBurnoutManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
@@ -32,18 +30,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin implements IFlightBurnoutManagerAccessor, IUndyingCooldown {
+public class PlayerEntityMixin implements IUndyingCooldown {
 
-    private FlightBurnoutManager dmlRefFlightManager;
     private Long dmlRefUndyingLastUsage;
 
-    @Override
-    public FlightBurnoutManager getDmlFlightBurnoutManager() {
-        if (dmlRefFlightManager == null) {
-            dmlRefFlightManager = new FlightBurnoutManager((PlayerEntity) (Object) this);
-        }
-        return dmlRefFlightManager;
-    }
 
     @Override
     public @Nullable Long getDmlRefUndyingLastUsage() {

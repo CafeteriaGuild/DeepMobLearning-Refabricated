@@ -50,7 +50,6 @@ class GlitchArmor {
     var allowEnergyOutput = false
 
     var soulVisionRange = 12
-    var maxFlightTicksPerLevel = 30 * 20
     var undyingCooldownTime = 36000
 
     val costs = GlitchArmorDataConsume()
@@ -75,7 +74,7 @@ class GlitchArmorDataConsume {
     var teleports = 25L
     var soulVision = 16L
     var nightVision = 8L
-    var fly = 50L
+    var fly = 20L
     var underwaterHaste = 10L
     var depthStrider = 15L
     var waterBreathing = 10L

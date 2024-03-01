@@ -20,7 +20,6 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.event.VanillaEvents
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.BlockMatterCondenser.Companion.BLOCK_MATTER_CONDENSER
 import dev.nathanpb.dml.modular_armor.ItemPristineEnergyCube.Companion.ITEM_PRISTINE_ENERGY_CUBE
@@ -46,14 +45,9 @@ fun init() {
     MatterCondenserScreenHandler.INSTANCE // force evaluate to register
     ModularArmorScreenHandler.INSTANCE // force evaluate to register
 
-    VanillaEvents.PlayerEntityTickEvent.register {
-        it.flightBurnoutManager.tick()
-    }
-
     ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
         it.addAfter(ItemStack(BLOCK_MATTER_CONDENSER), ITEM_PRISTINE_ENERGY_CUBE)
     }
-
 }
 
 val modularArmorConfig: ModularArmorConfig = initConfig("modular-armor", ModularArmorConfig(), ModularArmorConfig::class.java)

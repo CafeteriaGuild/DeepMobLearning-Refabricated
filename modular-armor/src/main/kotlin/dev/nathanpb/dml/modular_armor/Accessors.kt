@@ -20,11 +20,7 @@
 
 package dev.nathanpb.dml.modular_armor
 
-import dev.nathanpb.dml.modular_armor.cooldown.FlightBurnoutManager
 import net.minecraft.entity.player.PlayerEntity
-
-val PlayerEntity.flightBurnoutManager: FlightBurnoutManager
-    get() = (this as dev.nathanpb.dml.modular_armor.accessor.IFlightBurnoutManagerAccessor).dmlFlightBurnoutManager
 
 var PlayerEntity.undyingLastUsage
     get() = (this as dev.nathanpb.dml.modular_armor.accessor.IUndyingCooldown).dmlRefUndyingLastUsage

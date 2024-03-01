@@ -37,7 +37,6 @@ package dev.nathanpb.dml.modular_armor.mixin;/*
  *  along with Deep Mob Learning: Refabricated.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import dev.nathanpb.dml.modular_armor.hud.FlightBurnoutHud;
 import dev.nathanpb.dml.modular_armor.hud.UndyingCooldownHud;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -51,7 +50,6 @@ public class InGameHudMixin {
 
     @Inject(at = @At("RETURN"), method = "renderStatusBars")
     public void renderStatusBar(DrawContext ctx, CallbackInfo ci){
-        FlightBurnoutHud.Companion.getINSTANCE().render(ctx);
         UndyingCooldownHud.Companion.getINSTANCE().render(ctx);
     }
 }

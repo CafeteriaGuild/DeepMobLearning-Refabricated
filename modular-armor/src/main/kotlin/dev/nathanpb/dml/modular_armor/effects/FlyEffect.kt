@@ -28,7 +28,6 @@ import dev.nathanpb.dml.modular_armor.core.EffectStackOption
 import dev.nathanpb.dml.modular_armor.core.ModularEffectContext
 import dev.nathanpb.dml.modular_armor.core.ModularEffectTriggerPayload
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
-import dev.nathanpb.dml.modular_armor.flightBurnoutManager
 import dev.nathanpb.dml.modular_armor.modularArmorConfig
 import io.github.ladysnake.pal.VanillaAbilities
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -65,9 +64,5 @@ class FlyEffect : AbilityBasedEffect(
 
     override fun acceptTier(tier: DataModelTier) = tier.isMaxTier()
     override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
-
-    override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
-        return super.canApply(context, payload) && context.player.flightBurnoutManager.canFly
-    }
 
 }
