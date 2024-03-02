@@ -23,6 +23,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.baseConfig
 import dev.nathanpb.dml.enums.EntityCategory
 import dev.nathanpb.dml.inventory.LootFabricatorInventory
+import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.recipe.RECIPE_LOOT_FABRICATOR
 import dev.nathanpb.dml.utils.*
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
@@ -89,6 +90,14 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
     }
     
     companion object {
+        private fun calculateEnergyCost(pristineMatter: ItemStack): Long {
+            if(!baseConfig.machines.lootFabricator.isEnergyCostScaledToMatterType) {
+                return baseConfig.machines.lootFabricator.fixedCost
+            }
+            if(pristineMatter.item !is ItemPristineMatter) throw IllegalStateException("Loot Fabricator has non-pristine matter item at its input!")
+            return ((pristineMatter.item as ItemPristineMatter).entityCategory.energyValue.toFloat() * baseConfig.machines.lootFabricator.energyCostMultiplier).toLong()
+        }
+
         val ticker = BlockEntityTicker<BlockEntityLootFabricator> { world, _, _, blockEntity ->
 
             moveToStorage(blockEntity.energyStorage, blockEntity.inventory, LootFabricatorInventory.ENERGY_INPUT)
@@ -100,7 +109,9 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
                 val recipe = world.recipeManager.getFirstMatch(RECIPE_LOOT_FABRICATOR, blockEntity.inventory, world).orElse(null)
                     ?: return@BlockEntityTicker blockEntity.resetProgress()
 
-                if(blockEntity.energyStorage.amount >= 256) {
+                val energyCost = calculateEnergyCost(pristineMatterStack)
+
+                if(blockEntity.energyStorage.amount >= energyCost) {
                     if(blockEntity.progress >= blockEntity.maxProgress) {
                         val generatedLoot = blockEntity.generateLoot((world as ServerWorld), recipe.category).also {
                             // O(n²) goes brrrr
@@ -120,7 +131,7 @@ class BlockEntityLootFabricator(pos: BlockPos, state: BlockState) :
                         pristineMatterStack.decrement(1)
                         blockEntity.dumpInternalInventory()
 
-                        blockEntity.energyStorage.amount -= 256
+                        blockEntity.energyStorage.amount -= energyCost
                         blockEntity.propertyDelegate[2] = blockEntity.energyStorage.amount.toInt()
                         blockEntity.markDirty()
                     } else {

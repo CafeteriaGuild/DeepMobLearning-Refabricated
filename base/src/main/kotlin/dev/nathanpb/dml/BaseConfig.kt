@@ -99,18 +99,18 @@ class Machines {
 }
 
 class DataSynthesizer {
-    var overworldDataEnergyValue = 400
-    var zombieDataEnergyValue = 1200
-    var skeletonDataEnergyValue = 320
-    var slimyDataEnergyValue = 640
-    var illagerDataEnergyValue = 1648
-    var oceanDataEnergyValue = 640
-    var ghostDataEnergyValue = 1488
-    var netherDataEnergyValue = 1200
-    var endDataEnergyValue = 2048
+    var overworldDataEnergyValue = 400L
+    var zombieDataEnergyValue = 1200L
+    var skeletonDataEnergyValue = 320L
+    var slimyDataEnergyValue = 640L
+    var illagerDataEnergyValue = 1648L
+    var oceanDataEnergyValue = 640L
+    var ghostDataEnergyValue = 1488L
+    var netherDataEnergyValue = 1200L
+    var endDataEnergyValue = 2048L
 
-    var energyCapacity = 196608L
-    var energyIO = 8192L
+    var energyCapacity = 200000L
+    var energyIO = 10000L
 }
 
 class LootFabricator {
@@ -126,7 +126,12 @@ class LootFabricator {
     var unstackableNullificationChance = .75F
 
     var processTime = 200
-    var energyCapacity = 16384L
+
+    var isEnergyCostScaledToMatterType = false
+    var fixedCost = 75L
+    var energyCostMultiplier = 0.125F // divide by 8
+
+    var energyCapacity = 16500L
     var energyInput = 8192L
 }
 
@@ -137,13 +142,13 @@ class Misc {
     var energyOctahedron = EnergyOctahedron()
 }
 
-class GlitchSword { // FIXME balance accordingly to Data Synthesizer
-    var energyCapacity = 12500L
-    var energyInput = 2048L
-    var usageCost = 200L
+class GlitchSword {
+    var energyCapacity = 101550L
+    var energyInput = 5000L
+    var usageCost = 50L
 }
 
-class EnergyOctahedron { // FIXME balance accordingly to Data Synthesizer
-    var energyCapacity = 32768L
-    var energyIO = 4096L
+class EnergyOctahedron {
+    var energyCapacity = 50000L
+    var energyIO = 5000L
 }

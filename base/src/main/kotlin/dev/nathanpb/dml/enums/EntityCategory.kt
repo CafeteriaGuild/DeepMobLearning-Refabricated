@@ -31,7 +31,7 @@ import net.minecraft.text.Text
 
 enum class EntityCategory(
     val tagKey: TagKey<EntityType<*>>,
-    val energyValue: Int,
+    val energyValue: Long,
     val exchangeRatio: Int,
     val matterType: MatterType, /** simulacrum only! */
     private val itemForRendering: ()->Item = ::ITEM_DATA_MODEL // TODO show category stuff on REI?
