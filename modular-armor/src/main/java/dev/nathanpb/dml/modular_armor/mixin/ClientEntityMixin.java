@@ -25,6 +25,7 @@ import dev.nathanpb.dml.modular_armor.InitKt;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,12 +42,13 @@ public class ClientEntityMixin {
     @Inject(at = @At("RETURN"), method = "isGlowing", cancellable = true)
     public void isGlowing(CallbackInfoReturnable<Boolean> cir) {
         if (this.world.isClient && !cir.getReturnValue()) {
-            if ((Object) this instanceof LivingEntity dis) {
+            if((Object) this instanceof LivingEntity dis) {
                 PlayerEntity player = MinecraftClient.getInstance().player;
-                if (player != null && dis != player && player.hasStatusEffect(EntityStatusEffectsKt.getSOUL_VISION_EFFECT())) {
-                    if (player.distanceTo(dis) <= InitKt.getModularArmorConfig().getGlitchArmor().getSoulVisionRange()) {
+                if(player != null && dis != player && player.hasStatusEffect(EntityStatusEffectsKt.getSOUL_VISION_EFFECT())) {
+                    StatusEffectInstance soulVision = player.getActiveStatusEffects().get(EntityStatusEffectsKt.getSOUL_VISION_EFFECT());
+
+                    if(player.distanceTo(dis) <= ((soulVision.getAmplifier() + 1) * InitKt.getModularArmorConfig().getGlitchArmor().getSoulVisionRangeMultiplier())) {
                         cir.setReturnValue(true);
-                        cir.cancel();
                     }
                 }
             }

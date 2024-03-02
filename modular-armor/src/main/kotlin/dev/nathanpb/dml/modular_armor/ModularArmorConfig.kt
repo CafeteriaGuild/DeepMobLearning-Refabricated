@@ -49,7 +49,7 @@ class GlitchArmor {
     var energyIOMultiplier = 625L
     var allowEnergyOutput = false
 
-    var soulVisionRange = 12
+    var soulVisionRangeMultiplier = 6
     var undyingCooldownTime = 36000
 
     val costs = GlitchArmorDataConsume()

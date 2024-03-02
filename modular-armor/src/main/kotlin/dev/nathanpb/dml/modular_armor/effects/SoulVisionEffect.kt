@@ -42,6 +42,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
@@ -65,13 +66,13 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
             })
         }
 
-        ModularArmorEvents.SoulVisionEffectRequestedEvent.register { player ->
+        ModularArmorEvents.SoulVisionEffectRequestedEvent.register { player: PlayerEntity ->
             if (!player.world.isClient && !player.hasStatusEffect(SOUL_VISION_EFFECT)) {
                 ModularEffectContext.from(player)
-                    .run(EffectStackOption.RANDOMIZE.apply)
+                    .run(EffectStackOption.PRIORITIZE_GREATER.apply)
                     .any { context ->
                         attemptToApply(context, ModularEffectTriggerPayload.EMPTY) { _, _ ->
-                            player.addStatusEffect(StatusEffectInstance(SOUL_VISION_EFFECT, 16*20))
+                            player.addStatusEffect(StatusEffectInstance(SOUL_VISION_EFFECT, 16*20, context.tier.ordinal))
                         }.result == ActionResult.SUCCESS
                     }
             }
@@ -79,8 +80,9 @@ class SoulVisionEffect : ModularEffect<ModularEffectTriggerPayload>(
     }
 
     override fun acceptTier(tier: DataModelTier) = true
-    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
-    // FIXME should be scaled
+    override fun minimumTier() = DataModelTier.FAULTY
+    override fun isScaled() = true
+    override fun getEnergyConsumptionType() = EffectInfo.EnergyConsumptionType.USE
 
     override fun createEntityAttributeModifier(armor: ModularArmorData): EntityAttributeModifier {
         return EntityAttributeModifier(id.toString(), 1.0, EntityAttributeModifier.Operation.ADDITION)
