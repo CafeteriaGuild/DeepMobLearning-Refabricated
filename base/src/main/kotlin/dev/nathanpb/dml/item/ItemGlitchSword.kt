@@ -37,7 +37,9 @@ import net.minecraft.entity.damage.DamageTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
+import net.minecraft.item.ToolMaterial
 import net.minecraft.item.ToolMaterials
+import net.minecraft.recipe.Ingredient
 import net.minecraft.text.Text
 import net.minecraft.util.Rarity
 import net.minecraft.world.World
@@ -45,7 +47,7 @@ import team.reborn.energy.api.base.SimpleEnergyItem
 
 
 class ItemGlitchSword : SwordItem(
-        ToolMaterials.NETHERITE, // FIXME use unique ToolMaterial
+        this,
         3,
         -2.4f,
         FabricItemSettings().fireproof()
@@ -62,24 +64,21 @@ class ItemGlitchSword : SwordItem(
 
     override fun postHit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         if(getStoredEnergy(stack) >= usageCost) {
-            tryUseEnergy(stack, usageCost)
+            return tryUseEnergy(stack, usageCost)
         }
-        return true
+        return false
     }
 
     override fun getEnergyCapacity(stack: ItemStack) = baseConfig.misc.glitchSword.energyCapacity
-
     override fun getEnergyMaxInput(stack: ItemStack) = baseConfig.misc.glitchSword.energyInput
-
     override fun getEnergyMaxOutput(stack: ItemStack) = 0L
 
-    override fun isEnchantable(stack: ItemStack) = false
-
     override fun getItemBarStep(stack: ItemStack): Int = getEnergyBarStep(stack)
-
     override fun getItemBarColor(stack: ItemStack) = RenderUtils.ENERGY_COLOR
-
     override fun isItemBarVisible(stack: ItemStack) = true
+
+    override fun isDamageable(): Boolean = false
+    override fun isEnchantable(stack: ItemStack) = false
 
     override fun getRarity(stack: ItemStack) = Rarity.EPIC
 
@@ -87,7 +86,7 @@ class ItemGlitchSword : SwordItem(
         tooltip.add(getEnergyTooltipText(stack))
     }
 
-    companion object {
+    companion object : ToolMaterial {
 
         fun getIncreasedDamage(source: DamageSource, amount: Float): Float {
             var finalAmount = amount
@@ -99,6 +98,13 @@ class ItemGlitchSword : SwordItem(
             }
             return finalAmount
         }
+
+        override fun getDurability(): Int = ToolMaterials.NETHERITE.durability
+        override fun getAttackDamage(): Float = ToolMaterials.NETHERITE.attackDamage
+        override fun getRepairIngredient(): Ingredient = Ingredient.EMPTY
+        override fun getEnchantability(): Int = 0
+        override fun getMiningSpeedMultiplier(): Float = 0F
+        override fun getMiningLevel(): Int = 0
     }
 
 }
