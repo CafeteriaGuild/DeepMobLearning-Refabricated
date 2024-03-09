@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"parent": "block/block",
 	"textures": {
 		"1": "dml-refabricated:block/trial_keystone_side",
 		"2": "dml-refabricated:block/trial_keystone_container_top",
@@ -319,20 +320,5 @@
 				"down": {"uv": [10, 0, 11, 14], "rotation": 90, "texture": "#3"}
 			}
 		}
-	],
-	"display": {
-		"thirdperson_righthand": {
-			"scale": [0.5, 0.5, 0.5]
-		},
-		"thirdperson_lefthand": {
-			"scale": [0.5, 0.5, 0.5]
-		},
-		"ground": {
-			"scale": [0.5, 0.5, 0.5]
-		},
-		"gui": {
-			"rotation": [20, 50, 0],
-			"scale": [0.5, 0.5, 0.5]
-		}
-	}
+	]
 }
