@@ -1,0 +1,11 @@
+{
+  "type": "dml-refabricated:crushing",
+  "input": {
+    "item": "dml-refabricated:physically_condensed_matrix_fragment"
+  },
+  "block": "minecraft:redstone_block",
+  "output": {
+    "item": "dml-refabricated:pristine_energy_cube",
+    "count": 1
+  }
+}
