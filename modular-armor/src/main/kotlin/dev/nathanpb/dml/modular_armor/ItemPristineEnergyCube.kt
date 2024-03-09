@@ -3,10 +3,10 @@ package dev.nathanpb.dml.modular_armor
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.battery.AbstractItemBattery
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
-import dev.nathanpb.dml.modular_armor.BlockMatterCondenser.Companion.BLOCK_MATTER_CONDENSER
 import dev.nathanpb.dml.utils.ITEM_PRISTINE
 import dev.nathanpb.dml.utils.RenderUtils.Companion.ALT_STYLE
 import dev.nathanpb.dml.utils.RenderUtils.Companion.STYLE
+import dev.nathanpb.dml.utils.getEmptyAndFullCapacityEnergyItem
 import dev.nathanpb.dml.utils.getEnergyStorage
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemStack
@@ -29,7 +29,9 @@ class ItemPristineEnergyCube : AbstractItemBattery() {
                 return@registerForItems EnergyStorage.EMPTY
             }, ITEM_PRISTINE_ENERGY_CUBE)
             ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
-                it.addAfter(ItemStack(BLOCK_MATTER_CONDENSER), ITEM_PRISTINE_ENERGY_CUBE)
+                getEmptyAndFullCapacityEnergyItem(ITEM_PRISTINE_ENERGY_CUBE).forEach { stack ->
+                    it.addAfter(ItemStack(BlockMatterCondenser.BLOCK_MATTER_CONDENSER), stack)
+                }
             }
 
         }

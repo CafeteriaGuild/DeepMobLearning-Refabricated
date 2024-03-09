@@ -25,7 +25,7 @@ import com.google.common.collect.MultimapBuilder
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.data.DataModelData
 import dev.nathanpb.dml.identifier
-import dev.nathanpb.dml.item.ITEM_GLITCH_INGOT
+import dev.nathanpb.dml.item.ITEM_GLITCH_SWORD
 import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.core.ModularEffectRegistry
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
@@ -82,7 +82,9 @@ class ItemModularGlitchArmor(type: Type, settings: Settings) : ArmorItem(
                 ITEM_PRISTINE.registerForItems(::getEnergyStorage, item)
 
                 ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
-                    it.addAfter(ItemStack(ITEM_GLITCH_INGOT), item)
+                    getEmptyAndFullCapacityEnergyItem(item).forEach { stack ->
+                        it.addAfter(getFullCapacityStack(ITEM_GLITCH_SWORD), stack)
+                    }
                 }
             }
 

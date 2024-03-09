@@ -33,6 +33,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
+import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Style
 import net.minecraft.text.Text
@@ -43,6 +44,7 @@ import net.minecraft.world.World
 import team.reborn.energy.api.EnergyStorage
 import team.reborn.energy.api.EnergyStorageUtil
 import team.reborn.energy.api.base.SimpleEnergyItem
+import team.reborn.energy.api.base.SimpleEnergyItem.ENERGY_KEY
 import team.reborn.energy.api.base.SimpleEnergyStorage
 import java.util.function.Predicate
 import kotlin.math.roundToInt
@@ -301,4 +303,16 @@ fun getShortEnergyKey(isPristine: Boolean): String {
     } else {
         "text.dml-refabricated.energy.short"
     }
+}
+
+
+fun getEmptyAndFullCapacityEnergyItem(item: ItemConvertible): List<ItemStack> {
+    return listOf(getFullCapacityStack(item), ItemStack(item))
+}
+
+fun getFullCapacityStack(item: ItemConvertible): ItemStack {
+    if(item !is SimpleEnergyItem) throw IllegalStateException("Item must implement SimpleEnergyItem!")
+    val stack = ItemStack(item)
+    stack.orCreateNbt.putLong(ENERGY_KEY, (item as SimpleEnergyItem).getEnergyCapacity(stack))
+    return stack
 }

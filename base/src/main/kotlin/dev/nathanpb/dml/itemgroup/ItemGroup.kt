@@ -4,6 +4,7 @@ import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.block.*
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.*
+import dev.nathanpb.dml.utils.getEmptyAndFullCapacityEnergyItem
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.ItemGroup
@@ -43,14 +44,19 @@ fun registerItemGroup() {
         }
 
         it.addBefore(ITEM_TRIAL_KEY, BLOCK_DATA_SYNTHESIZER)
-        it.addAfter(BLOCK_DATA_SYNTHESIZER, ITEM_ENERGY_OCTAHEDRON)
+        getEmptyAndFullCapacityEnergyItem(ITEM_ENERGY_OCTAHEDRON).forEach { stack ->
+            it.addAfter(BLOCK_DATA_SYNTHESIZER, stack)
+        }
 
         it.addAfter(ITEM_TRIAL_KEY, BLOCK_TRIAL_KEYSTONE)
         it.addBefore(ITEM_PRISTINE_MATTER_OVERWORLD, BLOCK_LOOT_FABRICATOR)
 
 
         it.addAfter(ItemStack(ITEM_GLITCH_INGOT), ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE)
-        it.addAfter(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE, ITEM_GLITCH_SWORD)
+
+        getEmptyAndFullCapacityEnergyItem(ITEM_GLITCH_SWORD).forEach { stack ->
+            it.addAfter(ITEM_GLITCH_UPGRADE_SMITHING_TEMPLATE, stack)
+        }
     }
 
 }

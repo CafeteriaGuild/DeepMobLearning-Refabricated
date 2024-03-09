@@ -25,6 +25,7 @@ import dev.nathanpb.dml.itemgroup.ITEM_GROUP_KEY
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor.Companion.GLITCH_BOOTS
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandler
 import dev.nathanpb.dml.modular_armor.screen.MatterCondenserScreenHandlerFactory
+import dev.nathanpb.dml.utils.getFullCapacityStack
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -36,7 +37,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemPlacementContext
-import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.screen.ScreenHandler
@@ -68,7 +68,7 @@ class BlockMatterCondenser : HorizontalFacingBlock(
             Registry.register(Registries.ITEM, IDENTIFIER, BlockItem(BLOCK_MATTER_CONDENSER, FabricItemSettings().rarity(Rarity.RARE)))
 
             ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP_KEY).register {
-                it.addAfter(ItemStack(GLITCH_BOOTS), BLOCK_MATTER_CONDENSER)
+                it.addAfter(getFullCapacityStack(GLITCH_BOOTS), BLOCK_MATTER_CONDENSER)
             }
         }
     }
