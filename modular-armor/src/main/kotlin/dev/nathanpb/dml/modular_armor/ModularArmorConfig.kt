@@ -90,8 +90,8 @@ class Misc {
 }
 
 
-class PristineEnergyCube { // FIXME balance accordingly to Matter Condenser
+class PristineEnergyCube {
 
-    var energyCapacity = 32768L
-    var energyIO = 4096L
+    var energyCapacity = 250000L
+    var energyIO = 25000L
 }
