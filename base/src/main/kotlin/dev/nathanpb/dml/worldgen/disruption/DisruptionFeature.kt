@@ -3,6 +3,7 @@ package dev.nathanpb.dml.worldgen.disruption
 import com.mojang.serialization.Codec
 import dev.nathanpb.dml.block.BLOCK_DISRUPTIONS_CORE
 import dev.nathanpb.dml.block.BLOCK_FADING_GLITCHED_TILE
+import dev.nathanpb.dml.block.BlockDisruptionsCore
 import dev.nathanpb.dml.blockEntity.BlockEntityFadingGlitchedTile
 import net.minecraft.block.Block
 import net.minecraft.block.entity.LootableContainerBlockEntity
@@ -72,7 +73,7 @@ class DisruptionFeature(
 
         val hasGenerated = i > 0
         if(hasGenerated) {
-            world.setBlockState(origin, BLOCK_DISRUPTIONS_CORE.defaultState, Block.NOTIFY_LISTENERS)
+            world.setBlockState(origin, BLOCK_DISRUPTIONS_CORE.defaultState.with(BlockDisruptionsCore.FADING, true), Block.NOTIFY_LISTENERS)
             LootableContainerBlockEntity.setLootTable(world, random, origin, LootTables.WOODLAND_MANSION_CHEST)
         }
 

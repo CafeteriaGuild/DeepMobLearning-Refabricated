@@ -16,6 +16,8 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.state.StateManager
+import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -28,10 +30,19 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.event.GameEvent
 
-class BlockDisruptionsCore: BlockWithEntity(FabricBlockSettings.copy(Blocks.SHULKER_BOX).luminance { 7 }) {
+class BlockDisruptionsCore: BlockWithEntity(
+    FabricBlockSettings.copy(Blocks.SHULKER_BOX).luminance({ 7 })
+) {
+
+    init {
+        defaultState = getStateManager().defaultState.with(FADING, false)
+    }
+
+    companion object {
+        val FADING = BooleanProperty.of("fading")
+    }
 
     private val shape = createCuboidShape(0.0, 15.0, 0.0, 16.0, 16.0, 16.0)
-
 
     override fun onUse(
         state: BlockState,
@@ -46,15 +57,19 @@ class BlockDisruptionsCore: BlockWithEntity(FabricBlockSettings.copy(Blocks.SHUL
 
         val blockEntity = world.getBlockEntity(pos)
         if(blockEntity is BlockEntityDisruptionsCore) {
-            if(canOpen(state, world, pos, blockEntity)) {
+            if(canOpen(world, pos, blockEntity)) {
                 player.openHandledScreen(DisruptionsCoreScreenHandlerFactory(pos) { syncId, inventory, context ->
                     DisruptionsCoreScreenHandler(syncId, inventory, context)
                 })
 
-                val belowPos = pos.down()
-                if(world.getBlockState(belowPos).isOf(BLOCK_FADING_GLITCHED_TILE)) {
+
+                if(state.get(FADING)) {
                     world.scheduleBlockTick(pos, BLOCK_DISRUPTIONS_CORE, 4*20)
-                    world.scheduleBlockTick(belowPos, BLOCK_FADING_GLITCHED_TILE, 4*20 + 6)
+
+                    val belowPos = pos.down()
+                    if(world.getBlockState(belowPos).isOf(BLOCK_FADING_GLITCHED_TILE)) {
+                        world.scheduleBlockTick(belowPos, BLOCK_FADING_GLITCHED_TILE, 4*20 + 6)
+                    }
                 }
             }
             return ActionResult.CONSUME
@@ -92,7 +107,7 @@ class BlockDisruptionsCore: BlockWithEntity(FabricBlockSettings.copy(Blocks.SHUL
         return BlockRenderType.ENTITYBLOCK_ANIMATED
     }
 
-    private fun canOpen(state: BlockState, world: World, pos: BlockPos, entity: BlockEntityDisruptionsCore): Boolean {
+    private fun canOpen(world: World, pos: BlockPos, entity: BlockEntityDisruptionsCore): Boolean {
         if(entity.animationStage != BlockEntityDisruptionsCore.AnimationStage.CLOSED) return true
         val box = ShulkerEntity.calculateBoundingBox(Direction.UP, 0.0f, 0.5f).offset(pos).contract(1.0E-6)
         return world.isSpaceEmpty(box)
@@ -144,6 +159,10 @@ class BlockDisruptionsCore: BlockWithEntity(FabricBlockSettings.copy(Blocks.SHUL
         return if(blockEntity is BlockEntityDisruptionsCore) {
             VoxelShapes.cuboid(blockEntity.getBoundingBox())
         } else VoxelShapes.fullCube()
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(FADING)
     }
 
     override fun hasComparatorOutput(state: BlockState?): Boolean {
