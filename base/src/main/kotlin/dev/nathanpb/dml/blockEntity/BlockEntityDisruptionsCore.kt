@@ -174,7 +174,7 @@ class BlockEntityDisruptionsCore(
     }
 
     override fun getContainerName(): Text {
-        return Text.translatable("container.shulkerBox")
+        return Text.empty()
     }
 
     override fun readNbt(nbt: NbtCompound) {
@@ -204,15 +204,10 @@ class BlockEntityDisruptionsCore(
         inventory = list
     }
 
-
     fun getAnimationProgress(delta: Float): Float {
         return MathHelper.lerp(delta, prevAnimationProgress, animationProgress)
     }
 
-
-
-
-    // FIXME
     override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
         return DisruptionsCoreScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos))
     }

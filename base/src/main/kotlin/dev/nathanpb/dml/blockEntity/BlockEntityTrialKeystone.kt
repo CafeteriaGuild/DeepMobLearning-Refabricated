@@ -44,7 +44,6 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
@@ -208,7 +207,7 @@ class BlockEntityTrialKeystone(pos: BlockPos, state: BlockState) :
                 (0 .. min(wrongTerrain.size / 4, 1)).let { _ ->
                     wrongTerrain.random().let {
                         world?.addParticle(
-                            ParticleTypes.FLAME,
+                            RenderUtils.GLITCH_PARTICLE,
                             true,
                             it.x + Random.nextDouble() - .1,
                             it.y + 1.0,

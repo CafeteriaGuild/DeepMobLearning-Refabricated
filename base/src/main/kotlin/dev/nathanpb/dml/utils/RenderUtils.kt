@@ -39,7 +39,7 @@ import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
-import org.joml.Vector3f
+import net.minecraft.util.math.Vec3d
 import java.text.NumberFormat
 import java.util.*
 
@@ -84,8 +84,8 @@ class RenderUtils {
         val ENERGY_STYLE: Style = Style.EMPTY.withColor(ENERGY_COLOR)
 
         /* Particles */
-        val GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vector3f(4F, 252F, 196F), 1F)
-        val ALT_GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vector3f(98F, 216F, 255F), 1F)
+        val GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vec3d.unpackRgb(TITLE_COLOR).toVector3f(), 1F)
+        val ALT_GLITCH_PARTICLE: DustParticleEffect = DustParticleEffect(Vec3d.unpackRgb(ALT_TITLE_COLOR).toVector3f(), 1F)
 
     }
 }
