@@ -24,7 +24,7 @@ class DisruptionFeature(
     override fun generate(context: FeatureContext<DisruptionFeatureConfig>): Boolean {
         val config = context.config
         val random = context.random
-        val origin = context.origin
+        val origin = context.origin.up()
         val world = context.world
 
 

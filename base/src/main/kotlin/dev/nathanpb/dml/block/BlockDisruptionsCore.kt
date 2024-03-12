@@ -31,7 +31,7 @@ import net.minecraft.world.World
 import net.minecraft.world.event.GameEvent
 
 class BlockDisruptionsCore: BlockWithEntity(
-    FabricBlockSettings.copy(Blocks.SHULKER_BOX).luminance({ 7 })
+    FabricBlockSettings.copy(Blocks.SHULKER_BOX).luminance({ 7 }).dropsNothing()
 ) {
 
     init {

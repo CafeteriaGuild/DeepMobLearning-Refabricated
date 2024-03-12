@@ -1,0 +1,17 @@
+{
+  "values": [
+    "#c:plains",
+    "#c:savanna",
+    "#c:taiga",
+    "#c:forest",
+    "#c:birch_forest",
+    "#c:swamp",
+    "#c:desert",
+    "#c:mountain",
+    "#c:extreme_hills",
+    "#c:windswept",
+    "#c:mesa",
+    "#c:icy",
+    "#c:mushroom"
+  ]
+}
