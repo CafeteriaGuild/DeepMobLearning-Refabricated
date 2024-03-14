@@ -5,9 +5,9 @@ import dev.nathanpb.dml.block.BLOCK_DISRUPTIONS_CORE
 import dev.nathanpb.dml.block.BLOCK_FADING_GLITCHED_TILE
 import dev.nathanpb.dml.block.BlockDisruptionsCore
 import dev.nathanpb.dml.blockEntity.BlockEntityFadingGlitchedTile
+import dev.nathanpb.dml.identifier
 import net.minecraft.block.Block
 import net.minecraft.block.entity.LootableContainerBlockEntity
-import net.minecraft.loot.LootTables
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.BlockPos.Mutable
 import net.minecraft.util.math.Direction
@@ -28,7 +28,7 @@ class DisruptionFeature(
         val world = context.world
 
 
-        var i = 0
+        var hasGeneratedAny = false
         val radius = config.radius.get(random)
 
         val cx: Int = origin.x
@@ -61,23 +61,24 @@ class DisruptionFeature(
                 }
 
                 if(canGenerate) {
-                    pos = verticalOffset(pos, offset)
+                    if(pos != origin) { // block below core can never be offset
+                        pos = verticalOffset(pos, offset)
+                    }
 
                     val blockState = world.getBlockState(pos)
                     world.setBlockState(pos, BLOCK_FADING_GLITCHED_TILE.defaultState, Block.NOTIFY_LISTENERS)
                     (world.getBlockEntity(pos) as? BlockEntityFadingGlitchedTile)?.blockState = blockState
-                    i++
+                    hasGeneratedAny = true
                 }
             }
         }
 
-        val hasGenerated = i > 0
-        if(hasGenerated) {
+        if(hasGeneratedAny) {
             world.setBlockState(origin, BLOCK_DISRUPTIONS_CORE.defaultState.with(BlockDisruptionsCore.FADING, true), Block.NOTIFY_LISTENERS)
-            LootableContainerBlockEntity.setLootTable(world, random, origin, LootTables.WOODLAND_MANSION_CHEST)
+            LootableContainerBlockEntity.setLootTable(world, random, origin, identifier("chests/disruption"))
         }
 
-        return hasGenerated
+        return hasGeneratedAny
     }
 
     private fun testPos(pos: BlockPos, direction: Direction, world: StructureWorldAccess): Boolean {

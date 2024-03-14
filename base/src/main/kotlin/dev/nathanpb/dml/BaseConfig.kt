@@ -140,6 +140,7 @@ class LootFabricator {
 class Misc {
     var glitchSword = GlitchSword()
     var energyOctahedron = EnergyOctahedron()
+    var disruption = Disruption()
 }
 
 class GlitchSword {
@@ -151,4 +152,10 @@ class GlitchSword {
 class EnergyOctahedron {
     var energyCapacity = 50000L
     var energyIO = 5000L
+}
+
+class Disruption {
+    var maxDataModelData = 14
+    var maxPristineMatterStackSize = 3
+    var maxEnergyOctahedronEnergyPercentage = 0.65F
 }
