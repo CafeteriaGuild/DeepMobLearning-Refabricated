@@ -41,8 +41,6 @@ class FeatherFallingEffect : ProtectionLikeEffect(
 
     override fun protectsAgainst(world: World, source: DamageSource) = source.isIn(DamageTypeTags.IS_FALL)
 
-    // FIXME scale protection
-
     override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
     override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
 }

@@ -22,8 +22,8 @@ package dev.nathanpb.dml.compat.rei.category
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.compat.rei.ReiPlugin
 import dev.nathanpb.dml.compat.rei.display.CrushingRecipeDisplay
-import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
 import dev.nathanpb.dml.compat.rei.itemStack
+import dev.nathanpb.dml.compat.rei.widgets.EntityDisplayWidget
 import dev.nathanpb.dml.item.ITEM_SOOT_REDSTONE
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
@@ -69,7 +69,7 @@ class CrushingDisplayCategory: DisplayCategory<CrushingRecipeDisplay> {
             blockSlot,
             Widgets.createSlot(Point(startPoint.x + 80, startPoint.y + 38)).entries(output.flatten())
         ).also { widgets ->
-            MinecraftClient.getInstance().player?.let { player ->
+            MinecraftClient.getInstance().player?.let { player -> // FIXME swing is seen on actual player
                 EntityDisplayWidget(
                     listOf(player),
                     startPoint.x + 24,
