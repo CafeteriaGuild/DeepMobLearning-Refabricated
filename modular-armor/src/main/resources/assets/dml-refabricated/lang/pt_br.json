@@ -78,5 +78,7 @@
     "advancements.dml-refabricated.glitch_armor": "Bugado até o Osso",
     "advancements.dml-refabricated.glitch_armor.description": "Fabrique todas as peças de uma Armadura Bugada.",
     "advancements.dml-refabricated.matter_condenser": "Condensando Matéria",
-    "advancements.dml-refabricated.matter_condenser.description": "Fabrique um Condensador de Matéria."
+    "advancements.dml-refabricated.matter_condenser.description": "Fabrique um Condensador de Matéria.",
+    "advancements.dml-refabricated.pristine_energy_cube": "Bateria de 6 lados",
+    "advancements.dml-refabricated.pristine_energy_cube.description": "Fabrique um Cubo de energia de matéria pura"
 }

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:data_synthesizer"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.data_synthesizer"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.data_synthesizer.description"
+    }
+  },
+  "parent": "dml-refabricated:data_models",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:data_synthesizer"]
+          }
+        ]
+      }
+    }
+  }
+}

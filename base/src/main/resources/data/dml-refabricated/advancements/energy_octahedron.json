@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:energy_octahedron"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.energy_octahedron"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.energy_octahedron.description"
+    }
+  },
+  "parent": "dml-refabricated:data_synthesizer",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:energy_octahedron"]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:glitch_sword"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.glitch_sword"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.glitch_sword.description"
+    }
+  },
+  "parent": "dml-refabricated:glitch_ingot",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:glitch_sword"]
+          }
+        ]
+      }
+    }
+  }
+}

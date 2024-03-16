@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "dml-refabricated:pristine_energy_cube"
+    },
+    "title": {
+      "translate": "advancements.dml-refabricated.pristine_energy_cube"
+    },
+    "description": {
+      "translate": "advancements.dml-refabricated.pristine_energy_cube.description"
+    }
+  },
+  "parent": "dml-refabricated:matter_condenser",
+  "criteria": {
+    "checkInv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["dml-refabricated:pristine_energy_cube"]
+          }
+        ]
+      }
+    }
+  }
+}

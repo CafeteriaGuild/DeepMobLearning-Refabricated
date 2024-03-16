@@ -205,6 +205,10 @@
   "advancements.dml-refabricated.blank_data_model.description": "Craft a Blank Data Model.",
   "advancements.dml-refabricated.data_models": "Modeling Data",
   "advancements.dml-refabricated.data_models.description": "Craft any Bound-Data Model.",
+  "advancements.dml-refabricated.data_synthesizer": "A Most Energetic Synthesis",
+  "advancements.dml-refabricated.data_synthesizer.description": "Craft a Data Synthesizer.",
+  "advancements.dml-refabricated.energy_octahedron": "Eight-faced Battery",
+  "advancements.dml-refabricated.energy_octahedron.description": "Craft an Energy Octahedron",
   "advancements.dml-refabricated.deep_learner": "Deep Learning",
   "advancements.dml-refabricated.deep_learner.description": "Craft a Deep Learner.",
   "advancements.dml-refabricated.trial": "Not your typical 30-day Trial",
@@ -214,5 +218,7 @@
   "advancements.dml-refabricated.loot_fabricator": "Fabric-ating Loot",
   "advancements.dml-refabricated.loot_fabricator.description": "Craft a Loot Fabricator.",
   "advancements.dml-refabricated.glitch_ingot": "Canned Glitches",
-  "advancements.dml-refabricated.glitch_ingot.description": "Craft a Glitch Ingot."
+  "advancements.dml-refabricated.glitch_ingot.description": "Craft a Glitch Ingot.",
+  "advancements.dml-refabricated.glitch_sword": "A Glitchy Revenge",
+  "advancements.dml-refabricated.glitch_sword.description": "Craft a Glitch Sword."
 }
