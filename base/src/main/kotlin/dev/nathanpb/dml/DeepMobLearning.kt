@@ -20,16 +20,10 @@
 package dev.nathanpb.dml
 
 import dev.nathanpb.dml.block.registerBlocks
-import dev.nathanpb.dml.blockEntity.BLOCKENTITY_DATA_SYNTHESIZER
-import dev.nathanpb.dml.blockEntity.BLOCKENTITY_DISRUPTIONS_CORE
 import dev.nathanpb.dml.blockEntity.registerBlockEntityTypes
-import dev.nathanpb.dml.blockEntity.renderer.BlockEntityRendererDataSynthesizer
-import dev.nathanpb.dml.blockEntity.renderer.BlockEntityRendererDisruptionsCore
 import dev.nathanpb.dml.command.DMLCommand
-import dev.nathanpb.dml.entity.registerEntityRenderer
 import dev.nathanpb.dml.entity.registerEntityTypes
 import dev.nathanpb.dml.event.VanillaEvents
-import dev.nathanpb.dml.item.ITEM_ENERGY_OCTAHEDRON
 import dev.nathanpb.dml.item.registerItems
 import dev.nathanpb.dml.itemgroup.registerItemGroup
 import dev.nathanpb.dml.listener.CrushingRecipeListener
@@ -39,25 +33,22 @@ import dev.nathanpb.dml.misc.registerSounds
 import dev.nathanpb.dml.recipe.registerRecipeSerializers
 import dev.nathanpb.dml.recipe.registerRecipeTypes
 import dev.nathanpb.dml.screen.handler.registerScreenHandlers
-import dev.nathanpb.dml.screen.registerScreens
 import dev.nathanpb.dml.trial.TrialGriefPrevention
 import dev.nathanpb.dml.trial.affix.core.TrialAffixRegistry
 import dev.nathanpb.dml.utils.initConfig
 import dev.nathanpb.dml.worldgen.registerFeatures
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories
 import net.minecraft.util.Identifier
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
 const val MOD_ID = "dml-refabricated"
 
-val LOGGER = LoggerFactory.getLogger(MOD_ID)
+val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
 
 val baseConfig: BaseConfig = initConfig("base", BaseConfig(), BaseConfig::class.java)
 
@@ -85,25 +76,6 @@ fun init() {
     registerSounds()
     CommandRegistrationCallback.EVENT.register(DMLCommand())
     LOGGER.info("Deep Mob Learning: Refabricated" + quirkyStartupMessages[Random.nextInt(quirkyStartupMessages.size)])
-}
-
-@Suppress("unused")
-fun initClient() {
-    registerScreens()
-    registerEntityRenderer()
-
-    BlockEntityRendererFactories.register(BLOCKENTITY_DATA_SYNTHESIZER, ::BlockEntityRendererDataSynthesizer)
-    BlockEntityRendererFactories.register(BLOCKENTITY_DISRUPTIONS_CORE, ::BlockEntityRendererDisruptionsCore)
-
-    ModelLoadingPlugin.register{ ctx ->
-        ctx.addModels(
-            identifier("block/data_synthesizer_grid")
-        )
-    }
-
-    ITEM_ENERGY_OCTAHEDRON.let {
-        ColorProviderRegistry.ITEM.register({ stack, _ -> it.getScaledColor(stack) }, it)
-    }
 }
 
 fun identifier(path: String) = Identifier(MOD_ID, path)

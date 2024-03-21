@@ -29,6 +29,7 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WBar
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
+import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
 import net.minecraft.entity.player.PlayerEntity
@@ -76,6 +77,7 @@ class LootFabricatorScreenHandler(
         root.add(energyComponent, 0, (1 * 18) - 6)
 
         root.add(createPlayerInventoryPanel(), 0, 5 * 18)
+        setTitleAlignment(HorizontalAlignment.CENTER)
         root.validate(this)
 
         (blockInventory as? SimpleInventory)?.addListener {

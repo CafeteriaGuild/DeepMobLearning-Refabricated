@@ -4,7 +4,6 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractBlockAccessor",
-    "BakedModelManagerAccessor",
     "BowItemMixin",
     "CrossbowItemMixin",
     "EndermanEntityMixin",
@@ -21,6 +20,7 @@
     "WorldMixin"
   ],
   "client": [
+    "BakedModelManagerAccessor",
     "DrawContextAccessor",
     "HandledScreenAccessor"
   ],

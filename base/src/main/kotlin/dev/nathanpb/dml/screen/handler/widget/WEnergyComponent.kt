@@ -39,7 +39,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 
-class WEnergyComponent(
+open class WEnergyComponent(
     private val energyIndex: Int,
     private val maxEnergyIndex: Int,
     inventory: Inventory,
@@ -77,19 +77,24 @@ class WEnergyComponent(
         isPristineEnergy
     )
 
+    val energyBar: WEnergyBar
+
     init {
         val inputSlot = WItemSlot.of(inventory, inputIndex)
 
         if(outputIndex != null) {
             val outputSlot = WItemSlot.of(inventory, outputIndex)
+            energyBar = WEnergyBar(false)
 
             add(outputSlot, 0, 0)
             add(WSprite(ENERGY_BAR_ARROW), 0, 19, 18, 4)
-            add(WEnergyBar(false), 0, 24, 1 * 18, 30)
+            add(energyBar, 0, 24, 1 * 18, 30)
             add(WSprite(ENERGY_BAR_ARROW), 0, 3 * 18, 18, 4)
             add(inputSlot, 0, (3 * 18) + 4)
         } else {
-            add(WEnergyBar(true), 0, 0, 1 * 18, 54)
+            energyBar = WEnergyBar(true)
+
+            add(energyBar, 0, 0, 1 * 18, 54)
             add(WSprite(ENERGY_BAR_ARROW), 0, 3 * 18, 18, 4)
             add(inputSlot, 0, (3 * 18) + 4)
         }
@@ -118,7 +123,7 @@ class WEnergyComponent(
                 withTooltip(
                     Text.translatable(
                         getShortEnergyKey(isPristineEnergy),
-                        formatAccordingToLanguage().format(getHost()?.propertyDelegate?.get(energyIndex))
+                        formatAccordingToLanguage().format(properties.get(energyIndex))
                     ).apply {
                         style = if(isPristineEnergy) STYLE else ENERGY_STYLE
                     }

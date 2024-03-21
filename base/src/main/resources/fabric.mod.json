@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": ["dev.nathanpb.dml.DeepMobLearningKt::init"],
-    "client": ["dev.nathanpb.dml.DeepMobLearningKt::initClient"],
+    "client": ["dev.nathanpb.dml.DeepMobLearningClientKt::initClient"],
     "rei_client": ["dev.nathanpb.dml.compat.rei.ReiPlugin"]
   },
   "mixins": ["mixins.dml-refabricated-base.json"],

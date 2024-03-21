@@ -43,4 +43,5 @@ class FeatherFallingEffect : ProtectionLikeEffect(
 
     override fun acceptTier(tier: DataModelTier) = !tier.isMaxTier()
     override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    override fun getEnergyConsumptionType() = EffectInfo.EnergyConsumptionType.USE
 }

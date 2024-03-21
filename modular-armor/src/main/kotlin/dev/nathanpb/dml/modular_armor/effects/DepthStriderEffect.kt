@@ -46,8 +46,8 @@ class DepthStriderEffect : StatusEffectLikeEffect(
         return StatusEffectInstance(DEPTH_STRIDER_EFFECT, 16 * 20, context.tier.ordinal / 2, true, false)
     }
 
-    override fun acceptTier(tier: DataModelTier): Boolean = tier.ordinal >= 2
-    override fun minimumTier(): DataModelTier = DataModelTier.FAULTY
+    override fun acceptTier(tier: DataModelTier): Boolean = tier.ordinal >= 2 && tier != DataModelTier.SELF_AWARE
+    override fun minimumTier(): DataModelTier = DataModelTier.ADVANCED
 
     override fun canApply(context: ModularEffectContext, payload: ModularEffectTriggerPayload): Boolean {
         return super.canApply(context, payload) && context.player.isTouchingWater

@@ -51,39 +51,35 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 {
 
     /**
-     * 0 - [SimpleEnergyStorage.amount]
-     * 1 - [energyCapacity] (const)
-     * 2 - [progress]
-     * 3 - [maxProgress] (const)
-     * 4 - [canProgress]
-     * 5 - [mute]
+     * 0 - [progress]
+     * 1 - [maxProgress] (const)
+     * 2 - [canProgress]
+     * 3 - [mute]
      */
-    private val _propertyDelegate = ArrayPropertyDelegate(6)
+    private val _propertyDelegate = ArrayPropertyDelegate(4)
     val inventory = DataSynthesizerInventory()
-    private val energyCapacity = baseConfig.machines.dataSynthesizer.energyCapacity
+    val energyCapacity = baseConfig.machines.dataSynthesizer.energyCapacity
     private val energyIO = baseConfig.machines.dataSynthesizer.energyIO
     val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, energyIO, energyIO) {
 
         override fun onFinalCommit() {
             markDirty()
-            propertyDelegate[0] = amount.toInt()
         }
     }
-    var progress: Int = 0
-        set(value) {
-            field = value
-            propertyDelegate[2] = value
-        }
 
     val maxProgress = 3 * 20
-    var canProgress = false
+    var progress by Delegates.observable(0) { _, _, newValue ->
+        propertyDelegate[0] = newValue
+    }
+    var canProgress by Delegates.observable(false) { _, _, newValue ->
+        propertyDelegate[2] = if(newValue) 1 else 0
+    }
     var mute by Delegates.observable(false) { _, _, newValue ->
-        propertyDelegate[5] = if(newValue) 1 else 0
+        propertyDelegate[3] = if(newValue) 1 else 0
     }
 
     init {
-        propertyDelegate[1] = energyCapacity.toInt()
-        propertyDelegate[3] = maxProgress
+        propertyDelegate[1] = maxProgress
     }
 
     companion object {
@@ -94,7 +90,6 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
                 if(blockEntity.energyStorage.amount <= (blockEntity.energyCapacity - dataEnergyValue)) {
                     if(dataModelStack.hasSimUnrestrictedData()) {
                         blockEntity.canProgress = true
-                        blockEntity.propertyDelegate[4] = 1
                         blockEntity.markDirty()
                         blockEntity.sync()
                     } else { // ensure the laser on the UI doesn't flicker by only removing flag on the start of the next loop, if invalid
@@ -113,7 +108,6 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
                         if(blockEntity.progress >= blockEntity.maxProgress) {
                             dataModelStack.dataModel.dataAmount--
                             blockEntity.energyStorage.amount += dataEnergyValue
-                            blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
                             resetProgress(blockEntity)
                             blockEntity.markDirty()
                             blockEntity.sync()
@@ -140,7 +134,6 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
 
         private fun removeCanProgressFlag(blockEntity: BlockEntityDataSynthesizer) {
             blockEntity.canProgress = false
-            blockEntity.propertyDelegate[4] = 0
             resetProgress(blockEntity)
             blockEntity.markDirty()
             blockEntity.sync()
@@ -173,35 +166,18 @@ class BlockEntityDataSynthesizer(pos: BlockPos, state: BlockState) :
         Inventories.readNbt(nbt.getCompound("${MOD_ID}:inventory"), stacks)
         inventory.setStacks(stacks)
 
-        energyStorage.amount = nbt.getLong("${MOD_ID}:energy").also {
-            propertyDelegate[0] = it.toInt()
-        }
+        energyStorage.amount = nbt.getLong("${MOD_ID}:energy")
         canProgress = nbt.getBoolean("${MOD_ID}:can_progress")
         progress = nbt.getInt("${MOD_ID}:progress")
-        mute = nbt.getBoolean("${MOD_ID}:mute").also {
-            propertyDelegate[5] = if(it) 1 else 0
-        }
+        mute = nbt.getBoolean("${MOD_ID}:mute")
     }
 
     override fun toClientTag(nbt: NbtCompound) {
-        NbtCompound().let { invTag ->
-            Inventories.writeNbt(invTag, inventory.items())
-            nbt.put("${MOD_ID}:inventory", invTag)
-        }
-
-        canProgress = nbt.getBoolean("${MOD_ID}:can_progress")
-        nbt.putInt("${MOD_ID}:progress", progress)
-        nbt.putBoolean("${MOD_ID}:mute", mute)
+        toTag(nbt)
     }
 
     override fun fromClientTag(nbt: NbtCompound) {
-        val stacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
-        Inventories.readNbt(nbt.getCompound("${MOD_ID}:inventory"), stacks)
-        inventory.setStacks(stacks)
-
-        nbt.putBoolean("${MOD_ID}:can_progress", canProgress)
-        progress = nbt.getInt("${MOD_ID}:progress")
-        mute = nbt.getBoolean("${MOD_ID}:mute")
+        fromTag(nbt)
     }
 
     override fun getPropertyDelegate() = _propertyDelegate

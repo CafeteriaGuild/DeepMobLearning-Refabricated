@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.enums.DataModelTier
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.item.ItemDataModel
 import dev.nathanpb.dml.simulacrum.PRISTINE_CHANCE
 import dev.nathanpb.dml.simulacrum.block.chamber.BlockEntitySimulationChamber
 import dev.nathanpb.dml.simulacrum.util.Animation
@@ -105,7 +106,7 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
 
 
         drawConsoleText(ctx, x, y, spacing)
-        if(blockEntity.isCrafting) updateSimulationText()
+        if(blockEntity.isCrafting && !hasDataModelChanged()) updateSimulationText()
         if((!blockEntity.isCrafting && blockEntity.canStartSimulation()) || hasDataModelChanged() || blockEntity.percentDone == 100) {
             resetAnimations()
         }
@@ -316,7 +317,8 @@ open class ScreenSimulationChamber(handler: ScreenHandlerSimulationChamber, inve
         val aLine8: Animation? = getAnimation("blinkingDots1")
         simulationText["simulationProgressLine1"] = animate(lines[0], aLine1, null, 1, false)
         simulationText["simulationProgressLine1Version"] = "§6" + animate(lines[1], aLine1Version, aLine1, 1, false) + "§r"
-        hasDataModelChanged() // resync data model from BE
+
+        if(currentDataModel.item !is ItemDataModel) return
         simulationText["simulationProgressLine2"] = animate(lines[2], aLine2, aLine1Version, 1, false, (currentDataModel.dataModel.simulationCount + 1))
         simulationText["simulationProgressLine3"] = animate(lines[3], aLine3, aLine2, 2, false)
         simulationText["simulationProgressLine4"] = animate(lines[4], aLine4, aLine3, 1, false)

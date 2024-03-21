@@ -20,8 +20,8 @@
 
 package dev.nathanpb.dml.screen.handler
 
-import dev.nathanpb.dml.blockEntity.BlockEntityDataSynthesizer
 import dev.nathanpb.dml.baseConfig
+import dev.nathanpb.dml.blockEntity.BlockEntityDataSynthesizer
 import dev.nathanpb.dml.data.dataModel
 import dev.nathanpb.dml.identifier
 import dev.nathanpb.dml.item.ItemDataModel
@@ -36,6 +36,7 @@ import io.github.cottonmc.cotton.gui.networking.ScreenNetworking
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WSprite
+import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import io.github.cottonmc.cotton.gui.widget.data.Texture
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon
@@ -43,6 +44,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -61,15 +63,15 @@ class DataSynthesizerScreenHandler(
 ) {
     init {
         val MUTE_TOGGLE_ID = identifier("data_synthesizer_mute_toggle")
-        val blockPos = ctx.get { _, u -> { u }}.get().invoke()
+        val blockPos = ctx.get { _, pos -> { pos }}.get().invoke()
 
         ScreenNetworking.of(
             this,
             NetworkSide.SERVER
         ).receive(MUTE_TOGGLE_ID) { _ ->
             val blockEntity = world.getBlockEntity(blockPos)
-            if(world.getBlockEntity(blockPos) is BlockEntityDataSynthesizer) {
-                (blockEntity as BlockEntityDataSynthesizer).mute = !blockEntity.mute
+            if(blockEntity is BlockEntityDataSynthesizer) {
+                blockEntity.mute = !blockEntity.mute
                 blockEntity.markDirty()
                 blockEntity.sync()
             }
@@ -108,10 +110,24 @@ class DataSynthesizerScreenHandler(
         val progressLine = WProgressLine((2 * 18) + 14)
         root.add(progressLine, (4 * 18) + 1, progressLine.initialY + 7, 16, 1)
 
-        val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2)
+        val energyComponent = object : WEnergyComponent(0, 1, blockInventory, 1, 2) {
+
+            override fun tick() {
+                super.tick()
+
+                val energyProperties = ArrayPropertyDelegate(2)
+                val blockEntity = world.getBlockEntity(blockPos)
+                if(blockEntity is BlockEntityDataSynthesizer) {
+                    energyProperties[0] = blockEntity.energyStorage.amount.toInt()
+                    energyProperties[1] = blockEntity.energyCapacity.toInt()
+                }
+                energyBar.setProperties(energyProperties)
+            }
+        }
+
         root.add(energyComponent, 0, (1 * 18) - 6)
 
-        val soundButton = object : WMuteButton(propertyDelegate[5]) {
+        val soundButton = object : WMuteButton(propertyDelegate[3]) {
             override fun toggleMute() {
                 ScreenNetworking.of(
                     this@DataSynthesizerScreenHandler,
@@ -123,13 +139,12 @@ class DataSynthesizerScreenHandler(
         root.add(soundButton, (8 * 18) - 2, (1 * 18) - 6, 20, 20)
 
         root.add(createPlayerInventoryPanel(), 0, (5 * 18) + 2)
+        setTitleAlignment(HorizontalAlignment.CENTER)
         root.validate(this)
 
         (blockInventory as? SimpleInventory)?.addListener {
             sendContentUpdates()
         }
-
-
     }
 
     override fun canUse(entity: PlayerEntity?) = true
@@ -152,7 +167,7 @@ class DataSynthesizerScreenHandler(
         private val areaSize = 15F
 
         override fun tick() {
-            if(host!!.propertyDelegate!!.get(4) == 0) { // canProgress
+            if(host!!.propertyDelegate!!.get(2) == 0) { // canProgress
                 hidden = true
                 return
             }
@@ -160,7 +175,7 @@ class DataSynthesizerScreenHandler(
 
 
             val percentage = MathHelper.clamp(
-                host!!.propertyDelegate!!.get(2).toFloat() / host!!.propertyDelegate!!.get(3).toFloat(),
+                host!!.propertyDelegate!!.get(0).toFloat() / host!!.propertyDelegate!!.get(1).toFloat(),
                 0F,
                 1F
             )

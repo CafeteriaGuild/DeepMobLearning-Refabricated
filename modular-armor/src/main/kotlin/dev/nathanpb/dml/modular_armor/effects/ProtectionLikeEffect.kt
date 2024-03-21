@@ -67,4 +67,7 @@ abstract class ProtectionLikeEffect(
         return super.canApply(context, payload) && protectsAgainst(context.player.world, payload.value.source)
     }
 
+    override fun getEnergyConsumptionType(): EffectInfo.EnergyConsumptionType = EffectInfo.EnergyConsumptionType.USE
+
+
 }

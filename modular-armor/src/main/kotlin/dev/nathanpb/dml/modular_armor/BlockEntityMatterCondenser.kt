@@ -21,14 +21,13 @@
 package dev.nathanpb.dml.modular_armor
 
 import dev.nathanpb.dml.MOD_ID
+import dev.nathanpb.dml.blockEntity.ClientSyncedBlockEntity
 import dev.nathanpb.dml.item.ItemPristineMatter
 import dev.nathanpb.dml.modular_armor.data.ModularArmorData
 import dev.nathanpb.dml.modular_armor.inventory.MatterCondenserInventory
 import dev.nathanpb.dml.utils.*
-import io.github.cottonmc.cotton.gui.PropertyDelegateHolder
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
-import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.inventory.Inventories
@@ -36,37 +35,27 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
-import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.WorldAccess
 import team.reborn.energy.api.base.SimpleEnergyStorage
 
-class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
-    BlockEntity(BLOCK_ENTITY_TYPE, pos, state),
-    InventoryProvider,
-    PropertyDelegateHolder
+class BlockEntityMatterCondenser(pos: BlockPos, state: BlockState) :
+    ClientSyncedBlockEntity(BLOCK_ENTITY_TYPE, pos, state),
+    InventoryProvider
 {
 
     val energyCapacity = modularArmorConfig.machines.matterCondenser.energyCapacity
     val energyIO = modularArmorConfig.machines.matterCondenser.energyIO
     var inventory = MatterCondenserInventory()
-    private val propertyDelegate = ArrayPropertyDelegate(2)
     val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(energyCapacity, energyIO, energyIO) {
 
         override fun onFinalCommit() {
             markDirty()
-            propertyDelegate[0] = amount.toInt()
         }
-
-    }
-
-    init {
-        propertyDelegate[1] = energyCapacity.toInt()
     }
 
     companion object {
-
         val ticker = BlockEntityTicker<BlockEntityMatterCondenser> { world, pos, _, blockEntity ->
             val armorStack = blockEntity.inventory.armorStack
             val inputStack = blockEntity.inventory.pristineInputStack
@@ -86,18 +75,16 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
             if(inputStack.item is ItemPristineMatter) {
                 val pristineEnergyValue = (inputStack.item as ItemPristineMatter).entityCategory.energyValue * modularArmorConfig.machines.matterCondenser.normalToPristineEnergyMultiplier
                 if(blockEntity.energyStorage.addEnergy(pristineEnergyValue)) {
-                    blockEntity.propertyDelegate[0] = blockEntity.energyStorage.amount.toInt()
                     inputStack.decrement(1)
                     blockEntity.markDirty()
+                    blockEntity.sync()
                 }
             }
-
 
             pushPristineEnergyToAllSides(world, pos, blockEntity.energyStorage)
             moveToStoragePristine(blockEntity.energyStorage, blockEntity.inventory, 1)
             moveToStackPristine(blockEntity.energyStorage, blockEntity.inventory, 2)
-
-
+            blockEntity.sync()
         }
 
         val BLOCK_ENTITY_TYPE = Registry.register(
@@ -112,24 +99,27 @@ class BlockEntityMatterCondenser (pos: BlockPos, state: BlockState) :
         }
     }
 
-
     override fun getInventory(state: BlockState?, world: WorldAccess?, pos: BlockPos?) = inventory
 
-    override fun getPropertyDelegate() = propertyDelegate
-
-    override fun writeNbt(tag: NbtCompound) {
-        Inventories.writeNbt(tag, inventory.items())
-        tag.putLong("${MOD_ID}:energy", energyStorage.amount)
+    override fun toTag(nbt: NbtCompound) {
+        Inventories.writeNbt(nbt, inventory.items())
+        nbt.putLong("${MOD_ID}:energy", energyStorage.amount)
     }
 
-    override fun readNbt(tag: NbtCompound) {
-        super.readNbt(tag)
+    override fun fromTag(nbt: NbtCompound) {
         val list = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
-        Inventories.readNbt(tag, list)
+        Inventories.readNbt(nbt, list)
         inventory.setStacks(list)
 
-        energyStorage.amount = tag.getLong("$MOD_ID:energy").also {
-            propertyDelegate[0] = it.toInt()
-        }
+        energyStorage.amount = nbt.getLong("$MOD_ID:energy")
     }
+
+    override fun toClientTag(nbt: NbtCompound) {
+        toTag(nbt)
+    }
+
+    override fun fromClientTag(nbt: NbtCompound) {
+        fromTag(nbt)
+    }
+
 }

@@ -44,5 +44,6 @@ class FallImmunityEffect : DamageImmunityLikeEffect(
 
     override fun acceptTier(tier: DataModelTier): Boolean = tier.isMaxTier()
     override fun minimumTier(): DataModelTier = DataModelTier.SELF_AWARE
+    override fun getEnergyConsumptionType() = EffectInfo.EnergyConsumptionType.USE
 
 }

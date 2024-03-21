@@ -62,7 +62,6 @@ class AutoExtinguishEffect : ProtectionLikeEffect(
 
     override fun acceptTier(tier: DataModelTier): Boolean = tier.ordinal >= 2
     override fun minimumTier(): DataModelTier = DataModelTier.ADVANCED
-    override fun getEnergyConsumptionType(): EffectInfo.EnergyConsumptionType = EffectInfo.EnergyConsumptionType.USE
 
     // todo check if the player is standing in fire too
     override fun canApply(context: ModularEffectContext, payload: WrappedEffectTriggerPayload<VanillaEvents.LivingEntityDamageContext>): Boolean {

@@ -83,7 +83,7 @@ class BlockEntitySimulationChamber(pos: BlockPos?, state: BlockState?) : BlockEn
         percentDone = compound.getInt("percentDone")
 
         val currentDataModelType = compound.getString("currentDataModelType")
-        if(currentDataModelType != null) {
+        if(currentDataModelType != null && currentDataModelType.isNotEmpty()) {
             this.currentDataModelType = enumValueOf<EntityCategory>(currentDataModelType)
         }
         Inventories.readNbt(compound, inventory)

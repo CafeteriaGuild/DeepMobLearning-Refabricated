@@ -22,6 +22,7 @@ package dev.nathanpb.dml.modular_armor.screen
 
 import dev.nathanpb.dml.MOD_ID
 import dev.nathanpb.dml.identifier
+import dev.nathanpb.dml.modular_armor.BlockEntityMatterCondenser
 import dev.nathanpb.dml.modular_armor.BlockMatterCondenser
 import dev.nathanpb.dml.modular_armor.ItemModularGlitchArmor
 import dev.nathanpb.dml.screen.handler.registerScreenHandlerForBlockEntity
@@ -40,6 +41,7 @@ import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment
 import io.github.cottonmc.cotton.gui.widget.data.Insets
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.text.Text
 
@@ -51,7 +53,7 @@ class MatterCondenserScreenHandler(
     INSTANCE,
     syncId, playerInventory,
     getBlockInventory(ctx),
-    getBlockPropertyDelegate(ctx)
+    ArrayPropertyDelegate(2) // dummy delegate, required for WEnergyComponent's WBar
 ) {
 
     companion object {
@@ -62,10 +64,11 @@ class MatterCondenserScreenHandler(
     }
 
     init {
+        val blockPos = ctx.get { _, pos -> { pos }}.get().invoke()
+
         val root = WPlainPanel()
         setRootPanel(root)
         root.insets = Insets.ROOT_PANEL
-
 
         val armorSlot = WItemSlot(blockInventory, 0, 1, 1, true).apply {
             setInputFilter {
@@ -85,7 +88,21 @@ class MatterCondenserScreenHandler(
         root.add(armorSlotFrame, (3 * 18) + 6, (2 * 18) - 6, 42, 42)
 
 
-        val energyComponent = WEnergyComponent(0, 1, blockInventory, 1, 2, true)
+        val energyComponent = object : WEnergyComponent(0, 1, blockInventory, 1, 2, true) {
+
+            override fun tick() {
+                super.tick()
+
+                val energyProperties = ArrayPropertyDelegate(2)
+                val blockEntity = world.getBlockEntity(blockPos)
+                if(blockEntity is BlockEntityMatterCondenser) {
+                    energyProperties[0] = blockEntity.energyStorage.amount.toInt()
+                    energyProperties[1] = blockEntity.energyCapacity.toInt()
+                }
+                energyBar.setProperties(energyProperties)
+            }
+        }
+
         root.add(energyComponent, 0, (1*18) - 6)
 
         val infoBubble = WInfoBubbleWidget(
@@ -120,7 +137,6 @@ class MatterCondenserScreenHandler(
         root.add(infoBubble, (8 * 18) + 10, 0, 8, 8)
 
         root.add(createPlayerInventoryPanel(), 0, (5 * 18) + 2)
-
         setTitleAlignment(HorizontalAlignment.CENTER)
         root.validate(this)
         (blockInventory as? SimpleInventory)?.addListener {

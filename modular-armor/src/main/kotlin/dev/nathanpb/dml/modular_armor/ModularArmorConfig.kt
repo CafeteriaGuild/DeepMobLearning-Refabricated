@@ -75,10 +75,10 @@ class GlitchArmorDataConsume {
     var soulVision = 16L
     var nightVision = 8L
     var fly = 20L
-    var underwaterHaste = 10L
-    var depthStrider = 15L
-    var waterBreathing = 10L
-    var poseidonBless = 30L
+    var underwaterHaste = 2L
+    var depthStrider = 4L
+    var waterBreathing = 8L
+    var poseidonBless = 10L
     var resistance = 20L
     var undying = 1000L
 }
