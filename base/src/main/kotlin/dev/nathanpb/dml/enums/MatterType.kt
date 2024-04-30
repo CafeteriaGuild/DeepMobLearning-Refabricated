@@ -17,6 +17,6 @@ enum class MatterType(id: String, color: Formatting) {
 
     val text: Text = Text.translatable("modelType.${MOD_ID}.${id}").formatted(color)
 
-    val matter: Item? = getItemFromRegistry(identifier("${id}_matter"))
+    val matter: Item? by lazy { getItemFromRegistry(identifier("${id}_matter")) }
 
 }
