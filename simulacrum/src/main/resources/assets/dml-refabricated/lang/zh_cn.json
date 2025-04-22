@@ -1,0 +1,56 @@
+{
+  "block.dml-refabricated.simulation_chamber": "模拟室",
+  
+  "item.dml-refabricated.polymer_clay": "聚合粘土",
+  "item.dml-refabricated.overworld_matter": "主世界物质",
+  "item.dml-refabricated.hellish_matter": "地狱物质",
+  "item.dml-refabricated.extraterrestrial_matter": "末地物质",
+
+  "modelType.dml-refabricated.overworld": "主世界",
+  "modelType.dml-refabricated.hellish": "地狱",
+  "modelType.dml-refabricated.extraterrestrial": "末地",
+  "modelType.dml-refabricated.invalid": "不合理的！这不应该发生...",
+
+  "tooltip.dml-refabricated.matter.1": "可消耗获取经验值",
+  "tooltip.dml-refabricated.matter.2": "（右键点击）",
+  "tooltip.dml-refabricated.matter.3": "潜行",
+  "tooltip.dml-refabricated.matter.4": "可消耗整组物品",
+  "tooltip.dml-refabricated.matter.5": "单个物品经验值：",
+  
+  "tooltip.dml-refabricated.data_model.1": "模拟消耗：",
+  "tooltip.dml-refabricated.data_model.2": "%d E",
+  "tooltip.dml-refabricated.data_model.3": "类型：",
+  "tooltip.dml-refabricated.data_model.4": "%d",
+  "tooltip.dml-refabricated.data_model.5": "包含模拟数据",
+
+  "text.dml-refabricated.simulation_chamber.iterations": "迭代次数：%s",
+  "text.dml-refabricated.simulation_chamber.pristine_chance": "原始物质概率：%d",
+  "text.dml-refabricated.simulation_chamber.insert_data_model.1": "请插入数据模型",
+  "text.dml-refabricated.simulation_chamber.insert_data_model.2": "以启动模拟",
+  "text.dml-refabricated.simulation_chamber.insuficiente_data.1": "模型数据不足",
+  "text.dml-refabricated.simulation_chamber.insuficiente_data.2": "请插入普通品质",
+  "text.dml-refabricated.simulation_chamber.insuficiente_data.3": "或更高品质模型 ",
+  "text.dml-refabricated.simulation_chamber.cant_begin": "无法启动模拟",
+  "text.dml-refabricated.simulation_chamber.missing_polymer": "缺少聚合介质",
+  "text.dml-refabricated.simulation_chamber.missing_energy": "系统能量等级不足",
+  "text.dml-refabricated.simulation_chamber.output_full": "输出或原始缓冲区已满",
+  "text.dml-refabricated.simulation_chamber.data_collected": "已收集数据 %d/%d",
+  "text.dml-refabricated.simulation_chamber.max_tier": "该数据模型已达最高品质",
+  "text.dml-refabricated.simulation_chamber.missing_data_model": "机器缺少数据模型",
+  
+  "text.dml-refabricated.simulation_chamber.sim.1": "> 启动运行时环境",
+  "text.dml-refabricated.simulation_chamber.sim.2": "v1.4.7",
+  "text.dml-refabricated.simulation_chamber.sim.3": "> 开始第 %d 次迭代",
+  "text.dml-refabricated.simulation_chamber.sim.4": "> 从芯片内存加载模型",
+  "text.dml-refabricated.simulation_chamber.sim.5": "> 评估威胁等级",
+  "text.dml-refabricated.simulation_chamber.sim.6": "> 遭遇敌对实体",
+  "text.dml-refabricated.simulation_chamber.sim.7": "> 获取原始物质",
+  "text.dml-refabricated.simulation_chamber.succeeded": "成功",
+  "text.dml-refabricated.simulation_chamber.fail": "失败",
+  "text.dml-refabricated.simulation_chamber.sim.8": "> 处理结果中",
+
+  "advancements.dml-refabricated.simulation_chamber": "模拟与实验",
+  "advancements.dml-refabricated.simulation_chamber.description": "制作模拟室",
+  "advancements.dml-refabricated.matter": "物质之谜",
+  "advancements.dml-refabricated.matter.description": "获取全部3种物质类型"
+}
